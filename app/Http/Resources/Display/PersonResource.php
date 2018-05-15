@@ -28,6 +28,13 @@ class PersonResource extends JsonResource
             ],
             'birth_date' => $this->birth_date->toDateString(),
             'remarks' => $this->remarks,
+            'avatar' => [
+                'letters' => $this->avatar_letters,
+                'image' => $this->avatar
+            ],
+            'membership_status' => $this->membership_status,
+
+            'groupMemberships' => GroupMembershipResource::collection($this->whenLoaded('groupMemberships')),
         ];
     }
 }

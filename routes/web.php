@@ -64,7 +64,8 @@ Route::namespace('People')->prefix('people')->group(function() {
     Route::get('/search', 'SearchController@search')->name('people.search');
     Route::get('/search/groups', 'SearchController@group')->name('people.search.groups');
 
-    Route::get('/{person}','PersonController@timeline')->name('people.person');
+    Route::get('/{person}','PersonController@show')->name('people.person');
+    Route::get('/{person}/timeline', 'PersonController@timeline')->name('people.person.timeline');
     Route::get('/{person}/contact', 'PersonController@contact')->name('people.person.contact');
 
 });
@@ -77,6 +78,8 @@ Route::namespace('People')->prefix('people')->group(function() {
 Route::namespace('Events')->prefix('events')->group(function() {
 
     Route::get('/','SearchController@index')->name('events.index');
+
+    Route::get('/{event}', 'EventController@show')->name('events.event');
 
 });
 

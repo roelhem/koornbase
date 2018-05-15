@@ -38,6 +38,8 @@ Vue.use(VueGoogleMaps, {
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+Vue.component('data-display', require('./components/displays/data-display'));
+
 Vue.component('crud-form', require('./components/forms/crud-form.vue'));
 
 Vue.component('f-name-input', require('./components/forms/f-name-input.vue'));
@@ -66,6 +68,7 @@ Vue.component('full-calendar', require('./components/FullCalendar'));
 
 Vue.component('user-avatar', require('./components/displays/user-avatar'));
 
+Vue.component('person-page', require('./components/person/page'));
 
 
 Vue.component(

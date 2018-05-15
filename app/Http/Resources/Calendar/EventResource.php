@@ -49,6 +49,7 @@ class EventResource extends Resource
     {
         return parent::toArray($request) + [
             'is_open' => $this->is_open,
+            'url' => route('events.event', ['event' => $this->resource]),
         ];
     }
 

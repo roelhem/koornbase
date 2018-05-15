@@ -5,9 +5,7 @@
 <script>
     export default {
         name: "person-avatar",
-        props: {
-            avatar:Object
-        }
+        props: ['avatar']
     }
 </script>
 

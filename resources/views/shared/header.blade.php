@@ -3,6 +3,7 @@
         <div class="d-flex">
 
             <a class="header-brand" href="/">
+                <img src="/images/koornbase/server.svg" class="header-brand-img" alt="Koornbase Admin logo">
                 <span class="font-weight-normal">KoornBase </span> Admin
             </a>
 

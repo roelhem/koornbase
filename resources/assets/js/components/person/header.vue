@@ -1,0 +1,47 @@
+<template>
+
+    <div class="container">
+
+        <div class="d-flex">
+            <div class="person-avatar py-1 px-2">
+                <person-avatar :avatar="person.avatar" class="avatar-xl"></person-avatar>
+            </div>
+
+            <div class="person-name p-1">
+                <h1 class="m-1">
+                    <span>{{ person.name.first }}</span>
+                    <span class="small font-italic" v-if="person.name.nickname">[ {{ person.name.nickname }} ]</span>
+                    <span v-if="person.name.prefix">{{ person.name.prefix }}</span>
+                    <span v-if="person.name.last">{{ person.name.last }}</span>
+                </h1>
+                <div class="tags">
+                    <group-tag v-for="m in person.groupMemberships"
+                               :key="m.id"
+                               :group="m.group"
+                               label-type="member_name"
+                               v-if="m.group.category.options.showOnPersonsPage && m.chronology === 0">
+                    </group-tag>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</template>
+
+<script>
+    import PersonAvatar from "../displays/person-avatar";
+
+    export default {
+        components: {PersonAvatar},
+        props: {
+            person:Object,
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

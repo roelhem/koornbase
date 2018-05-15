@@ -11,6 +11,41 @@
         <div class="row">
             <div class="col-lg-8">
                 <p>Welkom op de KoornBase website</p>
+
+                <h2>De door Aron gemaakte logo's</h2>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/empty.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/cloud-eye.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/cloud-eye-slash.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/cloud-key.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/feed.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/server.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/shield-admin.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/shield-cog.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/shield-delft.svg">
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="/images/koornbase/user.svg">
+                    </div>
+                </div>
             </div>
 
             <div class="col-lg-4">

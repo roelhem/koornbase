@@ -19,6 +19,7 @@ class GroupMembershipResource extends JsonResource
             'start' => $this->start,
             'end' => $this->end,
             'remarks' => $this->remarks,
+            'chronology' => $this->chronology,
             'group' => new GroupResource($this->whenLoaded('group')),
         ];
     }
