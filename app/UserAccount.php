@@ -1,0 +1,129 @@
+<?php
+
+namespace App;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Wildside\Userstamps\Userstamps;
+use Laravel\Socialite\Contracts\User as OAuthUserContract;
+use Laravel\Socialite\AbstractUser as AbstractOAuthUser;
+use Laravel\Socialite\Two\User as OAuthUser;
+
+/**
+ * Class UserAccount
+ * @package App
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $provider
+ * @property string $token
+ * @property string|null $refresh_token
+ * @property integer|null $expires_in
+ *
+ * @property string|null $ref_id
+ * @property string|null $nickname
+ * @property string|null $name
+ * @property string|null $email
+ * @property string|null $avatar
+ *
+ * @property array|null $user_json
+ *
+ * @property Carbon|null $created_at
+ * @property integer|null $created_by
+ * @property Carbon|null $updated_at
+ * @property integer|null $updated_by
+ *
+ * @property-read User $user
+ */
+class UserAccount extends Model
+{
+    use Userstamps;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    protected $table = 'user_accounts';
+
+    protected $casts = ['user_json' => 'array'];
+
+    protected $fillable = ['user_id', 'provider', 'oauthUser'];
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getOAuthUserAttribute() {
+        $result = new OAuthUser();
+
+        $result->id = $this->ref_id;
+        $result->nickname = $this->nickname;
+        $result->name = $this->name;
+        $result->email = $this->email;
+        $result->avatar = $this->avatar;
+        $result->user = $this->user_json;
+
+        $result->token = $this->token;
+        $result->refreshToken = $this->expires_in;
+        $result->expiresIn = $this->expires_in;
+        $result->refreshToken = $this->refresh_token;
+
+        return $result;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM MUTATORS ------------------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function setOAuthUserAttribute($user) {
+
+        if($user instanceof OAuthUserContract) {
+
+            $this->ref_id = $user->getId();
+            $this->nickname = $user->getNickname();
+            $this->name = $user->getName();
+            $this->email = $user->getEmail();
+            $this->avatar = $user->getAvatar();
+
+            if ($user instanceof AbstractOAuthUser) {
+                $this->user_json = $user->getRaw();
+            }
+
+            if ($user instanceof OAuthUser) {
+                $this->token = $user->token;
+                $this->refresh_token = $user->refreshToken;
+                $this->expires_in = $user->expiresIn;
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOPES --------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * A scope that only gives the accounts of the given provider
+     *
+     * @param Builder $query
+     * @param string $name
+     * @return Builder
+     */
+    public function scopeProvider($query, $name) {
+        return $query->where('provider','=',$name);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Gives the user where this UserAccount belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+}
