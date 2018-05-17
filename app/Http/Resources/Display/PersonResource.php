@@ -16,17 +16,8 @@ class PersonResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => [
-                'full' => $this->name,
-                'short' => $this->name_short,
-                'initials' => $this->name_initials,
-                'first' => $this->name_first,
-                'middle' => $this->name_middle,
-                'prefix' => $this->name_prefix,
-                'last' => $this->name_last,
-                'nickname' => $this->nickname,
-            ],
-            'birth_date' => $this->birth_date->toDateString(),
+            'name' => $this->name_array,
+            'birth_date' => $this->birth_date,
             'remarks' => $this->remarks,
             'avatar' => [
                 'letters' => $this->avatar_letters,
@@ -35,6 +26,8 @@ class PersonResource extends JsonResource
             'membership_status' => $this->membership_status,
 
             'groupMemberships' => GroupMembershipResource::collection($this->whenLoaded('groupMemberships')),
+            'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+            'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
         ];
     }
 }

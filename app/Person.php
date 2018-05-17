@@ -43,6 +43,8 @@ use Wildside\Userstamps\Userstamps;
  * @property-read string|null $avatar
  * @property-read integer|null $age
  *
+ * @property array $name_array
+ *
  * @property-read User[] $users
  * @property-read Debtor[] $debtors
  * @property-read Job[] $jobs
@@ -65,7 +67,7 @@ class Person extends Model
 
     protected $fillable = [
             'name_initials','name_first','name_middle','name_prefix','name_last','name_nickname',
-            'birth_date','bsn','remarks'
+            'birth_date','bsn','remarks','name_array'
         ];
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -113,6 +115,23 @@ class Person extends Model
         }
 
         return $result.' '.$this->name_last;
+    }
+
+    /**
+     * Returns all the name parts in one array.
+     */
+    public function getNameArrayAttribute() {
+        return [
+            'full' => $this->name,
+            'short' => $this->name_short,
+            'formal' => $this->name_formal,
+            'initials' => $this->name_initials,
+            'first' => $this->name_first,
+            'middle' => $this->name_middle,
+            'prefix' => $this->name_prefix,
+            'last' => $this->name_last,
+            'nickname' => $this->name_nickname,
+        ];
     }
 
     /**
@@ -187,6 +206,35 @@ class Person extends Model
         }
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM MUTATORS ------------------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Sets the name of this person by using an array of name parts.
+     *
+     * @param array|null $newValue
+     */
+    public function setNameArrayAttribute($newValue) {
+        if(is_array($newValue)) {
+
+            $map = [
+                'initials' => 'name_initials',
+                'first' => 'name_first',
+                'middle' => 'name_middle',
+                'prefix' => 'name_prefix',
+                'last' => 'name_last',
+                'nickname' => 'name_nickname',
+            ];
+
+            foreach ($map as $arrayKey => $attributeKey) {
+                if(array_has($newValue, $arrayKey)) {
+                    $this->$attributeKey = array_get($newValue, $arrayKey);
+                }
+            }
+
+        }
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //

@@ -64,6 +64,11 @@ Route::namespace('People')->prefix('people')->group(function() {
     Route::get('/search', 'SearchController@search')->name('people.search');
     Route::get('/search/groups', 'SearchController@group')->name('people.search.groups');
 
+    Route::get('/create', 'PersonController@create')->name('people.person.create');
+    Route::post('/create', 'PersonController@store');
+    Route::get('/{person}/edit', 'PersonController@edit')->name('people.person.edit');
+    Route::post('/{person}/edit', 'PersonController@update');
+
     Route::get('/{person}','PersonController@show')->name('people.person');
     Route::get('/{person}/timeline', 'PersonController@timeline')->name('people.person.timeline');
     Route::get('/{person}/contact', 'PersonController@contact')->name('people.person.contact');

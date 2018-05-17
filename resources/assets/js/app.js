@@ -19,7 +19,24 @@ Vue.use(require('vue-moment'), {
     moment
 });
 
-// Including and configuring the vue-google-maps
+// Including and configuring the v-calendar plugin
+
+import VCalendar from 'v-calendar';
+
+Vue.use(VCalendar, {
+    firstDayOfWeek: 2,
+    locale: 'nl-NL',
+    formats: {
+        title:'MMMM YYYY',
+        weekdays:'WW',
+        navMonths:'MMM',
+        input:['DD-MM-YYYY','L','YYYY-MM-DD', 'YYYY/MM/DD'],
+        dayPopover:'DD-MM-YYYY',
+        data:['L', 'YYYY-MM-DD', 'YYYY/MM/DD'],
+    }
+});
+
+// Including and configuring the vue-google-maps plugin
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
@@ -29,6 +46,7 @@ Vue.use(VueGoogleMaps, {
         key:'AIzaSyCqKKtjBf4nrCMcyh2Pnnia7iyvHlK2JLo',
     }
 });
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -69,6 +87,7 @@ Vue.component('full-calendar', require('./components/FullCalendar'));
 Vue.component('user-avatar', require('./components/displays/user-avatar'));
 
 Vue.component('person-page', require('./components/person/page'));
+Vue.component('person-form', require('./components/person/form/form'));
 
 
 Vue.component(

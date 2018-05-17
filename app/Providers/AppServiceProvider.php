@@ -6,6 +6,7 @@ use App\Services\Navigation\BreadcrumbService;
 use App\Services\Navigation\NavbarService;
 use App\Services\Navigation\NavigationItemRepository;
 use App\Services\Navigation\SitemapService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,7 +18,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+        Carbon::serializeUsing(function($carbon) {
+            return $carbon->format('c');
+        });
+
     }
 
     /**

@@ -33,7 +33,7 @@ class PeopleSearchResource extends JsonResource
                     'last' => $person->name_last,
                     'nickname' => $person->name_nickname,
                 ],
-                'birth_date' => $person->birth_date->toDateString(),
+                'birth_date' => $person->birth_date ? $person->birth_date->toDateString() : null,
                 'avatar' => [
                     'letters' => $person->avatar_letters,
                     'image' => $this->when($person->avatar !== null, $person->avatar),

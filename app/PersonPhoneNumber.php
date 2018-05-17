@@ -4,7 +4,6 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Propaganistas\LaravelPhone\Rules\Phone;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Query\Builder;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -38,6 +37,8 @@ class PersonPhoneNumber extends Model
     // ---------------------------------------------------------------------------------------------------------- //
 
     protected $table = 'person_phone_numbers';
+
+    protected $fillable = ['label','is_primary','for_emergency','is_mobile','phone_number','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MAGIC METHODS -------------------------------------------------------------------------------------- //

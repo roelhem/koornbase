@@ -1,6 +1,6 @@
 <template>
 
-    <label class="custom-control custom-checkbox">
+    <label class="custom-control custom-checkbox" :class="{'custom-control-inline':inline}">
         <input type="checkbox" class="custom-control-input" :checked="checked" @change="$emit('change', $event.target.checked)" :value="value">
         <span class="custom-control-label"><slot></slot></span>
     </label>
@@ -16,6 +16,10 @@
         },
         props: {
             checked: {
+                type:Boolean,
+                default:false
+            },
+            inline: {
                 type:Boolean,
                 default:false
             },
