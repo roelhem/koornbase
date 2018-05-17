@@ -4,11 +4,11 @@
 
         <div class="row">
 
-            <div class="col-lg-4">
-                contact
+            <div class="col-lg-6">
+                <person-contact-card :person="person"></person-contact-card>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-6">
 
             </div>
 
@@ -20,7 +20,14 @@
 
 <script>
     export default {
-        name: "contact"
+
+        props:{
+            person:Object
+        },
+
+        components:{
+            'person-contact-card': require('../cards/contact')
+        }
     }
 </script>
 

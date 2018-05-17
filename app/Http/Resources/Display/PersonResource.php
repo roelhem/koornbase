@@ -24,6 +24,7 @@ class PersonResource extends JsonResource
                 'image' => $this->avatar
             ],
             'membership_status' => $this->membership_status,
+            'membership_status_since' => $this->membership_status_since,
 
             'groupMemberships' => GroupMembershipResource::collection($this->whenLoaded('groupMemberships')),
             'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),

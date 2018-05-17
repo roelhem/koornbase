@@ -21,7 +21,11 @@ class PersonController extends Controller
             return view('people.person.show');
         }
 
-        $person->load('groupMemberships.group.category');
+        $person->load([
+            'groupMemberships.group.category',
+            'emailAddresses',
+            'phoneNumbers',
+        ]);
 
         return new PersonResource($person);
     }
