@@ -1,13 +1,13 @@
 <template>
 
-    <td>
+    <div>
         <div>
             <membership-status :value="row.membership.status"></membership-status>
         </div>
         <div v-if="row.membership.since" class="text-muted small">
             {{ row.membership.since | moment('dd D MMMM Y') }}
         </div>
-    </td>
+    </div>
 
 
 </template>

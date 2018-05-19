@@ -1,11 +1,11 @@
 <template>
 
-    <td>
+    <div>
         <div>{{ row.birth_date | moment('D MMMM Y') }}</div>
         <div class="small font-italic" :class="{'text-danger': underAged, 'text-muted': !underAged}">
             ( {{ age }} jaar )
         </div>
-    </td>
+    </div>
 
 </template>
 

@@ -2,39 +2,79 @@
 
     <fieldset>
 
-        <legend>Naam</legend>
+        <b-form-row>
 
-        <div class="row">
+            <b-col lg="5">
+                <b-form-group label="Voornaam"
+                              label-for="person_name_first">
+                    <b-form-input id="person_name_first"
+                                  name="name[first]"
+                                  :required="true"
+                                  v-model.trim="first">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
 
-            <div class="col-lg-5">
-                <f-simple-input label="Voornaam" name="name[first]" :required="true" v-model="first"
-                                :input-events="firstEventHandler"></f-simple-input>
-            </div>
+            <b-col>
+                <b-form-group label="Overige Voornamen"
+                              label-for="person_name_middle">
+                    <b-form-input id="person_name_middle"
+                                  name="name[middle]"
+                                  v-model.trim="middle">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
 
-            <div class="col-lg-7">
-                <f-simple-input ref="middle" label="Overige Voornamen" name="name[middle]" v-model="middle"></f-simple-input>
-            </div>
-
-        </div>
+        </b-form-row>
 
 
-        <div class="row">
+        <b-form-row>
 
-            <div class="col-lg-3">
-                <f-simple-input label="Initialen" name="name[initials]" v-model="initials" :events="initialsEventHandler" :required="true" />
-            </div>
+            <b-col lg="3">
+                <b-form-group label="Initialen"
+                              label-for="person_name_initials">
+                    <b-form-input id="person_name_initials"
+                                  name="name[initials]"
+                                  v-model="initials">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
 
-            <div class="col-lg-2">
-                <f-simple-input label="Tussenvoegsel" name="name[prefix]" v-model="prefix"></f-simple-input>
-            </div>
+            <b-col lg="2">
+                <b-form-group label="Tussenvoegsel"
+                              label-for="person_name_prefix">
+                    <b-form-input id="person_name_prefix"
+                                  name="name[prefix]"
+                                  v-model="prefix">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
 
-            <div class="col-lg-7">
-                <f-simple-input label="Achternaam" name="name[last]" :required="true" v-model="last"></f-simple-input>
-            </div>
+            <b-col>
+                <b-form-group label="Achternaam"
+                              label-for="person_name_last">
+                    <b-form-input id="person_name_last"
+                                  name="name[last]"
+                                  v-model="last"
+                                  :required="true">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
 
-        </div>
+        </b-form-row>
 
-        <f-simple-input label="Koornbeurs Bijnaam" name="name[nickname]" v-model="nickname" :placeholder="first"></f-simple-input>
+        <b-form-row>
+            <b-col>
+                <b-form-group label="Bijnaam op de Koornbeurs"
+                              label-for="person_name_nickname">
+                    <b-form-input id="person_name_nickname"
+                                  name="name[nickname]"
+                                  v-model="nickname"
+                                  :placeholder="first">
+                    </b-form-input>
+                </b-form-group>
+            </b-col>
+        </b-form-row>
 
     </fieldset>
 

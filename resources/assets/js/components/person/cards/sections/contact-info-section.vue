@@ -3,17 +3,17 @@
     <div>
         <h3 v-if="title">{{ title }}</h3>
 
-        <div v-for="item in items" class="row">
+        <b-row v-for="item in items" :key="item.id">
 
-            <div class="col-md-5 col-lg-3" :class="{'text-primary':item.is_primary,'text-danger':item.for_emergency}">
+            <b-col lg="3" md="5" :class="{'text-primary':item.is_primary,'text-danger':item.for_emergency}">
                 <strong>{{ item.label }}</strong>
-            </div>
+            </b-col>
 
-            <div class="col-md-7 col-lg-9" :class="{'text-muted-dark':!item.is_pimary && !item.for_emergency, 'text-danger':item.for_emergency}">
+            <b-col :class="{'text-muted-dark':!item.is_pimary && !item.for_emergency, 'text-danger':item.for_emergency}">
                 <component v-if="displayComponent" :is="displayComponent" :item="item" :person="person"></component>
-            </div>
+            </b-col>
 
-        </div>
+        </b-row>
     </div>
 
 </template>

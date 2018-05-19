@@ -20,7 +20,10 @@
 <script>
     export default {
         name: "card-flexible",
-        props: ['title', 'collapsed'],
+        props: {
+            'title':String,
+            'collapsed':Boolean
+        },
         data: function() {
             return {
                 isCollapsed: this.collapsed

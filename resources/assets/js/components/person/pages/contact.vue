@@ -1,20 +1,20 @@
 <template>
 
-    <div class="container my-4">
+    <b-container class="my-4">
 
-        <div class="row">
+        <b-row>
 
-            <div class="col-lg-6">
+            <b-col lg="6">
                 <person-contact-card :person="person"></person-contact-card>
-            </div>
+            </b-col>
 
-            <div class="col-lg-6">
+            <b-col>
 
-            </div>
+            </b-col>
 
-        </div>
+        </b-row>
 
-    </div>
+    </b-container>
 
 </template>
 

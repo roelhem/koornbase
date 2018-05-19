@@ -1,14 +1,13 @@
 <template>
 
-    <div class="card" :class="{'card-collapsed':!isActive}">
+    <div class="card" :class="{'card-collapsed':!checked}">
+
+        <div class="card-status bg-info"></div>
 
         <div class="card-header">
             <h3 class="card-title"><i class="fe fe-filter text-muted"></i> {{ title }}</h3>
             <div class="card-options left">
-                <label class="custom-switch m-0">
-                    <input type="checkbox" class="custom-switch-input" v-model="isActive" @change="$emit('change', $event.target.checked)">
-                    <span class="custom-switch-indicator"></span>
-                </label>
+                <custom-control-input type="checkbox" as-switch v-model="checked" />
             </div>
 
         </div>
@@ -23,14 +22,22 @@
     export default {
         name: "card-filter",
         props: ['title', 'active'],
-        data: function() {
-            return {
-                'isActive': this.active
+        computed: {
+            checked:{
+                get:function() {
+                    return this.active;
+                },
+                set:function(newValue) {
+                    this.$emit('change', newValue );
+                }
             }
         },
         model: {
             prop: 'active',
             event: 'change'
+        },
+        components: {
+            'custom-control-input':require('../forms/custom-control-input')
         }
     }
 </script>

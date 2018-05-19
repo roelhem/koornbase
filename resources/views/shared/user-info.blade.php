@@ -1,8 +1,8 @@
 @inject('repository', '\App\Services\Navigation\NavigationItemRepository')
-
+@auth
 <div class="dropdown">
 
-    @auth
+
         <?php $user = Auth::user(); ?>
 
     <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
@@ -12,7 +12,7 @@
             <span class="text-muted d-block mt-1 small">{{ $user->email }}</span>
         </span>
     </a>
-    @endauth
+
 
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
@@ -35,3 +35,4 @@
     </div>
 
 </div>
+@endauth

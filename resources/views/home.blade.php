@@ -3,9 +3,21 @@
 @section('title', 'Home')
 
 @section('content')
-<div class="container">
 
-    <card-calendar :sources="['/calendar/birthdays','/calendar/events']"></card-calendar>
+    <b-container>
 
-</div>
+        <b-row>
+
+            <b-col lg="3">
+                <h1>Hallo?</h1>
+            </b-col>
+
+            <b-col>
+                <h1>Hoi?</h1>
+            </b-col>
+
+        </b-row>
+
+    </b-container>
+
 @endsection

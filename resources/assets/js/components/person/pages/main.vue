@@ -1,20 +1,24 @@
 <template>
 
-    <div class="container my-4">
+    <b-container class="my-4">
 
-        <div class="row">
+        <b-row>
 
-            <div class="col-lg-4">
+            <b-col lg="4">
                 <person-card-info-small :person="person"></person-card-info-small>
-            </div>
+            </b-col>
 
-            <div class="col-lg-8">
+            <b-col>
+                <b-card no-body>
+                    <b-table class="card-table" :items="person.groupMemberships">
 
-            </div>
+                    </b-table>
+                </b-card>
+            </b-col>
 
-        </div>
+        </b-row>
 
-    </div>
+    </b-container>
 
 </template>
 

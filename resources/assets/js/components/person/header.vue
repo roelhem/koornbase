@@ -1,13 +1,13 @@
 <template>
 
-    <div class="container">
+    <b-container style="margin-top: -40px;">
 
         <div class="d-flex">
-            <div class="person-avatar py-1 px-2">
-                <person-avatar :avatar="person.avatar" class="avatar-xl"></person-avatar>
+            <div class="person-avatar px-2">
+                <person-avatar :avatar="person.avatar" class="avatar-xxl"></person-avatar>
             </div>
 
-            <div class="person-name p-1">
+            <div class="person-name p-1 pt-3">
                 <h1 class="m-1">
                     <span>{{ person.name.first }}</span>
                     <span class="small font-italic" v-if="person.name.nickname">[ {{ person.name.nickname }} ]</span>
@@ -26,7 +26,7 @@
 
         </div>
 
-    </div>
+    </b-container>
 
 
 </template>

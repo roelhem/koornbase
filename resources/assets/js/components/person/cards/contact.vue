@@ -1,33 +1,28 @@
 <template>
 
-    <div class="card">
+    <b-card>
 
-        <div class="card-header">
-            <h3 class="card-title">Contactgegevens</h3>
-        </div>
+        <h3 class="card-title" slot="header">Contactgegevens</h3>
 
-        <div class="card-body">
+        <b-row>
 
-            <div class="row">
+            <contact-info-section title="E-mailadressen"
+                                  :items="person.emailAddresses"
+                                  :person="person"
+                                  :display-component="require('./displays/email-address')"
+                                  class="col-lg-12 my-2">
+            </contact-info-section>
 
-                <contact-info-section title="E-mailadressen"
-                                      :items="person.emailAddresses"
-                                      :person="person"
-                                      :display-component="require('./displays/email-address')"
-                                      class="col-lg-12 my-2">
-                </contact-info-section>
+            <contact-info-section title="Telefoonnummers"
+                                  :items="person.phoneNumbers"
+                                  :display-component="require('./displays/phone-number')"
+                                  class="col-lg-12 my-2">
+            </contact-info-section>
 
-                <contact-info-section title="Telefoonnummers"
-                                      :items="person.phoneNumbers"
-                                      :display-component="require('./displays/phone-number')"
-                                      class="col-lg-12 my-2">
-                </contact-info-section>
+        </b-row>
 
-            </div>
 
-        </div>
-
-    </div>
+    </b-card>
 
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="map-header" :style="bannerStyle"></div>
+    <div class="map-header person-page-header" :style="bannerStyle"></div>
 </template>
 
 <script>
@@ -36,5 +36,13 @@
 </script>
 
 <style scoped>
+
+    .person-page-header {
+        -webkit-background-size: cover;
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        height:200px;
+    }
 
 </style>

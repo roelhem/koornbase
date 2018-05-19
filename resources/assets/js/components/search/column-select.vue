@@ -1,22 +1,12 @@
 <template>
 
-    <draggable v-model="columns" class="list-group list-group-flush">
+    <draggable v-model="columns" class="list-group list-group-flush" :options="{ghostClass:'bg-gray-lighter'}">
 
         <column-select-entry v-for="column in columns" :key="column.key" :column="column"></column-select-entry>
 
     </draggable>
 
 </template>
-
-<!--<ul class="list-group list-group-flush">
-        <li class="list-group-item p-0" v-for="col in value">
-            <label class="custom-switch d-block p-2">
-                <input type="checkbox" class="custom-switch-input" v-model="col.visible" @click="trigger">
-                <span class="custom-switch-indicator"></span>
-                <span class="custom-switch-description">{{ col.name }}</span>
-            </label>
-        </li>
-    </ul>-->
 
 <script>
     import draggable from 'vuedraggable'
@@ -27,20 +17,22 @@
         props: {
             value:Array
         },
-        data: function() {
-            return {
-                columns: this.value
+        computed: {
+            columns: {
+                get: function() {
+                    return this.value;
+                },
+                set: function(newValue) {
+                    this.$emit('input', newValue);
+                },
             }
         },
+
+
         components: {
             ColumnSelectEntry,
             draggable
         },
-        watch: {
-            columns: function(val) {
-                this.$emit('input', val);
-            }
-        }
     }
 </script>
 

@@ -2,12 +2,14 @@
 
 @section('content')
 
-    <form class="card" action="{{ route('login') }}" method="post">
+    <b-form class="card" action="{{ route('login') }}" method="post">
 
         @csrf
 
-        <div class="card-body p-6">
+        <b-card-body class="p-6">
             <div class="card-title">Koornbeurs Log-In</div>
+
+
 
             <div class="form-group">
                 <label class="form-label">E-Mailadres</label>
@@ -57,9 +59,9 @@
                 </a>
 
             </div>
-        </div>
+        </b-card-body>
 
-    </form>
+    </b-form>
 
     <div class="text-center text-muted">
         Heb je nog geen account? <a href="{{ route('register') }}">Account aanvragen</a>.

@@ -1,5 +1,5 @@
 <div class="header py-4">
-    <div class="container">
+    <b-container>
         <div class="d-flex">
 
             <a class="header-brand" href="/">
@@ -28,18 +28,31 @@
             </a>
 
         </div>
-    </div>
+    </b-container>
 </div>
 
 <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg order-lg-first">
-                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+    <b-container>
+        <b-row class="align-items-center">
+            <b-col lg order-lg="first">
+                <b-nav tabs class="border-0 flex-column flex-lg-row">
                     @inject('navbar', 'App\Services\Navigation\NavbarService')
-                    @each('shared.nav.nav-item', $navbar, 'item')
-                </ul>
-            </div>
-        </div>
-    </div>
+                    @foreach($navbar as $item)
+                        @if($item->children)
+                            <b-nav-item-dropdown no-caret href="{{ $item->href }}" extra-menu-classes="dropdown-menu-arrow" :no-flip="true">
+                                <template slot="text">{!! $item->icon('fe') !!} {{ $item->label }}</template>
+                                @foreach($item as $child)
+                                    <b-dropdown-item href="{{ $child->href }}">
+                                        {!! $child->icon(['dropdown-icon'],'fe','fa') !!} {{ $child->label }}
+                                    </b-dropdown-item>
+                                @endforeach
+                            </b-nav-item-dropdown>
+                        @else
+                            <b-nav-item href="{{ $item->href }}">{!! $item->icon('fe') !!} {{ $item->label }}</b-nav-item>
+                        @endif
+                    @endforeach
+                </b-nav>
+            </b-col>
+        </b-row>
+    </b-container>
 </div>

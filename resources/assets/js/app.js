@@ -9,6 +9,12 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// Including and configuring BootstrapVue
+
+import BootstrapVue from 'bootstrap-vue';
+
+Vue.use(BootstrapVue);
+
 
 // Including and configuring the vue-moment and moment.
 
@@ -54,17 +60,9 @@ Vue.use(VueGoogleMaps, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
 Vue.component('data-display', require('./components/displays/data-display'));
 
 Vue.component('crud-form', require('./components/forms/crud-form.vue'));
-
-Vue.component('f-name-input', require('./components/forms/f-name-input.vue'));
-Vue.component('f-simple-input', require('./components/forms/f-simple-input.vue'));
-Vue.component('f-simple-select', require('./components/forms/f-simple-select.vue'));
-Vue.component('f-textarea', require('./components/forms/f-textarea.vue'));
-Vue.component('f-custom-checkbox', require('./components/forms/f-custom-checkbox.vue'));
 
 Vue.component('card-user-small', require('./components/cards/card-user-small.vue'));
 Vue.component('card-timeline', require('./components/cards/card-timeline.vue'));
@@ -74,7 +72,6 @@ Vue.component('card-calendar', require('./components/cards/card-calendar.vue'));
 Vue.component('card-maps', require('./components/cards/card-maps.vue'));
 
 Vue.component('column-select', require('./components/search/column-select.vue'));
-Vue.component('list-filter', require('./components/search/list-filter.vue'));
 
 Vue.component('people-search-page', require('./components/people/search/page.vue'));
 
@@ -88,6 +85,9 @@ Vue.component('user-avatar', require('./components/displays/user-avatar'));
 
 Vue.component('person-page', require('./components/person/page'));
 Vue.component('person-form', require('./components/person/form/form'));
+
+Vue.component('display-person-name', require('./components/DisplayPersonName'));
+Vue.component('display-person-birth-date', require('./components/DisplayPersonBirthDate'));
 
 
 Vue.component(

@@ -11,6 +11,9 @@
                     <column-select v-model="columns"></column-select>
                 </card-flexible>
 
+                <slot name="filters">
+
+                </slot>
 
             </div>
 
@@ -39,7 +42,6 @@
     import axios from "axios";
     import CardResultTable from "../cards/card-result-table";
     import SearchPager from "./pager";
-    import SearchFilters from "./filters";
 
     export default {
         name: "search-page",
@@ -54,15 +56,17 @@
                     return [];
                 },
             },
-            filters: {
-                type: Array,
-                default: function() {
-                    return [];
-                },
-            },
             recordName: {
                 type: String,
                 default: 'records',
+            },
+            value: {
+                type: Object,
+                default: function() {
+                    return {
+                        page:1
+                    };
+                }
             }
         },
         data: function() {
@@ -71,26 +75,29 @@
                 rows: [],
                 meta: {},
                 loading: false,
-                page: 1,
-                per_page: 10,
             };
         },
+
+        computed: {
+            params: {
+                get: function() {
+                    console.log('Get van params wordt aangeroepen!');
+                    return this.value;
+                },
+                set: function(newValue) {
+                    console.log('Set van params wordt aangeroepen!');
+                    return this.$emit('input', newValue);
+                }
+            },
+        },
+
         methods: {
 
             changePage: function(page) {
                 if(page !== null) {
-                    this.page = page;
+                    this.$set(this.params, 'page', page );
                     this.load();
                 }
-            },
-
-            getParams: function() {
-                let res = {
-                    'page': this.page,
-                    'per_page': this.per_page,
-                };
-
-                return res;
             },
 
             load: function() {
@@ -99,7 +106,7 @@
 
                 // Make a axios request
                 axios.get(this.src, {
-                    params: this.getParams()
+                    params: this.params
                 }).then(response => {
 
                     this.rows = response.data.data;
@@ -118,7 +125,6 @@
             this.load();
         },
         components: {
-            SearchFilters,
             CardResultTable,
             SearchPager
         },

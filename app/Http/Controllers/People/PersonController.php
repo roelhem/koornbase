@@ -165,18 +165,27 @@ class PersonController extends Controller
             }
         });
 
-        return $validated;
+        return redirect()->route('people.person', ['person' => $person]);
 
     }
 
     protected function fillPhoneNumber(PersonPhoneNumber $phoneNumber, array $values) {
         $safeValues = array_only($values, ['label','is_primary','for_emergency','is_mobile','phone_number','remarks']);
+        $safeValues = array_merge([
+            'is_primary' => false,
+            'for_emergency' => false,
+            'is_mobile' => false,
+        ], $safeValues);
         $phoneNumber->fill($safeValues);
         return $phoneNumber;
     }
 
     protected function fillEmailAddress(PersonEmailAddress $emailAddress, array $values) {
         $safeValues = array_only($values, ['label','is_primary','for_emergency','email_address','remarks']);
+        $safeValues = array_merge([
+            'is_primary' => false,
+            'for_emergency' => false,
+        ], $safeValues);
         $emailAddress->fill($safeValues);
         return $emailAddress;
     }

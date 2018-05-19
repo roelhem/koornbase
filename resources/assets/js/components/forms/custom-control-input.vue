@@ -5,15 +5,14 @@
         <input :class="inputClasses"
                :type="type"
                :name="name"
-               :checked="checked"
                :disabled="disabled"
                :value="value"
                v-on="inputEvents"
-               @change="onChange"
+               v-model="modelledChecked"
                ref="input">
 
         <span v-if="asSwitch" class="custom-switch-indicator"
-              :class="(this.checked && this.color) ? 'bg-'+this.color : null"></span>
+              :class="(this.isChecked && this.color) ? 'bg-'+this.color : null"></span>
 
         <span ref="description" :class="descriptionClasses">
             <slot></slot>
@@ -33,7 +32,6 @@
 
         props: {
             value:{
-                String,
                 default:'1'
             },
             name:String,
@@ -48,15 +46,14 @@
                 type:Boolean,
                 default:false
             },
+            color:{
+                type:String
+            },
             asSwitch:{
                 type:Boolean,
                 default:false
             },
-            color: {
-                type:String,
-            },
             checked:{
-                type:Boolean,
                 default:false,
             },
             inputEvents:{
@@ -72,6 +69,24 @@
         },
 
         computed: {
+
+            modelledChecked: {
+                get: function() {
+                    return this.checked;
+                },
+                set: function(newValue) {
+                    this.$emit('change', newValue);
+                }
+            },
+
+            isChecked: function() {
+                if(typeof this.modelledChecked === 'boolean') {
+                    return this.modelledChecked;
+                } else {
+                    return this.modelledChecked.indexOf(this.value) >= 0;
+                }
+            },
+
             labelClasses: function() {
                 let res = [];
 
@@ -115,12 +130,6 @@
                 return res.join(' ');
             }
         },
-
-        methods: {
-            onChange( event ) {
-                this.$emit('change', event.target.checked );
-            }
-        }
     }
 </script>
 

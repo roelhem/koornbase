@@ -30,6 +30,7 @@ class SearchController extends Controller
         $membership_status = $request->input('membership_status');
         $groups = $request->input('groups');
         $sort = $request->input('sort');
+        $sortOrder = mb_strtolower($request->input('sort_order'));
         $per_page = intval($request->input('per_page'));
 
         $query = Person::query();
@@ -47,21 +48,26 @@ class SearchController extends Controller
             }
         }
 
+
+        if($sortOrder !== 'asc' && $sortOrder != 'desc') {
+            $sortOrder = 'asc';
+        }
+
         if(!empty($sort)) {
             switch ($sort) {
                 case 'id':
-                    $query->orderBy('id');
+                    $query->orderBy('id', $sortOrder);
                     break;
                 case 'birth_date':
-                    $query->orderBy('birth_date');
+                    $query->orderBy('birth_date', $sortOrder);
                 case 'name_last':
-                    $query->orderBy('name_last');
+                    $query->orderBy('name_last', $sortOrder);
                 case 'name_first':
-                    $query->orderBy('name_first');
+                    $query->orderBy('name_first', $sortOrder);
                 case 'name_nickname':
-                    $query->orderBy('name_nickname');
+                    $query->orderBy('name_nickname', $sortOrder);
                     break;
-                case 'status':
+                case 'membership_status':
                     $query->leftJoinSub("
                         SELECT DISTINCT ON(person_id) person_id, status, date
                         FROM membership_status_changes
@@ -69,8 +75,8 @@ class SearchController extends Controller
                         ORDER BY person_id, date DESC
                     ", 'last_membership_status_sorting',
                         'last_membership_status_sorting.person_id', '=' ,'persons.id')
-                        ->orderBy('last_membership_status_sorting.status')
-                        ->orderBy('last_membership_status_sorting.date');
+                        ->orderBy('last_membership_status_sorting.status', $sortOrder)
+                        ->orderBy('last_membership_status_sorting.date', $sortOrder);
                     break;
             }
         }

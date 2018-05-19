@@ -1,47 +1,21 @@
 <template>
 
-    <div class="card">
+    <b-card no-body>
 
-        <table class="table card-table table-sm">
+        <table class="table card-table table-hover table-sm">
             <tr>
                 <th><i class="fa fa-user text-muted"></i></th>
-                <td>
-                    <data-display title="Initialen">{{ person.name.initials }}</data-display>
-                    <span class="text-muted font-italic">
-                        (
-                        <data-display title="Voornaam" class="text-muted-dark">{{ person.name.first }}</data-display>
-                        <data-display title="Extra Namen">{{ person.name.middle }}</data-display>
-                        )
-                    </span>
-                    <data-display title="Tussenvoegsel">{{ person.name.prefix }}</data-display>
-                    <data-display title="Achternaam">{{ person.name.last }}</data-display>
-                </td>
+                <td><display-person-name v-bind="person.name" /></td>
             </tr>
 
             <tr>
                 <th><i class="fa fa-book text-muted"></i></th>
-                <td>
-                    <data-display title="Status Lidmaatschap">
-                        <membership-status :value="person.membership_status"></membership-status>
-                    </data-display>
-                    <small class="text-muted">
-                        [ Sinds
-                            <data-display class="text-muted-dark" title="Datum waarop de lidstatus veranderde">{{ person.membership_status_since | moment('dd D MMMM YYYY') }}</data-display>
-                        ]
-                    </small>
-                </td>
+                <td></td>
             </tr>
 
             <tr>
                 <th><i class="fa fa-birthday-cake text-muted"></i></th>
-                <td>
-                    <data-display title="Geboortedatum">{{ person.birth_date | moment('D MMMM YYYY') }}</data-display>
-                    <small :class="{'text-muted': !underAged, 'text-warning': underAged}">
-                        (
-                        <data-display title="Leeftijd">{{ age }}</data-display>
-                        )
-                    </small>
-                </td>
+                <td><display-person-birth-date :birth_date="person.birth_date" /></td>
             </tr>
 
             <tr v-for="emailAddress in person.emailAddresses" v-if="emailAddress.is_primary">
@@ -59,14 +33,15 @@
             </tr>
         </table>
 
-    </div>
+    </b-card>
 
 </template>
 
 <script>
-    import moment from 'moment';
+    import DisplayPersonName from "../../DisplayPersonName";
 
     export default {
+        components: {DisplayPersonName},
         props:{
             person:Object
         },

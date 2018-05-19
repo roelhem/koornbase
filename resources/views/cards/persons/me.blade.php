@@ -1,42 +1,38 @@
-<div class="card">
+<b-card no-body>
 
-
-
-    <div class="card-header">
-        <h3 class="card-title">
-            Mijn Persoonsgegevens
-            &nbsp;
-            <span class="text-muted small">
-                (<span class="data-display" title="Naam">{{ $person->name }}</span>)
-            </span>
-        </h3>
-    </div>
+    <h3 class="card-title" slot="header">
+        Mijn Persoonsgegevens
+        &nbsp;
+        <span class="text-muted small">
+            (<data-display title="Naam">{{ $person->name }}</data-display>)
+        </span>
+    </h3>
 
     <table class="table card-table">
         <tbody>
         <tr>
             <th>Volledige Naam</th>
             <td class="tracking-wide">
-                <span class="data-display" title="Initialen">{{ $person->name_initials }}</span>
+                <data-display title="Initialen">{{ $person->name_initials }}</data-display>
                 <span class="text-muted tracking-normal">[
-                    <span class="data-display" title="Voornaam">{{ $person->name_first }}</span>
+                    <data-display title="Voornaam">{{ $person->name_first }}</data-display>
                     @if(!empty($person->name_middle))
                         &nbsp;
-                        <span class="data-display" title="Overige voornamen">{{ $person->name_middle }}</span>
+                        <data-display title="Overige voornamen">{{ $person->name_middle }}</data-display>
                     @endif
                     ]
                 </span>
-                <span class="data-display" title="Tussenvoegsel">{{ $person->name_prefix }}</span>
-                <span class="data-display" title="Achternaam">{{ $person->name_last }}</span>
+                <data-display title="Tussenvoegsel">{{ $person->name_prefix }}</data-display>
+                <data-display title="Achternaam">{{ $person->name_last }}</data-display>
             </td>
         </tr>
         <tr>
             <th>Koornbeurs Bijnaam</th>
             <td class="tracking-wide">
                 @if(!empty($person->name_nickname))
-                    <span class="data-display" title="Bijnaam">{{ $person->name_nickname }}</span>
+                    <data-display title="Bijnaam">{{ $person->name_nickname }}</data-display>
                 @else
-                    <span class="data-display text-muted" title="Korte naam">{{ $person->name_short }}</span>
+                    <data-display title="Korte naam">{{ $person->name_short }}</data-display>
                     &nbsp;
                     <em class="text-muted small tracking-normal">(Geen bijnaam ingesteld)</em>
                 @endif
@@ -46,7 +42,7 @@
             <th>Geboortedatum</th>
             <td>
                 @if($person->birth_date)
-                <span class="data-display" title="Geboortedatum">{{ $person->birth_date->formatLocalized('%e %B %Y') }}</span>
+                <data-display title="Geboortedatum">{{ $person->birth_date->formatLocalized('%e %B %Y') }}</data-display>
                 &nbsp;
                 <em class="text-muted">({{ $person->birth_date->age }} jaar)</em>
                 @endif
@@ -55,16 +51,16 @@
         <tr>
             <th>Status Lidmaatschap</th>
             <td>
-                <span class="data-display tracking-wide" title="Status Lidmaatschap">
+                <data-display class="tracking-wide" title="Status Lidmaatschap">
                     <membership-status :value="{{ $person->membership_status }}"></membership-status>
-                </span>
+                </data-display>
 
                 @if($person->membership_status > 0)
                 <span class="text-muted small">
                     [ sinds
-                    <span class="data-display text-muted-dark" title="Status Lidmaatschap Sinds">
+                    <data-display class="text-muted-dark" title="Status Lidmaatschap Sinds">
                         {{ $person->membership_status_since->formatLocalized('%e %B %Y') }}
-                    </span>
+                    </data-display>
                     ]
                 </span>
                 @endif
@@ -74,15 +70,15 @@
             <th>Koornbeurs-pas</th>
             <td>
                 @if($person->cardOwnership)
-                    <span class="data-display tracking-wide" title="Nummer Koornbeurspas">
+                    <data-display class="tracking-wide" title="Nummer Koornbeurspas">
                         <i class="fa fa-id-card-o text-muted"></i> {{ $person->cardOwnership->card->id }}
-                    </span>
+                    </data-display>
                     @if($person->cardOwnership->start)
                         <small class="text-muted font-italic">
                             [ sinds
-                                <span class="data-display text-muted-dark" title="Koonbeurspas in bezit sinds">
+                                <data-display class="text-muted-dark" title="Koonbeurspas in bezit sinds">
                                     {{ $person->cardOwnership->start->formatLocalized('%e %B %Y') }}
-                                </span>
+                                </data-display>
                             ]
                         </small>
                     @endif
@@ -113,8 +109,6 @@
                 @if($phone_number->is_primary)<small class="font-weight-normal font-italic text-primary mx-1">(primair)</small>@endif
                 @if($phone_number->for_emergency)<small class="font-weight-normal font-italic text-danger mx-1">(voor noodgevallen)</small>@endif
                 @if($phone_number->is_mobile)<small class="font-weight-normal font-italic text-info mx-1">(mobiel)</small>@endif
-
-
             </td>
         </tr>
         @endforeach
@@ -142,4 +136,4 @@
         </tbody>
     </table>
 
-</div>
+</b-card>

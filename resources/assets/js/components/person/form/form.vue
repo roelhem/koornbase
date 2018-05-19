@@ -6,11 +6,12 @@
 
         <fieldset>
 
-            <legend>Overige Gegevens</legend>
-
-            <form-group label="Geboortedatum">
-                <v-date-picker v-model="birth_date_formated" :input-props="{class:'form-control',name:'birth_date'}"></v-date-picker>
-            </form-group>
+            <b-form-group label="Geboortedatum"
+                          label-for="person_birth_date">
+                <v-date-picker v-model="birth_date_formated"
+                               :input-props="{class:'form-control',name:'birth_date',id:'person_birth_date'}">
+                </v-date-picker>
+            </b-form-group>
 
 
         </fieldset>
@@ -31,7 +32,11 @@
 
             <legend>Opmerkingen</legend>
 
-            <f-textarea name="remarks"></f-textarea>
+            <b-form-textarea id="person_remarks"
+                             v-model="person.remarks"
+                             name="remarks"
+                             rows="6">
+            </b-form-textarea>
 
         </fieldset>
 
@@ -114,5 +119,6 @@
 </script>
 
 <style scoped>
+
 
 </style>
