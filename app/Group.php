@@ -23,6 +23,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $description
  * @property string $member_name
  * @property boolean $is_required
+ *
+ * @property-read GroupCategory $category
+ *
+ * @property-read string $style
  */
 class Group extends Model
 {
@@ -55,6 +59,10 @@ class Group extends Model
         } else {
             return $value;
         }
+    }
+
+    public function getStyleAttribute() {
+        return $this->category->style;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

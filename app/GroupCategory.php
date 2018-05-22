@@ -20,7 +20,7 @@ use Wildside\Userstamps\Userstamps;
  * @property string $name_short
  * @property string $description
  * @property boolean $is_required
- * @property integer $style
+ * @property string $style
  */
 class GroupCategory extends Model
 {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Display;
 
-use App\Enums\GroupCategoryStyles;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupCategoryResource extends JsonResource
@@ -20,7 +19,7 @@ class GroupCategoryResource extends JsonResource
             'name' => $this->name,
             'name_short' => $this->name_short,
             'description' => $this->description,
-            'style' => GroupCategoryStyles::getStyle($this->style),
+            'style' => $this->style,
             'options' => $this->options->toArray(),
         ];
     }

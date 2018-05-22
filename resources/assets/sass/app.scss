@@ -60,6 +60,12 @@
   }
 }
 
+@each $vendor, $color in $colors {
+  .custom-switch-#{$vendor} .custom-switch-input:checked ~ .custom-switch-indicator {
+    background-color: $color;
+  }
+}
+
 .tag-rounded .tag-addon:last-child {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;

@@ -15,12 +15,7 @@
                     <span v-if="person.name.last">{{ person.name.last }}</span>
                 </h1>
                 <div class="tags">
-                    <group-tag v-for="m in person.groupMemberships"
-                               :key="m.id"
-                               :group="m.group"
-                               label-type="member_name"
-                               v-if="m.group.category.options.showOnPersonsPage && m.chronology === 0">
-                    </group-tag>
+                    <ref-tag-group v-for="m in person.groupMemberships" :key="m.id" :val="m.group.id" allow-load label="member_name" />
                 </div>
             </div>
 
@@ -33,9 +28,10 @@
 
 <script>
     import BaseAvatar from "../BaseAvatar";
+    import RefTagGroup from "../RefTagGroup";
 
     export default {
-        components: {BaseAvatar},
+        components: {BaseAvatar, RefTagGroup},
         props: {
             person:Object,
         },

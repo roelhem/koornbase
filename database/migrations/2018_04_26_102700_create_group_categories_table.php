@@ -19,7 +19,7 @@ class CreateGroupCategoriesTable extends Migration
             $table->string('name_short', 63)->nullable();
             $table->text('description')->nullable();
 
-            $table->smallInteger('style')->default(\App\Enums\GroupCategoryStyles::Default);
+            $table->string('style', 63)->nullable();
 
             $table->boolean('is_required')->default(false);
 

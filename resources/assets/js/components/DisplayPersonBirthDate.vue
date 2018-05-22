@@ -1,33 +1,14 @@
 <template>
-
-    <span>
-        <data-display title="Geboortedatum">{{ birth_date | moment('D MMMM YYYY') }}</data-display>
-        <small class="font-italic" :class="{'text-muted': !underAged, 'text-warning': underAged}">
-            (
-            <data-display title="Leeftijd">{{ age }}</data-display> jaar
-            )
-        </small>
-    </span>
-
-
+    <span>{{ birth_date | moment('D MMMM YYYY') }}</span>
 </template>
 
 <script>
-    import moment from 'moment';
 
     export default {
         name: "display-person-birth-date",
         props:{
             birth_date:null
         },
-        computed: {
-            age:function() {
-                return moment().diff(this.birth_date, 'years');
-            },
-            underAged:function() {
-                return this.age < 18;
-            }
-        }
     }
 </script>
 

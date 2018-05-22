@@ -2,29 +2,19 @@
 
     <span>
         <span class="status-icon" :class="statusBackgroundClass"></span>
-        <data-display class="small" title="Lidstatus">{{ label }}</data-display>
-        <span class="small font-italic text-muted" v-if="since">
-            ( Sinds
-            <data-display class="text-muted-dark" title="Lidstatus sinds">{{ since | moment('dd D MMMM YYYY') }}</data-display>
-            )
-        </span>
+        {{ label }}
     </span>
 
 </template>
 
 <script>
     export default {
-        name: "display-person-membership-status",
+        name: "display-membership-status",
         props: {
             value:{
                 type:[String,Number],
                 default:0,
             },
-
-            since: {
-                type:[String, Date]
-            }
-
         },
 
         computed: {

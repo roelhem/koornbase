@@ -48,7 +48,7 @@ class GroupSeeder extends Seeder
                 'name' => 'KoornBase-systeem gerelateerd',
                 'name_short' => 'Systeem',
                 'description' => "Groepen die alleen functies hebben binnen het KoornBase-systeem of zeer belangrijk zijn om de KoornBase goed te laten werken.",
-                'style' => GroupCategoryStyles::System,
+                'style' => 'group-system',
                 'options' => [
                     'showOnPersonsPage' => false
                 ],
@@ -67,7 +67,7 @@ class GroupSeeder extends Seeder
                 'name' => 'KoornBase-systeem beheer',
                 'name_short' => 'Beheer',
                 'description' => 'Groepen die te maken hebben met het beheren van het KoornBase systeem.',
-                'style' => GroupCategoryStyles::Master,
+                'style' => 'group-master',
                 'options' => [
                     'showOnPersonsPage' => false
                 ],
@@ -103,7 +103,7 @@ class GroupSeeder extends Seeder
                 'name' => 'Groepen om te testen.',
                 'name_short' => 'Testgroepen',
                 'description' => 'Groepen die nodig zijn om de KoornBase goed te testen.',
-                'style' => GroupCategoryStyles::Debug,
+                'style' => 'group-debug',
                 'options' => [
                     'showOnPersonsPage' => false
                 ],
@@ -128,7 +128,7 @@ class GroupSeeder extends Seeder
                 'name' => 'Ontwikkelaars, Testers, etc.',
                 'name_short' => 'Ontwikkelaars',
                 'description' => 'Groepen die nieuwe dingen ontwikkelen of testen voor de KoornBase, of voor een andere applicatie die gebruik maakt van de KoornBase.',
-                'style' => GroupCategoryStyles::Develop,
+                'style' => 'group-develop',
                 'is_required' => true,
                 'groups' => [
                     [
@@ -154,14 +154,14 @@ class GroupSeeder extends Seeder
                 'name' => 'Koornbeurs-besturen',
                 'name_short' => 'Bestuur',
                 'description' => 'De groepen die voor de Koornbeurs-besturen zijn bedoeld.',
-                'style' => GroupCategoryStyles::Boss,
+                'style' => 'group-structure',
                 'is_required' => true,
             ],
             [
                 'id' => 'comm-primary',
                 'name' => 'Primaire commissie',
                 'description' => 'Comissies met een primaire taak waar de Koornbeurs zeer vanaf hangt. Commissies in deze categorie hebben meestal een naam die eindigd op \'-kie\' (een extra -e op het eind)',
-                'style' => GroupCategoryStyles::Primary,
+                'style' => 'group-primary',
                 'groups' => [
                     [
                         'name' => 'TapKie',
@@ -187,7 +187,7 @@ class GroupSeeder extends Seeder
                 'id' => 'comm-secondary',
                 'name' => 'Secundaire commissie',
                 'description' => 'Comissies met een secundaire taak in de Koornbeurs. Commissies in deze categorie hebben meestal een naam die eindigd op \'-ki\' (zonder een extra -e op het eind)',
-                'style' => GroupCategoryStyles::Secondary,
+                'style' => 'group-secondary',
                 'groups' => [
                     [
                         'name' => 'Freaky',
@@ -220,7 +220,7 @@ class GroupSeeder extends Seeder
             [
                 'name' => 'Disputen',
                 'name_short' => 'Dispuut',
-                'style' => GroupCategoryStyles::Friend,
+                'style' => 'group-friend',
                 'groups' => [
                     [
                         'name' => 'Dispuut Redux',
@@ -245,7 +245,7 @@ class GroupSeeder extends Seeder
             [
                 'name' => 'Personeelsgroepen',
                 'name_short' => 'Personeel',
-                'style' => GroupCategoryStyles::Skill,
+                'style' => 'group-skill',
                 'groups' => [
                     [
                         'name' => 'Tappers',
@@ -279,7 +279,7 @@ class GroupSeeder extends Seeder
             [
                 'name' => 'Studies',
                 'name_short' => 'Studies',
-                'style' => GroupCategoryStyles::Study,
+                'style' => 'group-study',
                 'groups' => [
                     [
                         'name' => 'Technische Wiskunde',

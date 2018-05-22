@@ -33,6 +33,18 @@ Route::prefix('select')->group(function() {
 });
 
 
+
+// Routes for the form-model-select components
+Route::prefix('tags')->group(function() {
+    Route::get('/group-category', 'Tags\GroupCategoryController@index')->name('tags.group-categories');
+
+
+    Route::get('/group', 'Tags\GroupController@index')->name('tags.group.index');
+    Route::get('/group/{group}', 'Tags\GroupController@show')->name('tags.group.show');
+});
+
+
+
 // Routes for the Socialite/OAuth2 connections.
 Route::prefix('login')->group(function() {
 

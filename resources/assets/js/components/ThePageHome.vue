@@ -4,18 +4,30 @@
 
         <b-row>
 
-            <b-col lg="12" v-for="(color, index) in colors" :key="`color-${index}`">
-                <div class="tags">
-                    <base-tag :color="color" remove-button @remove-click="$set(colors, index, undefined)" label="NoAvatar" />
-                    <base-tag :color="color" :avatar="{color:color}" label="Empty Avatar" />
-                    <base-tag :color="color" :avatar="{color:color,letters:'RH'}" label="Avatar met letters" />
-                    <base-tag :color="color" :avatar="{color:color,placeholder:true, colorInvert:true}" label="Placeholder Avatar" />
-                    <base-tag :color="color" :avatar="{icon:['fa','fa-tag']}" label="Icon Avatar" />
-                    <base-tag :color="color" :avatar="{image:'https://www.w3schools.com/howto/img_avatar.png'}" label="Image Avatar" />
-                    <base-tag :color="color" rounded :avatar="{color:color,icon:['fe','fe-tag']}" label="Icon Avatar" />
-                    <base-tag :color="color" rounded :avatar="{image:'https://www.w3schools.com/howto/img_avatar.png'}" label="Image Avatar" />
-                    <base-tag :label="color || 'default'" />
+            <b-col lg="4">
+
+                <div v-for="option in options" :key="'switch-div-'+option.name">
+                    <form-switch :value="option.name" v-model="val" :color="option.color">
+                        {{ option.label }}
+                    </form-switch>
                 </div>
+
+            </b-col>
+
+            <b-col>
+
+                <pre>{{ val }}</pre>
+
+            </b-col>
+
+        </b-row>
+
+        <b-row>
+
+            <b-col v-for="styleCard in styleCards" :key="'style-card-'+styleCard.style.name" lg="4">
+
+                <card-show-style :subject-style="styleCard.style" :collapsed.sync="styleCard.collapsed"></card-show-style>
+
             </b-col>
 
         </b-row>
@@ -25,27 +37,37 @@
 </template>
 
 <script>
-    import BaseTag from "./BaseTag";
-    import BaseAvatar from "./BaseAvatar";
-    import { TAG_COLORS } from '../constants/style';
+
+    import { GROUP_STYLES } from "../styles/groups";
+    import RefTagGroup from "./RefTagGroup";
+    import TablerCard from "./TablerCard";
+    import CardShowStyle from "./CardShowStyle";
+    import FormSwitch from "./FormSwitch";
 
     export default {
         components: {
-            BaseAvatar,
-            BaseTag
+            FormSwitch,
+            CardShowStyle,
+            TablerCard,
+            RefTagGroup,
         },
         name: "the-page-home",
 
         data:function() {
             return {
-                colors: [false].concat(TAG_COLORS)
+                styleCards: GROUP_STYLES.map(el => {
+                    return {
+                        style: el,
+                        collapsed: true
+                    };
+                }),
+                options: GROUP_STYLES,
+                val: [],
             }
         },
 
         methods:{
-            removeClickHandler(event) {
-                alert(event);
-            }
+
         }
 
     }

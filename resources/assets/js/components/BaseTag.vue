@@ -1,7 +1,7 @@
 <template>
     <span class="tag" :class="tagClass">
 
-        <base-avatar v-if="avatar" tag :default-color="defaultAvatarColor" v-bind="avatar" />
+        <base-avatar v-if="showAvatar" tag :default-style="defaultStyle" v-bind="avatar" />
 
         <slot>
             {{ label }}
@@ -28,7 +28,7 @@
         props: {
             label:String,
             avatar:Object,
-            defaultAvatarColor:[Boolean,String],
+            defaultStyle:Object,
 
             rounded:{
                 type:Boolean,
@@ -50,6 +50,27 @@
         },
 
         computed: {
+
+            showAvatar: function() {
+                if(this.avatar) {
+                    return true;
+                } else if(this.defaultStyle && this.defaultStyle.tag && this.defaultStyle.tag.alwaysShowAvatar) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
+            currentColor: function() {
+                if(this.color) {
+                    return this.color;
+                } else if(this.defaultStyle && this.defaultStyle.tag && this.defaultStyle.tag.color) {
+                    return this.defaultStyle.tag.color;
+                } else {
+                    return undefined;
+                }
+            },
+
             tagClass: function() {
                 let res = [];
 
@@ -57,8 +78,8 @@
                     res.push('tag-rounded');
                 }
 
-                if(this.color) {
-                    res.push('tag-'+this.color);
+                if(this.currentColor) {
+                    res.push('tag-'+this.currentColor);
                 }
 
                 return res;

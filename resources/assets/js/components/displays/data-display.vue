@@ -1,6 +1,8 @@
 <template>
 
-    <span class="data-display" :title="title"><slot></slot></span>
+    <span class="data-display" :title="title">
+        <slot></slot>
+    </span>
 
 </template>
 

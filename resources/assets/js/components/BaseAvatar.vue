@@ -4,8 +4,8 @@
           :class="spanClass"
           :style="spanStyle">
         <template v-if="type === 'slot'"><slot /></template>
-        <i v-else-if="type === 'icon'" :class="icon"></i>
-        <span v-else-if="type === 'letters'" class="avatar-letters">{{ letters }}</span>
+        <base-icon v-else-if="type === 'icon'" key="avatar-from-icon" :icon="this.icon || this.defaultIcon" />
+        <span v-else-if="type === 'letters'" key="avatar-from-letters" class="avatar-letters">{{ letters }}</span>
         <template v-else>&nbsp;</template>
 
         <span v-if="status" class="avatar-status" :class="statusClass"></span>
@@ -14,34 +14,29 @@
 </template>
 
 <script>
+    import BaseIcon from './BaseIcon';
     import { AVATAR_COLORS, BACKGROUND_COLORS, AVATAR_SIZES } from '../constants/style';
 
     export default {
+        components: {BaseIcon},
         name: "base-avatar",
 
         props: {
             image:String,
             letters:String,
-            icon:[String, Array],
+            icon:[String, Object],
 
             placeholder: {
                 type:Boolean,
                 default:false,
             },
 
-            color: {
-                type:[Boolean, String],
-                default:false,
-                validator:function(val) {
-                    return val === false || AVATAR_COLORS.indexOf(val) !== -1;
-                }
-            },
+            defaultStyle:Object,
 
-            defaultColor: {
-                type:[Boolean, String],
-                default:false,
+            color: {
+                type:String,
                 validator:function(val) {
-                    return val === false || AVATAR_COLORS.indexOf(val) !== -1;
+                    return AVATAR_COLORS.indexOf(val) !== -1;
                 }
             },
 
@@ -79,10 +74,10 @@
                     return 'slot';
                 } else if(this.image) {
                     return 'image';
-                } else if(this.icon) {
-                    return 'icon';
                 } else if(this.letters) {
                     return 'letters';
+                } else if(this.icon || this.defaultIcon) {
+                    return 'icon';
                 } else if(this.placeholder) {
                     return 'placeholder';
                 } else {
@@ -90,18 +85,43 @@
                 }
             },
 
-            spanClass:function() {
-                let res = Array.isArray(this.classes) ? this.classes : (this.classes ? [this.classes] : []);
-
-                if(this.color) {
-                    if(typeof this.color === 'string') {
-                        res.push('avatar-' + this.color);
+            defaultColor:function() {
+                if(this.defaultStyle) {
+                    if(this.defaultStyle.avatar && this.defaultStyle.avatar.color) {
+                        return this.defaultStyle.avatar.color;
                     }
-                } else if(this.defaultColor) {
-                    if(typeof this.defaultColor === 'string') {
-                        res.push('avatar-' + this.defaultColor);
+
+                    if(this.defaultStyle.color) {
+                        return this.defaultStyle.color;
                     }
                 }
+                return undefined;
+            },
+
+            defaultIcon:function() {
+                if(this.defaultStyle) {
+                    if(this.defaultStyle.avatar && this.defaultStyle.avatar.icon) {
+                        return this.defaultStyle.avatar.icon;
+                    }
+
+                    if(this.defaultStyle.icon) {
+                        return this.defaultStyle.icon;
+                    }
+                }
+                return undefined;
+            },
+
+            colorClass:function() {
+                const color = this.color || this.defaultColor;
+                if(color) {
+                    return 'avatar-'+color;
+                } else {
+                    return undefined;
+                }
+            },
+
+            spanClass:function() {
+                let res = [this.colorClass];
 
                 if(this.colorInvert) {
                     res.push('color-invert');

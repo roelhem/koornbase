@@ -28,3 +28,11 @@ export const AVATAR_SIZES = [
     'xl',
     'xxl',
 ];
+
+
+
+
+
+
+
+export const ICON_SETS = ['fa','fe'];
