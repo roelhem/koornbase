@@ -3,9 +3,9 @@
 
         <base-avatar v-if="avatar" tag :default-color="defaultAvatarColor" v-bind="avatar" />
 
-        {{ label }}
-
-        <slot />
+        <slot>
+            {{ label }}
+        </slot>
 
         <a v-if="removeButton"
            href="javascript:void(0);"

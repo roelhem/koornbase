@@ -14,7 +14,7 @@
 
                 <b-card>
                     <b-media>
-                        <base-avatar slot="aside" class="avatar-xxl mr-5" image="{{$user->avatar}}" letters="{{$user->avatar_letters}}"></base-avatar>
+                        <base-avatar slot="aside" class="avatar-xxl mr-5" image="{{$user->avatar->image}}" letters="{{$user->avatar->letters}}"></base-avatar>
                         <h4 class="m-0">{{ $user->name_display }}</h4>
                         <p class="text-muted mb-0">{{ $user->email }} <span class="small text-muted-dark">(<em>{{ $user->name }}</em>)</span></p>
                     </b-media>

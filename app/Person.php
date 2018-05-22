@@ -8,6 +8,7 @@ use App\Traits\Person\HasEmailAddresses;
 use App\Traits\Person\HasGroupMemberships;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasPhoneNumbers;
+use App\Types\AvatarType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,7 +41,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read string $name_short
  * @property-read string $name_formal
  * @property-read string $avatar_letters
- * @property-read string|null $avatar
+ * @property-read AvatarType $avatar
  * @property-read integer|null $age
  *
  * @property array $name_array
@@ -178,9 +179,10 @@ class Person extends Model
     }
 
     /**
-     * Returns a hyperlink to an image that can be used as an image for this persons Avatar.
+     * Returns a AvatarType that describes an Avatar that can be used in a front-end application to represent this
+     * Person.
      *
-     * @return string|null
+     * @return AvatarType
      */
     public function getAvatarAttribute() {
         foreach ($this->users as $user) {
@@ -188,7 +190,9 @@ class Person extends Model
                 return $user->avatar;
             }
         }
-        return null;
+        $res = new AvatarType;
+        $res->letters = $this->avatar_letters;
+        return $res;
     }
 
     /**

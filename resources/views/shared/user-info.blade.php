@@ -6,7 +6,7 @@
         <?php $user = Auth::user(); ?>
 
     <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-        <base-avatar color="blue" image="{{ $user->avatar }}" letters="{{ $user->avatar_letters }}"></base-avatar>
+        <base-avatar color="blue" image="{{ $user->avatar->image }}" letters="{{ $user->avatar->letters }}"></base-avatar>
         <span class="ml-2 d-none d-lg-block">
             <span class="text-default">{{ $user->name_display }}</span>
             <span class="text-muted d-block mt-1 small">{{ $user->email }}</span>

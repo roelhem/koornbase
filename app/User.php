@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Types\AvatarType;
 use App\Enums\OAuthProviders;
 use App\Traits\HasAssignedRoles;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,7 +27,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read string|null $name_display
  * @property-read string|null $name_short
  * @property-read string|null $avatar_letters
- * @property-read string|null $avatar
+ * @property-read AvatarType $avatar
  *
  * @inheritdoc
  */
@@ -103,24 +104,26 @@ class User extends Authenticatable
     }
 
     /**
-     * Returns an url to an image that can be used as an avatar picture of this user.
+     * Returns an AvatarType that gives an avatar that can represent this user.
      *
-     * @return string
+     * @return AvatarType
      */
     public function getAvatarAttribute() {
+
+        $res = new AvatarType;
+        $res->letters = $this->avatar_letters;
+
         $query = $this->accounts()->whereNotNull('avatar');
 
         foreach (OAuthProviders::ordeningAvatar() as $provider) {
             $query->orderByRaw('"provider" = ? DESC', [$provider]);
         }
-
         $account = $query->first();
-
         if($account) {
-            return $account->avatar;
-        } else {
-            return null;
+            $res->image = $account->avatar;
         }
+
+        return $res;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

@@ -34,10 +34,7 @@ class PeopleSearchResource extends JsonResource
                     'nickname' => $person->name_nickname,
                 ],
                 'birth_date' => $person->birth_date ? $person->birth_date->toDateString() : null,
-                'avatar' => [
-                    'letters' => $person->avatar_letters,
-                    'image' => $this->when($person->avatar !== null, $person->avatar),
-                ],
+                'avatar' => $person->avatar->toArray(),
                 'membership' => $this->getMembershipStatus($person),
                 'links' => [
                     'show' => route('people.person', ['person' => $person]),

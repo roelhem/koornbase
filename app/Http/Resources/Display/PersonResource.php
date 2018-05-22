@@ -19,10 +19,7 @@ class PersonResource extends JsonResource
             'name' => $this->name_array,
             'birth_date' => $this->birth_date,
             'remarks' => $this->remarks,
-            'avatar' => [
-                'letters' => $this->avatar_letters,
-                'image' => $this->avatar,
-            ],
+            'avatar' => $this->avatar->toArray(),
             'membership_status' => $this->membership_status,
             'membership_status_since' => $this->membership_status_since,
 
