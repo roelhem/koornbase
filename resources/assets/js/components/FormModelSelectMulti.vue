@@ -24,12 +24,12 @@
         </template>
 
         <template slot="tag" slot-scope="{ option, search, remove }">
-            <span class="tag mr-2 mb-2" @mousedown.prevent>
-                {{ option.name_short }}
-                <a href="javascript:void(0);" class="tag-addon">
-                    <i class="fe fe-x" @click.prevent="remove(option)"></i>
-                </a>
-            </span>
+            <ref-tag class="mr-2 mb-2"
+                     :label="option.name_short"
+                     @mousedown.prevent
+                     remove-button
+                     @remove-click="remove(option)"
+            />
         </template>
 
 
@@ -51,10 +51,12 @@
 <script>
     import axios from 'axios';
     import Multiselect from 'vue-multiselect';
+    import RefTag from "./BaseTag";
 
     export default {
         name: "form-model-select-multi",
         components:{
+            RefTag,
             Multiselect
         },
 

@@ -76,16 +76,14 @@ Vue.component('column-select', require('./components/search/column-select.vue'))
 Vue.component('people-search-page', require('./components/people/search/page.vue'));
 Vue.component('people-search-groups-page', require('./components/people/groups/search/page.vue'));
 
-Vue.component('membership-status', require('./components/displays/membership-status.vue'));
 Vue.component('group-tag', require('./components/displays/group-tag.vue'));
-Vue.component('group-membership-tag', require('./components/displays/group-membership-tag.vue'));
 
 Vue.component('full-calendar', require('./components/FullCalendar'));
 
-Vue.component('user-avatar', require('./components/displays/user-avatar'));
-
 Vue.component('person-page', require('./components/person/page'));
 Vue.component('person-form', require('./components/person/form/form'));
+
+Vue.component('base-avatar', require('./components/BaseAvatar'));
 
 Vue.component('display-person-name', require('./components/DisplayPersonName'));
 Vue.component('display-person-birth-date', require('./components/DisplayPersonBirthDate'));
@@ -94,6 +92,8 @@ Vue.component('display-person-membership-status', require('./components/DisplayP
 Vue.component('form-input-name', require('./components/FormInputName'));
 Vue.component('form-model-select-tree', require('./components/FormModelSelectTree'));
 Vue.component('form-model-select-multi', require('./components/FormModelSelectMulti'));
+
+Vue.component('the-page-home', require('./components/ThePageHome'));
 
 Vue.component(
     'passport-authorized-clients',

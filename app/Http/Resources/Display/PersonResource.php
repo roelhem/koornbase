@@ -21,7 +21,7 @@ class PersonResource extends JsonResource
             'remarks' => $this->remarks,
             'avatar' => [
                 'letters' => $this->avatar_letters,
-                'image' => $this->avatar
+                'image' => $this->avatar,
             ],
             'membership_status' => $this->membership_status,
             'membership_status_since' => $this->membership_status_since,

@@ -78,7 +78,7 @@ final class GroupCategoryStyles extends Enum
             'tagColor' => self::getTagColor($value),
             'avatar' => [
                 'color' => self::getAvatarColor($value),
-                'icon' => self::getAvatarIcon($value)
+                'icon' => ['fa', 'fa-'.self::getAvatarIcon($value)]
             ],
         ];
     }

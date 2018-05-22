@@ -147,7 +147,7 @@
                              :sort-desc.sync="sortDesc" hover responsive>
 
 
-                        <person-avatar slot="avatar" slot-scope="data" :avatar="data.item.avatar" />
+                        <base-avatar slot="avatar" slot-scope="{ item }" v-bind="item.avatar" default-color="blue" />
 
 
                         <template slot="name" slot-scope="data">
@@ -210,17 +210,17 @@
 </template>
 
 <script>
-    import PersonAvatar from "../../displays/person-avatar";
     import PeopleSearchColBirthDate from "./col/birth-date";
     import PeopleSearchColMembershipStatus from "./col/membership-status";
     import MembershipStatusFilter from './filter/membership-status';
+    import BaseAvatar from '../../BaseAvatar';
 
     export default {
 
         components: {
             PeopleSearchColMembershipStatus,
             PeopleSearchColBirthDate,
-            PersonAvatar,
+            BaseAvatar,
             MembershipStatusFilter
         },
 
@@ -237,7 +237,7 @@
                     },
                     {
                         key:'id',
-                        label:'id',
+                        label:'ID',
                         name:'ID',
                         sortable:'id',
                         visible:false

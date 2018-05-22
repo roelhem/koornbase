@@ -2,7 +2,7 @@
 
     <span class="tag group-tag" :class="g.category.style.tagColor ? 'tag-'+g.category.style.tagColor : null" slot="reference">
 
-        <group-avatar v-if="avatar && g.category.style.avatar" :config="g.category.style.avatar"></group-avatar>
+        <base-avatar tag v-if="avatar && g.category.style.avatar" v-bind="g.category.style.avatar"></base-avatar>
 
         <span v-if="labelType === 'short'">{{ g.name_short }}</span>
         <span v-else-if="labelType === 'member_name'">{{ g.member_name }}</span>
@@ -17,7 +17,7 @@
 
 <script>
     import axios from 'axios';
-    import GroupAvatar from "./group-avatar";
+    import BaseAvatar from "../BaseAvatar";
 
     export default {
         name: "group-tag",
@@ -78,7 +78,7 @@
             }
         },
         components: {
-            GroupAvatar,
+            BaseAvatar,
             'popper':Popper
         }
     }

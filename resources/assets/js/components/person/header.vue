@@ -4,7 +4,7 @@
 
         <div class="d-flex">
             <div class="person-avatar px-2">
-                <person-avatar :avatar="person.avatar" class="avatar-xxl"></person-avatar>
+                <base-avatar v-bind="person.avatar" size="xxl" default-color="blue"></base-avatar>
             </div>
 
             <div class="person-name p-1 pt-3">
@@ -32,10 +32,10 @@
 </template>
 
 <script>
-    import PersonAvatar from "../displays/person-avatar";
+    import BaseAvatar from "../BaseAvatar";
 
     export default {
-        components: {PersonAvatar},
+        components: {BaseAvatar},
         props: {
             person:Object,
         },
