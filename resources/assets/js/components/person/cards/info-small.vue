@@ -9,13 +9,31 @@
             </tr>
 
             <tr>
-                <th><i class="fa fa-book text-muted"></i></th>
-                <td></td>
+                <th><i class="fa fa-birthday-cake text-muted"></i></th>
+                <td><display-person-birth-date :birth_date="person.birth_date" /></td>
             </tr>
 
             <tr>
-                <th><i class="fa fa-birthday-cake text-muted"></i></th>
-                <td><display-person-birth-date :birth_date="person.birth_date" /></td>
+                <th><i class="fa fa-book text-muted"></i></th>
+                <td>
+                    <display-person-membership-status :value="person.membership_status"
+                                                      :since="person.membership_status_since">
+                    </display-person-membership-status>
+                </td>
+            </tr>
+
+            <tr v-if="person.cardOwnership">
+                <th><i class="fa fa-credit-card text-muted"></i></th>
+                <td>
+                    <data-display title="Ledenpas">{{ person.cardOwnership.card.id }}</data-display>
+                    <span class="small text-muted font-italic" v-if="person.cardOwnership.start">
+                        ( Sinds
+                        <data-display class="text-muted-dark" title="In bezit van ledenpas sinds">
+                            {{ person.cardOwnership.start | moment('dd D MMM YYYY') }}
+                        </data-display>
+                        )
+                    </span>
+                </td>
             </tr>
 
             <tr v-for="emailAddress in person.emailAddresses" v-if="emailAddress.is_primary">

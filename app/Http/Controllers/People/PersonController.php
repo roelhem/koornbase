@@ -25,17 +25,10 @@ class PersonController extends Controller
             'groupMemberships.group.category',
             'emailAddresses',
             'phoneNumbers',
+            'cardOwnership.card',
         ]);
 
         return new PersonResource($person);
-    }
-
-    function timeline(Person $person) {
-        return view('people.person.timeline', ['person' => $person]);
-    }
-
-    function contact(Person $person) {
-        return view('people.person.contact', ['person' => $person]);
     }
 
 

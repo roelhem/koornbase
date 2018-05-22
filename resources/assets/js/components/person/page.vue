@@ -16,7 +16,7 @@
                     {{ page.label }}
                 </b-nav-item>
 
-                <div class="ml-auto px-4">
+                <div class="ml-auto px-4 py-2">
 
 
                     <b-button class="mx-2" :href="editPageLink" variant="outline-primary"><a class="fa fa-pencil mr-2"></a>Bewerken</b-button>

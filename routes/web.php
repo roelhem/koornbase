@@ -26,6 +26,13 @@ Route::view('/sitemap', 'sitemap')->name('sitemap');
 
 
 
+// Routes for the form-model-select components
+Route::prefix('select')->group(function() {
+    Route::get('/group-category', 'Select\GroupCategoryController@index')->name('select.group-categories');
+    Route::get('/group','Select\GroupController@index')->name('select.groups');
+});
+
+
 // Routes for the Socialite/OAuth2 connections.
 Route::prefix('login')->group(function() {
 
@@ -64,14 +71,21 @@ Route::namespace('People')->prefix('people')->group(function() {
     Route::get('/search', 'SearchController@search')->name('people.search');
     Route::get('/search/groups', 'SearchController@group')->name('people.search.groups');
 
+    Route::get('/groups','GroupSearchController@index')->name('people.groups.index');
+    Route::get('/groups/search','GroupSearchController@search')->name('people.groups.search');
+
+    Route::get('/groups/create', 'GroupController@create')->name('people.groups.create');
+    Route::post('/groups/create', 'GroupController@store');
+
+    Route::get('/groups/categories/create','GroupCategoryController@create')->name('people.groups.categories.create');
+    Route::post('/groups/categories/create','GroupCategoryController@store');
+
     Route::get('/create', 'PersonController@create')->name('people.person.create');
     Route::post('/create', 'PersonController@store');
     Route::get('/{person}/edit', 'PersonController@edit')->name('people.person.edit');
     Route::post('/{person}/edit', 'PersonController@update');
 
     Route::get('/{person}','PersonController@show')->name('people.person');
-    Route::get('/{person}/timeline', 'PersonController@timeline')->name('people.person.timeline');
-    Route::get('/{person}/contact', 'PersonController@contact')->name('people.person.contact');
 
 });
 

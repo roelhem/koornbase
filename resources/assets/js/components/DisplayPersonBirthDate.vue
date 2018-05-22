@@ -2,9 +2,9 @@
 
     <span>
         <data-display title="Geboortedatum">{{ birth_date | moment('D MMMM YYYY') }}</data-display>
-        <small :class="{'text-muted': !underAged, 'text-warning': underAged}">
+        <small class="font-italic" :class="{'text-muted': !underAged, 'text-warning': underAged}">
             (
-            <data-display title="Leeftijd">{{ age }}</data-display>
+            <data-display title="Leeftijd">{{ age }}</data-display> jaar
             )
         </small>
     </span>

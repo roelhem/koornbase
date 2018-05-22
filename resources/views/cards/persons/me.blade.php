@@ -51,19 +51,10 @@
         <tr>
             <th>Status Lidmaatschap</th>
             <td>
-                <data-display class="tracking-wide" title="Status Lidmaatschap">
-                    <membership-status :value="{{ $person->membership_status }}"></membership-status>
-                </data-display>
 
-                @if($person->membership_status > 0)
-                <span class="text-muted small">
-                    [ sinds
-                    <data-display class="text-muted-dark" title="Status Lidmaatschap Sinds">
-                        {{ $person->membership_status_since->formatLocalized('%e %B %Y') }}
-                    </data-display>
-                    ]
-                </span>
-                @endif
+                <display-person-membership-status :value="{{ $person->membership_status }}"
+                                                  since="{{ $person->membership_status_since->format('c') }}">
+                </display-person-membership-status>
             </td>
         </tr>
         <tr>

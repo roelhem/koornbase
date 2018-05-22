@@ -29,6 +29,7 @@ class PersonResource extends JsonResource
             'groupMemberships' => GroupMembershipResource::collection($this->whenLoaded('groupMemberships')),
             'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
             'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
+            'cardOwnership' => new KoornbeursCardOwnershipResource($this->whenLoaded('cardOwnership')),
         ];
     }
 }

@@ -1,8 +1,8 @@
 <template>
 
     <div>
-        <div>{{ row.birth_date | moment('D MMMM Y') }}</div>
-        <div class="small font-italic" :class="{'text-danger': underAged, 'text-muted': !underAged}">
+        <div v-if="row.birth_date">{{ row.birth_date | moment('D MMMM Y') }}</div>
+        <div v-if="row.birth_date" class="small font-italic" :class="{'text-danger': underAged, 'text-muted': !underAged}">
             ( {{ age }} jaar )
         </div>
     </div>
