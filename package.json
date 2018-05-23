@@ -26,6 +26,7 @@
         "bootstrap-vue": "^2.0.0-rc.10",
         "fullcalendar": "^3.9.0",
         "moment": "^2.22.1",
+        "object-path": "^0.11.4",
         "tabler-ui": "github:tabler/tabler",
         "v-calendar": "^0.9.7",
         "vue-autosuggest": "^1.4.2-1",

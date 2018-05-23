@@ -3,5 +3,5 @@
 @section('title', 'Personen Beheren')
 
 @section('content')
-    <people-search-page src="{{ route('people.search') }}"></people-search-page>
+    <the-page-person-search></the-page-person-search>
 @endsection

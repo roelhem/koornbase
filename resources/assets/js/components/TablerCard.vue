@@ -7,7 +7,7 @@
         <div class="card-header" @click="headerClickHandler">
             <slot name="header">
                 <h3 class="card-title">
-                    <base-icon :icon="icon" class="text-muted-dark mr-1" />
+                    <base-icon :icon="icon" :from="iconFrom" class="text-muted-dark mr-1" />
                     <slot name="title">{{ title }}</slot>
                 </h3>
 
@@ -70,6 +70,12 @@
 
             title:String,
             icon:[String,Object],
+            iconFrom:{
+                type:[String, Array],
+                default:function() {
+                    return ['fe','fa'];
+                }
+            },
             status:String,
             statusLeft:{
                 type:Boolean,

@@ -15,11 +15,15 @@
 
 <script>
     import BaseIcon from './BaseIcon';
+    import useDefaultStyle from '../mixins/useDefaultStyle';
     import { AVATAR_COLORS, BACKGROUND_COLORS, AVATAR_SIZES } from '../constants/style';
 
     export default {
-        components: {BaseIcon},
         name: "base-avatar",
+
+        components: {BaseIcon},
+        mixins: [useDefaultStyle],
+
 
         props: {
             image:String,
@@ -30,8 +34,6 @@
                 type:Boolean,
                 default:false,
             },
-
-            defaultStyle:Object,
 
             color: {
                 type:String,
@@ -86,29 +88,11 @@
             },
 
             defaultColor:function() {
-                if(this.defaultStyle) {
-                    if(this.defaultStyle.avatar && this.defaultStyle.avatar.color) {
-                        return this.defaultStyle.avatar.color;
-                    }
-
-                    if(this.defaultStyle.color) {
-                        return this.defaultStyle.color;
-                    }
-                }
-                return undefined;
+                return this.getStyle('avatar.color', 'color');
             },
 
             defaultIcon:function() {
-                if(this.defaultStyle) {
-                    if(this.defaultStyle.avatar && this.defaultStyle.avatar.icon) {
-                        return this.defaultStyle.avatar.icon;
-                    }
-
-                    if(this.defaultStyle.icon) {
-                        return this.defaultStyle.icon;
-                    }
-                }
-                return undefined;
+                return this.getStyle('avatar.icon','icon');
             },
 
             colorClass:function() {

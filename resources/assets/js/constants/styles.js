@@ -147,3 +147,13 @@ export const GROUP_STYLES = [
         }
     }
 ];
+
+export const PERSON_STYLE = {
+    name: 'person-default',
+    label: 'Persoon',
+    avatar: {
+        color:'blue'
+    },
+};
+
+export default [ PERSON_STYLE ].concat(GROUP_STYLES);

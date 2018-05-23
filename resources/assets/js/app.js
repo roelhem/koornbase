@@ -65,33 +65,16 @@ Vue.component('data-display', require('./components/displays/data-display'));
 Vue.component('crud-form', require('./components/forms/crud-form.vue'));
 
 Vue.component('card-user-small', require('./components/cards/card-user-small.vue'));
-Vue.component('card-timeline', require('./components/cards/card-timeline.vue'));
-Vue.component('card-flexible', require('./components/cards/card-flexible.vue'));
-Vue.component('card-filter', require('./components/cards/card-filter.vue'));
 Vue.component('card-calendar', require('./components/cards/card-calendar.vue'));
-Vue.component('card-maps', require('./components/cards/card-maps.vue'));
-
-Vue.component('column-select', require('./components/search/column-select.vue'));
-
-Vue.component('people-search-page', require('./components/people/search/page.vue'));
-Vue.component('people-search-groups-page', require('./components/people/groups/search/page.vue'));
 
 Vue.component('full-calendar', require('./components/FullCalendar'));
 
 Vue.component('person-page', require('./components/person/page'));
 Vue.component('person-form', require('./components/person/form/form'));
-
 Vue.component('base-avatar', require('./components/BaseAvatar'));
 
-Vue.component('display-person-name', require('./components/DisplayPersonName'));
-Vue.component('display-person-birth-date', require('./components/DisplayPersonBirthDate'));
-Vue.component('display-person-membership-status', require('./components/DisplayMembershipStatus'));
-
-Vue.component('form-input-name', require('./components/FormInputName'));
-Vue.component('form-model-select-tree', require('./components/FormModelSelectTree'));
-Vue.component('form-model-select-multi', require('./components/FormModelSelectMulti'));
-
 Vue.component('the-page-home', require('./components/ThePageHome'));
+Vue.component('the-page-person-search', require('./components/ThePagePersonSearch'));
 
 Vue.component(
     'passport-authorized-clients',

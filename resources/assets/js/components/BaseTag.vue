@@ -18,17 +18,19 @@
 
 <script>
     import BaseAvatar from "./BaseAvatar";
+    import useDefaultStyle from '../mixins/useDefaultStyle';
     import { TAG_COLORS } from '../constants/style';
 
 
     export default {
         name: "base-tag",
+
+        mixins:[useDefaultStyle],
         components:{BaseAvatar},
 
         props: {
             label:String,
             avatar:Object,
-            defaultStyle:Object,
 
             rounded:{
                 type:Boolean,
@@ -52,23 +54,11 @@
         computed: {
 
             showAvatar: function() {
-                if(this.avatar) {
-                    return true;
-                } else if(this.defaultStyle && this.defaultStyle.tag && this.defaultStyle.tag.alwaysShowAvatar) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return this.avatar || this.getStyle('tag.alwaysShowAvatar');
             },
 
             currentColor: function() {
-                if(this.color) {
-                    return this.color;
-                } else if(this.defaultStyle && this.defaultStyle.tag && this.defaultStyle.tag.color) {
-                    return this.defaultStyle.tag.color;
-                } else {
-                    return undefined;
-                }
+                return this.color || this.getStyle('tag.color');
             },
 
             tagClass: function() {
