@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Select;
+namespace App\Http\Resources\Display;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Resource extends JsonResource
+class MembershipResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class Resource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'name_short' => $this->name_short,
-            'description' => $this->description,
-            'style' => $this->style
+            'application' => $this->application,
+            'start' => $this->start,
+            'end' => $this->end,
+            'remarks' => $this->remarks
         ];
     }
 }

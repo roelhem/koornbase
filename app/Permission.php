@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Contracts\Rbac\RbacChecker;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,6 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $id The primary identifier of this Permission.
  * @property string|null $name A descriptive name of this Permission.
  * @property string|null $description A description of this Permission, to clarify it's function.
+ *
+ * @property-read Collection $parentRoles
+ * @property-read Collection $parentPermissions
+ * @property-read Collection $childPermissions
  */
 class Permission extends Model
 {
@@ -28,9 +34,64 @@ class Permission extends Model
 
     protected $fillable = ['id','name','description'];
 
+    /**
+     * @var RbacChecker
+     */
+    protected $rbacChecker;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->rbacChecker = resolve(RbacChecker::class);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- METHODS for checking the RBAC TREE ----------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Checks if the role has the given permission.
+     *
+     * @param $permission
+     * @return boolean
+     */
+    public function hasPermission($permission) {
+        return $this->rbacChecker->permissionHasPermission($this, $permission);
+    }
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- METHODS for assigning RBAC ENTITIES ---------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Shortcut for assignPermission. Can also handle multiple assignments
+     *
+     * This function is added for convenience to make permissions work similar to the roles.
+     *
+     * @return $this
+     */
+    public function assign(...$permissions) {
+        foreach ($permissions as $permission) {
+            return $this->assignPermission($permission);
+        }
+    }
+
+    /**
+     * Assigns this permission to a model where an Permission can be assigned to.
+     *
+     * @param $model
+     * @return $this
+     * @throws
+     */
+    public function assignTo($model) {
+        if($model instanceof Role) {
+            return $this->assignToRole($model);
+        } else if($model instanceof Permission) {
+            return $this->assignToPermission($model);
+        }
+
+        throw new \Exception("Can't assign a permission to the given model.");
+    }
 
     /**
      * Assigns this Permission to the provided role.
@@ -97,6 +158,18 @@ class Permission extends Model
     public function childPermissions() {
         return $this->belongsToMany(Permission::class, 'permission_permission',
             'parent_id','child_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- MAGIC METHODS -------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString()
+    {
+        return $this->id;
     }
 
 }

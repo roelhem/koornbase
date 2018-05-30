@@ -16,7 +16,7 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('category_id', 63);
+            $table->unsignedInteger('category_id');
 
             $table->string('slug', 63)->unique();
 
@@ -37,6 +37,19 @@ class CreateGroupsTable extends Migration
 
             $table->foreign('category_id')->references('id')->on('group_categories')
                 ->onUpdate('cascade')->onDelete('restrict');
+        });
+
+        Schema::create('person_group', function(Blueprint $table) {
+            $table->unsignedInteger('person_id');
+            $table->unsignedInteger('group_id');
+
+            $table->primary(['person_id','group_id']);
+
+            $table->foreign('person_id')->references('id')->on('persons')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->foreign('group_id')->references('id')->on('groups')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

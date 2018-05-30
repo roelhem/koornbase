@@ -3,13 +3,12 @@
 namespace App;
 
 use App\Traits\Person\HasAddresses;
-use App\Traits\Person\HasCardOwnerships;
 use App\Traits\Person\HasEmailAddresses;
-use App\Traits\Person\HasGroupMemberships;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasPhoneNumbers;
 use App\Types\AvatarType;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
@@ -46,9 +45,9 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property array $name_array
  *
- * @property-read User[] $users
- * @property-read Debtor[] $debtors
- * @property-read Job[] $jobs
+ * @property-read Collection $users
+ * @property-read Collection $groups
+ * @property-read Collection $debtors
  */
 class Person extends Model
 {
@@ -56,7 +55,7 @@ class Person extends Model
     use SoftDeletes;
     use Userstamps;
 
-    use HasMemberships, HasGroupMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasCardOwnerships;
+    use HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -263,21 +262,21 @@ class Person extends Model
     }
 
     /**
-     * Gives the Jobs that this Person have fulfilled or should fulfill.
+     * Gives all the KoornbeursCards that belong to this Person.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function jobs() {
-        return $this->hasMany(Job::class, 'person_id');
+    public function cards() {
+        return $this->hasMany(KoornbeursCard::class, 'card_id');
     }
 
     /**
-     * Gives the Events that have this Person as the manager.
+     * Gives all the groups that belong to this person.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function managedEvents() {
-        return $this->hasMany(Event::class, 'manager_id');
+    public function groups() {
+        return $this->belongsToMany(Group::class, 'person_group','person_id','group_id');
     }
 
 

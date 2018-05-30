@@ -4,7 +4,7 @@
 
         <div class="d-flex">
             <div class="person-avatar px-2">
-                <base-avatar v-bind="person.avatar" size="xxl" default-color="blue"></base-avatar>
+                <base-avatar v-bind="person.avatar" size="xxl" default-color="blue" default-style="person-default"></base-avatar>
             </div>
 
             <div class="person-name p-1 pt-3">

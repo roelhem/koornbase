@@ -137,6 +137,9 @@ fieldset[disabled] .multiselect {
   background: #fff;
   font-size: $font-size-base;
 }
+.multiselect-no-border .multiselect__tags {
+  border:none;
+}
 .multiselect__tag {
   position: relative;
   display: inline-block;

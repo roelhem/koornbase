@@ -35,7 +35,7 @@ trait Sluggable
                 'uniqueSuffix' => null,
                 'includeTrashed' => true,
                 'reserved' => null,
-                'onUpdate' => true
+                'onUpdate' => false
             ]
         ];
     }

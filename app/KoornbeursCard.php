@@ -16,32 +16,21 @@ class KoornbeursCard extends Model
     // ---------------------------------------------------------------------------------------------------------- //
 
     protected $table = 'koornbeurs_cards';
-    public $incrementing = false;
 
     protected $dates = ['activated_at','deactivated_at','created_at', 'updated_at'];
-    protected $fillable = ['id','activated_at','deactivated_at','version','remarks'];
+    protected $fillable = ['id','ref','version','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Gives the KoornbeursCardOwnerships of this KoornbeursCard.
+     * Gives the Owner of this KoornbeursCard.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ownerships() {
-        return $this->hasMany(KoornbeursCardOwnership::class, 'card_id');
-    }
-
-    /**
-     * Gives the most recent KoornbeursCardOwnership of this KoornbeursCard.
-     *
-     * @param Carbon|string|null $at
-     * @return mixed
-     */
-    public function ownership($at = null) {
-        return $this->hasOne(KoornbeursCardOwnership::class, 'card_id')->now($at)->orderByDesc('start');
+    public function owner() {
+        return $this->belongsTo(Person::class, 'owner_id');
     }
 
 }

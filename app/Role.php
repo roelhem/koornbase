@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Contracts\Rbac\RbacChecker;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -9,11 +11,16 @@ use Wildside\Userstamps\Userstamps;
  * Class Role
  * @package App
  *
+ * @property string $id The id of the role
  * @property string $name The name of the role
  * @property boolean $for_user If this role may be assigned to a User
  * @property boolean $for_group If this role may be assigned to a Group
  * @property boolean $for_group_title If this role may be assigned to a GroupTitle
  * @property boolean $for_group_category If this role may be assigend to a GroupCategory
+ *
+ * @property-read Collection $parentRoles
+ * @property-read Collection $childRoles
+ * @property-read Collection $childPermissions
  */
 class Role extends Model
 {
@@ -30,26 +37,63 @@ class Role extends Model
     public $incrementing = false;
 
     protected $fillable = ['id','name','description','is_required','is_visible','for_user','for_group',
-                            'for_group_title','for_group_category'];
+                            'for_group_category'];
+
+    /**
+     * @var RbacChecker
+     */
+    protected $rbacChecker;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->rbacChecker = resolve(RbacChecker::class);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- METHODS for checking the RBAC TREE ----------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Checks if this role is equal to the given role or if it has a childRole.
+     *
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role) {
+        return $this->rbacChecker->roleHasRole($this, $role);
+    }
+
+    /**
+     * Checks if the role has the given permission.
+     *
+     * @param $permission
+     * @return boolean
+     */
+    public function hasPermission($permission) {
+        return $this->rbacChecker->roleHasPermission($this, $permission);
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- METHODS for assigning RBAC ENTITIES ---------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
-
     /**
-     * Assigns this role to another Model. (This will only work if the other model can have Roles be assigned to.)
+     * Assigns this role to an Model that can have assigned roles.
      *
-     * @param Model $model
+     * @param $model
      * @return $this
+     * @throws
      */
-    public function assignTo(Model $model) {
-        if($model instanceof Role) { $this->assignToRole($model); }
-        elseif($model instanceof User) { $this->assignToUser($model); }
-        elseif($model instanceof Group) { $this->assignToGroup($model); }
-        elseif($model instanceof GroupTitle) { $this->assignToGroupTitle($model); }
-        elseif($model instanceof GroupCategory) { $this->assignToGroupCategory($model); }
-        return $this;
+    public function assignTo($model) {
+        if($model instanceof Role) {
+            return $this->assignToRole($model);
+        } elseif(method_exists($model, 'assignRole')) {
+            $model->assignRole($this);
+            return $this;
+        }
+
+        throw new \Exception("Can't assign a role to the given model.");
     }
 
     /**
@@ -64,67 +108,20 @@ class Role extends Model
     }
 
     /**
-     * Assigns this Role to a User.
-     *
-     * @param User|integer $user
-     * @return $this
-     */
-    public function assignToUser($user) {
-        $this->parentUsers()->attach($user);
-        return $this;
-    }
-
-    /**
-     * Assigns this Role to a Group. If a string is given for the $group parameter, the method will try to find
-     * a group that has a slug equal to the provided string.
-     *
-     * @param Group|integer|string $group
-     * @return $this
-     */
-    public function assignToGroup($group) {
-        if(is_string($group)) {
-            $group = Group::findBySlug($group);
-        }
-        $this->parentGroups()->attach($group);
-        return $this;
-    }
-
-    /**
-     * Assigns this Role to a GroupTitle. If a string is given for the $groupTitle parameter, the method will try
-     * to find a GroupTitle that has a slug equal to the provided string.
-     *
-     * @param Group|integer|string $groupTitle
-     * @return $this
-     */
-    public function assignToGroupTitle($groupTitle) {
-        if(is_string($groupTitle)) {
-            $groupTitle = GroupTitle::findBySlug($groupTitle);
-        }
-        $this->parentGroupTitles()->attach($groupTitle);
-        return $this;
-    }
-
-    /**
-     * Assigns this Role to a GroupCategory.
-     *
-     * @param Group|string $groupCategory
-     * @return $this
-     */
-    public function assignToGroupCategory($groupCategory) {
-        $this->parentGroupCategories()->attach($groupCategory);
-        return $this;
-    }
-
-    /**
      * Assigns a provided Role or Permission to this Role as a child. ($this will be the parent and $model
      * will be the child). Only Roles and Permissions can be assigned with this method.
      *
-     * @param Model $model
+     * @param array $model
      * @return $this
      */
-    public function assign(Model $model) {
-        if($model instanceof Role) { $this->assignRole($model); }
-        elseif($model instanceof Permission) { $this->assignPermission($model); }
+    public function assign(...$models) {
+        foreach($models as $model) {
+            if ($model instanceof Role) {
+                $this->assignRole($model);
+            } elseif ($model instanceof Permission) {
+                $this->assignPermission($model);
+            }
+        }
         return $this;
     }
 
@@ -155,43 +152,30 @@ class Role extends Model
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Gives all Users where this Role is directly assigned to.
+     * Gives all the Users where this Role is assigned to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function parentUsers() {
-        return $this->belongsToMany(User::class, 'user_role',
-                                'role_id','user_id');
+    public function users() {
+        return $this->morphedByMany(User::class, 'assignable');
     }
 
     /**
-     * Gives all Groups where this Role is directly assigned to.
+     * Gives all the Groups where this Role is assigned to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function parentGroups() {
-        return $this->belongsToMany(Group::class, 'group_role',
-                                'role_id','group_id');
+    public function groups() {
+        return $this->morphedByMany(Group::class, 'assignable');
     }
 
     /**
-     * Gives all GroupTitles where this Role is directly assigned to.
+     * Gives all the GroupCategories where this Role is assigned to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function parentGroupTitles() {
-        return $this->belongsToMany(GroupTitle::class, 'group_title_role',
-                                'role_id','group_title_id');
-    }
-
-    /**
-     * Gives all the GroupCategories where this Role is directly assigned to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function parentGroupCategories() {
-        return $this->belongsToMany(GroupCategory::class, 'group_category_role',
-                                'role_id','user_id');
+    public function groupCategories() {
+        return $this->morphedByMany(GroupCategory::class, 'assignable');
     }
 
     /**

@@ -99,6 +99,11 @@ Route::namespace('People')->prefix('people')->group(function() {
 
     Route::get('/{person}','PersonController@show')->name('people.person');
 
+    Route::get('/{person}/memberships', 'MembershipController@index')->name('people.person.membership.index');
+    Route::post('/{person}/memberships/new', 'MembershipController@new')->name('people.person.membership.new');
+    Route::post('/{person}/memberships/{membership}/start', 'MembershipController@start')->name('people.person.membership.start');
+    Route::post('/{person}/memberships/{membership}/end', 'MembershipController@end')->name('people.person.membership.end');
+
 });
 
 

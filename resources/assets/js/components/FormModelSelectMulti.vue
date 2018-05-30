@@ -12,7 +12,8 @@
                  :selectedGroupLabel="labelText.selectedGroup"
                  :deselectLabel="labelText.deselect"
                  :deselectGroupLabel="labelText.deselectGroup"
-                 v-model="storedSelected">
+                 v-model="selected"
+                 :class="selectClass">
 
         <template slot="singleLabel" slot-scope="{ option, search }">
             <div style="width:100%; overflow:hidden; white-space:nowrap;">
@@ -26,6 +27,7 @@
         <template slot="tag" slot-scope="{ option, search, remove }">
             <ref-tag class="mr-2 mb-2"
                      :label="option.name_short"
+                     :default-style="option.style"
                      @mousedown.prevent
                      remove-button
                      @remove-click="remove(option)"
@@ -82,6 +84,11 @@
                         'group',
                     ].indexOf(val) !== -1;
                 }
+            },
+
+            noBorder: {
+                type:Boolean,
+                default:false,
             }
         },
 
@@ -90,7 +97,6 @@
 
         data: function () {
             return {
-                storedSelected:[],
                 options:[],
                 isLoading:false,
             }
@@ -109,6 +115,16 @@
                 set(newValue) {
                     this.$emit('input', newValue);
                 }
+            },
+
+            selectClass: function() {
+                let res = [];
+
+                if(this.noBorder) {
+                    res.push('multiselect-no-border');
+                }
+
+                return res;
             },
 
             optionsSource: function() {

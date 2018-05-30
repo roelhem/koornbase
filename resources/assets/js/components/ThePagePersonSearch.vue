@@ -100,7 +100,7 @@
 
 
                             <template slot="avatar" slot-scope="{ item }">
-                                <base-avatar v-bind="item.avatar" default-style="person-default" />
+                                <base-avatar v-bind="item.avatar" size="md" default-style="person-default" />
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
@@ -133,8 +133,6 @@
                                 </a>
                             </template>
 
-
-
                         </b-table>
                     </b-card>
                     <!-- END: The Search Table -->
@@ -166,6 +164,13 @@
                         v-model="filters.membershipStatus.value"
                         @input="refreshTable()" v-on:update:active="refreshTable()"
                     />
+
+                    <search-filter-group-card
+                            :active.sync="filters.groups.active"
+                            v-model="filters.groups.value"
+                            @input="refreshTable()" v-on:update:active="refreshTable()"
+                    />
+
                 </b-col>
                 <!-- END: The Sidebar Column -->
 
@@ -190,6 +195,8 @@
 
     import displayFilters from "../filters/display";
     import SearchFilterMembershipStatusCard from "./SearchFilterMembershipStatusCard";
+    import SearchFilterGroupCard from "./SearchFilterGroupCard";
+    import RefTagGroup from "./RefTagGroup";
 
 
     const peopleSearchColumns = [
@@ -199,6 +206,7 @@
             name:'Avatar',
             visible:true,
             thStyle:{'width':'1px'},
+            tdClass:['p-3']
         },
         {
             key:'id',
@@ -257,6 +265,8 @@
 
     export default {
         components: {
+            RefTagGroup,
+            SearchFilterGroupCard,
             SearchFilterMembershipStatusCard,
             SearchStatusDisplay,
             SearchSimplePager,
@@ -284,6 +294,10 @@
                     membershipStatus: {
                         active:false,
                         value:[]
+                    },
+                    groups: {
+                        active:false,
+                        value:[]
                     }
                 }
             }
@@ -299,6 +313,10 @@
 
                 if(this.filters.membershipStatus.active) {
                     res.membership_status = this.filters.membershipStatus.value;
+                }
+
+                if(this.filters.groups.active) {
+                    res.groups = this.filters.groups.value.map(el => el.id);
                 }
 
                 return res;

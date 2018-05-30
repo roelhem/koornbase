@@ -7,6 +7,8 @@ use App\Traits\HasAssignedRoles;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,8 +38,6 @@ class Group extends Model
     use Sluggable;
 
     use HasShortName, HasAssignedRoles;
-
-    use HasMembers;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -72,29 +72,19 @@ class Group extends Model
     /**
      * Gives the GroupCategory where this Group belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function category() {
         return $this->belongsTo(GroupCategory::class, 'category_id');
     }
 
     /**
-     * Gives the Roles that were directly assigned to this Group. If a Role is assigned to a Group, all current
-     * members of this group gain the permissions of the assigned Role.
+     * Gives all the Persons that belong to this Group.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function assignedRoles() {
-        return $this->belongsToMany(Role::class, 'group_role','group_id','role_id');
+    public function persons() {
+        return $this->belongsToMany(Person::class, 'person_group','group_id','person_id');
     }
 
-    /**
-     * Gives the JobCategories where this Group is allowed. A Job that belongs to a JobCategory in this list
-     * is allowed to be fulfilled by a Person that belongs to this Group.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function allowedJobCategories() {
-       return $this->belongsToMany(JobCategory::class,'job_category_group','group_id','category_id');
-    }
 }

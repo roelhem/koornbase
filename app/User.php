@@ -2,10 +2,9 @@
 
 namespace App;
 
+use App\Traits\HasAssignedRoles;
 use App\Types\AvatarType;
 use App\Enums\OAuthProviders;
-use App\Traits\HasAssignedRoles;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -34,8 +33,8 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use Notifiable;
-    use HasAssignedRoles;
     use HasApiTokens;
+    use HasAssignedRoles;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -141,17 +140,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Gives the Roles that were directly assigned to this User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function assignedRoles()
-    {
-        return $this->belongsToMany(Role::class, 'user_role',
-            'user_id','role_id');
-    }
-
-    /**
      * Gives the UserAccounts that belong to this User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -167,7 +155,8 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function facebookAccount() {
-        return $this->hasOne(UserAccount::class, 'user_id')->where('provider','=','facebook');
+        return $this->hasOne(UserAccount::class, 'user_id')
+                    ->where('provider','=','facebook');
     }
 
     /**
@@ -176,7 +165,8 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function githubAccount() {
-        return $this->hasOne(UserAccount::class, 'user_id')->where('provider','=','github');
+        return $this->hasOne(UserAccount::class, 'user_id')
+                    ->where('provider','=','github');
     }
 
     /**
@@ -185,7 +175,8 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function googleAccount() {
-        return $this->hasOne(UserAccount::class, 'user_id')->where('provider','=','google');
+        return $this->hasOne(UserAccount::class, 'user_id')
+                    ->where('provider','=','google');
     }
 
     /**
@@ -194,6 +185,7 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function twitterAccount() {
-        return $this->hasOne(UserAccount::class, 'user_id')->where('provider','=','twitter');
+        return $this->hasOne(UserAccount::class, 'user_id')
+                    ->where('provider','=','twitter');
     }
 }

@@ -29,13 +29,4 @@ class Debtor extends Model
         return $this->belongsTo(Person::class,'person_id');
     }
 
-    /**
-     * Gives the Events where this Debtor is the main Debtor.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function events() {
-        return $this->hasMany(Event::class, 'debtor_id');
-    }
-
 }

@@ -59,6 +59,7 @@
         },
 
         computed: {
+
             optionsSource: function () {
                 switch (this.model) {
                     case 'group-category':

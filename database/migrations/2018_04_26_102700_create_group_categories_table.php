@@ -14,9 +14,10 @@ class CreateGroupCategoriesTable extends Migration
     public function up()
     {
         Schema::create('group_categories', function (Blueprint $table) {
-            $table->string('id', 63);
+            $table->increments('id');
             $table->string('name',255);
             $table->string('name_short', 63)->nullable();
+            $table->string('slug', 63)->nullable();
             $table->text('description')->nullable();
 
             $table->string('style', 63)->nullable();
@@ -31,8 +32,6 @@ class CreateGroupCategoriesTable extends Migration
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
-
-            $table->primary('id');
         });
     }
 
