@@ -51,6 +51,11 @@ class PersonAddress extends Model implements AddressInterface
 
     protected $table = 'person_addresses';
 
+    protected $fillable = ['label','is_primary','for_emergency',
+                           'country_code','administrative_area','locality','dependent_locality','postal_code',
+                           'sorting_code','address_line_1','address_line_2','organisation','locale',
+                           'remarks'];
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- INTERFACE CONFORMATION: AddressInterface ----------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //

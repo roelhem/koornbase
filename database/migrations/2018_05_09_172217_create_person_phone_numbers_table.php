@@ -27,6 +27,8 @@ class CreatePersonPhoneNumbersTable extends Migration
 
             $table->string('phone_number', 63);
 
+            $table->char('country_code', 2)->default('NL');
+
             $table->text('remarks')->nullable();
 
             $table->timestamps();

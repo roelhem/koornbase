@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
+use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasPhoneNumbers;
 use App\Types\AvatarType;
@@ -46,7 +47,6 @@ use Wildside\Userstamps\Userstamps;
  * @property array $name_array
  *
  * @property-read Collection $users
- * @property-read Collection $groups
  * @property-read Collection $debtors
  */
 class Person extends Model
@@ -55,7 +55,7 @@ class Person extends Model
     use SoftDeletes;
     use Userstamps;
 
-    use HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses;
+    use HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -267,16 +267,7 @@ class Person extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function cards() {
-        return $this->hasMany(KoornbeursCard::class, 'card_id');
-    }
-
-    /**
-     * Gives all the groups that belong to this person.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function groups() {
-        return $this->belongsToMany(Group::class, 'person_group','person_id','group_id');
+        return $this->hasMany(KoornbeursCard::class, 'owner_id');
     }
 
 

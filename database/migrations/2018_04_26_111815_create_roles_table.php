@@ -21,9 +21,6 @@ class CreateRolesTable extends Migration
 
             $table->boolean('is_required')->default(false);
             $table->boolean('is_visible')->default(false);
-            $table->boolean('for_user')->default(false);
-            $table->boolean('for_group')->default(false);
-            $table->boolean('for_group_category')->default(false);
 
             $table->timestamps();
 
@@ -55,6 +52,9 @@ class CreateRolesTable extends Migration
 
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
+
+            $table->foreign('role_id')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

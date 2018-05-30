@@ -25,9 +25,6 @@ class CreateKoornbeursCardsTable extends Migration
             $table->timestamp('activated_at')->nullable();
             $table->timestamp('deactivated_at')->nullable();
 
-            $table->unsignedInteger('activated_by')->nullable();
-            $table->unsignedInteger('deactivated_by')->nullable();
-
             $table->text('remarks')->nullable();
 
             $table->timestamps();
@@ -50,7 +47,5 @@ class CreateKoornbeursCardsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('koornbeurs_cards');
-
-        Schema::dropIfExists('person_koornbeurs_card');
     }
 }

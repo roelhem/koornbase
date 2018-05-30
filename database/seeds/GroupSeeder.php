@@ -44,7 +44,6 @@ class GroupSeeder extends Seeder
     public function defaultValues() {
         return [
             [
-                'id' => 'system',
                 'name' => 'KoornBase-systeem gerelateerd',
                 'name_short' => 'Systeem',
                 'description' => "Groepen die alleen functies hebben binnen het KoornBase-systeem of zeer belangrijk zijn om de KoornBase goed te laten werken.",
@@ -63,7 +62,6 @@ class GroupSeeder extends Seeder
                 ]
             ],
             [
-                'id' => 'admin',
                 'name' => 'KoornBase-systeem beheer',
                 'name_short' => 'Beheer',
                 'description' => 'Groepen die te maken hebben met het beheren van het KoornBase systeem.',
@@ -99,7 +97,6 @@ class GroupSeeder extends Seeder
                 ]
             ],
             [
-                'id' => 'debug',
                 'name' => 'Groepen om te testen.',
                 'name_short' => 'Testgroepen',
                 'description' => 'Groepen die nodig zijn om de KoornBase goed te testen.',
@@ -124,7 +121,6 @@ class GroupSeeder extends Seeder
                 ],
             ],
             [
-                'id' => 'develop',
                 'name' => 'Ontwikkelaars, Testers, etc.',
                 'name_short' => 'Ontwikkelaars',
                 'description' => 'Groepen die nieuwe dingen ontwikkelen of testen voor de KoornBase, of voor een andere applicatie die gebruik maakt van de KoornBase.',
@@ -150,7 +146,6 @@ class GroupSeeder extends Seeder
                 ]
             ],
             [
-                'id' => 'bestuur',
                 'name' => 'Koornbeurs-besturen',
                 'name_short' => 'Bestuur',
                 'description' => 'De groepen die voor de Koornbeurs-besturen zijn bedoeld.',
@@ -158,7 +153,6 @@ class GroupSeeder extends Seeder
                 'is_required' => true,
             ],
             [
-                'id' => 'comm-primary',
                 'name' => 'Primaire commissie',
                 'description' => 'Comissies met een primaire taak waar de Koornbeurs zeer vanaf hangt. Commissies in deze categorie hebben meestal een naam die eindigd op \'-kie\' (een extra -e op het eind)',
                 'style' => 'group-primary',
@@ -184,7 +178,6 @@ class GroupSeeder extends Seeder
                 'roles' => ['commissielid']
             ],
             [
-                'id' => 'comm-secondary',
                 'name' => 'Secundaire commissie',
                 'description' => 'Comissies met een secundaire taak in de Koornbeurs. Commissies in deze categorie hebben meestal een naam die eindigd op \'-ki\' (zonder een extra -e op het eind)',
                 'style' => 'group-secondary',

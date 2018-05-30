@@ -14,10 +14,8 @@ class DatabaseSeeder extends Seeder
 
         // Default data seeders.
         $this->call([
-            RoleSeeder::class,
-            PermissionSeeder::class,
+            RbacSeeder::class,
             GroupSeeder::class,
-            EventCategorySeeder::class,
             UserSeeder::class
         ]);
 
@@ -28,9 +26,7 @@ class DatabaseSeeder extends Seeder
 
         // Random data seeders.
         $this->call([
-            RandomSeeder::class,
             PersonSeeder::class,
-            EventSeeder::class,
         ]);
 
 

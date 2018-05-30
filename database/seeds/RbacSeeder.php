@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use \App\Role;
 
-class RandomSeeder extends Seeder
+class RbacSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +12,7 @@ class RandomSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Tag::class, 20)->create();
-
-        factory(\App\Budget::class, 20)->create();
+        require(__DIR__.'/../rbac/system.php');
+        require(__DIR__.'/../rbac/groups.php');
     }
 }

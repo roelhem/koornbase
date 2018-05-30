@@ -11,6 +11,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class)->create(['name' => 'admin', 'email' => 'admin@roelweb.com']);
+        $admin = factory(\App\User::class)->create(['name' => 'admin', 'email' => 'admin@roelweb.com']);
+        $admin->assignRole('admin');
     }
 }

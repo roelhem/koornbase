@@ -17,87 +17,105 @@ $factory->define(Membership::class, function (Faker $faker) {
             return Person::query()->inRandomOrder()->value('id');
         },
         'application' => function($self) use ($faker) {
-            $person = Person::findOrFail($self['person_id'])->first();
-            $sixteen_date = $person->getBirthDay(16);
+            $start = array_get($self, 'start');
+            $end = array_get($self, 'end');
 
-            if($sixteen_date->isPast()) {
-                $days_after_sixteen = $faker->numberBetween(0, $sixteen_date->diffInDays(Carbon::today()));
+            // Finding the lower bound
+            $lowerBound = Carbon::parse('-10 years');
+
+            // Finding the upper bound for the application
+            if($start instanceof Carbon) {
+                $upperBound = $start;
+            } elseif($start instanceof DateTime) {
+                $upperBound = Carbon::instance($start);
+            } elseif(is_string($start)) {
+                $upperBound = Carbon::parse($start);
+            } elseif($end instanceof Carbon) {
+                $upperBound = $end;
+            } elseif($end instanceof DateTime) {
+                $upperBound = Carbon::instance($end);
+            } elseif(is_string($end)) {
+                $upperBound = Carbon::parse($end);
             } else {
-                return null;
+                $upperBound = Carbon::now();
             }
 
-            $result = (clone $sixteen_date)->addDays($days_after_sixteen);
-
-            if($result->isPast()) {
-                return $result;
+            // Assert that the lower bound is always smaller than the upper bound.
+            while($lowerBound >= $upperBound) {
+                $lowerBound->subMonth();
             }
 
-            return null;
+            // Pick a random date between the upper and the lower bound.
+            $randomDays = $faker->numberBetween(0, $lowerBound->diffInDays($upperBound));
+            return (clone $lowerBound)->addDays($randomDays);
+
         },
         'start' => function($self) use ($faker) {
-            $person = Person::findOrFail($self['person_id'])->first();
-            $sixteen_date = $person->getBirthDay(16);
 
-            if($sixteen_date->isPast()) {
-                $days_after_sixteen = $faker->numberBetween(0, $sixteen_date->diffInDays(Carbon::today()));
+            $application = array_get($self, 'application');
+            $end = array_get($self, 'end');
+
+            // Finding the lower bound
+            if($application instanceof Carbon) {
+                $lowerBound = $application;
+            } elseif($application instanceof DateTime) {
+                $lowerBound = Carbon::instance($application);
+            } elseif(is_string($application)) {
+                $lowerBound = Carbon::parse($application);
             } else {
-                return null;
+                $lowerBound = Carbon::parse('-10 years');
             }
 
-            $result = (clone $sixteen_date)->addDays($days_after_sixteen);
-            $result->next(Carbon::WEDNESDAY);
-
-            if($result->isPast()) {
-
-                if($self['application'] instanceof Carbon) {
-                    if($self['application'] < $result) {
-                        return $result;
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return $result;
-                }
+            // Finding the upper bound
+            if($end instanceof Carbon) {
+                $upperBound = $end;
+            } elseif($end instanceof DateTime) {
+                $upperBound = Carbon::instance($end);
+            } elseif(is_string($end)) {
+                $upperBound = Carbon::parse($end);
+            } else {
+                $upperBound = Carbon::now();
             }
 
-            return null;
+            // Pick a random date between the upper and the lower bound.
+            $randomDays = $faker->numberBetween(0, $lowerBound->diffInDays($upperBound));
+            return (clone $lowerBound)->addDays($randomDays);
+
         },
         'end' => function($self) use ($faker) {
-            $person = Person::findOrFail($self['person_id'])->first();
-            $sixteen_date = $person->getBirthDay(16);
+            $application = array_get($self, 'application');
+            $start = array_get($self, 'start');
 
-            if($sixteen_date->isPast()) {
-                $days_after_sixteen = $faker->numberBetween(0, $sixteen_date->diffInDays(Carbon::today()));
+            // Finding the lower bound
+            if($start instanceof Carbon) {
+                $lowerBound = $start;
+            } elseif($start instanceof DateTime) {
+                $lowerBound = Carbon::instance($start);
+            } elseif(is_string($start)) {
+                $lowerBound = Carbon::parse($start);
+            } elseif($application instanceof Carbon) {
+                $lowerBound = $application;
+            } elseif($application instanceof DateTime) {
+                $lowerBound = Carbon::instance($application);
+            } elseif(is_string($application)) {
+                $lowerBound = Carbon::parse($application);
             } else {
-                return null;
+                $lowerBound = Carbon::parse('-10 years');
             }
 
-            $result = (clone $sixteen_date)->addDays($days_after_sixteen);
+            // Finding the upper bound
+            $upperBound = Carbon::now();
 
-            if($result->isPast()) {
-
-                if($self['application'] instanceof Carbon) {
-                    if($self['application'] < $result) {
-                        return $result;
-                    } else {
-                        return null;
-                    }
-                }
-
-                if($self['start'] instanceof Carbon) {
-                    if($self['start'] < $result) {
-                        return $result;
-                    } else {
-                        return null;
-                    }
-                }
-
-                return $result;
+            // Assert the upper bound is higher than the lower bound
+            while($upperBound <= $lowerBound) {
+                $upperBound->addMonth();
             }
 
-            return null;
+            // Pick a random date between the upper and the lower bound.
+            $randomDays = $faker->numberBetween(0, $lowerBound->diffInDays($upperBound));
+            return (clone $lowerBound)->addDays($randomDays);
         },
-        'remarks' => 'Deze membership is gegenereerd op basis van random datums.'
+        'remarks' => 'Deze membership is gegenereerd op basis van random data. Gebruik deze membership alleen voor test-toepassingen.'
     ];
 });
 

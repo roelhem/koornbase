@@ -20,6 +20,7 @@ use Propaganistas\LaravelPhone\PhoneNumber;
  * @property boolean $for_emergency
  * @property boolean $is_mobile
  * @property PhoneNumber $phone_number
+ * @property string $country_code
  *
  * @property string|null $remarks
  *
@@ -52,7 +53,7 @@ class PersonPhoneNumber extends Model
      */
     public function __toString()
     {
-        return $this->phone_number->formatForCountry('NL');
+        return $this->phone_number->formatForCountry($this->country_code ?? 'NL');
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -66,7 +67,7 @@ class PersonPhoneNumber extends Model
      * @return PhoneNumber
      */
     public function getPhoneNumberAttribute($value) {
-        return PhoneNumber::make($value,  'NL');
+        return PhoneNumber::make($value,  $this->country_code ?? 'NL');
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -80,7 +81,7 @@ class PersonPhoneNumber extends Model
      */
     public function setPhoneNumberAttribute($value) {
         if(!($value instanceof PhoneNumber)) {
-            $value = PhoneNumber::make($value, 'NL');
+            $value = PhoneNumber::make($value, $this->country_code ?? 'NL');
         }
 
         $this->attributes['phone_number'] = $value->formatE164();

@@ -12,11 +12,10 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property string $id The id of the role
- * @property string $name The name of the role
- * @property boolean $for_user If this role may be assigned to a User
- * @property boolean $for_group If this role may be assigned to a Group
- * @property boolean $for_group_title If this role may be assigned to a GroupTitle
- * @property boolean $for_group_category If this role may be assigend to a GroupCategory
+ * @property string|null $name The name of the role
+ * @property string|null $description
+ * @property boolean $is_required
+ * @property boolean $is_visible
  *
  * @property-read Collection $parentRoles
  * @property-read Collection $childRoles
@@ -36,8 +35,7 @@ class Role extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['id','name','description','is_required','is_visible','for_user','for_group',
-                            'for_group_category'];
+    protected $fillable = ['id','name','description','is_required','is_visible'];
 
     /**
      * @var RbacChecker
@@ -86,7 +84,9 @@ class Role extends Model
      * @throws
      */
     public function assignTo($model) {
-        if($model instanceof Role) {
+        if(is_string($model)) {
+            return $this->assignToRole($model);
+        } elseif($model instanceof Role) {
             return $this->assignToRole($model);
         } elseif(method_exists($model, 'assignRole')) {
             $model->assignRole($this);
