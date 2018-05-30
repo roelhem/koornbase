@@ -54,6 +54,6 @@ trait HasPhoneNumbers
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function phoneNumbers() {
-        return $this->hasMany(PersonPhoneNumber::class, 'person_id');
+        return $this->hasMany(PersonPhoneNumber::class, 'person_id')->orderBy('index');
     }
 }

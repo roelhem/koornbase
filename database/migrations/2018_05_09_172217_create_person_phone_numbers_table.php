@@ -17,16 +17,12 @@ class CreatePersonPhoneNumbersTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('person_id');
-
+            $table->integer('index');
             $table->string('label',63);
-
-            $table->boolean('is_primary')->default(false);
-            $table->boolean('for_emergency')->default(false);
-
-            $table->boolean('is_mobile')->default(false);
+            $table->jsonb('options')->default('{}');
 
             $table->string('phone_number', 63);
-
+            $table->boolean('is_mobile')->default(false);
             $table->char('country_code', 2)->default('NL');
 
             $table->text('remarks')->nullable();

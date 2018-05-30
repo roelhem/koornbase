@@ -54,6 +54,6 @@ trait HasEmailAddresses
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function emailAddresses() {
-        return $this->hasMany(PersonEmailAddress::class, 'person_id');
+        return $this->hasMany(PersonEmailAddress::class, 'person_id')->orderBy('index');
     }
 }

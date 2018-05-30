@@ -8,8 +8,6 @@ $factory->define(\App\PersonAddress::class, function (Faker $faker) {
             return \App\Person::query()->inRandomOrder()->first()->id;
         },
         'label' => $faker->word,
-        'is_primary' => false,
-        'for_emergency' => false,
         'country_code' => $faker->countryCode,
         'administrative_area' => $faker->state,
         'locality' => $faker->city,
@@ -22,8 +20,3 @@ $factory->define(\App\PersonAddress::class, function (Faker $faker) {
         'remarks' => 'Dit adres is automatisch gegenereerd op basis van random gegevens.'
     ];
 });
-
-
-$factory->state(\App\PersonAddress::class, 'primary', [
-    'is_primary' => true,
-]);

@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Enums\MembershipStatus;
+use App\Traits\HasRemarks;
+use App\Traits\BelongsToPerson;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -14,11 +15,9 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer|null $id
- * @property integer|null $person_id
  * @property Carbon|null $application
  * @property Carbon|null $start
  * @property Carbon|null $end
- * @property string|null $remarks
  *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
@@ -36,6 +35,8 @@ class Membership extends Model
 {
 
     use Userstamps;
+
+    use HasRemarks, BelongsToPerson;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -109,19 +110,6 @@ class Membership extends Model
             case MembershipStatus::Outsider:
             default: return null;
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this Membership belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person() {
-        return $this->belongsTo(Person::class, 'person_id');
     }
 
 }

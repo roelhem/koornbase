@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Group;
-use App\Http\Resources\Api\GroupResource;
+use App\GroupCategory;
+use App\Http\Resources\Api\GroupCategoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class GroupController extends Controller
+class GroupCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +17,10 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Group::query();
+        $query = GroupCategory::query();
         $query->with($this->getAskedRelations($request));
 
-        return GroupResource::collection($query->paginate());
+        return GroupCategoryResource::collection($query->paginate());
     }
 
     /**
@@ -37,24 +37,24 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Group  $group
-     * @param  Request     $request
-     * @return GroupResource
+     * @param  \App\GroupCategory  $groupCategory
+     * @param  Request             $request
+     * @return GroupCategoryResource
      */
-    public function show(Group $group, Request $request)
+    public function show(GroupCategory $groupCategory, Request $request)
     {
-        $group->load($this->getAskedRelations($request));
-        return new GroupResource($group);
+        $groupCategory->load($this->getAskedRelations($request));
+        return new GroupCategoryResource($groupCategory);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $group
+     * @param  \App\GroupCategory  $groupCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request, GroupCategory $groupCategory)
     {
         //
     }
@@ -62,10 +62,10 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Group  $group
+     * @param  \App\GroupCategory  $groupCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Group $group)
+    public function destroy(GroupCategory $groupCategory)
     {
         //
     }

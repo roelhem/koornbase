@@ -33,10 +33,10 @@ final class MembershipStatus extends Enum
 
     public static function getLabel(int $value) {
         switch ($value) {
-            case self::Outsider: return 'Is een buitenstaander';
-            case self::Novice: return 'Kennismaker geworden';
-            case self::Member: return 'Lid geworden';
-            case self::FormerMember: return 'Lid-af geworden';
+            case self::Outsider: return 'Buitenstaander';
+            case self::Novice: return 'Kennismaker';
+            case self::Member: return 'Lid';
+            case self::FormerMember: return 'Oud-Lid';
             default: return 'Onbekend';
         }
     }

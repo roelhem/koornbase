@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\HasAssignedRoles;
+use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
 use App\Traits\HasStringPrimaryKey;
@@ -17,9 +18,6 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer $id
- * @property string $name
- * @property string $name_short
- * @property string $description
  * @property boolean $is_required
  * @property string $style
  */
@@ -28,8 +26,9 @@ class GroupCategory extends Model
 
     use SoftDeletes;
     use Userstamps;
-    use HasShortName;
     use Sluggable;
+
+    use HasShortName, HasDescription;
 
     use HasOptions, HasAssignedRoles;
 

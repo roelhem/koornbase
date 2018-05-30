@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\Rbac\RbacChecker;
+use App\Traits\HasDescription;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -13,7 +14,6 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property string $id The id of the role
  * @property string|null $name The name of the role
- * @property string|null $description
  * @property boolean $is_required
  * @property boolean $is_visible
  *
@@ -25,6 +25,8 @@ class Role extends Model
 {
 
     use Userstamps;
+
+    use HasDescription;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

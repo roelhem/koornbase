@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Traits\HasRemarks;
+use App\Traits\BelongsToPerson;
+use App\Traits\PersonContactEntry\HasContactOptions;
+use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
@@ -14,25 +18,21 @@ use Illuminate\Database\Schema\Builder;
  * @package App
  *
  * @property integer $id
- * @property integer $person_id
  * @property string $label
- * @property boolean $is_primary
- * @property boolean $for_emergency
  * @property string $email_address
- *
- * @property string|null $remarks
  *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
- *
- * @property-read Person $person
- * @property-read string $link
  */
 class PersonEmailAddress extends Model
 {
     use Userstamps;
+
+    use HasRemarks, BelongsToPerson;
+
+    use HasContactOptions, OrderableWithIndex;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -40,7 +40,7 @@ class PersonEmailAddress extends Model
 
     protected $table = 'person_email_addresses';
 
-    protected $fillable = ['label','is_primary','for_emergency','email_address','remarks'];
+    protected $fillable = ['label','email_address','options','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MAGIC METHODS -------------------------------------------------------------------------------------- //
@@ -56,28 +56,4 @@ class PersonEmailAddress extends Model
         return $this->email_address ?? '(onbekend)';
     }
 
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- SCOPES --------------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopePrimary($query) {
-        return $query->where('is_primary');
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this PersonEmailAddress belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person() {
-        return $this->belongsTo(Person::class, 'person_id');
-    }
 }

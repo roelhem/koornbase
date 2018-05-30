@@ -17,11 +17,9 @@ class CreatePersonEmailAddressesTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('person_id');
-
+            $table->integer('index');
             $table->string('label',63);
-
-            $table->boolean('is_primary')->default(false);
-            $table->boolean('for_emergency')->default(false);
+            $table->jsonb('options')->default('{}');
 
             $table->string('email_address', 255);
 

@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Traits\HasRemarks;
+use App\Traits\BelongsToPerson;
+use App\Traits\PersonContactEntry\HasContactOptions;
+use App\Traits\PersonContactEntry\HasCountryCode;
+use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
-use Illuminate\Database\Query\Builder;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
 /**
@@ -14,15 +18,9 @@ use Propaganistas\LaravelPhone\PhoneNumber;
  * @package App
  *
  * @property integer $id
- * @property integer $person_id
  * @property string $label
- * @property boolean $is_primary
- * @property boolean $for_emergency
  * @property boolean $is_mobile
  * @property PhoneNumber $phone_number
- * @property string $country_code
- *
- * @property string|null $remarks
  *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
@@ -33,13 +31,17 @@ class PersonPhoneNumber extends Model
 {
     use Userstamps;
 
+    use HasRemarks, BelongsToPerson;
+
+    use HasContactOptions, OrderableWithIndex, HasCountryCode;
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     protected $table = 'person_phone_numbers';
 
-    protected $fillable = ['label','is_primary','for_emergency','is_mobile','phone_number','remarks'];
+    protected $fillable = ['label','country_code','is_mobile','phone_number','options','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MAGIC METHODS -------------------------------------------------------------------------------------- //
@@ -85,30 +87,5 @@ class PersonPhoneNumber extends Model
         }
 
         $this->attributes['phone_number'] = $value->formatE164();
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- SCOPES --------------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopePrimary($query) {
-        return $query->where('is_primary');
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this PersonPhoneNumber belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person() {
-        return $this->belongsTo(Person::class, 'person_id');
     }
 }

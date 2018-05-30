@@ -2,15 +2,31 @@
 
 namespace App;
 
+use App\Traits\HasRemarks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
+/**
+ * Class KoornbeursCard
+ * @package App
+ *
+ * @property integer $id
+ * @property integer|null $owner_id
+ * @property string|null $ref
+ * @property string|null $version
+ * @property Carbon|null $activated_at
+ * @property Carbon|null $deactivated_at
+ *
+ * @property-read Person|null $owner
+ */
 class KoornbeursCard extends Model
 {
 
     use Userstamps;
+
+    use HasRemarks;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -19,7 +35,7 @@ class KoornbeursCard extends Model
     protected $table = 'koornbeurs_cards';
 
     protected $dates = ['activated_at','deactivated_at','created_at', 'updated_at'];
-    protected $fillable = ['id','ref','activated_at','deactivated_at','version','remarks'];
+    protected $fillable = ['id','ref','version','activated_at','deactivated_at','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- SCOPES --------------------------------------------------------------------------------------------- //

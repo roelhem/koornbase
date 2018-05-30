@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Traits\HasRemarks;
+use App\Traits\HasShortName;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
 use App\Traits\Person\HasGroups;
@@ -19,16 +21,12 @@ use Wildside\Userstamps\Userstamps;
  *
  * @package App
  *
- * @property integer|null $id
- * @property string|null $name_initials
- * @property string|null $name_first
- * @property string|null $name_middle
- * @property string|null $name_prefix
- * @property string|null $name_last
- * @property string|null $name_nickname
+ * @property integer $id
+ * @property string $name
+ * @property string $name_short
+ * @property string|null $name_formal
+ * @property string|null $nickname
  * @property Carbon|null $birth_date
- * @property string|null $bsn
- * @property string|null $remarks
  *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
@@ -37,14 +35,9 @@ use Wildside\Userstamps\Userstamps;
  * @property Carbon|null $deleted_at
  * @property integer|null $deleted_by
  *
- * @property-read string $name
- * @property-read string $name_short
- * @property-read string $name_formal
  * @property-read string $avatar_letters
  * @property-read AvatarType $avatar
  * @property-read integer|null $age
- *
- * @property array $name_array
  *
  * @property-read Collection $users
  * @property-read Collection $debtors
@@ -54,6 +47,8 @@ class Person extends Model
 
     use SoftDeletes;
     use Userstamps;
+
+    use HasShortName, HasRemarks;
 
     use HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
 
@@ -65,10 +60,7 @@ class Person extends Model
 
     protected $dates = ['birth_date','created_at','updated_at','deleted_at'];
 
-    protected $fillable = [
-            'name_initials','name_first','name_middle','name_prefix','name_last','name_nickname',
-            'birth_date','bsn','remarks','name_array'
-        ];
+    protected $fillable = ['name','name_short','name_formal','nickname', 'birth_date','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- GETTER METHODS ------------------------------------------------------------------------------------- //
@@ -103,78 +95,25 @@ class Person extends Model
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Returns the full name of this person as a string. This string can be used for display purposes.
-     *
-     * @return string
-     */
-    public function getNameAttribute() {
-        $result = $this->name_first;
-
-        if ($this->name_prefix) {
-            $result .= ' '.$this->name_prefix;
-        }
-
-        return $result.' '.$this->name_last;
-    }
-
-    /**
-     * Returns all the name parts in one array.
-     */
-    public function getNameArrayAttribute() {
-        return [
-            'full' => $this->name,
-            'short' => $this->name_short,
-            'formal' => $this->name_formal,
-            'initials' => $this->name_initials,
-            'first' => $this->name_first,
-            'middle' => $this->name_middle,
-            'prefix' => $this->name_prefix,
-            'last' => $this->name_last,
-            'nickname' => $this->name_nickname,
-        ];
-    }
-
-    /**
-     * Returns a short name of this person. This string can be used for display purposes.
-     *
-     * @return string
-     */
-    public function getNameShortAttribute() {
-        if(!empty($this->name_nickname)) {
-            return $this->name_nickname;
-        } else {
-            return $this->name_first;
-        }
-    }
-
-    /**
-     * Returns the name of this person in a formal way.
-     *
-     * @return string
-     */
-    public function getNameFormalAttribute() {
-        $res = $this->name_initials;
-
-        if($this->name_prefix) {
-            $res .= ' '.$this->name_prefix;
-        }
-
-        $res .= ' '.$this->name_last;
-
-        return $res;
-    }
-
-
-    /**
      * Returns two letters that can be used as a placeholder avatar of this person.
      *
      * @return string
      */
     public function getAvatarLettersAttribute() {
-        $firstLetter = substr(trim($this->name_first),0,1);
-        $secondLetter = substr(trim($this->name_last), 0,1);
+        $namePieces = explode(' ', trim($this->name));
+        if(count($namePieces) === 1) {
+            return mb_strtoupper(substr($namePieces[0], 0, 2));
+        } elseif(count($namePieces) >= 2) {
+            $firstWord = $namePieces[0];
+            $secondWord = $namePieces[1];
 
-        return mb_strtoupper($firstLetter.$secondLetter);
+            $firstLetter = substr(trim($firstWord),0,1);
+            $secondLetter = substr(trim($secondWord), 0,1);
+
+            return mb_strtoupper($firstLetter.$secondLetter);
+        } else {
+            return '??';
+        }
     }
 
     /**
@@ -206,36 +145,6 @@ class Person extends Model
             return null;
         } else {
             return $bd->age;
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- CUSTOM MUTATORS ------------------------------------------------------------------------------------ //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Sets the name of this person by using an array of name parts.
-     *
-     * @param array|null $newValue
-     */
-    public function setNameArrayAttribute($newValue) {
-        if(is_array($newValue)) {
-
-            $map = [
-                'initials' => 'name_initials',
-                'first' => 'name_first',
-                'middle' => 'name_middle',
-                'prefix' => 'name_prefix',
-                'last' => 'name_last',
-                'nickname' => 'name_nickname',
-            ];
-
-            foreach ($map as $arrayKey => $attributeKey) {
-                if(array_has($newValue, $arrayKey)) {
-                    $this->$attributeKey = array_get($newValue, $arrayKey);
-                }
-            }
-
         }
     }
 

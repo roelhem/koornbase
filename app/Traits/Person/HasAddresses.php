@@ -54,7 +54,7 @@ trait HasAddresses
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function addresses() {
-        return $this->hasMany(PersonAddress::class, 'person_id');
+        return $this->hasMany(PersonAddress::class, 'person_id')->orderBy('index');
     }
 
 

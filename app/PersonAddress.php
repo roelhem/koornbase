@@ -2,11 +2,15 @@
 
 namespace App;
 
+use App\Traits\HasRemarks;
+use App\Traits\BelongsToPerson;
+use App\Traits\PersonContactEntry\HasContactOptions;
+use App\Traits\PersonContactEntry\HasCountryCode;
+use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
 use CommerceGuys\Addressing\Model\AddressInterface;
 use CommerceGuys\Addressing\Repository\CountryRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -14,12 +18,8 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer|null $id
- * @property integer|null $person_id
  * @property string|null $label
- * @property boolean|null $is_primary
- * @property boolean|null $for_emergency
  *
- * @property string|null $country_code
  * @property string|null $administrative_area
  * @property string|null $locality
  * @property string|null $dependent_locality
@@ -30,20 +30,19 @@ use Wildside\Userstamps\Userstamps;
  * @property string|null $organisation
  * @property string|null $locale
  *
- * @property string|null $remarks
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
- *
- * @property-read Person $person
- * @property-read string|null $country
  */
 class PersonAddress extends Model implements AddressInterface
 {
 
     use Userstamps;
+
+    use HasRemarks, BelongsToPerson;
+
+    use HasContactOptions, OrderableWithIndex, HasCountryCode;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -51,10 +50,10 @@ class PersonAddress extends Model implements AddressInterface
 
     protected $table = 'person_addresses';
 
-    protected $fillable = ['label','is_primary','for_emergency',
+    protected $fillable = ['label',
                            'country_code','administrative_area','locality','dependent_locality','postal_code',
                            'sorting_code','address_line_1','address_line_2','organisation','locale',
-                           'remarks'];
+                           'options','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- INTERFACE CONFORMATION: AddressInterface ----------------------------------------------------------- //
@@ -146,47 +145,5 @@ class PersonAddress extends Model implements AddressInterface
     public function getLocale()
     {
         return $this->locale;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Returns the name of the country of this Address.
-     *
-     * @return string|null
-     */
-    public function getCountryAttribute() {
-
-        $code = $this->getCountryCode();
-        $list = app(CountryRepositoryInterface::class)->getList('NL');
-
-        return array_get($list, $code);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- SCOPES --------------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopePrimary($query) {
-        return $query->where('is_primary');
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this PersonAddress belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person() {
-        return $this->belongsTo(Person::class, 'person_id');
     }
 }

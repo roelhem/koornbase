@@ -13,8 +13,6 @@ $factory->define(App\PersonPhoneNumber::class, function (Faker $faker) {
             return \App\Person::query()->inRandomOrder()->value('id');
         },
         'label' => $faker->word,
-        'is_primary' => false,
-        'for_emergency' => false,
         'is_mobile' => $faker->boolean,
         'country_code' => $faker->randomElement(['NL','GB','FR','BE','DE','IT','SE','NO','DK','ES','PT','CH','AT']),
         'phone_number' => function($self) {
@@ -37,7 +35,3 @@ $factory->define(App\PersonPhoneNumber::class, function (Faker $faker) {
         'remarks' => 'Gegenereerd door een Factory.'
     ];
 });
-
-$factory->state(\App\PersonPhoneNumber::class, 'primary', [
-    'is_primary' => true,
-]);

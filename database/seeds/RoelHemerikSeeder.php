@@ -15,12 +15,10 @@ class RoelHemerikSeeder extends Seeder
     public function run()
     {
         $person = Person::create([
-            'name_initials' => 'R.A.B.',
-            'name_first' => 'Roel',
-            'name_middle' => 'Adriaan Bernard',
-            'name_prefix' => null,
-            'name_last' => 'Hemerik',
-            'name_nickname' => null,
+            'name' => 'Roel Hemerik',
+            'name_short' => 'Roel',
+            'name_formal' => 'R.A.B. Hemerik',
+            'nickname' => null,
             'birth_date' => Carbon::createFromDate(1993,9,20)
         ]);
 
@@ -39,7 +37,6 @@ class RoelHemerikSeeder extends Seeder
 
             $person->addresses()->create([
                 'label' => 'privé',
-                'is_primary' => true,
                 'locality' => 'Delft',
                 'postal_code' => '2611 EW',
                 'address_line_1' => 'De Vlouw 1d',
@@ -48,7 +45,6 @@ class RoelHemerikSeeder extends Seeder
 
             $person->addresses()->create([
                 'label' => 'ouders',
-                'for_emergency' => true,
                 'locality' => 'Hazerswoude-Dorp',
                 'postal_code' => '2391 EH',
                 'address_line_1' => 'Jacoba van Beyerenlaan 5',
@@ -58,7 +54,6 @@ class RoelHemerikSeeder extends Seeder
             $person->phoneNumbers()->create([
                 'label' => 'privé',
                 'is_mobile' => true,
-                'is_primary' => true,
                 'phone_number' => '0643941490',
                 'country_code' => 'NL',
             ]);
@@ -71,14 +66,12 @@ class RoelHemerikSeeder extends Seeder
 
             $person->phoneNumbers()->create([
                 'label' => 'ouders',
-                'for_emergency' => true,
                 'phone_number' => '0172587143',
                 'country_code' => 'NL',
             ]);
 
             $person->emailAddresses()->create([
                 'label' => 'privé',
-                'is_primary' => true,
                 'email_address' => 'koornbeurs@roelweb.com'
             ]);
 

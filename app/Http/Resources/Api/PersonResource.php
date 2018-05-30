@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Resources\Api;
+
+use App\Enums\MembershipStatus;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class PersonResource extends Resource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return parent::toArray($request) + [
+            'name' => $this->name,
+            'name_short' => $this->name_short,
+            'name_formal' => $this->name_formal,
+            'nickname' => $this->nickname,
+            'birth_date' => $this->formatedBirthDate(),
+            'age' => $this->age,
+
+            $this->membershipStatus($request),
+
+            'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
+            'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+            'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
+
+
+            'users' => UserResource::collection($this->whenLoaded('users')),
+            'groups' => GroupResource::collection($this->whenLoaded('groups')),
+
+        ] + $this->tailArray($request);
+    }
+
+    protected function formatedBirthDate() {
+        if($this->birth_date instanceof Carbon) {
+            return $this->birth_date->format('Y-m-d');
+        } else {
+            return $this->birth_date;
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\MissingValue|mixed
+     */
+    protected function membershipStatus($request) {
+        $res = [
+            'status' => $this->membership_status,
+            'name' => MembershipStatus::getDescription($this->membership_status),
+            'label' => MembershipStatus::getLabel($this->membership_status),
+        ];
+
+        $since = $this->membership_status_since;
+
+        if($since !== null) {
+            $res['since'] = $since->format('Y-m-d');
+        }
+
+        return $this->mergeWhen(true, [
+            'membership_status' => $res
+        ]);
+
+    }
+}

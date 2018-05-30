@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Group;
+use App\GroupCategory;
+use App\Person;
+use App\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -23,9 +27,35 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
+
+        Route::bind('group', function($value) {
+            if(ctype_digit($value)) {
+                return Group::findOrFail($value);
+            } else {
+                return Group::findBySlugOrFail($value);
+            }
+        });
+
+        Route::bind('group-category', function($value) {
+            if(ctype_digit($value)) {
+                return GroupCategory::findOrFail($value);
+            } else {
+                return GroupCategory::findBySlugOrFail($value);
+            }
+        });
+
+        Route::bind('user', function($value) {
+            if(ctype_digit($value)) {
+                return User::findOrFail($value);
+            } else {
+                return User::where('name', $value)->first() ?? abort(404);
+            }
+        });
+
+        Route::bind('person', function($value) {
+            return Person::findOrFail($value);
+        });
     }
 
     /**

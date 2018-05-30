@@ -10,6 +10,7 @@ namespace App\Traits\Person;
 
 
 use App\Membership;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use App\Helpers\MembershipStatusChange;
 use App\Enums\MembershipStatus;
@@ -22,8 +23,8 @@ use Carbon\Carbon;
  * @property-read integer $membership_status
  * @property-read Carbon|null $membership_status_since
  *
- * @property-read Membership[] $memberships
- * @property-read MembershipStatusChange[] $membership_status_changes
+ * @property-read Collection $memberships
+ * @property-read Collection $membership_status_changes
  */
 trait HasMemberships
 {

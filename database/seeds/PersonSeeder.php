@@ -21,26 +21,14 @@ class PersonSeeder extends Seeder
 
             // ADD SOME CONTACT INFORMATION
             // Add email addresses
-            factory(\App\PersonEmailAddress::class)->states('primary')
+            factory(\App\PersonEmailAddress::class, $faker->numberBetween(0, 5))
                 ->create(['person_id' => $person->id]);
-            factory(\App\PersonEmailAddress::class, $faker->numberBetween(0, 3))
-                ->create(['person_id' => $person->id]);
-            factory(\App\PersonEmailAddress::class, $faker->numberBetween(0, 2))
-                ->create(['person_id' => $person->id, 'for_emergency' => true]);
             // Add phone numbers
-            factory(\App\PersonPhoneNumber::class)->states('primary')
+            factory(App\PersonPhoneNumber::class, $faker->numberBetween(0, 5))
                 ->create(['person_id' => $person->id]);
-            factory(App\PersonPhoneNumber::class, $faker->numberBetween(0, 3))
-                ->create(['person_id' => $person->id]);
-            factory(\App\PersonPhoneNumber::class, $faker->numberBetween(0, 2))
-                ->create(['person_id' => $person->id, 'for_emergency' => true]);
             // Add addresses
-            factory(\App\PersonAddress::class)->states('primary')
+            factory(\App\PersonAddress::class,$faker->numberBetween(0, 5))
                 ->create(['person_id' => $person->id]);
-            factory(\App\PersonAddress::class,$faker->numberBetween(0, 3))
-                ->create(['person_id' => $person->id]);
-            factory(\App\PersonAddress::class, $faker->numberBetween(0, 2))
-                ->create(['person_id' => $person->id, 'for_emergency' => true]);
 
 
 

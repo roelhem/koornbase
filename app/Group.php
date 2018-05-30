@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Group\HasMembers;
 use App\Traits\HasAssignedRoles;
+use App\Traits\HasDescription;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -20,9 +21,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer $id
  * @property string $category_id
  * @property string $slug
- * @property string $name
- * @property string $name_short
- * @property string $description
  * @property string $member_name
  * @property boolean $is_required
  *
@@ -37,7 +35,7 @@ class Group extends Model
     use Userstamps;
     use Sluggable;
 
-    use HasShortName, HasAssignedRoles;
+    use HasShortName, HasDescription, HasAssignedRoles;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

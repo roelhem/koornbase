@@ -17,11 +17,9 @@ class CreatePersonAddressesTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('person_id');
-
+            $table->integer('index');
             $table->string('label',63);
-
-            $table->boolean('is_primary')->default(false);
-            $table->boolean('for_emergency')->default(false);
+            $table->jsonb('options')->default('{}');
 
             $table->char('country_code', 2)->default('NL');
             $table->string('administrative_area')->nullable();
@@ -43,6 +41,7 @@ class CreatePersonAddressesTable extends Migration
 
             $table->foreign('person_id')->references('id')->on('persons')
                 ->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 

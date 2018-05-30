@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\Rbac\RbacChecker;
+use App\Traits\HasDescription;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property string $id The primary identifier of this Permission.
  * @property string|null $name A descriptive name of this Permission.
- * @property string|null $description A description of this Permission, to clarify it's function.
  *
  * @property-read Collection $parentRoles
  * @property-read Collection $parentPermissions
@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
+
+    use HasDescription;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
