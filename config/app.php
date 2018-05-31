@@ -165,6 +165,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\AttributeServiceProvider::class,
         App\Providers\AddressingProvider::class,
+        App\Providers\ModelFinderServiceProvider::class
 
     ],
 

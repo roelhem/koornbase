@@ -89,6 +89,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
+    'country_code'         => 'De :attribute is geen geldige code voor een land.',
+    'finds'                => 'De :attribute heeft geen waarde waarmee een :modelClass can worden gevonden',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

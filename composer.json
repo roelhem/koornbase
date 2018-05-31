@@ -12,13 +12,13 @@
         "commerceguys/intl": "^0.7.5",
         "cviebrock/eloquent-sluggable": "^4.5",
         "fideloper/proxy": "^4.0",
+        "giggsey/libphonenumber-for-php": "^8.9",
         "jenssegers/date": "^3.3",
         "jwz104/eloquent-view": "^1.0",
         "laravel/framework": "5.6.*",
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "^1.0",
-        "propaganistas/laravel-phone": "^4.0",
         "wildside/userstamps": "0.5.1"
     },
     "require-dev": {

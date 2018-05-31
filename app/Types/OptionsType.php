@@ -310,7 +310,7 @@ class OptionsType implements \ArrayAccess, Arrayable, Jsonable
      */
     public function toJson($options = JSON_FORCE_OBJECT)
     {
-        return json_encode($this->getExplicit(), $options);
+        return json_encode( $this->getExplicit(), $options);
     }
 
 }

@@ -18,8 +18,8 @@ class GroupCategoryResource extends Resource
             'name_short' => $this->name_short,
             'description' => $this->description,
             'style' => $this->style,
-            'is_required' => $this->is_required,
-            'options' => $this->options,
+            'is_required' => $this->when($this->is_required, true),
+            'options' => $this->getOptions($request),
         ] + $this->tailArray($request);
     }
 }

@@ -53,7 +53,6 @@ class RoelHemerikSeeder extends Seeder
 
             $person->phoneNumbers()->create([
                 'label' => 'privé',
-                'is_mobile' => true,
                 'phone_number' => '0643941490',
                 'country_code' => 'NL',
             ]);

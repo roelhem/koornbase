@@ -63,10 +63,14 @@ class GroupCategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\GroupCategory  $groupCategory
-     * @return \Illuminate\Http\Response
+     * @throws
      */
     public function destroy(GroupCategory $groupCategory)
     {
-        //
+        if($groupCategory->is_required) {
+            abort(403, 'Deze groep categorie kan niet worden verwijderd omdat deze groep categorie nodig is voor het goed functioneren van dit systeem.');
+        } else {
+            $groupCategory->delete();
+        }
     }
 }

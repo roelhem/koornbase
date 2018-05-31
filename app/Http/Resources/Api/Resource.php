@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Types\OptionsType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
@@ -23,6 +24,36 @@ class Resource extends JsonResource
         ];
     }
 
+    public function getOptions($request) {
+        if ($this->options instanceof OptionsType) {
+            if($this->queryHas('optionDefaults', $request) &&
+                !in_array($request->query('optionDefaults'), ['hide','hidden','false','f'])
+            ) {
+                $res = $this->options->getAll();
+            } else {
+                $res = $this->options->getExplicit();
+            }
+
+            if(count($res) === 0) {
+                return new \stdClass();
+            } else {
+                return $res;
+            }
+        }
+        return $this->options;
+    }
+
+    /**
+     * Returns if the query has a specific parameter.
+     *
+     * @param $param
+     * @param $request
+     * @return bool
+     */
+    public function queryHas($param, $request) {
+        return $request->query($param, false) !== false;
+    }
+
     /**
      * Returns an array that should be added to the end of every array.
      *
@@ -30,7 +61,7 @@ class Resource extends JsonResource
      * @return array
      */
     public function tailArray($request) {
-        if($request->query('metaFieldsGrouped', false) !== false) {
+        if($this->queryHas('metaFieldsGrouped', $request)) {
             return [
                 '_meta' => $this->getMetaFields($request),
             ];

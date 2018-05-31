@@ -33,21 +33,20 @@ class PersonController extends Controller
      */
     public function store(PersonStoreRequest $request)
     {
-        $person = new Person($request->only([
-            'name','name_short','name_formal','nickname','birth_date','remarks'
-        ]));
+        $validated = $request->validated();
+
+        $person = new Person($validated);
         $person->saveOrFail();
 
-        foreach ($request->get('emailAddresses', []) as $index => $emailAddressInput) {
-            $emailAddress = $person->emailAddresses()->make([
-                    'index' => $index,
-                    'label' => $emailAddressInput['label'],
-                    'email_address' => $emailAddressInput['email_address'],
-                    'remarks' => array_get($emailAddressInput, 'remarks', null),
-                    'options' => array_get($emailAddressInput, 'options', [])
-                ]);
-            $emailAddress->saveOrFail();
-        }
+        collect(array_get($validated, 'emailAddresses', []))->each(function($input) use ($person) {
+            $person->emailAddresses()->create($input);
+        });
+        collect(array_get($validated, 'phoneNumbers', []))->each(function($input) use ($person) {
+            $person->phoneNumbers()->create($input);
+        });
+        collect(array_get($validated, 'addresses', []))->each(function($input) use ($person) {
+            $person->addresses()->create($input);
+        });
 
         $person->load($this->getAskedRelations($request));
         return new PersonResource($person);

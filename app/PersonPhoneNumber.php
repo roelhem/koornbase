@@ -9,8 +9,11 @@ use App\Traits\PersonContactEntry\HasCountryCode;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberType;
+use libphonenumber\PhoneNumberUtil;
 use Wildside\Userstamps\Userstamps;
-use Propaganistas\LaravelPhone\PhoneNumber;
 
 /**
  * Class PersonPhoneNumber
@@ -21,6 +24,7 @@ use Propaganistas\LaravelPhone\PhoneNumber;
  * @property string $label
  * @property boolean $is_mobile
  * @property PhoneNumber $phone_number
+ * @property PhoneNumberType $number_type
  *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
@@ -41,11 +45,26 @@ class PersonPhoneNumber extends Model
 
     protected $table = 'person_phone_numbers';
 
-    protected $fillable = ['label','country_code','is_mobile','phone_number','options','remarks'];
+    protected $fillable = ['label','country_code','phone_number','options','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MAGIC METHODS -------------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @var PhoneNumberUtil
+     */
+    protected $util;
+
+    /**
+     * PersonPhoneNumber constructor.
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->util = resolve(PhoneNumberUtil::class);
+        parent::__construct($attributes);
+    }
 
     /**
      * Returns the phone_number as a string.
@@ -55,7 +74,25 @@ class PersonPhoneNumber extends Model
      */
     public function __toString()
     {
-        return $this->phone_number->formatForCountry($this->country_code ?? 'NL');
+        if ($this->country_code === 'NL') {
+            return $this->format(PhoneNumberFormat::NATIONAL);
+        } else {
+            return $this->format(PhoneNumberFormat::INTERNATIONAL);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- HELPER METHODS ------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns the phone number in the given phoneNumberFormat.
+     *
+     * @param $phoneNumberFormat
+     * @return string
+     */
+    public function format($phoneNumberFormat) {
+        return $this->util->format($this->phone_number, $phoneNumberFormat);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -67,9 +104,19 @@ class PersonPhoneNumber extends Model
      *
      * @param $value
      * @return PhoneNumber
+     * @throws
      */
     public function getPhoneNumberAttribute($value) {
-        return PhoneNumber::make($value,  $this->country_code ?? 'NL');
+        return $this->util->parse($value, $this->country_code);
+    }
+
+    /**
+     * Returns the number type of this PhoneNumber
+     *
+     * @return int
+     */
+    public function getNumberTypeAttribute() {
+        return $this->util->getNumberType($this->phone_number);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -80,12 +127,15 @@ class PersonPhoneNumber extends Model
      * Saves the phone_number in the right format.
      *
      * @param $value
+     * @throws
      */
     public function setPhoneNumberAttribute($value) {
-        if(!($value instanceof PhoneNumber)) {
-            $value = PhoneNumber::make($value, $this->country_code ?? 'NL');
+        if(is_string($value)) {
+            $value = $this->util->parse($value, $this->country_code);
         }
 
-        $this->attributes['phone_number'] = $value->formatE164();
+        if($value instanceof PhoneNumber) {
+            $this->attributes['phone_number'] = $this->util->format($value, PhoneNumberFormat::E164);
+        }
     }
 }

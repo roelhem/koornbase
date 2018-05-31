@@ -22,7 +22,6 @@ class CreatePersonPhoneNumbersTable extends Migration
             $table->jsonb('options')->default('{}');
 
             $table->string('phone_number', 63);
-            $table->boolean('is_mobile')->default(false);
             $table->char('country_code', 2)->default('NL');
 
             $table->text('remarks')->nullable();

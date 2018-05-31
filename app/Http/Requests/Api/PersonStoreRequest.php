@@ -37,8 +37,15 @@ class PersonStoreRequest extends FormRequest
             'emailAddresses.*.email_address' => 'required|string|email|max:255',
 
             'phoneNumbers.*.label' => 'required|string|max:63',
-            'phoneNumbers.*.options' => 'sometimes|required|array',
-            'phoneNumbers.*.remarks' => 'nullable|string'
+            'phoneNumbers.*.options' => 'sometimes|array',
+            'phoneNumbers.*.remarks' => 'nullable|string',
+            'phoneNumbers.*.country_code' => 'sometimes|required|size:2|string|country_code',
+            'phoneNumbers.*.phone_number' => 'phone:phoneNumbers.*.country_code',
+
+            'addresses.*.label' => 'required|string|max:63',
+            'addresses.*.options' => 'sometimes|required|array',
+            'addresses.*.remarks' => 'nullable|string',
+            'addresses.*.country_code' => 'sometimes|required|size:2|string|country_code',
         ];
     }
 }

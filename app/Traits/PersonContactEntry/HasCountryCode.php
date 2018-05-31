@@ -36,6 +36,15 @@ trait HasCountryCode
     }
 
     /**
+     * Saves the country_code in the right format.
+     *
+     * @param $newValue
+     */
+    public function setCountryCodeAttribute($newValue) {
+        $this->attributes['country_code'] = mb_strtoupper(substr(trim($newValue),'0','2'));
+    }
+
+    /**
      * Returns the full, Dutch name of the country.
      *
      * @return mixed

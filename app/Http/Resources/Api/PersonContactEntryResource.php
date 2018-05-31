@@ -17,7 +17,7 @@ class PersonContactEntryResource extends Resource
         return parent::toArray($request) + [
                 'index' => $this->index,
                 'label' => $this->label,
-                'options' => $this->options,
+                'options' => $this->getOptions($request),
             ];
     }
 

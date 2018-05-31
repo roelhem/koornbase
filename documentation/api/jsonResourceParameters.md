@@ -29,6 +29,11 @@ in te stellen.
             <td><tt>leeg</tt></td>
             <td>Geeft aan hoe de metaFields getoond moeten worden.</td>
         </tr>
+        <tr>
+            <td><code>optionDefaults</code></td>
+            <td><tt>leeg</tt> | <tt>'show'</tt> | <tt>'hide'</tt> </td>
+            <td>Of een option-objecten ook standaardwaarden moet tonen.</td>
+        </tr>
     </tbody>
 </table>
 
@@ -195,3 +200,27 @@ meta-velden opvragen zonder dat het lastiger wordt om de meta-velden te ondersch
 
 Als je `metaFieldsGrouped` toevoegd aan de request wordt het veld `_meta` altijd getoond, bevat altijd een object
 en heeft altijd dezelfde naam.
+
+
+
+
+
+ ### Parameter `optionDefaults` .
+ 
+ Sommige objecten hebben een options object. Dit is een object die bepaalde instellingen bijhoud voor een
+ Model of object. Een options-object heeft meestal de key `options` as hij in een JSON-response wordt getoond.
+ 
+ In plaats van alle instellingen te bewaren, worden alle standaardinstellingen automatisch overgenomen en worden
+ alleen de verschillen met de standaardwaarden opgeslagen. Om deze reden zie lege options-objected. Bij deze
+ objecten zijn namelijk geen instellingen toegevoegd die afwijken van de standaardinstellingen.
+ 
+ Als je de waarde van een bepaalde instelling wilt weten, moet je dus in de meeste gevallen eerst opzoeken wat
+ de standaardinstellingen zijn. Deze parameter helpt je bij het uitlezen van de instellingen door naast alle
+ afwijkende instellingen ook de standaard instellingen te tonen.
+ 
+ Daarnast heeft deze parameter het effect dat vergelijkbare option-objected altijd dezelfde keys hebben. Hierdoor
+ is het makkelijker om verschillende instellingen te vergelijken.
+ 
+ Je kunt deze parameter op dezelfde mannier gebuiken als `metaFieldsGroup`, of de waarde `show` geven om de
+ standaardinstellingen in de option-objecten te tonen. Als je de standaardinstellingen wilt verbergen, moet je
+ deze parameter weghalen of de waarde `hide` geven.

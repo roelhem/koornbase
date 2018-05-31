@@ -13,7 +13,6 @@ $factory->define(App\PersonPhoneNumber::class, function (Faker $faker) {
             return \App\Person::query()->inRandomOrder()->value('id');
         },
         'label' => $faker->word,
-        'is_mobile' => $faker->boolean,
         'country_code' => $faker->randomElement(['NL','GB','FR','BE','DE','IT','SE','NO','DK','ES','PT','CH','AT']),
         'phone_number' => function($self) {
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
