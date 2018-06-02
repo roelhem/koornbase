@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Group;
 use App\GroupCategory;
+use App\GroupEmailAddress;
 use App\Person;
 use App\User;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,14 @@ class RouteServiceProvider extends ServiceProvider
                 return GroupCategory::findOrFail($value);
             } else {
                 return GroupCategory::findBySlugOrFail($value);
+            }
+        });
+
+        Route::bind('group_email_address',function($value) {
+            if(ctype_digit($value)) {
+                return GroupEmailAddress::findOrFail($value);
+            } else {
+                return GroupEmailAddress::where('email_address', $value)->first() ?? abort(404);
             }
         });
 

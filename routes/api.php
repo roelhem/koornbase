@@ -17,8 +17,9 @@ Route::name('api.')->group(function() {
 
     Route::get('me','Api\MeController@me');
 
-    Route::resource('users','Api\UserController');
-    Route::resource('persons', 'Api\PersonController');
-    Route::resource('groups', 'Api\GroupController');
-    Route::resource('group-categories', 'Api\GroupCategoryController');
+    Route::apiResource('users','Api\UserController');
+    Route::apiResource('persons', 'Api\PersonController');
+    Route::apiResource('groups', 'Api\GroupController');
+    Route::apiResource('group-categories', 'Api\GroupCategoryController');
+    Route::apiResource('group-email-addresses', 'Api\GroupEmailAddressController');
 });

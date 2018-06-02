@@ -22,6 +22,8 @@ class GroupResource extends Resource
 
                 'category' => new GroupCategoryResource($this->whenLoaded('category')),
                 'persons' => PersonResource::collection($this->whenLoaded('persons')),
+                'emailAddresses' => GroupEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+
             ] + $this->tailArray($request);
     }
 }

@@ -124,38 +124,9 @@ Route::namespace('Events')->prefix('events')->group(function() {
 
 
 
-
-
-// Routes for crud
-Route::namespace('Crud')->prefix('crud')->group(function() {
-    Route::resource('studies', 'StudyController');
-    Route::resource('persons', 'PersonController');
-    Route::resource('groups', 'GroupController');
-    Route::resource('group-categories', 'GroupCategoryController');
-});
-
-
-
-
-
-
-
 // Routes shared display elements
 Route::namespace('Display')->prefix('display')->group(function() {
     Route::get('/group/{group}', 'GroupController@group')->name('display.group');
-});
-
-
-
-
-
-
-
-// Routes for FullCalendar event-feeds.
-Route::namespace('Calendar')->prefix('calendar')->group(function() {
-    Route::get('/birthdays', 'BirthdayController@list')->name('calendar.birthdays');
-
-    Route::get('/events', 'EventController@list')->name('calendar.events');
 });
 
 

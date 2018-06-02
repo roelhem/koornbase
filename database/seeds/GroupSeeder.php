@@ -28,6 +28,10 @@ class GroupSeeder extends Seeder
                 $group = Group::make(array_except($grp,['titles','roles']));
                 $category->groups()->save($group);
 
+                $group->emailAddresses()->create([
+                    'email_address' => "{$group->slug}@koornbeurs.nl"
+                ]);
+
                 foreach (array_get($grp, 'roles',[]) as $role) {
                     $group->assignRole($role);
                 }
