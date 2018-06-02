@@ -85,4 +85,13 @@ class Group extends Model
         return $this->belongsToMany(Person::class, 'person_group','group_id','person_id');
     }
 
+    /**
+     * Gives the GroupEmailAdresses that belong to this Group.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function emailAddresses() {
+        return $this->hasMany(GroupEmailAddress::class, 'group_id');
+    }
+
 }
