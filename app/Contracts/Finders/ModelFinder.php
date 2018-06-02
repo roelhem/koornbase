@@ -10,6 +10,7 @@ namespace App\Contracts\Finders;
 
 use App\Exceptions\Finders\InputNotAcceptedException;
 use App\Exceptions\Finders\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Interface ModelFinder
@@ -41,7 +42,7 @@ interface ModelFinder
      * Tries to find the Model based on the input.
      *
      * @param $input
-     * @return mixed
+     * @return Model
      * @throws ModelNotFoundException
      * @throws InputNotAcceptedException
      */

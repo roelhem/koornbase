@@ -9,6 +9,19 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class GroupCategoryController extends Controller
 {
+
+    /**
+     * Prepares a group-category to be send by an action.
+     *
+     * @param GroupCategory $category
+     * @param Request $request
+     * @return GroupCategoryResource
+     */
+    protected function prepare(GroupCategory $category, Request $request) {
+        $category->load($this->getAskedRelations($request));
+        return new GroupCategoryResource($category);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,11 +40,22 @@ class GroupCategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return GroupCategoryResource
+     * @throws
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'name_short' => 'nullable|string|max:63',
+            'description' => 'nullable|string',
+            'style' => 'nullable|string|max:63'
+        ]);
+
+        $groupCategory = new GroupCategory($validatedData);
+        $groupCategory->saveOrFail();
+
+        return $this->prepare($groupCategory, $request);
     }
 
     /**
@@ -43,8 +67,7 @@ class GroupCategoryController extends Controller
      */
     public function show(GroupCategory $groupCategory, Request $request)
     {
-        $groupCategory->load($this->getAskedRelations($request));
-        return new GroupCategoryResource($groupCategory);
+        return $this->prepare($groupCategory, $request);
     }
 
     /**
@@ -52,11 +75,22 @@ class GroupCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\GroupCategory  $groupCategory
-     * @return \Illuminate\Http\Response
+     * @return GroupCategoryResource
+     * @throws
      */
     public function update(Request $request, GroupCategory $groupCategory)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'name_short' => 'nullable|string|max:63',
+            'description' => 'nullable|string',
+            'style' => 'nullable|string|max:63'
+        ]);
+
+        $groupCategory->fill($validatedData);
+        $groupCategory->saveOrFail();
+
+        return $this->prepare($groupCategory, $request);
     }
 
     /**

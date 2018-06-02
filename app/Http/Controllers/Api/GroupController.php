@@ -5,11 +5,24 @@ namespace App\Http\Controllers\Api;
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
 use App\Services\Finders\GroupCategoryFinder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class GroupController extends Controller
 {
+    /**
+     * Prepares a group to be send by an action.
+     *
+     * @param Model $group
+     * @param Request $request
+     * @return GroupResource
+     */
+    protected function prepare($group, Request $request) {
+        $group->load($this->getAskedRelations($request));
+        return new GroupResource($group);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -44,9 +57,7 @@ class GroupController extends Controller
         $groupCategory = $groupCategoryFinder->find($validatedData['category']);
         $group = $groupCategory->groups()->create($validatedData);
 
-        $group->load($this->getAskedRelations($request));
-
-        return new GroupResource($group);
+        return $this->prepare($group, $request);
     }
 
     /**
@@ -58,8 +69,7 @@ class GroupController extends Controller
      */
     public function show(Group $group, Request $request)
     {
-        $group->load($this->getAskedRelations($request));
-        return new GroupResource($group);
+        return $this->prepare($group, $request);
     }
 
     /**
@@ -67,11 +77,30 @@ class GroupController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Group  $group
-     * @return \Illuminate\Http\Response
+     * @param  GroupCategoryFinder $categoryFinder
+     * @return GroupResource
+     * @throws
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request, Group $group, GroupCategoryFinder $categoryFinder)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'category' => 'sometimes|required|finds:App\GroupCategory',
+            'name_short' => 'nullable|string|max:63',
+            'description' => 'nullable|string',
+            'member_name' => 'nullable|string|max:255',
+        ]);
+
+        $group->fill($validatedData);
+
+        if(array_has($validatedData, 'category')) {
+            $category = $categoryFinder->find($validatedData['category']);
+            $group->category()->associate($category);
+        }
+
+        $group->saveOrFail();
+
+        return $this->prepare($group, $request);
     }
 
     /**

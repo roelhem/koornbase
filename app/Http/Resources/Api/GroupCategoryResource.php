@@ -13,13 +13,16 @@ class GroupCategoryResource extends Resource
     public function toArray($request)
     {
         return parent::toArray($request) + [
-            'slug' => $this->slug,
-            'name' => $this->name,
-            'name_short' => $this->name_short,
-            'description' => $this->description,
-            'style' => $this->style,
-            'is_required' => $this->when($this->is_required, true),
-            'options' => $this->getOptions($request),
-        ] + $this->tailArray($request);
+                'slug' => $this->slug,
+                'name' => $this->name,
+                'name_short' => $this->name_short,
+                'description' => $this->description,
+                'style' => $this->style,
+                'is_required' => $this->when($this->is_required, true),
+                'options' => $this->getOptions($request),
+
+                'groups' => GroupResource::collection($this->whenLoaded('groups')),
+
+            ] + $this->tailArray($request);
     }
 }

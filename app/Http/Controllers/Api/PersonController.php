@@ -10,6 +10,12 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PersonController extends Controller
 {
+
+    protected function prepare($person, Request $request) {
+        $person->load($this->getAskedRelations($request));
+        return new PersonResource($person);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,8 +54,7 @@ class PersonController extends Controller
             $person->addresses()->create($input);
         });
 
-        $person->load($this->getAskedRelations($request));
-        return new PersonResource($person);
+        return $this->prepare($person, $request);
     }
 
     /**
@@ -61,8 +66,7 @@ class PersonController extends Controller
      */
     public function show(Person $person, Request $request)
     {
-        $person->load($this->getAskedRelations($request));
-        return new PersonResource($person);
+        return $this->prepare($person, $request);
     }
 
     /**

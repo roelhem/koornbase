@@ -9,6 +9,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller as ParentController;
+use App\Http\Middleware\Api\PrepareModelResult;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 /**
