@@ -16,10 +16,12 @@ class CreatePersonsTable extends Migration
         Schema::create('persons', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name',255);
-            $table->string('name_short', 63)->nullable();
-            $table->string('name_formal', 255)->nullable();
-            $table->string('nickname', 255)->nullable();
+            $table->string('name_first',255);
+            $table->string('name_middle', 255)->nullable();
+            $table->string('name_prefix', 63)->nullable();
+            $table->string('name_last', 255);
+            $table->string('name_initials', 63)->nullable();
+            $table->string('name_nickname', 255)->nullable();
 
             $table->date('birth_date')->nullable();
 

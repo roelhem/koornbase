@@ -17,24 +17,30 @@ class PersonResource extends Resource
     public function toArray($request)
     {
         return parent::toArray($request) + [
-            'name' => $this->name,
-            'name_short' => $this->name_short,
-            'name_formal' => $this->name_formal,
-            'nickname' => $this->nickname,
-            'birth_date' => $this->formatedBirthDate(),
-            'age' => $this->age,
+                'name' => $this->name,
+                'name_short' => $this->name_short,
+                'name_formal' => $this->name_formal,
+                'name_full' => $this->name_full,
+                'name_first' => $this->name_first,
+                'name_middle' => $this->name_middle,
+                'name_prefix' => $this->name_prefix,
+                'name_last' => $this->name_last,
+                'name_initials' => $this->name_initials,
+                'name_nickname' => $this->name_nickname,
+                'nickname' => $this->nickname,
+                'birth_date' => $this->formatedBirthDate(),
+                'age' => $this->age,
 
-            $this->membershipStatus($request),
+                $this->membershipStatus($request),
 
-            'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
-            'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
-            'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
+                'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
+                'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+                'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
 
+                'users' => UserResource::collection($this->whenLoaded('users')),
+                'groups' => GroupResource::collection($this->whenLoaded('groups')),
 
-            'users' => UserResource::collection($this->whenLoaded('users')),
-            'groups' => GroupResource::collection($this->whenLoaded('groups')),
-
-        ] + $this->tailArray($request);
+            ] + $this->tailArray($request);
     }
 
     protected function formatedBirthDate() {

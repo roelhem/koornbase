@@ -24,10 +24,12 @@ class PersonStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'name_short' => 'nullable|string|max:63',
-            'name_formal' => 'nullable|string|max:255',
-            'nickname' => 'nullable|string|max:255',
+            'name_first' => 'required|string|max:255',
+            'name_initials' => 'nullable|string|max:63',
+            'name_middle' => 'nullable|string|max:255',
+            'name_prefix' => 'nullable|string|max:63',
+            'name_last' => 'required|string|max:255',
+            'name_nickname' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:now',
             'remarks' => 'nullable|string',
 

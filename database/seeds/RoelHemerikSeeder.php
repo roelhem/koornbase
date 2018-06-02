@@ -15,10 +15,10 @@ class RoelHemerikSeeder extends Seeder
     public function run()
     {
         $person = Person::create([
-            'name' => 'Roel Hemerik',
-            'name_short' => 'Roel',
-            'name_formal' => 'R.A.B. Hemerik',
-            'nickname' => null,
+            'name_first' => 'Roel',
+            'name_middle' => 'Adriaan Bernard',
+            'name_last' => 'Hemerik',
+            'name_initials' => 'rab',
             'birth_date' => Carbon::createFromDate(1993,9,20)
         ]);
 

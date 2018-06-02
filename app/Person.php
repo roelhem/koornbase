@@ -8,6 +8,7 @@ use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
 use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
+use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
 use App\Types\AvatarType;
 use Carbon\Carbon;
@@ -22,9 +23,6 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer $id
- * @property string $name
- * @property string $name_short
- * @property string|null $name_formal
  * @property string|null $nickname
  * @property Carbon|null $birth_date
  *
@@ -48,9 +46,9 @@ class Person extends Model
     use SoftDeletes;
     use Userstamps;
 
-    use HasShortName, HasRemarks;
+    use HasRemarks;
 
-    use HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
+    use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -60,7 +58,7 @@ class Person extends Model
 
     protected $dates = ['birth_date','created_at','updated_at','deleted_at'];
 
-    protected $fillable = ['name','name_short','name_formal','nickname', 'birth_date','remarks'];
+    protected $fillable = ['name_first','name_middle','name_prefix','name_last','name_initials','name_nickname', 'birth_date','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- GETTER METHODS ------------------------------------------------------------------------------------- //
