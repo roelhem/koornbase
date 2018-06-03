@@ -30,7 +30,7 @@ abstract class ModelByIdFinder implements ModelFinder
      */
     public function accepts($input): bool
     {
-        if(is_a($input, $this->modelClass())) {
+        if(is_subclass_of($input, $this->modelClass()) || is_a($input, $this->modelClass())) {
             return true;
         }
 
@@ -62,7 +62,7 @@ abstract class ModelByIdFinder implements ModelFinder
             $model = $modelClass::find($input);
         }
 
-        if (is_a($input, $modelClass)) {
+        if (is_subclass_of($model, $modelClass) || is_a($model, $modelClass)) {
             return $model;
         }
 

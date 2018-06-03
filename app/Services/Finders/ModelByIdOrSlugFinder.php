@@ -21,11 +21,7 @@ abstract class ModelByIdOrSlugFinder extends ModelByIdFinder
      */
     public function accepts($input): bool
     {
-        if(is_a($input,$this->modelClass())) {
-            return true;
-        }
-
-        if(is_integer($input)) {
+        if(parent::accepts($input)) {
             return true;
         }
 
@@ -59,7 +55,7 @@ abstract class ModelByIdOrSlugFinder extends ModelByIdFinder
             $model = $modelClass::findBySlug($input);
         }
 
-        if(is_a($model, $modelClass)) {
+        if(is_subclass_of($model, $modelClass) || is_a($model, $modelClass)) {
             return $model;
         } else {
             throw new ModelNotFoundException;

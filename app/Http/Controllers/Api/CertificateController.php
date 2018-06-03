@@ -51,7 +51,7 @@ class CertificateController extends Controller
     {
         $validatedData = $request->validate([
             'person' => 'required|finds:App\Person',
-            'category' => 'required|finds:App\Category',
+            'category' => 'required|finds:App\CertificateCategory',
             'passed' => 'boolean',
             'examination_at' => 'nullable|date',
             'valid_at' => 'nullable|date',
@@ -66,7 +66,7 @@ class CertificateController extends Controller
         $inputData['person_id'] = $person->id;
         $inputData['category_id'] = $category->id;
 
-        $certificate = Certificate::create($validatedData);
+        $certificate = Certificate::create($inputData);
 
         return $this->prepare($certificate, $request);
     }
