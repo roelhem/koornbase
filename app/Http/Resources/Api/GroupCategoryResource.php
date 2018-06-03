@@ -13,7 +13,6 @@ class GroupCategoryResource extends Resource
     public function toArray($request)
     {
         return parent::toArray($request) + [
-                'slug' => $this->slug,
                 'name' => $this->name,
                 'name_short' => $this->name_short,
                 'description' => $this->description,

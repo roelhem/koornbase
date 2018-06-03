@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Certificate;
+use App\CertificateCategory;
 use App\Group;
 use App\GroupCategory;
 use App\GroupEmailAddress;
@@ -64,6 +66,18 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('person', function($value) {
             return Person::findOrFail($value);
+        });
+
+        Route::bind('certificates', function($value) {
+            return Certificate::findOrFail($value);
+        });
+
+        Route::bind('certificate-category', function($value) {
+            if(ctype_digit($value)) {
+                return CertificateCategory::findOrFail($value);
+            } else {
+                return CertificateCategory::findBySlugOrFail($value);
+            }
         });
     }
 

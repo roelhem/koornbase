@@ -85,7 +85,9 @@ class PersonSeeder extends Seeder
 
 
             // ADD SOME CERTIFICATES
-            factory(\App\Certificate::class, $faker->numberBetween(0,3))->create(['person_id' => $person->id]);
+            if($person->age >= 18) {
+                factory(\App\Certificate::class, $faker->numberBetween(0, 3))->create(['person_id' => $person->id]);
+            }
 
 
 

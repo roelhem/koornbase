@@ -56,6 +56,10 @@ class PersonResource extends Resource
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
     protected function membershipStatus($request) {
+        if($this->membership_status === null) {
+            return null;
+        };
+
         $res = [
             'status' => $this->membership_status,
             'name' => MembershipStatus::getDescription($this->membership_status),

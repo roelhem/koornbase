@@ -2,7 +2,8 @@
 
 namespace App\Http\Resources\Api;
 
-class GroupResource extends Resource
+
+class CertificateCategoryResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +17,10 @@ class GroupResource extends Resource
                 'name' => $this->name,
                 'name_short' => $this->name_short,
                 'description' => $this->description,
-                'member_name' => $this->member_name,
-                'is_required' => $this->when($this->is_required, true),
+                'default_expire_years' => $this->default_expire_years,
+                'is_required' => $this->is_required,
 
-                'category' => new GroupCategoryResource($this->whenLoaded('category')),
-                'persons' => PersonResource::collection($this->whenLoaded('persons')),
-                'emailAddresses' => GroupEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
-
+                'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
             ] + $this->tailArray($request);
     }
 }

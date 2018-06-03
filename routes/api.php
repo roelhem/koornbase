@@ -17,9 +17,13 @@ Route::name('api.')->group(function() {
 
     Route::get('me','Api\MeController@me');
 
-    Route::apiResource('users','Api\UserController');
-    Route::apiResource('persons', 'Api\PersonController');
-    Route::apiResource('groups', 'Api\GroupController');
-    Route::apiResource('group-categories', 'Api\GroupCategoryController');
-    Route::apiResource('group-email-addresses', 'Api\GroupEmailAddressController');
+    Route::apiResources([
+        'users' => 'Api\UserController',
+        'persons' => 'Api\PersonController',
+        'groups' => 'Api\GroupController',
+        'group-categories' => 'Api\GroupCategoryController',
+        'group-email-address' => 'Api\GroupEmailAddressController',
+        'certificates' => 'Api\CertificateController',
+        'certificate-categories' => 'Api\CertificateCategoryController'
+    ]);
 });

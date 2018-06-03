@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api;
 
 use App\Types\OptionsType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class Resource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'slug' => $this->when($this->slug, $this->slug),
         ];
     }
 
@@ -119,5 +121,19 @@ class Resource extends JsonResource
         }
 
         return $res;
+    }
+
+    /**
+     * Formats a date in the right format
+     *
+     * @param Carbon|null $input
+     * @param Request $request
+     * @return string|null
+     */
+    protected function formatDate($input, $request) {
+        if($input instanceof Carbon) {
+            return $input->toDateString();
+        }
+        return null;
     }
 }

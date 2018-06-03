@@ -20,7 +20,7 @@ use App\Group;
  *
  * @package App\Services\Finders
  */
-class GroupFinder implements ModelFinder
+class GroupFinder extends ModelByIdOrSlugFinder
 {
 
     /**
@@ -31,52 +31,4 @@ class GroupFinder implements ModelFinder
         return Group::class;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function accepts($input): bool
-    {
-        if($input instanceof Group) {
-            return true;
-        }
-
-        if(is_integer($input)) {
-            return true;
-        }
-
-        if(is_string($input)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     * @return Group
-     */
-    public function find($input)
-    {
-        if (!$this->accepts($input)) {
-            throw new InputNotAcceptedException;
-        }
-
-        if($input instanceof Group) {
-            return $input;
-        }
-
-        $model = null;
-
-        if(is_integer($input)) {
-            $model = Group::find($input);
-        } else if(is_string($input)) {
-            $model = Group::findBySlug($input);
-        }
-
-        if($model instanceof Group) {
-            return $model;
-        } else {
-            throw new ModelNotFoundException;
-        }
-    }
 }

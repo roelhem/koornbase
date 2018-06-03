@@ -20,7 +20,7 @@ use App\GroupCategory;
  *
  * @package App\Services\Finders
  */
-class GroupCategoryFinder implements ModelFinder
+class GroupCategoryFinder extends ModelByIdOrSlugFinder
 {
 
     /**
@@ -29,54 +29,5 @@ class GroupCategoryFinder implements ModelFinder
     public function modelClass(): string
     {
         return GroupCategory::class;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function accepts($input): bool
-    {
-        if($input instanceof GroupCategory) {
-            return true;
-        }
-
-        if(is_integer($input)) {
-            return true;
-        }
-
-        if(is_string($input)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     * @return GroupCategory
-     */
-    public function find($input)
-    {
-        if (!$this->accepts($input)) {
-            throw new InputNotAcceptedException;
-        }
-
-        if($input instanceof GroupCategory) {
-            return $input;
-        }
-
-        $model = null;
-
-        if(is_integer($input)) {
-            $model = GroupCategory::find($input);
-        } else if(is_string($input)) {
-            $model = GroupCategory::findBySlug($input);
-        }
-
-        if($model instanceof GroupCategory) {
-            return $model;
-        } else {
-            throw new ModelNotFoundException;
-        }
     }
 }
