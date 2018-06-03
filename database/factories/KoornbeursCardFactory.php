@@ -7,7 +7,12 @@ use \Carbon\Carbon;
 $factory->define(App\KoornbeursCard::class, function (Faker $faker) {
     return [
         'owner_id' => function() {
-            return Person::query()->inRandomOrder()->first()->id;
+            $person = Person::query()->inRandomOrder()->first();
+            if($person) {
+                return $person->id;
+            } else {
+                return null;
+            }
         },
         'ref' => $faker->numerify('T##########'),
         'version' => 'unexistantTestVersion',
@@ -38,4 +43,8 @@ $factory->define(App\KoornbeursCard::class, function (Faker $faker) {
 
 $factory->state(App\KoornbeursCard::class, 'active', [
     'deactivated_at' => null,
+]);
+
+$factory->state(App\KoornbeursCard::class, 'no-owner', [
+    'owner_id' => null
 ]);

@@ -35,7 +35,7 @@ class KoornbeursCard extends Model
     protected $table = 'koornbeurs_cards';
 
     protected $dates = ['activated_at','deactivated_at','created_at', 'updated_at'];
-    protected $fillable = ['id','ref','version','activated_at','deactivated_at','remarks'];
+    protected $fillable = ['id','owner_id','ref','version','activated_at','deactivated_at','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- SCOPES --------------------------------------------------------------------------------------------- //

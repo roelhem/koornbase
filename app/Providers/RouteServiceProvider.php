@@ -7,6 +7,7 @@ use App\CertificateCategory;
 use App\Group;
 use App\GroupCategory;
 use App\GroupEmailAddress;
+use App\KoornbeursCard;
 use App\Person;
 use App\User;
 use Illuminate\Support\Facades\Route;
@@ -65,7 +66,10 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('person', function($value) {
-            return Person::findOrFail($value);
+            if(ctype_digit($value)) {
+                return Person::findOrFail($value);
+            }
+            abort(404);
         });
 
         Route::bind('certificates', function($value) {
@@ -78,6 +82,20 @@ class RouteServiceProvider extends ServiceProvider
             } else {
                 return CertificateCategory::findBySlugOrFail($value);
             }
+        });
+
+        Route::bind('koornbeurs-card', function($value) {
+            if(ctype_digit($value)) {
+                return KoornbeursCard::findOrFail($value);
+            } elseif(str_is('_*',$value)) {
+                return KoornbeursCard::where('ref', str_after($value, '_'))
+                        ->first() ?? abort(404);
+            } elseif(str_is('*_*',$value)) {
+                return KoornbeursCard::where('ref', str_after($value, '_'))
+                        ->where('version', str_before($value, '_'))
+                        ->first() ?? abort(404);
+            }
+            abort(404);
         });
     }
 

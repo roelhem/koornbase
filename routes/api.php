@@ -24,6 +24,7 @@ Route::name('api.')->group(function() {
         'group-categories' => 'Api\GroupCategoryController',
         'group-email-address' => 'Api\GroupEmailAddressController',
         'certificates' => 'Api\CertificateController',
-        'certificate-categories' => 'Api\CertificateCategoryController'
+        'certificate-categories' => 'Api\CertificateCategoryController',
+        'koornbeurs-cards' => 'Api\KoornbeursCardController'
     ]);
 });
