@@ -38,6 +38,47 @@ class KoornbeursCard extends Model
     protected $fillable = ['id','owner_id','ref','version','activated_at','deactivated_at','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- GETTERS -------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns if this KoornbeursCard is active at the given moment $at. If $at is ommitted or `null`, the current
+     * moment wil be used.
+     *
+     * @param Carbon|string|null $at
+     * @return boolean
+     */
+    public function isActive($at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        if($this->activated_at === null || $this->activated_at > $at) {
+            return false;
+        }
+
+        if($this->deactivated_at !== null && $this->deactivated_at < $at) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Calculated attribute that tells if this card is active or not at the current moment.
+     *
+     * @return bool
+     */
+    public function getIsActiveAttribute()
+    {
+        return $this->isActive();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- SCOPES --------------------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 

@@ -41,7 +41,7 @@ class PersonResource extends Resource
                 'users' => UserResource::collection($this->whenLoaded('users')),
                 'groups' => GroupResource::collection($this->whenLoaded('groups')),
                 'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
-                'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards')),
+                'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards'))
 
             ] + $this->tailArray($request);
     }

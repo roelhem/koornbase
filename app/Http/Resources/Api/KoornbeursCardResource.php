@@ -17,6 +17,7 @@ class KoornbeursCardResource extends Resource
                 'version' => $this->version,
                 'activated_at' => $this->activated_at,
                 'deactivated_at' => $this->deactivated_at,
+                'is_active' => $this->is_active,
 
                 'owner' => new PersonResource($this->whenLoaded('owner')),
             ] + $this->tailArray($request);

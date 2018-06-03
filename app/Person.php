@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\Api\KoornbeursCardResource;
 use App\Traits\HasRemarks;
 use App\Traits\HasShortName;
 use App\Traits\Person\HasAddresses;
@@ -174,7 +175,10 @@ class Person extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function cards() {
-        return $this->hasMany(KoornbeursCard::class, 'owner_id');
+        return $this->hasMany(KoornbeursCard::class, 'owner_id')
+            ->orderByDesc('deactivated_at')
+            ->orderByDesc('activated_at')
+            ->orderByDesc('created_at');
     }
 
     /**
