@@ -2,65 +2,49 @@
 
 namespace App;
 
-use App\Traits\HasAssignedRoles;
 use App\Traits\HasDescription;
-use App\Traits\HasOptions;
 use App\Traits\HasShortName;
-use App\Traits\HasStringPrimaryKey;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
 /**
- * Class GroupCategory
+ * Class CertificateCategory
  *
  * @package App
  *
  * @property integer $id
- * @property boolean $is_required
- * @property string $style
+ * @property integer|null $default_expire_years
  */
-class GroupCategory extends Model
+class CertificateCategory extends Model
 {
-
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
 
     use HasShortName, HasDescription;
 
-    use HasOptions, HasAssignedRoles;
-
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
-    protected $table = 'group_categories';
+    protected $table = 'certificate_categories';
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    protected $fillable = ['name','name_short', 'slug','style','description','is_required','groups'];
-
-    protected function defaultOptions(): array
-    {
-        return [
-            'showOnPersonsPage' => true,
-        ];
-    }
+    protected $fillable = ['name','name_short', 'slug','style','description','default_expire_years','is_required'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Gives all the Groups that belong to this GroupCategory.
+     * Gives all the Certificates that belong to this CertificateCategory
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function groups() {
-        return $this->hasMany(Group::class, 'category_id');
+    public function certificates() {
+        return $this->hasMany(Certificate::class, 'category_id');
     }
-
-
 }

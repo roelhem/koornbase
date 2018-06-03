@@ -84,6 +84,11 @@ class PersonSeeder extends Seeder
 
 
 
+            // ADD SOME CERTIFICATES
+            factory(\App\Certificate::class, $faker->numberBetween(0,3))->create(['person_id' => $person->id]);
+
+
+
             // ADD A KOORNBEURS CARD
             // 50/50 change of a deactivated card.
             if($faker->boolean) {

@@ -177,5 +177,14 @@ class Person extends Model
         return $this->hasMany(KoornbeursCard::class, 'owner_id');
     }
 
+    /**
+     * Gives all the Certificates that belong to this CertificateCategory.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function certificates() {
+        return $this->hasMany(Certificate::class, 'person_id');
+    }
+
 
 }

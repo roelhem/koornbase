@@ -90,6 +90,14 @@ class RoelHemerikSeeder extends Seeder
                 'activated_at' => Carbon::createFromDate(2015,2,14),
             ]);
 
+            $certificateCategory = \App\CertificateCategory::where(['name_short' => 'IVA'])->first();
+
+            if($certificateCategory instanceof \App\CertificateCategory) {
+                $certificateCategory->certificates()->create([
+                    'person_id' => $person->id
+                ]);
+            }
+
         }
 
     }
