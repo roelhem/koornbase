@@ -26,10 +26,7 @@ class RolesAndPermissionsTest extends TestCase
             'id' => $attrs['id'],
             'description' => null,
             'is_required' => false,
-            'is_visible' => false,
-            'for_user' => false,
-            'for_group' => false,
-            'for_group_category' => false
+            'is_visible' => false
         ];
 
         $role = Role::create($attrs);

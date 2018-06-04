@@ -6,6 +6,7 @@ use App\Contracts\Finders\FinderCollection;
 use App\Exceptions\Finders\ModelNotFoundException;
 use App\GroupEmailAddress;
 use App\KoornbeursCard;
+use App\Services\Finders\ModelByIdOrSlugFinder;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,6 +18,7 @@ class FinderTest extends TestCase
      * Tests if all the modelFinders can always identify by id
      *
      * @return void
+     * @throws
      */
     public function testShared()
     {
@@ -29,6 +31,10 @@ class FinderTest extends TestCase
             $this->assertTrue($finder->accepts($model->id));
             $this->assertTrue($finder->accepts(strval($model->id)));
 
+            if($finder instanceof ModelByIdOrSlugFinder) {
+                $this->assertTrue($finder->accepts($model->slug));
+            }
+
             $foundByInstance = $finder->find($model);
             $foundById       = $finder->find($model->id);
             $foundByStringId = $finder->find(strval($model->id));
@@ -36,6 +42,10 @@ class FinderTest extends TestCase
             $this->assertEquals($model->id, $foundByInstance->id,"Finder $name via instance");
             $this->assertEquals($model->id, $foundById->id, "Finder $name via id");
             $this->assertEquals($model->id, $foundByStringId->id, "Finder $name via string value of id");
+
+            if($finder instanceof ModelByIdOrSlugFinder) {
+                $this->assertEquals($model->id, $finder->find($model->slug)->id,"Finder $name via slug");
+            }
 
             $model->forceDelete();
 
@@ -51,6 +61,15 @@ class FinderTest extends TestCase
                 $this->assertTrue(false, "Finder $name found the string value of id {$model->id} after deletion");
             } catch (\Exception $exception) {
                 $this->assertInstanceOf(ModelNotFoundException::class, $exception);
+            }
+
+            if($finder instanceof ModelByIdOrSlugFinder) {
+                try {
+                    $finder->find(strval($model->slug));
+                    $this->assertTrue(false, "Finder $name found the slug {$model->slug} after deletion");
+                } catch (\Exception $exception) {
+                    $this->assertInstanceOf(ModelNotFoundException::class, $exception);
+                }
             }
         }
     }

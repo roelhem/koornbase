@@ -22,10 +22,10 @@ class PersonStoreTest extends TestCase
     {
         Passport::actingAs(factory(User::class)->create());
 
-        $response = $this->post('/api/persons', [
-            'name' => 'Roel Hemerik',
-            'name_short' => 'Roel',
-            'name_formal' => 'R.A.B. Hemerik',
+        $response = $this->postJson('/api/persons', [
+            'name_first' => 'Roel',
+            'name_last' => 'Hemerik',
+            'name_initials' => 'rab',
             'birth_date' => '1993-09-20',
             'remarks' => 'Dit ben ik zelf!',
 
@@ -47,9 +47,9 @@ class PersonStoreTest extends TestCase
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('persons', [
-            'name' => 'Roel Hemerik',
-            'name_short' => 'Roel',
-            'name_formal' => 'R.A.B. Hemerik',
+            'name_first' => 'Roel',
+            'name_last' => 'Hemerik',
+            'name_initials' => 'R.A.B.',
             'birth_date' => '1993-09-20',
             'remarks' => 'Dit ben ik zelf!',
         ]);

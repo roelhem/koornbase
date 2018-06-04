@@ -59,7 +59,7 @@ class ModelByIdOrSlugFinder extends ModelByIdFinder
 
         $model = null;
 
-        if(is_string($model)) {
+        if(is_string($input)) {
             $model = $modelClass::findBySlug($input);
         }
 
