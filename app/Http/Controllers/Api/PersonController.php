@@ -6,6 +6,7 @@ use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Resources\Api\PersonResource;
 use App\Person;
 use App\Services\Finders\GroupFinder;
+use App\Services\Sorters\PersonSorter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -26,6 +27,10 @@ class PersonController extends Controller
     public function index(Request $request)
     {
         $query = Person::query();
+
+        $personSorter = new PersonSorter;
+        $personSorter->addList($query, $this->getSortList($request));
+
         $query->with($this->getAskedRelations($request));
 
         return PersonResource::collection($query->paginate());

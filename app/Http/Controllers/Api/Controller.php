@@ -9,8 +9,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller as ParentController;
-use App\Http\Middleware\Api\PrepareModelResult;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 /**
@@ -22,6 +20,26 @@ use Illuminate\Http\Request;
  */
 class Controller extends ParentController
 {
+
+    /**
+     * Returns an array of sorting-settings from the request that can be used in a sorter.
+     *
+     * @param Request $request
+     * @return array|string
+     */
+    protected function getSortList(Request $request) {
+        $sort = $request->query('sort', []);
+
+        if(is_string($sort)) {
+            $sort = explode(',', $sort);
+        }
+
+        if(!is_array($sort)) {
+            return [];
+        }
+
+        return $sort;
+    }
 
     /**
      * Returns an array of relations where the request asked for.
