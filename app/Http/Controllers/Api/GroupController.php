@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
 use App\Services\Finders\GroupCategoryFinder;
+use App\Services\Finders\PersonFinder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -117,5 +118,114 @@ class GroupController extends Controller
         } else {
             $group->delete();
         }
+    }
+
+    /**
+     * Endpoint to attach some persons.
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param PersonFinder $personFinder
+     * @return GroupResource
+     * @throws
+     */
+    public function attach(Request $request, Group $group, PersonFinder $personFinder) {
+        $validatedData = $request->validate([
+            'persons' => 'nullable|array',
+            'persons.*' => [
+                'bail',
+                'finds:App\Person',
+                function($attribute, $value, $fail) use ($group, $personFinder) {
+                    $person = $personFinder->find($value);
+                    if (\DB::table('person_group')->where([
+                        ['person_id', '=', $person->id],
+                        ['group_id', '=', $group->id]
+                    ])->exists()) {
+                        return $fail("De persoon '{$person->name}' zit al in de groep '{$group->name_short}'. ");
+                    }
+                }
+            ],
+        ]);
+
+        $personInputs = array_get($validatedData, 'persons');
+        if($personInputs !== null) {
+            foreach($personInputs as $personInput) {
+                $person = $personFinder->find($personInput);
+                $group->persons()->attach($person->id);
+            }
+        }
+
+        return $this->prepare($group, $request);
+    }
+
+    /**
+     * Endpoint to detach attached persons from this group.
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param PersonFinder $personFinder
+     * @return GroupResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
+    public function detach(Request $request, Group $group, PersonFinder $personFinder) {
+        $validatedData = $request->validate([
+            'persons' => 'nullable|array',
+            'persons.*' => [
+                'bail',
+                'finds:App\Person',
+                function($attribute, $value, $fail) use ($group, $personFinder) {
+                    $person = $personFinder->find($value);
+                    if (!\DB::table('person_group')->where([
+                        ['person_id', '=', $person->id],
+                        ['group_id', '=', $group->id]
+                    ])->exists()) {
+                        return $fail("De persoon '{$person->name}' zit niet in de groep '{$group->name_short}'. ");
+                    }
+                }
+            ],
+        ]);
+
+        $personInputs = array_get($validatedData, 'persons');
+        if($personInputs !== null) {
+            foreach($personInputs as $personInput) {
+                $person = $personFinder->find($personInput);
+                $group->persons()->detach($person->id);
+            }
+        }
+
+        return $this->prepare($group, $request);
+    }
+
+    /**
+     * Endpoint to sync attached persons with the input
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param PersonFinder $personFinder
+     * @return GroupResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
+    public function sync(Request $request, Group $group, PersonFinder $personFinder) {
+        $validatedData = $request->validate([
+            'persons' => 'array',
+            'persons.*' => 'finds:App\Person',
+            'withoutDetaching' => 'boolean'
+        ]);
+
+        $withoutDetaching = boolval(array_get($validatedData, 'withoutDetaching', false));
+
+        $personInputs = array_get($validatedData, 'persons');
+        if($personInputs !== null) {
+            $syncIds = [];
+            foreach ($personInputs as $personInput) {
+                $person = $personFinder->find($personInput);
+                $syncIds[] = $person->id;
+            }
+            $group->persons()->sync($syncIds, !$withoutDetaching);
+        }
+
+        return $this->prepare($group, $request);
     }
 }

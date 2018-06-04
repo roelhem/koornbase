@@ -15,8 +15,6 @@ use Illuminate\Http\Request;
 
 Route::name('api.')->group(function() {
 
-    Route::get('me','Api\MeController@me');
-
     Route::apiResources([
         'users' => 'Api\UserController',
         'persons' => 'Api\PersonController',
@@ -27,4 +25,14 @@ Route::name('api.')->group(function() {
         'certificate-categories' => 'Api\CertificateCategoryController',
         'koornbeurs-cards' => 'Api\KoornbeursCardController'
     ]);
+
+    Route::post('persons/{person}/attach','Api\PersonController@attach')->name('persons.attach');
+    Route::post('persons/{person}/detach', 'Api\PersonController@detach')->name('persons.detach');
+    Route::post('persons/{person}/sync', 'Api\PersonController@sync')->name('persons.sync');
+
+    Route::post('groups/{group}/attach','Api\GroupController@attach')->name('groups.attach');
+    Route::post('groups/{group}/detach', 'Api\GroupController@detach')->name('groups.detach');
+    Route::post('groups/{group}/sync', 'Api\GroupController@sync')->name('groups.sync');
+
+    Route::get('me','Api\MeController@me');
 });
