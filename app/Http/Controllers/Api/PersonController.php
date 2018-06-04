@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Resources\Api\PersonResource;
 use App\Http\Resources\Api\Resource;
@@ -85,20 +86,20 @@ class PersonController extends Controller
      *
      * @param Request $request
      * @param Person $person
-     * @param GroupFinder $groupFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function attach(Request $request, Person $person, GroupFinder $groupFinder)
+    public function attach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
             'groups.*' => [
                 'bail',
-                'finds:App\Group',
-                function($attribute, $value, $fail) use ($person, $groupFinder) {
-                    $group = $groupFinder->find($value);
+                'finds:group',
+                function($attribute, $value, $fail) use ($person, $finders) {
+                    $group = $finders->find($value,'group');
                     if(\DB::table('person_group')->where([
                         ['person_id','=',$person->id],
                         ['group_id','=',$group->id]
@@ -112,7 +113,7 @@ class PersonController extends Controller
         $groupInputs = array_get($validatedData, 'groups');
         if($groupInputs !== null) {
             foreach ($groupInputs as $groupInput) {
-                $group = $groupFinder->find($groupInput);
+                $group = $finders->find($groupInput,'group');
                 $person->groups()->attach($group->id);
             }
         }
@@ -125,20 +126,20 @@ class PersonController extends Controller
      *
      * @param Request $request
      * @param Person $person
-     * @param GroupFinder $groupFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function detach(Request $request, Person $person, GroupFinder $groupFinder)
+    public function detach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
             'groups.*' => [
                 'bail',
-                'finds:App\Group',
-                function($attribute, $value, $fail) use ($person, $groupFinder) {
-                    $group = $groupFinder->find($value);
+                'finds:group',
+                function($attribute, $value, $fail) use ($person, $finders) {
+                    $group = $finders->find($value, 'group');
                     if(!\DB::table('person_group')->where([
                         ['person_id','=',$person->id],
                         ['group_id','=',$group->id]
@@ -152,7 +153,7 @@ class PersonController extends Controller
         $groupInputs = array_get($validatedData, 'groups');
         if($groupInputs !== null) {
             foreach ($groupInputs as $groupInput) {
-                $group = $groupFinder->find($groupInput);
+                $group = $finders->find($groupInput,'group');
                 $person->groups()->detach($group->id);
             }
         }
@@ -165,16 +166,16 @@ class PersonController extends Controller
      *
      * @param Request $request
      * @param Person $person
-     * @param GroupFinder $groupFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function sync(Request $request, Person $person, GroupFinder $groupFinder)
+    public function sync(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'array',
-            'groups.*' => 'finds:App\Group',
+            'groups.*' => 'finds:group',
             'withoutDetaching' => 'boolean'
         ]);
 
@@ -184,7 +185,7 @@ class PersonController extends Controller
         if($groupInputs !== null) {
             $syncIds = [];
             foreach ($groupInputs as $groupInput) {
-                $group = $groupFinder->find($groupInput);
+                $group = $finders->find($groupInput,'group');
                 $syncIds[] = $group->id;
             }
             $person->groups()->sync($syncIds, !$withoutDetaching);

@@ -32,29 +32,36 @@ interface FinderCollection
     /**
      * Returns if this FinderCollection is able to find a model with the given class name.
      *
-     * @param string $className
+     * @param string $modelName
      * @return bool
      */
-    public function canFind($className) : bool;
+    public function canFind($modelName) : bool;
 
     /**
      * Returns if the FinderCollection accepts the type if the input to find the provided $className
      *
      * @param mixed $input
-     * @param string $className
+     * @param string $modelName
      * @return bool
      */
-    public function accepts($input, $className) : bool;
+    public function accepts($input, $modelName) : bool;
 
     /**
      * Tries to find the model with the given $className based on the given $input.
      *
      * @param mixed $input
-     * @param string $className
+     * @param string $modelName
      * @return mixed
      * @throws InputNotAcceptedException
      * @throws ModelNotFoundException
      */
-    public function find($input, $className);
+    public function find($input, $modelName);
+
+    /**
+     * Returns a list of finders in this collection with the name of these finders as keys.
+     *
+     * @return array
+     */
+    public function list() : array;
 
 }

@@ -30,15 +30,11 @@ class FindableValidator
 
 
     public function validatedFindable($attribute, $value, $parameters) {
-        $modelClass = $parameters[0];
-        if($this->finderCollection->canFind($modelClass)) {
+        $modelName = $parameters[0];
+        if($this->finderCollection->canFind($modelName)) {
             try {
-                $model = $this->finderCollection->find($value, $modelClass);
-                if (is_a($model, $modelClass)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                $model = $this->finderCollection->find($value, $modelName);
+                return boolval($model);
             } catch (ModelNotFoundException $e) {
                 return false;
             } catch (InputNotAcceptedException $e) {

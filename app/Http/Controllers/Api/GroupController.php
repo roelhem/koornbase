@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
-use App\Http\Resources\Api\Resource;
-use App\Services\Finders\GroupCategoryFinder;
-use App\Services\Finders\PersonFinder;
 use App\Services\Sorters\GroupSorter;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Validation\Rule;
+use Symfony\Component\Finder\Finder;
 
 class GroupController extends Controller
 {
@@ -25,21 +21,21 @@ class GroupController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param GroupCategoryFinder   $groupCategoryFinder
+     * @param FinderCollection   $finders
      * @return Resource
      * @throws
      */
-    public function store(Request $request, GroupCategoryFinder $groupCategoryFinder)
+    public function store(Request $request, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'required|finds:App\GroupCategory',
+            'category' => 'required|finds:group_category',
             'name_short' => 'nullable|string|max:63',
             'description' => 'nullable|string',
             'member_name' => 'nullable|string|max:255',
         ]);
 
-        $groupCategory = $groupCategoryFinder->find($validatedData['category']);
+        $groupCategory = $finders->find($validatedData['category'], 'group_category');
         $group = $groupCategory->groups()->create($validatedData);
 
         return $this->prepare($group, $request);
@@ -62,15 +58,15 @@ class GroupController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Group  $group
-     * @param  GroupCategoryFinder $categoryFinder
+     * @param  FinderCollection $finders
      * @return Resource
      * @throws
      */
-    public function update(Request $request, Group $group, GroupCategoryFinder $categoryFinder)
+    public function update(Request $request, Group $group, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'category' => 'sometimes|required|finds:App\GroupCategory',
+            'category' => 'sometimes|required|finds:group_category',
             'name_short' => 'nullable|string|max:63',
             'description' => 'nullable|string',
             'member_name' => 'nullable|string|max:255',
@@ -79,7 +75,7 @@ class GroupController extends Controller
         $group->fill($validatedData);
 
         if(array_has($validatedData, 'category')) {
-            $category = $categoryFinder->find($validatedData['category']);
+            $category = $finders->find($validatedData['category'], 'group_category');
             $group->category()->associate($category);
         }
 
@@ -108,18 +104,18 @@ class GroupController extends Controller
      *
      * @param Request $request
      * @param Group $group
-     * @param PersonFinder $personFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws
      */
-    public function attach(Request $request, Group $group, PersonFinder $personFinder) {
+    public function attach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
             'persons.*' => [
                 'bail',
-                'finds:App\Person',
-                function($attribute, $value, $fail) use ($group, $personFinder) {
-                    $person = $personFinder->find($value);
+                'finds:person',
+                function($attribute, $value, $fail) use ($group, $finders) {
+                    $person = $finders->find($value,'person');
                     if (\DB::table('person_group')->where([
                         ['person_id', '=', $person->id],
                         ['group_id', '=', $group->id]
@@ -133,7 +129,7 @@ class GroupController extends Controller
         $personInputs = array_get($validatedData, 'persons');
         if($personInputs !== null) {
             foreach($personInputs as $personInput) {
-                $person = $personFinder->find($personInput);
+                $person = $finders->find($personInput, 'person');
                 $group->persons()->attach($person->id);
             }
         }
@@ -146,19 +142,19 @@ class GroupController extends Controller
      *
      * @param Request $request
      * @param Group $group
-     * @param PersonFinder $personFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function detach(Request $request, Group $group, PersonFinder $personFinder) {
+    public function detach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
             'persons.*' => [
                 'bail',
-                'finds:App\Person',
-                function($attribute, $value, $fail) use ($group, $personFinder) {
-                    $person = $personFinder->find($value);
+                'finds:person',
+                function($attribute, $value, $fail) use ($group, $finders) {
+                    $person = $finders->find($value, 'person');
                     if (!\DB::table('person_group')->where([
                         ['person_id', '=', $person->id],
                         ['group_id', '=', $group->id]
@@ -172,7 +168,7 @@ class GroupController extends Controller
         $personInputs = array_get($validatedData, 'persons');
         if($personInputs !== null) {
             foreach($personInputs as $personInput) {
-                $person = $personFinder->find($personInput);
+                $person = $finders->find($personInput, 'person');
                 $group->persons()->detach($person->id);
             }
         }
@@ -185,15 +181,15 @@ class GroupController extends Controller
      *
      * @param Request $request
      * @param Group $group
-     * @param PersonFinder $personFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function sync(Request $request, Group $group, PersonFinder $personFinder) {
+    public function sync(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'array',
-            'persons.*' => 'finds:App\Person',
+            'persons.*' => 'finds:person',
             'withoutDetaching' => 'boolean'
         ]);
 
@@ -203,7 +199,7 @@ class GroupController extends Controller
         if($personInputs !== null) {
             $syncIds = [];
             foreach ($personInputs as $personInput) {
-                $person = $personFinder->find($personInput);
+                $person = $finders->find($personInput, 'person');
                 $syncIds[] = $person->id;
             }
             $group->persons()->sync($syncIds, !$withoutDetaching);

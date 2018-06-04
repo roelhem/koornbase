@@ -22,7 +22,7 @@ class SimpleFinderCollection implements FinderCollection
 {
 
     /**
-     * @var ModelFinder[]
+     * @var array
      */
     protected $array = [];
 
@@ -32,31 +32,37 @@ class SimpleFinderCollection implements FinderCollection
      */
     public function add(ModelFinder $finder)
     {
-        $className = $finder->modelClass();
-        $this->array[$className] = $finder;
+        $this->array[$finder->modelName()] = $finder;
     }
 
     /**
      * @inheritdoc
      */
-    public function canFind($className): bool
+    public function canFind($modelName): bool
     {
-        return array_key_exists($className, $this->array);
+        return array_key_exists($modelName, $this->array);
     }
 
     /**
      * @inheritdoc
      */
-    public function accepts($input, $className): bool
+    public function accepts($input, $modelName): bool
     {
-        $this->array[$className]->accepts($input);
+        return $this->array[$modelName]->accepts($input);
     }
 
     /**
      * @inheritdoc
      */
-    public function find($input, $className)
+    public function find($input, $modelName)
     {
-        return $this->array[$className]->find($input);
+        return $this->array[$modelName]->find($input);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function list():array {
+        return $this->array;
     }
 }

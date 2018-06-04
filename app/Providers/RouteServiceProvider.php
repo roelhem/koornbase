@@ -2,14 +2,9 @@
 
 namespace App\Providers;
 
-use App\Certificate;
-use App\CertificateCategory;
-use App\Group;
-use App\GroupCategory;
-use App\GroupEmailAddress;
-use App\KoornbeursCard;
-use App\Person;
-use App\User;
+use App\Contracts\Finders\FinderCollection;
+use App\Contracts\Finders\ModelFinder;
+use App\Exceptions\Finders\ModelNotFoundException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -33,70 +28,17 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Route::bind('group', function($value) {
-            if(ctype_digit($value)) {
-                return Group::findOrFail($value);
-            } else {
-                return Group::findBySlugOrFail($value);
+        foreach (resolve(FinderCollection::class)->list() as $name => $finder) {
+            if($finder instanceof ModelFinder) {
+                Route::bind($name, function ($value) use ($finder) {
+                    try {
+                        return $finder->find($value);
+                    } catch (ModelNotFoundException $exception) {
+                        abort(404, "Kon geen '{$finder->modelName()}' vinden met de waarde '{$value}'.");
+                    }
+                });
             }
-        });
-
-        Route::bind('group-category', function($value) {
-            if(ctype_digit($value)) {
-                return GroupCategory::findOrFail($value);
-            } else {
-                return GroupCategory::findBySlugOrFail($value);
-            }
-        });
-
-        Route::bind('group_email_address',function($value) {
-            if(ctype_digit($value)) {
-                return GroupEmailAddress::findOrFail($value);
-            } else {
-                return GroupEmailAddress::where('email_address', $value)->first() ?? abort(404);
-            }
-        });
-
-        Route::bind('user', function($value) {
-            if(ctype_digit($value)) {
-                return User::findOrFail($value);
-            } else {
-                return User::where('name', $value)->first() ?? abort(404);
-            }
-        });
-
-        Route::bind('person', function($value) {
-            if(ctype_digit($value)) {
-                return Person::findOrFail($value);
-            }
-            abort(404);
-        });
-
-        Route::bind('certificates', function($value) {
-            return Certificate::findOrFail($value);
-        });
-
-        Route::bind('certificate-category', function($value) {
-            if(ctype_digit($value)) {
-                return CertificateCategory::findOrFail($value);
-            } else {
-                return CertificateCategory::findBySlugOrFail($value);
-            }
-        });
-
-        Route::bind('koornbeurs-card', function($value) {
-            if(ctype_digit($value)) {
-                return KoornbeursCard::findOrFail($value);
-            } elseif(str_is('_*',$value)) {
-                return KoornbeursCard::where('ref', str_after($value, '_'))
-                        ->first() ?? abort(404);
-            } elseif(str_is('*_*',$value)) {
-                return KoornbeursCard::where('ref', str_after($value, '_'))
-                        ->where('version', str_before($value, '_'))
-                        ->first() ?? abort(404);
-            }
-            abort(404);
-        });
+        }
     }
 
     /**

@@ -22,8 +22,21 @@ use App\Exceptions\Finders\ModelNotFoundException;
  *
  * @package App\Services\Finders
  */
-abstract class ModelByIdFinder implements ModelFinder
+class ModelByIdFinder implements ModelFinder
 {
+
+    use UseModelClassAndNameProperties;
+
+    /**
+     * ModelByIdFinder constructor.
+     * @param string $modelName
+     * @param string $modelClass
+     */
+    public function __construct($modelName, $modelClass)
+    {
+        $this->modelName = $modelName;
+        $this->modelClass = $modelClass;
+    }
 
     /**
      * @inheritdoc
@@ -35,6 +48,10 @@ abstract class ModelByIdFinder implements ModelFinder
         }
 
         if(is_integer($input)) {
+            return true;
+        }
+
+        if(ctype_digit($input)) {
             return true;
         }
 
@@ -60,6 +77,10 @@ abstract class ModelByIdFinder implements ModelFinder
 
         if(is_integer($input)) {
             $model = $modelClass::find($input);
+        }
+
+        if(ctype_digit($input)) {
+            $model = $modelClass::find(intval($input));
         }
 
         if (is_subclass_of($model, $modelClass) || is_a($model, $modelClass)) {

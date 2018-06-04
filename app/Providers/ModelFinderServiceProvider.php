@@ -2,13 +2,18 @@
 
 namespace App\Providers;
 
+use App\Certificate;
+use App\CertificateCategory;
 use App\Contracts\Finders\FinderCollection;
-use App\Services\Finders\CertificateCategoryFinder;
-use App\Services\Finders\CertificateFinder;
-use App\Services\Finders\GroupCategoryFinder;
-use App\Services\Finders\GroupFinder;
-use App\Services\Finders\PersonFinder;
+use App\Group;
+use App\GroupCategory;
+use App\Person;
+use App\Services\Finders\GroupEmailAddressFinder;
+use App\Services\Finders\KoornbeursCardFinder;
+use App\Services\Finders\ModelByIdFinder;
+use App\Services\Finders\ModelByIdOrSlugFinder;
 use App\Services\Finders\SimpleFinderCollection;
+use App\Services\Finders\UserFinder;
 use Illuminate\Support\ServiceProvider;
 
 class ModelFinderServiceProvider extends ServiceProvider
@@ -30,19 +35,17 @@ class ModelFinderServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(GroupCategoryFinder::class);
-        $this->app->singleton(GroupFinder::class);
-        $this->app->singleton(PersonFinder::class);
-        $this->app->singleton(CertificateFinder::class);
-        $this->app->singleton(CertificateCategoryFinder::class);
 
         $this->app->singleton(SimpleFinderCollection::class, function($app) {
             $res = new SimpleFinderCollection();
-            $res->add($app->make(GroupCategoryFinder::class));
-            $res->add($app->make(GroupFinder::class));
-            $res->add($app->make(PersonFinder::class));
-            $res->add($app->make(CertificateFinder::class));
-            $res->add($app->make(CertificateCategoryFinder::class));
+            $res->add(new ModelByIdOrSlugFinder('group', Group::class));
+            $res->add(new ModelByIdOrSlugFinder('group_category', GroupCategory::class));
+            $res->add(new ModelByIdFinder('person', Person::class));
+            $res->add(new ModelByIdFinder('certificate', Certificate::class));
+            $res->add(new ModelByIdOrSlugFinder('certificate_category', CertificateCategory::class));
+            $res->add(new GroupEmailAddressFinder());
+            $res->add(new UserFinder());
+            $res->add(new KoornbeursCardFinder());
             return $res;
         });
 

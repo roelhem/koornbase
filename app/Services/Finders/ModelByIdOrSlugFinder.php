@@ -13,8 +13,18 @@ use App\Exceptions\Finders\InputNotAcceptedException;
 use App\Exceptions\Finders\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class ModelByIdOrSlugFinder extends ModelByIdFinder
+class ModelByIdOrSlugFinder extends ModelByIdFinder
 {
+
+    /**
+     * ModelByIdOrSlugFinder constructor.
+     * @param string $modelName
+     * @param string $modelClass
+     */
+    public function __construct(string $modelName, string $modelClass)
+    {
+        parent::__construct($modelName, $modelClass);
+    }
 
     /**
      * @inheritdoc
@@ -37,21 +47,19 @@ abstract class ModelByIdOrSlugFinder extends ModelByIdFinder
      */
     public function find($input)
     {
+        if (parent::accepts($input)) {
+            return parent::find($input);
+        }
+
         if (!$this->accepts($input)) {
             throw new InputNotAcceptedException;
         }
 
         $modelClass = $this->modelClass();
 
-        if(is_a($input, $modelClass)) {
-            return $input;
-        }
-
         $model = null;
 
-        if(is_integer($input)) {
-            $model = $modelClass::find($input);
-        } else if(is_string($input)) {
+        if(is_string($model)) {
             $model = $modelClass::findBySlug($input);
         }
 
@@ -60,5 +68,6 @@ abstract class ModelByIdOrSlugFinder extends ModelByIdFinder
         } else {
             throw new ModelNotFoundException;
         }
+
     }
 }

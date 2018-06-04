@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
 use App\GroupEmailAddress;
 use App\Http\Resources\Api\GroupEmailAddressResource;
-use App\Http\Resources\Api\Resource;
-use App\Services\Finders\GroupFinder;
 use App\Services\Sorters\GroupEmailAddressSorter;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -23,19 +21,19 @@ class GroupEmailAddressController extends Controller
      * Creates a new GroupEmailAddress.
      *
      * @param Request $request
-     * @param GroupFinder $finder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function store(Request $request, GroupFinder $finder) {
+    public function store(Request $request, FinderCollection $finders) {
         $validatedData = $request->validate([
             'email_address' => 'required|string|email|unique:group_email_addresses|max:255',
             'remarks' => 'nullable|string',
-            'group' => 'required|finds:App\Group'
+            'group' => 'required|finds:group'
         ]);
 
-        $group = $finder->find($validatedData['group']);
+        $group = $finders->find($validatedData['group'],'group');
 
         $emailAddress = $group->emailAddresses()->create($validatedData);
 

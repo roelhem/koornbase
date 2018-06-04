@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Http\Resources\Api\KoornbeursCardResource;
-use App\Http\Resources\Api\Resource;
 use App\KoornbeursCard;
-use App\Services\Finders\PersonFinder;
 use App\Services\Sorters\KoornbeursCardSorter;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -21,15 +20,15 @@ class KoornbeursCardController extends Controller
      * Action to store a new KoornbeursCard
      *
      * @param Request $request
-     * @param PersonFinder $personFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      * @throws \Throwable
      */
-    public function store(Request $request, PersonFinder $personFinder) {
+    public function store(Request $request, FinderCollection $finders) {
         $validatedData = $request->validate([
-            'owner' => 'nullable|finds:App\Person',
+            'owner' => 'nullable|finds:person',
             'ref' => 'required|string|unique:koornbeurs_cards|max:63',
             'version' => 'required|string|max:63',
             'remarks' => 'nullable|string',
@@ -40,7 +39,7 @@ class KoornbeursCardController extends Controller
         $inputData = array_except($validatedData, ['owner']);
 
         if(array_get($validatedData, 'owner') !== null) {
-            $owner = $personFinder->find($validatedData['owner']);
+            $owner = $finders->find($validatedData['owner'],'person');
             $inputData['owner_id'] = $owner->id;
         } else {
             $inputData['owner_id'] = null;
@@ -69,15 +68,15 @@ class KoornbeursCardController extends Controller
      *
      * @param Request $request
      * @param KoornbeursCard $koornbeursCard
-     * @param PersonFinder $personFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      * @throws \Throwable
      */
-    public function update(Request $request, KoornbeursCard $koornbeursCard, PersonFinder $personFinder) {
+    public function update(Request $request, KoornbeursCard $koornbeursCard, FinderCollection $finders) {
         $validatedData = $request->validate([
-            'owner' => 'nullable|finds:App\Person',
+            'owner' => 'nullable|finds:person',
             'ref' => ['sometimes','required','string','max:63',
                 Rule::unique('koornbeurs_cards')->ignore($koornbeursCard->id)
             ],
@@ -91,7 +90,7 @@ class KoornbeursCardController extends Controller
 
         if(array_has($validatedData, 'owner')) {
             if (array_get($validatedData, 'owner') !== null) {
-                $owner = $personFinder->find($validatedData['owner']);
+                $owner = $finders->find($validatedData['owner'],'person');
                 $inputData['owner_id'] = $owner->id;
             } else {
                 $inputData['owner_id'] = null;

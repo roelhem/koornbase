@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Certificate;
+use App\Contracts\Finders\FinderCollection;
 use App\Http\Resources\Api\CertificateResource;
-use App\Http\Resources\Api\Resource;
-use App\Services\Finders\CertificateCategoryFinder;
-use App\Services\Finders\PersonFinder;
 use App\Services\Sorters\CertificateSorter;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CertificateController extends Controller
 {
@@ -22,16 +19,15 @@ class CertificateController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param PersonFinder $personFinder
-     * @param CertificateCategoryFinder $categoryFinder
+     * @param FinderCollection $finders
      * @return Resource
      * @throws
      */
-    public function store(Request $request, PersonFinder $personFinder, CertificateCategoryFinder $categoryFinder)
+    public function store(Request $request, FinderCollection $finders)
     {
         $validatedData = $request->validate([
-            'person' => 'required|finds:App\Person',
-            'category' => 'required|finds:App\CertificateCategory',
+            'person' => 'required|finds:person',
+            'category' => 'required|finds:certificate_category',
             'passed' => 'boolean',
             'examination_at' => 'nullable|date',
             'valid_at' => 'nullable|date',
@@ -39,8 +35,8 @@ class CertificateController extends Controller
             'remarks' => 'nullable|string'
         ]);
 
-        $person = $personFinder->find($validatedData['person']);
-        $category = $categoryFinder->find($validatedData['category']);
+        $person = $finders->find($validatedData['person'], 'person');
+        $category = $finders->find($validatedData['category'], 'certificate_category');
 
         $inputData = array_except($validatedData, ['person','category']);
         $inputData['person_id'] = $person->id;

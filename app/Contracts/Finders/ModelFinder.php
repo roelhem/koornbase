@@ -31,6 +31,15 @@ interface ModelFinder
     public function modelClass() : string;
 
     /**
+     * Returns a name that identifies this model.
+     *
+     * One function of this value is to define the Route bind to search an url argument with this ModelFinder.
+     *
+     * @return string
+     */
+    public function modelName() : string;
+
+    /**
      * Returns if the ModelFinder accepts the type of the given input.
      *
      * @param mixed input
