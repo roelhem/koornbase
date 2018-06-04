@@ -12,13 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GroupTest extends TestCase
 {
-    use RefreshDatabase;
-
-    private function asAdmin() {
-        $user = factory(User::class)->create();
-        Passport::actingAs($user);
-        return $user;
-    }
+    use RefreshDatabase, UsePassportAsAdmin;
 
     /**
      * A basic test example.

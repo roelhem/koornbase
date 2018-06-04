@@ -2,12 +2,9 @@
 
 namespace Tests\Feature\Api;
 
-use App\Http\Resources\Api\MembershipResource;
 use App\Membership;
 use App\Person;
-use App\User;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,18 +12,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class MembershipTest extends TestCase
 {
 
-    use RefreshDatabase;
+    use RefreshDatabase, UsePassportAsAdmin;
 
-    /**
-     * Use the API as an admin user.
-     *
-     * @return mixed
-     */
-    private function asAdmin() {
-        $user = factory(User::class)->create();
-        Passport::actingAs($user);
-        return $user;
-    }
 
     /**
      * Tests the basic usage of the index endpoint

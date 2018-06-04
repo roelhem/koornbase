@@ -4,8 +4,6 @@ namespace Tests\Feature\Api;
 
 use App\Group;
 use App\Person;
-use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,13 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class PersonGroupTest extends TestCase
 {
 
-    use RefreshDatabase;
-
-    private function asAdmin() {
-        $user = factory(User::class)->create();
-        Passport::actingAs($user);
-        return $user;
-    }
+    use RefreshDatabase, UsePassportAsAdmin;
 
     /**
      * Tests the enpoint to attach a new group to this person.

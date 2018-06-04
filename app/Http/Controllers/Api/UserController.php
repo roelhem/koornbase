@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Http\Resources\Api\UserResource;
 use App\User;
 use Illuminate\Http\Request;
@@ -28,16 +29,17 @@ class UserController extends Controller
      * Store a new User in the database.
      *
      * @param Request $request
+     * @param FinderCollection $finders
      * @return UserResource
      * @throws \Throwable
      */
-    public function store(Request $request)
+    public function store(Request $request, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'name' => 'required|unique:users|string|max:255',
             'email' => 'required|unique:users|email|max:255',
             'password' => 'required|string|min:8',
-            'person_id' => 'sometimes|nullable|integer|exists:persons,id',
+            'person' => 'nullable|finds:person',
         ]);
 
         $user = new User();
@@ -45,8 +47,10 @@ class UserController extends Controller
         $user->email = $validatedData['email'];
         $user->password = bcrypt($validatedData['password']);
 
-        if(array_key_exists('person_id', $validatedData)) {
-            $user->person_id = $validatedData['person_id'];
+        $personInput = array_get($validatedData, 'person');
+        if($personInput !== null) {
+            $person = $finders->find($personInput, 'person');
+            $user->person()->associate($person);
         }
 
         $user->saveOrFail();
@@ -73,16 +77,17 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\User  $user
+     * @param  FinderCollection $finders
      * @return UserResource
      * @throws
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'name' => ['sometimes','required','string','max:255', Rule::unique('users')->ignore($user->id)],
             'email' => ['sometimes','required','email','max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'sometimes|required|string|min:8',
-            'person_id' => 'sometimes|nullable|integer|exists:person,id'
+            'person' => 'nullable|finds:person'
         ]);
 
         if(array_has($validatedData, 'name')) {
@@ -97,8 +102,14 @@ class UserController extends Controller
             $user->password = bcrypt($validatedData['password']);
         }
 
-        if(array_has($validatedData, 'person_id')) {
-            $user->person_id = $validatedData['person_id'];
+        if(array_has($validatedData, 'person')) {
+            $personInput = array_get($validatedData, 'person');
+            if($personInput === null) {
+                $user->person_id = null;
+            } else {
+                $person = $finders->find($personInput, 'person');
+                $user->person()->associate($person);
+            }
         }
 
         $user->saveOrFail();

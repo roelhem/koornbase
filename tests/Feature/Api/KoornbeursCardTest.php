@@ -14,18 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class KoornbeursCardTest extends TestCase
 {
 
-    use RefreshDatabase;
-
-    /**
-     * Use the API as an admin user.
-     *
-     * @return mixed
-     */
-    private function asAdmin() {
-        $user = factory(User::class)->create();
-        Passport::actingAs($user);
-        return $user;
-    }
+    use RefreshDatabase, UsePassportAsAdmin;
 
     /**
      * Tests the basic usage of the index endpoint
