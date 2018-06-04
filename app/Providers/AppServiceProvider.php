@@ -10,6 +10,12 @@ use App\Services\Navigation\NavigationItemRepository;
 use App\Services\Navigation\SitemapService;
 use App\Services\Rbac\DatabaseRbacGraph;
 use App\Services\Rbac\SimpleRbacChecker;
+use App\Services\Sorters\CertificateCategorySorter;
+use App\Services\Sorters\CertificateSorter;
+use App\Services\Sorters\GroupCategorySorter;
+use App\Services\Sorters\GroupSorter;
+use App\Services\Sorters\KoornbeursCardSorter;
+use App\Services\Sorters\PersonSorter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +50,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SimpleRbacChecker::class);
         $this->app->bind(RbacChecker::class, SimpleRbacChecker::class);
 
+        
+        $this->app->singleton(PersonSorter::class);
+        $this->app->singleton(GroupSorter::class);
+        $this->app->singleton(GroupCategorySorter::class);
+        $this->app->singleton(CertificateSorter::class);
+        $this->app->singleton(CertificateCategorySorter::class);
+        $this->app->singleton(KoornbeursCardSorter::class);
+        
 
         $this->app->singleton(NavigationItemRepository::class);
 

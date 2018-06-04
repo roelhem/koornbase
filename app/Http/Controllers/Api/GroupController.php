@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
+use App\Http\Resources\Api\Resource;
 use App\Services\Finders\GroupCategoryFinder;
 use App\Services\Finders\PersonFinder;
+use App\Services\Sorters\GroupSorter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -13,37 +15,18 @@ use Illuminate\Validation\Rule;
 
 class GroupController extends Controller
 {
-    /**
-     * Prepares a group to be send by an action.
-     *
-     * @param Model $group
-     * @param Request $request
-     * @return GroupResource
-     */
-    protected function prepare($group, Request $request) {
-        $group->load($this->getAskedRelations($request));
-        return new GroupResource($group);
-    }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = Group::query();
-        $query->with($this->getAskedRelations($request));
+    protected $modelClass = Group::class;
+    protected $resourceClass = GroupResource::class;
+    protected $sorterClass = GroupSorter::class;
 
-        return GroupResource::collection($query->paginate());
-    }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return GroupResource
+     * @param GroupCategoryFinder   $groupCategoryFinder
+     * @return Resource
      * @throws
      */
     public function store(Request $request, GroupCategoryFinder $groupCategoryFinder)
@@ -67,7 +50,7 @@ class GroupController extends Controller
      *
      * @param  \App\Group  $group
      * @param  Request     $request
-     * @return GroupResource
+     * @return Resource
      */
     public function show(Group $group, Request $request)
     {
@@ -80,7 +63,7 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Group  $group
      * @param  GroupCategoryFinder $categoryFinder
-     * @return GroupResource
+     * @return Resource
      * @throws
      */
     public function update(Request $request, Group $group, GroupCategoryFinder $categoryFinder)
@@ -126,7 +109,7 @@ class GroupController extends Controller
      * @param Request $request
      * @param Group $group
      * @param PersonFinder $personFinder
-     * @return GroupResource
+     * @return Resource
      * @throws
      */
     public function attach(Request $request, Group $group, PersonFinder $personFinder) {
@@ -164,7 +147,7 @@ class GroupController extends Controller
      * @param Request $request
      * @param Group $group
      * @param PersonFinder $personFinder
-     * @return GroupResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
@@ -203,7 +186,7 @@ class GroupController extends Controller
      * @param Request $request
      * @param Group $group
      * @param PersonFinder $personFinder
-     * @return GroupResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */

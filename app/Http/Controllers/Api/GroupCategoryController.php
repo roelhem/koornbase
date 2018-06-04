@@ -4,43 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\GroupCategory;
 use App\Http\Resources\Api\GroupCategoryResource;
+use App\Http\Resources\Api\Resource;
+use App\Services\Sorters\GroupCategorySorter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class GroupCategoryController extends Controller
 {
 
-    /**
-     * Prepares a group-category to be send by an action.
-     *
-     * @param GroupCategory $category
-     * @param Request $request
-     * @return GroupCategoryResource
-     */
-    protected function prepare(GroupCategory $category, Request $request) {
-        $category->load($this->getAskedRelations($request));
-        return new GroupCategoryResource($category);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = GroupCategory::query();
-        $query->with($this->getAskedRelations($request));
-
-        return GroupCategoryResource::collection($query->paginate());
-    }
+    protected $modelClass = GroupCategory::class;
+    protected $resourceClass = GroupCategoryResource::class;
+    protected $sorterClass = GroupCategorySorter::class;
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return GroupCategoryResource
+     * @return Resource
      * @throws
      */
     public function store(Request $request)
@@ -63,7 +43,7 @@ class GroupCategoryController extends Controller
      *
      * @param  \App\GroupCategory  $groupCategory
      * @param  Request             $request
-     * @return GroupCategoryResource
+     * @return Resource
      */
     public function show(GroupCategory $groupCategory, Request $request)
     {
@@ -75,7 +55,7 @@ class GroupCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\GroupCategory  $groupCategory
-     * @return GroupCategoryResource
+     * @return Resource
      * @throws
      */
     public function update(Request $request, GroupCategory $groupCategory)

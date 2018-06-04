@@ -5,43 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\CertificateCategory;
 use App\Http\Resources\Api\CertificateCategoryResource;
 use App\Services\Finders\CertificateCategoryFinder;
+use App\Services\Sorters\CertificateCategorySorter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CertificateCategoryController extends Controller
 {
 
-    /**
-     * Prepares a CertificateCategory to be send.
-     *
-     * @param CertificateCategory $category
-     * @param Request $request
-     * @return CertificateCategoryResource
-     */
-    protected function prepare(CertificateCategory $category, Request $request) {
-        $category->load($this->getAskedRelations($request));
-        return new CertificateCategoryResource($category);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = CertificateCategory::query();
-        $query->with($this->getAskedRelations($request));
-
-        return CertificateCategoryResource::collection($query->paginate());
-    }
+    protected $modelClass = CertificateCategory::class;
+    protected $sorterClass = CertificateCategorySorter::class;
+    protected $resourceClass = CertificateCategoryResource::class;
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return CertificateCategoryResource
+     * @return Resource
      */
     public function store(Request $request)
     {
@@ -62,7 +41,7 @@ class CertificateCategoryController extends Controller
      *
      * @param  Request $request
      * @param  \App\CertificateCategory  $category
-     * @return CertificateCategoryResource
+     * @return Resource
      */
     public function show(Request $request, CertificateCategory $category)
     {
@@ -74,7 +53,7 @@ class CertificateCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\CertificateCategory  $category
-     * @return CertificateCategoryResource
+     * @return Resource
      * @throws
      */
     public function update(Request $request, CertificateCategory $category)

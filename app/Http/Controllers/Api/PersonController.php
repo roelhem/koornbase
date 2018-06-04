@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Resources\Api\PersonResource;
+use App\Http\Resources\Api\Resource;
 use App\Person;
 use App\Services\Finders\GroupFinder;
 use App\Services\Sorters\PersonSorter;
@@ -13,34 +14,15 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class PersonController extends Controller
 {
 
-    protected function prepare($person, Request $request) {
-        $person->load($this->getAskedRelations($request));
-        return new PersonResource($person);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = Person::query();
-
-        $personSorter = new PersonSorter;
-        $personSorter->addList($query, $this->getSortList($request));
-
-        $query->with($this->getAskedRelations($request));
-
-        return PersonResource::collection($query->paginate());
-    }
+    protected $modelClass = Person::class;
+    protected $resourceClass = PersonResource::class;
+    protected $sorterClass = PersonSorter::class;
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  PersonStoreRequest  $request
-     * @return PersonResource
+     * @return Resource
      * @throws
      */
     public function store(PersonStoreRequest $request)
@@ -68,7 +50,7 @@ class PersonController extends Controller
      *
      * @param  \App\Person  $person
      * @param  Request      $request
-     * @return PersonResource
+     * @return Resource
      */
     public function show(Person $person, Request $request)
     {
@@ -80,7 +62,7 @@ class PersonController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Person  $person
-     * @return \Illuminate\Http\Response
+     * @return Resource
      */
     public function update(Request $request, Person $person)
     {
@@ -104,7 +86,7 @@ class PersonController extends Controller
      * @param Request $request
      * @param Person $person
      * @param GroupFinder $groupFinder
-     * @return PersonResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
@@ -144,7 +126,7 @@ class PersonController extends Controller
      * @param Request $request
      * @param Person $person
      * @param GroupFinder $groupFinder
-     * @return PersonResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
@@ -184,7 +166,7 @@ class PersonController extends Controller
      * @param Request $request
      * @param Person $person
      * @param GroupFinder $groupFinder
-     * @return PersonResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */

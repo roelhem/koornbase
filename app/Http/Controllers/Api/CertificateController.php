@@ -4,39 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Certificate;
 use App\Http\Resources\Api\CertificateResource;
+use App\Http\Resources\Api\Resource;
 use App\Services\Finders\CertificateCategoryFinder;
 use App\Services\Finders\PersonFinder;
+use App\Services\Sorters\CertificateSorter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CertificateController extends Controller
 {
 
-    /**
-     * Prepares a Certificate to be send.
-     *
-     * @param Certificate $certificate
-     * @param Request $request
-     * @return CertificateResource
-     */
-    protected function prepare(Certificate $certificate, Request $request) {
-        $certificate->load($this->getAskedRelations($request));
-        return new CertificateResource($certificate);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = Certificate::query();
-        $query->with($this->getAskedRelations($request));
-
-        return CertificateResource::collection($query->paginate());
-    }
+    protected $modelClass = Certificate::class;
+    protected $resourceClass = CertificateResource::class;
+    protected $sorterClass = CertificateSorter::class;
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +24,7 @@ class CertificateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param PersonFinder $personFinder
      * @param CertificateCategoryFinder $categoryFinder
-     * @return CertificateResource
+     * @return Resource
      * @throws
      */
     public function store(Request $request, PersonFinder $personFinder, CertificateCategoryFinder $categoryFinder)
@@ -76,7 +56,7 @@ class CertificateController extends Controller
      *
      * @param  Request $request
      * @param  \App\Certificate  $certificate
-     * @return CertificateResource
+     * @return Resource
      */
     public function show(Request $request, Certificate $certificate)
     {
@@ -88,7 +68,7 @@ class CertificateController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Certificate  $certificate
-     * @return CertificateResource
+     * @return Resource
      * @throws
      */
     public function update(Request $request, Certificate $certificate)

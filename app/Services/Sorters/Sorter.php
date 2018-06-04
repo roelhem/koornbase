@@ -15,6 +15,13 @@ class Sorter
 {
 
     /**
+     * Names of columns that can also be sorted by.
+     *
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
      * @inheritdoc
      */
     public function list():array {
@@ -23,12 +30,12 @@ class Sorter
 
             $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-            $list = [];
+            $list = $this->columns;
 
             foreach ($methods as $method) {
                 $shortName = $method->getShortName();
                 if (str_is('sort*', $shortName)) {
-                    $list[] = kebab_case(str_after($shortName, 'sort'));
+                    $list[] = snake_case(str_after($shortName, 'sort'));
                 }
             }
             return $list;
@@ -43,16 +50,21 @@ class Sorter
      */
     public function has(string $sortName): bool
     {
-        return method_exists($this, $this->getMethodName($sortName));
+        if(method_exists($this, $this->getMethodName($sortName))) {
+            return true;
+        } else if(in_array($sortName, $this->columns)) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * @inheritdoc
      */
-    public function add($query, string $sortName, bool $desc = false)
+    public function add($query, string $sortName, string $order = 'asc')
     {
         $callable = $this->getCallable($sortName);
-        return $callable($query, $desc);
+        return $callable($query, $order);
     }
 
     /**
@@ -63,15 +75,15 @@ class Sorter
         foreach($sortNameList as $key => $value) {
             if(is_integer($key)) {
                 if(str_is('*:asc', $value)) {
-                    $query = $this->add($query, str_before($value, ':asc'), false);
+                    $query = $this->add($query, str_before($value, ':asc'), 'asc');
                 } elseif(str_is('*:desc', $value)) {
-                    $query = $this->add($query, str_before($value, ':desc'), true);
+                    $query = $this->add($query, str_before($value, ':desc'), 'desc');
                 } else {
                     $query = $this->add($query, $value);
                 }
             } else {
                 if(mb_strtolower($value) === 'desc') {
-                    $query = $this->add($query, $key, true);
+                    $query = $this->add($query, $key, 'desc');
                 } else {
                     $query = $this->add($query, $key);
                 }
@@ -95,6 +107,11 @@ class Sorter
         if(method_exists($this, $methodName) && is_callable($result)) {
             return $result;
         } else {
+            if(in_array($sortName, $this->columns)) {
+                return function($query, $order) use ($sortName) {
+                    return $query->orderBy($sortName, $order);
+                };
+            }
             throw new SortNameNotFoundException("The sort with name '$sortName' was not found in ".self::class.". (Failed to create the callable).");
         }
     }

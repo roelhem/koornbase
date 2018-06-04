@@ -24,15 +24,15 @@ class SorterTest extends TestCase
 
         $list = $personSorter->list();
 
-        $this->assertContains('name-first', $list);
-        $this->assertContains('name-last', $list);
-        $this->assertNotContains('does-not-exist', $list);
+        $this->assertContains('name_first', $list);
+        $this->assertContains('name_last', $list);
+        $this->assertNotContains('does_not_exist', $list);
 
         foreach ($list as $item) {
             $this->assertTrue($personSorter->has($item));
         }
 
-        $this->assertFalse($personSorter->has('does-not-exist'));
+        $this->assertFalse($personSorter->has('does_not_exist'));
     }
 
     public function testPersonSorting() {
@@ -43,14 +43,14 @@ class SorterTest extends TestCase
         $personBA = factory(Person::class)->create(['name_first' => 'BA', 'name_last' => 'XX', 'name_prefix' => null]);
         $personBB = factory(Person::class)->create(['name_first' => 'BB', 'name_last' => 'XX', 'name_prefix' => null]);
 
-        $query = $personSorter->add(Person::query(), 'name-first');
+        $query = $personSorter->add(Person::query(), 'name_first');
         $persons = $query->get();
         $this->assertEquals($personAA->id, $persons[0]->id);
         $this->assertEquals($personAB->id, $persons[1]->id);
         $this->assertEquals($personBA->id, $persons[2]->id);
         $this->assertEquals($personBB->id, $persons[3]->id);
 
-        $query = $personSorter->add(Person::query(), 'name-first', true);
+        $query = $personSorter->add(Person::query(), 'name_first', 'desc');
         $persons = $query->get();
         $this->assertEquals($personBB->id, $persons[0]->id);
         $this->assertEquals($personBA->id, $persons[1]->id);
@@ -58,8 +58,8 @@ class SorterTest extends TestCase
         $this->assertEquals($personAA->id, $persons[3]->id);
 
         $query = $personSorter->addList(Person::query(), [
-            'name-last',
-            'name-first:asc'
+            'name_last',
+            'name_first:asc'
         ]);
         $persons = $query->get();
         $this->assertEquals($personBA->id, $persons[0]->id);
@@ -68,8 +68,8 @@ class SorterTest extends TestCase
         $this->assertEquals($personAB->id, $persons[3]->id);
 
         $query = $personSorter->addList(Person::query(), [
-            'name-last' => 'desc',
-            'name-first:desc'
+            'name_last' => 'desc',
+            'name_first:desc'
         ]);
         $persons = $query->get();
         $this->assertEquals($personAB->id, $persons[0]->id);

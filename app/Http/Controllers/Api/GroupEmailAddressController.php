@@ -4,44 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\GroupEmailAddress;
 use App\Http\Resources\Api\GroupEmailAddressResource;
+use App\Http\Resources\Api\Resource;
 use App\Services\Finders\GroupFinder;
+use App\Services\Sorters\GroupEmailAddressSorter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class GroupEmailAddressController extends Controller
 {
-    /**
-     * Prepares a group-email-address to be send by an action.
-     *
-     * @param Model $groupEmailAddress
-     * @param Request $request
-     * @return GroupEmailAddressResource
-     */
-    protected function prepare($groupEmailAddress, Request $request) {
-        $groupEmailAddress->load($this->getAskedRelations($request));
-        return new GroupEmailAddressResource($groupEmailAddress);
-    }
 
-    /**
-     * Shows a list of GroupEmailAddresses.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
-    public function index(Request $request) {
-        $query = GroupEmailAddress::query();
-        $query->with($this->getAskedRelations($request));
+    protected $modelClass = GroupEmailAddress::class;
+    protected $resourceClass = GroupEmailAddressResource::class;
+    protected $sorterClass = GroupEmailAddressSorter::class;
 
-        return GroupEmailAddressResource::collection($query->paginate());
-    }
 
     /**
      * Creates a new GroupEmailAddress.
      *
      * @param Request $request
      * @param GroupFinder $finder
-     * @return GroupEmailAddressResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
@@ -64,7 +47,7 @@ class GroupEmailAddressController extends Controller
      *
      * @param Request $request
      * @param GroupEmailAddress $emailAddress
-     * @return GroupEmailAddressResource
+     * @return Resource
      */
     public function show(Request $request, GroupEmailAddress $emailAddress) {
         return $this->prepare($emailAddress, $request);
@@ -75,7 +58,7 @@ class GroupEmailAddressController extends Controller
      *
      * @param Request $request
      * @param GroupEmailAddress $emailAddress
-     * @return GroupEmailAddressResource
+     * @return Resource
      * @throws \Throwable
      */
     public function update(Request $request, GroupEmailAddress $emailAddress) {

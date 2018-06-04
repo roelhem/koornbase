@@ -3,45 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Api\KoornbeursCardResource;
+use App\Http\Resources\Api\Resource;
 use App\KoornbeursCard;
 use App\Services\Finders\PersonFinder;
+use App\Services\Sorters\KoornbeursCardSorter;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class KoornbeursCardController extends Controller
 {
 
-    /**
-     * Prepares a KoornbeurCard instance to be send as a Json Resource.
-     *
-     * @param KoornbeursCard $card
-     * @param Request $request
-     * @return KoornbeursCardResource
-     */
-    public function prepare(KoornbeursCard $card, Request $request) {
-        $card->load($this->getAskedRelations($request));
-        return new KoornbeursCardResource($card);
-    }
-
-    /**
-     * Action to show a list of KoornbeursCards
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\ResourceCollection
-     */
-    public function index(Request $request) {
-        $query = KoornbeursCard::query();
-        $query->with($this->getAskedRelations($request));
-
-        return KoornbeursCardResource::collection($query->paginate());
-    }
+    protected $modelClass = KoornbeursCard::class;
+    protected $resourceClass = KoornbeursCardResource::class;
+    protected $sorterClass = KoornbeursCardSorter::class;
 
     /**
      * Action to store a new KoornbeursCard
      *
      * @param Request $request
      * @param PersonFinder $personFinder
-     * @return KoornbeursCardResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      * @throws \Throwable
@@ -76,7 +57,7 @@ class KoornbeursCardController extends Controller
      *
      * @param Request $request
      * @param KoornbeursCard $card
-     * @return KoornbeursCardResource
+     * @return Resource
      */
     public function show(Request $request, KoornbeursCard $card)
     {
@@ -89,7 +70,7 @@ class KoornbeursCardController extends Controller
      * @param Request $request
      * @param KoornbeursCard $koornbeursCard
      * @param PersonFinder $personFinder
-     * @return KoornbeursCardResource
+     * @return Resource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      * @throws \Throwable

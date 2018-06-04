@@ -9,45 +9,64 @@
 namespace App\Services\Sorters;
 
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class PersonSorter extends Sorter
 {
 
-    public function sortNameFirst($builder, $desc = false) {
-        return $builder
-            ->orderBy('name_first', $desc ? 'desc' : 'asc')
-            ->orderBy('name_middle', $desc ? 'desc' : 'asc');
+    protected $columns = [
+        'id',
+        'name_first',
+        'name_last',
+        'name_middle',
+        'name_prefix',
+        'name_initials',
+        'name_nickname',
+        'birth_date',
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
+     * @param Builder $query
+     * @param string $order
+     * @return Builder
+     */
+    public function sortName($query, $order) {
+        return $query
+            ->orderBy('name_first',$order)
+            ->orderBy('name_prefix',$order)
+            ->orderBy('name_last',$order);
     }
 
-    public function sortNameLast($builder, $desc = false) {
-        return $builder
-            ->orderBy('name_last', $desc ? 'desc' : 'asc')
-            ->orderBy('name_prefix', $desc ? 'desc' : 'asc');
+    /**
+     * @param Builder $query
+     * @param string $order
+     * @return Builder
+     */
+    public function sortNameFull($query, $order) {
+        return $query
+            ->orderBy('name_first',$order)
+            ->orderBy('name_middle',$order)
+            ->orderBy('name_prefix',$order)
+            ->orderBy('name_last',$order);
     }
 
-    public function sortId($builder, $desc = false) {
-        return $builder->orderBy('id', $desc ? 'desc' : 'asc');
-    }
-
-    public function sortBirthDate($builder, $desc = false) {
-        return $builder->orderBy('birth_date', $desc ? 'desc' : 'asc');
-    }
-
-    public function sortNameNickname($builder, $desc = false) {
-        return $this->sortNameFirst($builder->orderBy('name_nickname', $desc ? 'desc' : 'asc'), $desc);
-    }
-
-    public function sortMembershipStatus($builder, $desc = false) {
-        return $builder->leftJoinSub("
+    /**
+     * @param Builder $query
+     * @param string $order
+     * @return Builder
+     */
+    public function sortMembershipStatus($query, $order) {
+        return $query->leftJoinSub("
                         SELECT DISTINCT ON(person_id) person_id, status, date
                         FROM membership_status_changes
                         WHERE date <= NOW()
                         ORDER BY person_id, date DESC
                     ", 'last_membership_status_sorting',
             'last_membership_status_sorting.person_id', '=' ,'persons.id')
-            ->orderBy('last_membership_status_sorting.status', $desc ? 'desc' : 'asc')
-            ->orderBy('last_membership_status_sorting.date', $desc ? 'desc' : 'asc');
+            ->orderBy('last_membership_status_sorting.status', $order)
+            ->orderBy('last_membership_status_sorting.date', $order);
     }
 
 }
