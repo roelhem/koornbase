@@ -14,7 +14,12 @@ $factory->define(Membership::class, function (Faker $faker) {
 
     return [
         'person_id' => function() {
-            return Person::query()->inRandomOrder()->value('id');
+            $res = Person::query()->inRandomOrder()->first();
+            if($res instanceof Person) {
+                return $res->id;
+            } else {
+                return factory(Person::class)->create()->id;
+            }
         },
         'application' => function($self) use ($faker) {
             $start = array_get($self, 'start');

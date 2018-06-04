@@ -15,6 +15,7 @@ use App\Services\Sorters\CertificateSorter;
 use App\Services\Sorters\GroupCategorySorter;
 use App\Services\Sorters\GroupSorter;
 use App\Services\Sorters\KoornbeursCardSorter;
+use App\Services\Sorters\MembershipSorter;
 use App\Services\Sorters\PersonSorter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -57,6 +58,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CertificateSorter::class);
         $this->app->singleton(CertificateCategorySorter::class);
         $this->app->singleton(KoornbeursCardSorter::class);
+        $this->app->singleton(MembershipSorter::class);
         
 
         $this->app->singleton(NavigationItemRepository::class);

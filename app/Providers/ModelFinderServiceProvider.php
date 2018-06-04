@@ -7,6 +7,7 @@ use App\CertificateCategory;
 use App\Contracts\Finders\FinderCollection;
 use App\Group;
 use App\GroupCategory;
+use App\Membership;
 use App\Person;
 use App\Services\Finders\GroupEmailAddressFinder;
 use App\Services\Finders\KoornbeursCardFinder;
@@ -42,6 +43,7 @@ class ModelFinderServiceProvider extends ServiceProvider
             $res->add(new ModelByIdOrSlugFinder('group_category', GroupCategory::class));
             $res->add(new ModelByIdFinder('person', Person::class));
             $res->add(new ModelByIdFinder('certificate', Certificate::class));
+            $res->add(new ModelByIdFinder('membership', Membership::class));
             $res->add(new ModelByIdOrSlugFinder('certificate_category', CertificateCategory::class));
             $res->add(new GroupEmailAddressFinder());
             $res->add(new UserFinder());

@@ -23,7 +23,8 @@ Route::name('api.')->group(function() {
         'group-email-address' => 'Api\GroupEmailAddressController',
         'certificates' => 'Api\CertificateController',
         'certificate-categories' => 'Api\CertificateCategoryController',
-        'koornbeurs-cards' => 'Api\KoornbeursCardController'
+        'koornbeurs-cards' => 'Api\KoornbeursCardController',
+        'memberships' => 'Api\MembershipController'
     ]);
 
     Route::post('persons/{person}/attach','Api\PersonController@attach')->name('persons.attach');
