@@ -16,17 +16,18 @@ use Illuminate\Http\Request;
 Route::name('api.')->group(function() {
 
     Route::apiResources([
-        'users' => 'Api\UserController',
-        'persons' => 'Api\PersonController',
-        'person-addresses' => 'Api\PersonAddressController',
-        'person-phone-numbers' => 'Api\PersonPhoneNumberController',
-        'groups' => 'Api\GroupController',
-        'group-categories' => 'Api\GroupCategoryController',
-        'group-email-address' => 'Api\GroupEmailAddressController',
-        'certificates' => 'Api\CertificateController',
+        'users'                  => 'Api\UserController',
+        'persons'                => 'Api\PersonController',
+        'person-addresses'       => 'Api\PersonAddressController',
+        'person-email-addresses' => 'Api\PersonEmailAddressController',
+        'person-phone-numbers'   => 'Api\PersonPhoneNumberController',
+        'groups'                 => 'Api\GroupController',
+        'group-categories'       => 'Api\GroupCategoryController',
+        'group-email-address'    => 'Api\GroupEmailAddressController',
+        'certificates'           => 'Api\CertificateController',
         'certificate-categories' => 'Api\CertificateCategoryController',
-        'koornbeurs-cards' => 'Api\KoornbeursCardController',
-        'memberships' => 'Api\MembershipController'
+        'koornbeurs-cards'       => 'Api\KoornbeursCardController',
+        'memberships'            => 'Api\MembershipController'
     ]);
 
     Route::post('persons/{person}/attach','Api\PersonController@attach')->name('persons.attach');

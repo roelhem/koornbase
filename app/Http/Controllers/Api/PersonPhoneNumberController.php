@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Finders\FinderCollection;
+use App\Http\Requests\Api\PersonPhoneNumberStoreRequest;
+use App\Http\Requests\Api\PersonPhoneNumberUpdateRequest;
 use App\Http\Resources\Api\PersonPhoneNumberResource;
 use App\Http\Resources\Api\Resource;
 use App\PersonPhoneNumber;
@@ -16,17 +19,28 @@ class PersonPhoneNumberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  PersonPhoneNumberStoreRequest  $request
+     * @param  FinderCollection               $finders
+     * @return Resource
+     * @throws
      */
-    public function store(Request $request)
+    public function store(PersonPhoneNumberStoreRequest $request, FinderCollection $finders)
     {
-        //
+        $person = $finders->find($request->validated()['person'], 'person');
+        $personPhoneNumber = $person->phoneNumbers()->create($request->validated());
+
+        $index = array_get($request->validated(), 'index');
+        if($index !== null) {
+            $personPhoneNumber->moveToIndex($index);
+        }
+
+        return $this->prepare($personPhoneNumber, $request);
     }
 
     /**
      * Display the specified resource.
      *
+     * @param  Request $request
      * @param  \App\PersonPhoneNumber  $personPhoneNumber
      * @return Resource
      */
@@ -38,13 +52,22 @@ class PersonPhoneNumberController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PersonPhoneNumberUpdateRequest  $request
      * @param  \App\PersonPhoneNumber  $personPhoneNumber
-     * @return \Illuminate\Http\Response
+     * @return Resource
+     * @throws
      */
-    public function update(Request $request, PersonPhoneNumber $personPhoneNumber)
+    public function update(PersonPhoneNumberUpdateRequest $request, PersonPhoneNumber $personPhoneNumber)
     {
-        //
+        $personPhoneNumber->fill($request->validated());
+        $personPhoneNumber->saveOrFail();
+
+        $index = array_get($request->validated(), 'index');
+        if($index !== null) {
+            $personPhoneNumber->moveToIndex($index);
+        }
+
+        return $this->prepare($personPhoneNumber, $request);
     }
 
     /**

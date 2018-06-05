@@ -10,7 +10,12 @@ $factory->define(App\PersonPhoneNumber::class, function (Faker $faker) {
 
     return [
         'person_id' => function() {
-            return \App\Person::query()->inRandomOrder()->value('id');
+            $person = \App\Person::query()->inRandomOrder()->first();
+            if($person instanceof \App\Person) {
+                return $person->id;
+            } else {
+                return factory(\App\Person::class)->create()->id;
+            }
         },
         'label' => $faker->word,
         'country_code' => $faker->randomElement(['NL','GB','FR','BE','DE','IT','SE','NO','DK','ES','PT','CH','AT']),

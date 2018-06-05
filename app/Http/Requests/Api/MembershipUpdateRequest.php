@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api;
 
 use App\Contracts\Finders\FinderCollection;
+use App\Http\Requests\Api\Traits\FindsModels;
+use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Membership;
 use App\Person;
 use Carbon\Carbon;
@@ -11,7 +13,7 @@ use Illuminate\Validation\Validator;
 
 class MembershipUpdateRequest extends FormRequest
 {
-    use MembershipCommonMethods;
+    use MembershipCommonMethods, HandlesValidation, FindsModels;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -38,15 +40,6 @@ class MembershipUpdateRequest extends FormRequest
         ];
     }
 
-    /**
-     * Configure the validator instance.
-     *
-     * @param Validator $validator
-     */
-    public function withValidator($validator)
-    {
-        $validator->after([$this, 'afterValidation']);
-    }
 
     /**
      * Called after the validation, to add some more
@@ -55,7 +48,8 @@ class MembershipUpdateRequest extends FormRequest
      */
     public function afterValidation($validator)
     {
-        $membership = $this->getMembership();
+        $membership = $this->findFromUrl('membership');
+        if(!($membership instanceof Membership)) { abort(404); }
 
         // Data parsen
         $data        = $validator->getData();
@@ -95,17 +89,6 @@ class MembershipUpdateRequest extends FormRequest
             }
         }
 
-    }
-
-    /**
-     * Gets the membership that is going to be updated
-     *
-     * @return Membership
-     */
-    protected function getMembership()
-    {
-        $finders = resolve(FinderCollection::class);
-        return $finders->find($this->route('membership'), 'membership');
     }
 
 }

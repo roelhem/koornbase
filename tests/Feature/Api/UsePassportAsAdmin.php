@@ -28,6 +28,9 @@ trait UsePassportAsAdmin
      * @return User  the user that is used to navigate the database.
      */
     public function asAdmin() {
+
+        $this->defaultHeaders = ['Accept','application/json'];
+
         $user = factory(User::class)->create();
         Passport::actingAs($user);
         return $user;

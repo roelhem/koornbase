@@ -3,13 +3,16 @@
 namespace App\Http\Requests\Api;
 
 use App\Contracts\Finders\FinderCollection;
+use App\Http\Requests\Api\Traits\FindsModels;
+use App\Http\Requests\Api\Traits\HandlesValidation;
+use App\Person;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
 class MembershipStoreRequest extends FormRequest
 {
-    use MembershipCommonMethods;
+    use MembershipCommonMethods, HandlesValidation, FindsModels;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -38,16 +41,6 @@ class MembershipStoreRequest extends FormRequest
     }
 
     /**
-     * Configure the validator instance.
-     *
-     * @param Validator $validator
-     */
-    public function withValidator($validator) {
-
-        $validator->after([$this, 'afterValidation']);
-    }
-
-    /**
      * Called after the validation, to add some more
      *
      * @param Validator $validator
@@ -60,11 +53,8 @@ class MembershipStoreRequest extends FormRequest
         $start       = $this->parseDate(array_get($data, 'start'));
         $end         = $this->parseDate(array_get($data, 'end'));
 
-        try {
-            $person = resolve(FinderCollection::class)->find(array_get($data, 'person'), 'person');
-        } catch (\Exception $exception) {
-            return;
-        }
+        $person = $this->findFromInput('person', $data);
+        if(!($person instanceof Person)) { return; }
 
         $this->validateChronology($application, $start, $end, $validator);
 
