@@ -2,7 +2,8 @@
 
 namespace App\Http\Resources\Api;
 
-class GroupCategoryResource extends Resource
+
+class UserAccountResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -13,14 +14,16 @@ class GroupCategoryResource extends Resource
     public function toArray($request)
     {
         return parent::toArray($request) + [
+                'provider' => $this->provider,
+                'ref_id' => $this->ref_id,
+                'nickname' => $this->nickname,
                 'name' => $this->name,
-                'name_short' => $this->name_short,
-                'description' => $this->description,
-                'style' => $this->style,
-                'options' => $this->getOptions($request),
-
-                'groups' => GroupResource::collection($this->whenLoaded('groups')),
-
+                'email' => $this->email,
+                'avatar' => $this->avatar
             ] + $this->tailArray($request);
+    }
+
+    public function fieldUserJson($request) {
+        return $this->user_json;
     }
 }

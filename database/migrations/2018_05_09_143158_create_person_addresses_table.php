@@ -30,7 +30,7 @@ class CreatePersonAddressesTable extends Migration
             $table->string('address_line_1')->nullable();
             $table->string('address_line_2')->nullable();
             $table->string('organisation')->nullable();
-            $table->string('locale', 5)->default('und');
+            $table->string('locale', 15)->default('und');
 
             $table->text('remarks')->nullable();
 

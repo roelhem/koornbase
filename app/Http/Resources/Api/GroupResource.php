@@ -17,7 +17,6 @@ class GroupResource extends Resource
                 'name_short' => $this->name_short,
                 'description' => $this->description,
                 'member_name' => $this->member_name,
-                'is_required' => $this->when($this->is_required, true),
 
                 'category' => new GroupCategoryResource($this->whenLoaded('category')),
                 'persons' => PersonResource::collection($this->whenLoaded('persons')),

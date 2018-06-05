@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller as ParentController;
 use App\Http\Resources\Api\Resource;
 use App\Services\Sorters\Sorter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -56,9 +57,19 @@ class Controller extends ParentController
         $query = $sorter->addList($query, $this->getSortList($request));
         $query->with($this->getAskedRelations($request));
 
-        $paginate = $query->paginate();
+        $paginate = $this->getPaginate($query, $request);
 
         return $resourceClass::collection($paginate);
+    }
+
+    /**
+     * A function that creates a paginate object and applies the settings that were send in the request.
+     *
+     * @param Builder $query
+     * @param Request $request
+     */
+    protected function getPaginate($query, Request $request) {
+        return $query->paginate($request->query('per_page',15));
     }
 
     /**
@@ -99,7 +110,7 @@ class Controller extends ParentController
      * Returns an array of relations where the request asked for.
      *
      * @param Request $request
-     * @return array
+     * @return array|null
      */
     protected function getAskedRelations(Request $request) {
         $with = $request->query('with', []);

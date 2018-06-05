@@ -26,6 +26,12 @@ class Resource extends JsonResource
         ];
     }
 
+    /**
+     * Returns the options attribute in the format asked by in the url parameter.
+     *
+     * @param $request
+     * @return array|mixed|\stdClass
+     */
     public function getOptions($request) {
         if ($this->options instanceof OptionsType) {
             if($this->queryHas('optionDefaults', $request) &&
@@ -63,14 +69,83 @@ class Resource extends JsonResource
      * @return array
      */
     public function tailArray($request) {
+        $res = [];
+        $res = $res + $this->getOptionalFields($request);
+
+        $res['remarks'] = $this->when($this->remarks !== null, $this->remarks);
+        $res['is_required'] = $this->when($this->is_required, true);
+
+        $res['creator'] = new UserResource($this->whenLoaded('creator'));
+        $res['editor'] = new UserResource($this->whenLoaded('editor'));
+
         if($this->queryHas('metaFieldsGrouped', $request)) {
-            return [
+            $res = $res + [
                 '_meta' => $this->getMetaFields($request),
             ];
         } else {
-            return $this->getMetaFields($request);
+            $res = $res + $this->getMetaFields($request);
         }
+
+        return $res;
     }
+
+    /**
+     * Returns an array of optional fields that are activated by the fields parameter.
+     *
+     * @param Request $request
+     * @return array
+     * @throws
+     */
+    protected function getOptionalFields($request) {
+        $fields = $request->query('fields', []);
+
+        // Return every optional fields
+        if($fields === '*') {
+            $res = [];
+            $reflection = new \ReflectionClass($this);
+            $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+            foreach ($methods as $method) {
+                $shortName = $method->getShortName();
+                if(starts_with($shortName,'field' )) {
+                    $attributeName = snake_case(str_after($shortName, 'field'));
+                    $res[$attributeName] = $method->invoke($this, $request);
+                }
+            }
+            return $res;
+        }
+
+
+        // Return the fields that were specifically asked for.
+        if(is_string($fields)) {
+            $fields = explode(',', $fields);
+        }
+
+        $res = [];
+        foreach ($fields as $field) {
+            $method = 'field'.ucfirst(camel_case($field));
+            if(method_exists($this, $method)) {
+                $res[snake_case($field)] = $this->$method($request);
+            }
+        }
+        return $res;
+    }
+
+    public function fieldCreatedAt() {
+        return $this->created_at;
+    }
+
+    public function fieldCreatedBy() {
+        return $this->created_by;
+    }
+
+    public function fieldUpdatedAt() {
+        return $this->updated_at;
+    }
+
+    public function fieldUpdatedBy() {
+        return $this->updated_by;
+    }
+
 
     /**
      * Returns an array with all the fields that were requested by the metaFields parameter.
@@ -105,19 +180,6 @@ class Resource extends JsonResource
             if(in_array('_primaryKey', $metaFields) || in_array('_primaryKeyType', $metaFields)) {
                 $res['_primaryKeyType'] = $resource->getKeyType();
             }
-        }
-
-        if(in_array('_created', $metaFields) || in_array('_created_at', $metaFields)) {
-            $res['_created_at'] = $this->created_at;
-        }
-        if(in_array('_created', $metaFields) || in_array('_created_by', $metaFields)) {
-            $res['_created_by'] = $this->created_by;
-        }
-        if(in_array('_updated', $metaFields) || in_array('_updated_at', $metaFields)) {
-            $res['_updated_at'] = $this->updated_at;
-        }
-        if(in_array('_updated', $metaFields) || in_array('_updated_by', $metaFields)) {
-            $res['_updated_by'] = $this->updated_by;
         }
 
         return $res;

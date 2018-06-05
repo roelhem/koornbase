@@ -95,6 +95,27 @@ class PersonPhoneNumber extends Model
         return $this->util->format($this->phone_number, $phoneNumberFormat);
     }
 
+    /**
+     * Returns the phone-number in a format that can be dialed form the given country.
+     *
+     * @param string $country_code
+     * @return string
+     */
+    public function formatFor($country_code = 'NL') {
+        return $this->util->formatOutOfCountryCallingNumber($this->phone_number, $country_code);
+    }
+
+    /**
+     * Returns the phone-number in a format such it can be dialed from a mobile number form the given country.
+     *
+     * @param string $country_code
+     * @param bool $numFormatting
+     * @return string
+     */
+    public function formatMobile($country_code = 'NL', $numFormatting = true) {
+        return $this->util->formatNumberForMobileDialing($this->phone_number, $country_code, $numFormatting);
+    }
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //

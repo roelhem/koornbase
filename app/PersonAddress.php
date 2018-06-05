@@ -4,12 +4,16 @@ namespace App;
 
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
+use App\Traits\PersonContactEntry\AddressingAttributeMapping;
 use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\HasCountryCode;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
-use CommerceGuys\Addressing\Model\AddressInterface;
-use CommerceGuys\Addressing\Repository\CountryRepositoryInterface;
+use CommerceGuys\Addressing\AddressFormat\AddressFormat;
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
+use CommerceGuys\Addressing\AddressInterface;
+use CommerceGuys\Addressing\Formatter\FormatterInterface;
+use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -34,6 +38,8 @@ use Wildside\Userstamps\Userstamps;
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
+ *
+ * @property-read AddressFormat $addressFormat
  */
 class PersonAddress extends Model implements AddressInterface
 {
@@ -42,7 +48,7 @@ class PersonAddress extends Model implements AddressInterface
 
     use HasRemarks, BelongsToPerson;
 
-    use HasContactOptions, OrderableWithIndex, HasCountryCode;
+    use HasContactOptions, OrderableWithIndex, HasCountryCode, AddressingAttributeMapping;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -56,94 +62,80 @@ class PersonAddress extends Model implements AddressInterface
                            'options','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
-    // ----- INTERFACE CONFORMATION: AddressInterface ----------------------------------------------------------- //
+    // ----- FORMATTING METHODS --------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * @inheritdoc
+     * @param array $options
+     * @return string
      */
-    public function getCountryCode()
-    {
-        return $this->country_code;
+    public function format($options = []) {
+        $formatter = resolve(FormatterInterface::class);
+        return $formatter->format($this, $options);
     }
 
     /**
-     * @inheritdoc
+     * @param array $options
+     * @return string
      */
-    public function getAdministrativeArea()
+    public function postalLabel($options = []) {
+        $formatter = resolve(PostalLabelFormatterInterface::class);
+        return $formatter->format($this, $options);
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * The AddressFormat of this PersonAddress (based on the country_code.)
+     *
+     * @return AddressFormat
+     */
+    public function getAddressFormatAttribute() {
+        $addressFormatRepository = resolve(AddressFormatRepositoryInterface::class);
+        return $addressFormatRepository->get($this->country_code);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- BOOT AND STATIC ------------------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * The boot settings
+     */
+    public static function boot()
     {
-        return $this->administrative_area;
+        static::saving(function(PersonAddress $personAddress) {
+            $addressFormat = $personAddress->addressFormat;
+            $usedFields = $addressFormat->getUsedFields();
+            foreach (self::addressFieldAttributeNames() as $attributeName) {
+                if($attributeName === 'organisation') {
+                    $fieldName = 'organization';
+                } else {
+                    $fieldName = camel_case($attributeName);
+                }
+
+                if(!in_array($fieldName, $usedFields)) {
+                    $personAddress->$attributeName = null;
+                }
+            }
+        });
+
+        parent::boot();
     }
 
     /**
-     * @inheritdoc
+     * Returns the names of the attributes that store the address values.
+     *
+     * @return array
      */
-    public function getLocality()
-    {
-        return $this->locality;
+    public static function addressFieldAttributeNames() {
+        return [
+            'administrative_area','locality','dependent_locality','postal_code','sorting_code',
+            'address_line_1','address_line_2','organisation'
+        ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getDependentLocality()
-    {
-        return $this->dependent_locality;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPostalCode()
-    {
-        return $this->postal_code;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSortingCode()
-    {
-        return $this->sorting_code;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAddressLine1()
-    {
-        return $this->address_line_1;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAddressLine2()
-    {
-       return $this->address_line_2;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getRecipient()
-    {
-        return $this->person->name;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getOrganization()
-    {
-        return $this->organisation;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
 }

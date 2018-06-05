@@ -85,17 +85,22 @@ trait OrderableWithIndex
         // Get the models.
         $models = static::query()->where('person_id', $this->person_id)->orderBy('index')->get();
 
-        if($toIndex < count($models)) {
-            $models->splice($this->index, 1);
-            $models->splice($toIndex, 0, [$this]);
-
-            \DB::transaction(function() use ($models) {
-                foreach ($models->values() as $index => $model) {
-                    $model->index = $index;
-                    $model->saveOrFail();
-                }
-            });
+        if($toIndex < 0) {
+            $toIndex = 0;
+        } elseif($toIndex >= count($models)) {
+            $toIndex = count($models) - 1;
         }
+
+        $models->splice($this->index, 1);
+        $models->splice($toIndex, 0, [$this]);
+
+        \DB::transaction(function() use ($models) {
+            foreach ($models->values() as $index => $model) {
+                $model->index = $index;
+                $model->saveOrFail();
+            }
+        });
+
     }
 
 }

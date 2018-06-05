@@ -99,20 +99,9 @@ class Person extends Model
      * @return string
      */
     public function getAvatarLettersAttribute() {
-        $namePieces = explode(' ', trim($this->name));
-        if(count($namePieces) === 1) {
-            return mb_strtoupper(substr($namePieces[0], 0, 2));
-        } elseif(count($namePieces) >= 2) {
-            $firstWord = $namePieces[0];
-            $secondWord = $namePieces[1];
-
-            $firstLetter = substr(trim($firstWord),0,1);
-            $secondLetter = substr(trim($secondWord), 0,1);
-
-            return mb_strtoupper($firstLetter.$secondLetter);
-        } else {
-            return '??';
-        }
+        $firstLetter = substr(trim($this->name_first), 0,1);
+        $lastLetter = substr(trim($this->name_last), 0,1);
+        return mb_strtoupper($firstLetter.$lastLetter);
     }
 
     /**
@@ -122,11 +111,11 @@ class Person extends Model
      * @return AvatarType
      */
     public function getAvatarAttribute() {
-        foreach ($this->users as $user) {
+        /*foreach ($this->users as $user) {
             if($user->avatar !== null) {
                 return $user->avatar;
             }
-        }
+        }*/
         $res = new AvatarType;
         $res->letters = $this->avatar_letters;
         return $res;

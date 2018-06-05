@@ -3,6 +3,8 @@
 namespace App\Http\Resources\Api;
 
 
+use App\Http\Resources\Api\Support\AddressFormatResource;
+
 class PersonAddressResource extends PersonContactEntryResource
 {
     /**
@@ -26,5 +28,17 @@ class PersonAddressResource extends PersonContactEntryResource
             'organisation' => $this->when($this->organisation !== null, $this->organisation),
             'locale' => $this->when($this->locale !== 'und', $this->locale)
         ] + $this->tailArray($request);
+    }
+
+    public function fieldFormatted() {
+        return $this->resource->format();
+    }
+
+    public function fieldPostalLabel() {
+        return $this->resource->postalLabel();
+    }
+
+    public function fieldAddressFormat() {
+        return new AddressFormatResource($this->addressFormat);
     }
 }

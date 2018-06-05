@@ -18,6 +18,8 @@ Route::name('api.')->group(function() {
     Route::apiResources([
         'users' => 'Api\UserController',
         'persons' => 'Api\PersonController',
+        'person-addresses' => 'Api\PersonAddressController',
+        'person-phone-numbers' => 'Api\PersonPhoneNumberController',
         'groups' => 'Api\GroupController',
         'group-categories' => 'Api\GroupCategoryController',
         'group-email-address' => 'Api\GroupEmailAddressController',
@@ -36,4 +38,16 @@ Route::name('api.')->group(function() {
     Route::post('groups/{group}/sync', 'Api\GroupController@sync')->name('groups.sync');
 
     Route::get('me','Api\MeController@me');
+
+
+    Route::name('support.')->prefix('support')->group(function() {
+
+        Route::get("countries",'Api\Support\CountryController@index')->name('countries.index');
+        Route::get("countries/{country_code}",'Api\Support\CountryController@show')->name('countries.show');
+
+        Route::get("address-formats", 'Api\Support\AddressFormatController@index')->name('address-formats.index');
+        Route::get("address-formats/{country_code}", 'Api\Support\AddressFormatController@show')->name('address-formats.show');
+
+    });
+
 });

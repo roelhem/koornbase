@@ -2,17 +2,18 @@
 
 namespace App\Providers;
 
+use App\Services\Validators\AddressValidator;
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
+use CommerceGuys\Addressing\Country\CountryRepository;
+use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 use CommerceGuys\Addressing\Formatter\DefaultFormatter;
 use CommerceGuys\Addressing\Formatter\FormatterInterface;
 use CommerceGuys\Addressing\Formatter\PostalLabelFormatter;
 use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
-use CommerceGuys\Addressing\Repository\AddressFormatRepositoryInterface;
-use CommerceGuys\Addressing\Repository\CountryRepositoryInterface;
-use CommerceGuys\Addressing\Repository\SubdivisionRepositoryInterface;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
-use CommerceGuys\Addressing\Repository\AddressFormatRepository;
-use CommerceGuys\Addressing\Repository\CountryRepository;
-use CommerceGuys\Addressing\Repository\SubdivisionRepository;
 use libphonenumber\geocoding\PhoneNumberOfflineGeocoder;
 use libphonenumber\PhoneNumberUtil;
 
@@ -25,10 +26,9 @@ class AddressingProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Validator::extend('country_code', function($attribute, $value) {
-            $repository = resolve(CountryRepositoryInterface::class);
-            return array_key_exists($value, $repository->getList());
-        });
+        \Validator::extend('country_code', 'App\Services\Validators\AddressValidator@validateCountryCode');
+        \Validator::extend('postal_code', 'App\Services\Validators\AddressValidator@validatePostalCode');
+        \Validator::extendImplicit('address_field', 'App\Services\Validators\AddressValidator@validateAddressField');
 
         \Validator::extend('phone', function($attribute, $value, $parameters, $validator) {
             $country_code_attr = str_replace('phone_number','country_code',$attribute);
@@ -55,19 +55,47 @@ class AddressingProvider extends ServiceProvider
             return PhoneNumberOfflineGeocoder::getInstance();
         });
 
-        // Addressing
-        $this->app->singleton(AddressFormatRepository::class);
+        // ADDRESSING
+        // Repositories
         $this->app->singleton(CountryRepository::class);
-        $this->app->singleton(SubdivisionRepository::class);
-
-        $this->app->bind(AddressFormatRepositoryInterface::class, AddressFormatRepository::class);
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
+        $this->app->singleton(AddressFormatRepository::class);
+        $this->app->bind(AddressFormatRepositoryInterface::class, AddressFormatRepository::class);
+        $this->app->singleton(SubdivisionRepository::class);
         $this->app->bind(SubdivisionRepositoryInterface::class, SubdivisionRepository::class);
-
-        $this->app->bind(DefaultFormatter::class);
-        $this->app->bind(PostalLabelFormatter::class);
-
+        // Formatters
+        $this->app->singleton(DefaultFormatter::class, function($app) {
+            return new DefaultFormatter(
+                $app->make(AddressFormatRepositoryInterface::class),
+                $app->make(CountryRepositoryInterface::class),
+                $app->make(SubdivisionRepositoryInterface::class),
+                [
+                    'locale' => 'nl',
+                    'html' => false,
+                    'html_tag' => 'div'
+                ]
+            );
+        });
         $this->app->bind(FormatterInterface::class, DefaultFormatter::class);
+        $this->app->singleton(PostalLabelFormatter::class, function($app) {
+            return new PostalLabelFormatter(
+                $app->make(AddressFormatRepositoryInterface::class),
+                $app->make(CountryRepositoryInterface::class),
+                $app->make(SubdivisionRepositoryInterface::class),
+                [
+                    'locale' => 'nl',
+                    'html' => false,
+                    'html_tag' => 'div',
+                    'origin_country' => 'NL'
+                ]
+            );
+        });
         $this->app->bind(PostalLabelFormatterInterface::class, PostalLabelFormatter::class);
+
+        // VALIDATORS
+        $this->app->singleton(AddressValidator::class);
+
+
+
     }
 }

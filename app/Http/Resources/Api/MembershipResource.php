@@ -20,11 +20,17 @@ class MembershipResource extends Resource
                 'start' => $this->formatDate($this->start, $request),
                 'end' => $this->formatDate($this->end, $request),
                 'status' =>  $this->status,
-                'status_name' => MembershipStatus::getDescription($this->status),
-                'status_label' => MembershipStatus::getLabel($this->status),
 
                 'person' => new PersonResource($this->whenLoaded('person')),
 
             ] + $this->tailArray($request);
+    }
+
+    public function fieldStatusName() {
+        return MembershipStatus::getDescription($this->status);
+    }
+
+    public function fieldStatusLabel() {
+        return MembershipStatus::getLabel($this->status);
     }
 }

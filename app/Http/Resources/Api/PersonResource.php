@@ -20,19 +20,13 @@ class PersonResource extends Resource
         return parent::toArray($request) + [
                 'name' => $this->name,
                 'name_short' => $this->name_short,
-                'name_formal' => $this->name_formal,
-                'name_full' => $this->name_full,
                 'name_first' => $this->name_first,
                 'name_middle' => $this->name_middle,
                 'name_prefix' => $this->name_prefix,
                 'name_last' => $this->name_last,
                 'name_initials' => $this->name_initials,
                 'name_nickname' => $this->name_nickname,
-                'nickname' => $this->nickname,
-                'birth_date' => $this->formatedBirthDate(),
-                'age' => $this->age,
-
-                $this->membershipStatus($request),
+                'birth_date' => $this->formatDate($this->birth_date, $request),
 
                 'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
                 'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
@@ -46,22 +40,27 @@ class PersonResource extends Resource
             ] + $this->tailArray($request);
     }
 
-    protected function formatedBirthDate() {
-        if($this->birth_date instanceof Carbon) {
-            return $this->birth_date->format('Y-m-d');
-        } else {
-            return $this->birth_date;
-        }
+
+    public function fieldNameFormal($request) {
+        return $this->name_formal;
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
-     */
-    protected function membershipStatus($request) {
+    public function fieldNameFull($request) {
+        return $this->name_full;
+    }
+
+    public function fieldAge($request) {
+        return $this->age;
+    }
+
+    public function fieldAvatar($request) {
+        return $this->avatar;
+    }
+
+    public function fieldMembershipStatus($request) {
         if($this->membership_status === null) {
             return null;
-        };
+        }
 
         $res = [
             'status' => $this->membership_status,
@@ -75,9 +74,7 @@ class PersonResource extends Resource
             $res['since'] = $since->format('Y-m-d');
         }
 
-        return $this->mergeWhen(true, [
-            'membership_status' => $res
-        ]);
+        return $res;
 
     }
 }

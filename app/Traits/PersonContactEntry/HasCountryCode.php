@@ -7,7 +7,8 @@
  */
 
 namespace App\Traits\PersonContactEntry;
-use CommerceGuys\Addressing\Repository\CountryRepositoryInterface;
+
+use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 
 /**
  * Trait HasCountryCode

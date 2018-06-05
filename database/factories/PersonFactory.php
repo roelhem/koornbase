@@ -53,7 +53,7 @@ $factory->define(App\Person::class, function (Faker $faker) {
             $length = $faker->numberBetween(4,12);
 
             if(strlen($name_first) > $length) {
-                return substr($name_first, 0, $length);
+                return mb_substr($name_first, 0, $length);
             } else {
                 return null;
             }

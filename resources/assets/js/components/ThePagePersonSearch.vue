@@ -104,11 +104,9 @@
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
-                                <div>{{ item.name.full }}</div>
+                                <div>{{ item.name }}</div>
                                 <div class="small text-muted">
-                                    {{ item.name.initials }}
-                                    {{ item.name.prefix }}
-                                    {{ item.name.last }}
+                                    {{ item.name_formal }}
                                 </div>
                             </template>
 
@@ -119,11 +117,11 @@
 
                             <template slot="membership_status" slot-scope="{ item }">
                                 <div>
-                                    <span class="status-icon" :class="item.membership.status | membershipStatusColor "></span>
-                                    {{ item.membership.status | membershipStatusName }}
+                                    <span class="status-icon" :class="item.membership_status.status | membershipStatusColor "></span>
+                                    {{ item.membership_status.status | membershipStatusName }}
                                 </div>
                                 <div class="small text-muted">
-                                    {{ item.membership.since | date('lg') }}
+                                    {{ item.membership_status.since | date('lg') }}
                                 </div>
                             </template>
 
@@ -219,21 +217,21 @@
             key:'name',
             label:'Hele Naam',
             name:'Volledige Naam',
-            sortable:'name_last',
+            sortable:'name',
             visible:true,
             formatter:function(value, key, item) {
-                return item.name.full;
+                return item.name;
             }
         },
         {
-            key:'name.short',
+            key:'name_short',
             label: 'Naam',
             name:'Korte Naam',
             sortable:'name_first',
             visible:false
         },
         {
-            key:'name.nickname',
+            key:'name_nickname',
             label:'Bijnaam',
             name:'Bijnaam',
             sortable:'name_nickname',
@@ -305,7 +303,7 @@
 
         computed: {
             endpoint: function() {
-                return '/people/search';
+                return '/api/persons';
             },
 
             params: function() {

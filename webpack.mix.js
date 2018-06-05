@@ -16,4 +16,4 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.copyDirectory('resources/assets/images/koornbase', 'public/images/koornbase');
 
-mix.browserSync('homestead.test');
+mix.browserSync('https://homestead.test/');

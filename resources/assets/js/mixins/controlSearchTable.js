@@ -111,8 +111,7 @@ export default {
             res.page = this.page;
 
             if(this.sort) {
-                res.sort = this.sort;
-                res.sort_order = this.sortOrder;
+                res.sort = this.sort + ':' + this.sortOrder;
             }
 
             return res;
