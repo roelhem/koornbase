@@ -38,7 +38,7 @@ Route::name('api.')->group(function() {
     Route::post('groups/{group}/detach', 'Api\GroupController@detach')->name('groups.detach');
     Route::post('groups/{group}/sync', 'Api\GroupController@sync')->name('groups.sync');
 
-    Route::get('me','Api\MeController@me');
+    Route::get('me','Api\MeController@me')->name('me');
 
 
     Route::name('support.')->prefix('support')->group(function() {
