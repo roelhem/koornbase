@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PersonStoreRequest extends FormRequest
+class PersonUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class PersonStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,11 +24,11 @@ class PersonStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_first' => 'required|string|max:255',
+            'name_first' => 'sometimes|required|string|max:255',
             'name_initials' => 'nullable|string|max:63',
             'name_middle' => 'nullable|string|max:255',
             'name_prefix' => 'nullable|string|max:63',
-            'name_last' => 'required|string|max:255',
+            'name_last' => 'sometimes|required|string|max:255',
             'name_nickname' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:now',
             'remarks' => 'nullable|string'

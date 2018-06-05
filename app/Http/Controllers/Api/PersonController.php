@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonStoreRequest;
+use App\Http\Requests\Api\PersonUpdateRequest;
 use App\Http\Resources\Api\PersonResource;
 use App\Http\Resources\Api\Resource;
 use App\Person;
@@ -33,16 +34,6 @@ class PersonController extends Controller
         $person = new Person($validated);
         $person->saveOrFail();
 
-        collect(array_get($validated, 'emailAddresses', []))->each(function($input) use ($person) {
-            $person->emailAddresses()->create($input);
-        });
-        collect(array_get($validated, 'phoneNumbers', []))->each(function($input) use ($person) {
-            $person->phoneNumbers()->create($input);
-        });
-        collect(array_get($validated, 'addresses', []))->each(function($input) use ($person) {
-            $person->addresses()->create($input);
-        });
-
         return $this->prepare($person, $request);
     }
 
@@ -61,13 +52,17 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PersonUpdateRequest  $request
      * @param  \App\Person  $person
      * @return Resource
+     * @throws
      */
-    public function update(Request $request, Person $person)
+    public function update(PersonUpdateRequest $request, Person $person)
     {
-        //
+        $person->fill($request->validated());
+        $person->saveOrFail();
+
+        return $this->prepare($person, $request);
     }
 
     /**
