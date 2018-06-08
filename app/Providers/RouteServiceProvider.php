@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\Finders\FinderCollection;
 use App\Contracts\Finders\ModelFinder;
+use App\Exceptions\Finders\InputNotAcceptedException;
 use App\Exceptions\Finders\ModelNotFoundException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -35,6 +36,8 @@ class RouteServiceProvider extends ServiceProvider
                         return $finder->find($value);
                     } catch (ModelNotFoundException $exception) {
                         abort(404, "Kon geen '{$finder->modelName()}' vinden met de waarde '{$value}'.");
+                    } catch (InputNotAcceptedException $exception) {
+                        abort(404, "Ongeldige waarde voor een '{$finder->modelName()}'.");
                     }
                 });
             }

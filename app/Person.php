@@ -2,15 +2,16 @@
 
 namespace App;
 
-use App\Http\Resources\Api\KoornbeursCardResource;
+use App\Enums\MembershipStatus;
+use App\Interfaces\Rbac\RbacModel;
 use App\Traits\HasRemarks;
-use App\Traits\HasShortName;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
 use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
+use App\Traits\Rbac\ImplementRbacModel;
 use App\Types\AvatarType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,7 +42,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read Collection $users
  * @property-read Collection $debtors
  */
-class Person extends Model
+class Person extends Model implements RbacModel
 {
 
     use SoftDeletes;
@@ -50,6 +51,7 @@ class Person extends Model
     use HasRemarks;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
+    use ImplementRbacModel;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -134,6 +136,54 @@ class Person extends Model
         } else {
             return $bd->age;
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- RBAC DEFINITIONS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @inheritdoc
+     */
+    public function getComputedRoles()
+    {
+        $res = [];
+        $personRole = Role::find('person');
+        if($personRole instanceof Role) {
+            $res[] = $personRole;
+        }
+
+        switch ($this->membership_status) {
+            case MembershipStatus::Outsider:
+                $membershipRole = Role::find('membership_status.outsider');
+                break;
+            case MembershipStatus::Novice:
+                $membershipRole = Role::find('membership_status.novice');
+                break;
+            case MembershipStatus::Member:
+                $membershipRole = Role::find('membership_status.member');
+                break;
+            case MembershipStatus::FormerMember:
+                $membershipRole = Role::find('membership_status.former_member');
+                break;
+            default:
+                $membershipRole = null;
+                break;
+        }
+
+        if($membershipRole instanceof Role) {
+            $res[] = $membershipRole;
+        }
+
+        return collect($res);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function inheritsRolesFrom()
+    {
+        return $this->groups;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

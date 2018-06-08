@@ -1,10 +1,26 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use \App\Role;
+use \App\Services\Rbac\RbacGenerator;
 
 class RbacSeeder extends Seeder
 {
+
+    /**
+     * @var RbacGenerator
+     */
+    protected $generator;
+
+    /**
+     * RbacSeeder constructor.
+     *
+     * @param RbacGenerator $generator
+     */
+    public function __construct(RbacGenerator $generator)
+    {
+        $this->generator = $generator;
+    }
+
     /**
      * Run the database seeds.
      *
@@ -12,7 +28,6 @@ class RbacSeeder extends Seeder
      */
     public function run()
     {
-        require(__DIR__.'/../rbac/system.php');
-        require(__DIR__.'/../rbac/groups.php');
+        $this->generator->run();
     }
 }

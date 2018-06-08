@@ -9,6 +9,7 @@
 namespace Tests\Feature\Api;
 
 
+use App\Services\Rbac\RbacGenerator;
 use App\User;
 use Laravel\Passport\Passport;
 
@@ -23,15 +24,27 @@ trait UsePassportAsAdmin
 {
 
     /**
+     * Loads the rbac-structure into the database.
+     */
+    public function loadRbac() {
+       resolve(RbacGenerator::class)->run();
+    }
+
+    /**
      * Sets passport such that you can use test API-calls as an Admin-account.
      *
      * @return User  the user that is used to navigate the database.
      */
     public function asAdmin() {
 
+        $this->loadRbac();
+
         $this->defaultHeaders = ['Accept','application/json'];
 
         $user = factory(User::class)->create();
+        if($user instanceof User) {
+            $user->assignRole('admin');
+        }
         Passport::actingAs($user);
         return $user;
     }

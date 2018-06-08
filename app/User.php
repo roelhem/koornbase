@@ -2,7 +2,9 @@
 
 namespace App;
 
-use App\Traits\HasAssignedRoles;
+use App\Interfaces\Rbac\RbacModel;
+use App\Traits\Rbac\HasAssignedRoles;
+use App\Traits\Rbac\ImplementRbacModel;
 use App\Types\AvatarType;
 use App\Enums\OAuthProviders;
 use Illuminate\Notifications\Notifiable;
@@ -29,12 +31,14 @@ use Laravel\Passport\HasApiTokens;
  * @property-read AvatarType $avatar
  *
  * @inheritdoc
+ *
+ * @method static User findOrFail(integer $id)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements RbacModel
 {
     use Notifiable;
     use HasApiTokens;
-    use HasAssignedRoles;
+    use ImplementRbacModel;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -126,6 +130,35 @@ class User extends Authenticatable
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- INTERFACE IMPLEMENTATION: RbacInheriting ----------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @inheritdoc
+     */
+    public function inheritsRolesFrom()
+    {
+        if($this->person) {
+            return [$this->person];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getComputedRoles()
+    {
+        $role = Role::find('user');
+        if($role instanceof Role) {
+            return [$role];
+        } else {
+            return [];
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
@@ -188,4 +221,6 @@ class User extends Authenticatable
         return $this->hasOne(UserAccount::class, 'user_id')
                     ->where('provider','=','twitter');
     }
+
+
 }

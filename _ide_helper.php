@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.18 on 2018-04-30 09:52:42.
+ * Generated for Laravel 5.6.24 on 2018-06-08 12:09:13.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1248,7 +1248,7 @@ namespace Illuminate\Support\Facades {
          * Set the shared instance of the container.
          *
          * @param \Illuminate\Contracts\Container\Container|null $container
-         * @return static 
+         * @return \Illuminate\Contracts\Container\Container|static 
          * @static 
          */ 
         public static function setInstance($container = null)
@@ -1745,13 +1745,13 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Invalid other sessions for the current user.
+         * Invalidate other sessions for the current user.
          * 
          * The application must be using the AuthenticateSession middleware.
          *
          * @param string $password
          * @param string $attribute
-         * @return $this 
+         * @return null|bool 
          * @static 
          */ 
         public static function logoutOtherDevices($password, $attribute = 'password')
@@ -7560,6 +7560,18 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * 
+         *
+         * @internal 
+         * @static 
+         */ 
+        public static function setSessionFactory($factory)
+        {
+            //Method inherited from \Symfony\Component\HttpFoundation\Request            
+            return \Illuminate\Http\Request::setSessionFactory($factory);
+        }
+        
+        /**
          * Returns the client IP addresses.
          * 
          * In the returned array the most trusted IP address is first, and the
@@ -7924,7 +7936,7 @@ namespace Illuminate\Support\Facades {
          * Gets the mime type associated with the format.
          *
          * @param string $format The format
-         * @return string The associated mime type (null if not found)
+         * @return string|null The associated mime type (null if not found)
          * @static 
          */ 
         public static function getMimeType($format)
@@ -8513,7 +8525,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Determine if the request contains any of the given inputs.
          *
-         * @param string|array $key
+         * @param string|array $keys
          * @return bool 
          * @static 
          */ 
@@ -10693,6 +10705,18 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Unset the given disk instances.
+         *
+         * @param array|string $disk
+         * @return $this 
+         * @static 
+         */ 
+        public static function forgetDisk($disk)
+        {
+            return \Illuminate\Filesystem\FilesystemManager::forgetDisk($disk);
+        }
+        
+        /**
          * Register a custom driver creator Closure.
          *
          * @param string $driver
@@ -12441,6 +12465,365 @@ namespace Illuminate\Support\Facades {
  
 }
 
+namespace Jwz104\EloquentView\Facades { 
+
+    class EloquentView {
+        
+        /**
+         * Build the view by executing the query.
+         *
+         * @param string $view The view name.
+         * @param mixed $builder The query builder.
+         * @return void 
+         * @static 
+         */ 
+        public static function create($view, $builder)
+        {
+            \Jwz104\EloquentView\ViewBuilder::create($view, $builder);
+        }
+        
+        /**
+         * Drop a view.
+         *
+         * @param string $view The view to drop.
+         * @return void 
+         * @static 
+         */ 
+        public static function drop($view)
+        {
+            \Jwz104\EloquentView\ViewBuilder::drop($view);
+        }
+        
+        /**
+         * Drop a view if the view exists.
+         *
+         * @param string $view The view to drop.
+         * @return void 
+         * @static 
+         */ 
+        public static function dropIfExists($view)
+        {
+            \Jwz104\EloquentView\ViewBuilder::dropIfExists($view);
+        }
+         
+    }
+ 
+}
+
+namespace App\Facades { 
+
+    class Rbac {
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function authorizer()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::authorizer();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function builder()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::builder();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function provider()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::provider();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function handler()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::handler();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function permission($id, $name = null, $description = null)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::permission($id, $name, $description);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function role($id, $name = null, $description = null)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::role($id, $name, $description);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function hasPermission($permission)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::hasPermission($permission);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function hasRole($role)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::hasRole($role);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function userRoles()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::userRoles();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function userPermissions()
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::userPermissions();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getPermission($permission)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getPermission($permission);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getPermissionId($permission)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getPermissionId($permission);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getPermissionById($id)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getPermissionById($id);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getPermissionByRoute($route)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getPermissionByRoute($route);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getRole($role)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getRole($role);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getRoleId($role)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getRoleId($role);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function getRoleById($id)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::getRoleById($id);
+        }
+         
+    }
+ 
+}
+
+namespace Jenssegers\Date { 
+
+    class Date {
+         
+    }
+ 
+}
+
+namespace Laravel\Socialite\Facades { 
+
+    class Socialite {
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @static 
+         */ 
+        public static function with($driver)
+        {
+            return \Laravel\Socialite\SocialiteManager::with($driver);
+        }
+        
+        /**
+         * Build an OAuth 2 provider instance.
+         *
+         * @param string $provider
+         * @param array $config
+         * @return \Laravel\Socialite\Two\AbstractProvider 
+         * @static 
+         */ 
+        public static function buildProvider($provider, $config)
+        {
+            return \Laravel\Socialite\SocialiteManager::buildProvider($provider, $config);
+        }
+        
+        /**
+         * Format the server configuration.
+         *
+         * @param array $config
+         * @return array 
+         * @static 
+         */ 
+        public static function formatConfig($config)
+        {
+            return \Laravel\Socialite\SocialiteManager::formatConfig($config);
+        }
+        
+        /**
+         * Get the default driver name.
+         *
+         * @throws \InvalidArgumentException
+         * @return string 
+         * @static 
+         */ 
+        public static function getDefaultDriver()
+        {
+            return \Laravel\Socialite\SocialiteManager::getDefaultDriver();
+        }
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @static 
+         */ 
+        public static function driver($driver = null)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::driver($driver);
+        }
+        
+        /**
+         * Register a custom driver creator Closure.
+         *
+         * @param string $driver
+         * @param \Closure $callback
+         * @return $this 
+         * @static 
+         */ 
+        public static function extend($driver, $callback)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::extend($driver, $callback);
+        }
+        
+        /**
+         * Get all of the created "drivers".
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getDrivers()
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::getDrivers();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -12555,7 +12938,7 @@ namespace  {
              * Add a basic where clause to the query.
              *
              * @param string|array|\Closure $column
-             * @param string $operator
+             * @param mixed $operator
              * @param mixed $value
              * @param string $boolean
              * @return $this 
@@ -12570,7 +12953,7 @@ namespace  {
              * Add an "or where" clause to the query.
              *
              * @param \Closure|array|string $column
-             * @param string $operator
+             * @param mixed $operator
              * @param mixed $value
              * @return \Illuminate\Database\Eloquent\Builder|static 
              * @static 
@@ -13755,11 +14138,11 @@ namespace  {
              *
              * @param string $column
              * @param string $operator
-             * @param string $value
+             * @param mixed $value
              * @return \Illuminate\Database\Query\Builder|static 
              * @static 
              */ 
-            public static function orWhereDate($column, $operator, $value)
+            public static function orWhereDate($column, $operator, $value = null)
             {    
                 return \Illuminate\Database\Query\Builder::orWhereDate($column, $operator, $value);
             }
@@ -14010,6 +14393,61 @@ namespace  {
             public static function orWhereRowValues($columns, $operator, $values)
             {    
                 return \Illuminate\Database\Query\Builder::orWhereRowValues($columns, $operator, $values);
+            }
+         
+            /**
+             * Add a "where JSON contains" clause to the query.
+             *
+             * @param string $column
+             * @param mixed $value
+             * @param string $boolean
+             * @param bool $not
+             * @return $this 
+             * @static 
+             */ 
+            public static function whereJsonContains($column, $value, $boolean = 'and', $not = false)
+            {    
+                return \Illuminate\Database\Query\Builder::whereJsonContains($column, $value, $boolean, $not);
+            }
+         
+            /**
+             * Add a "or where JSON contains" clause to the query.
+             *
+             * @param string $column
+             * @param mixed $value
+             * @return $this 
+             * @static 
+             */ 
+            public static function orWhereJsonContains($column, $value)
+            {    
+                return \Illuminate\Database\Query\Builder::orWhereJsonContains($column, $value);
+            }
+         
+            /**
+             * Add a "where JSON not contains" clause to the query.
+             *
+             * @param string $column
+             * @param mixed $value
+             * @param string $boolean
+             * @return $this 
+             * @static 
+             */ 
+            public static function whereJsonDoesntContain($column, $value, $boolean = 'and')
+            {    
+                return \Illuminate\Database\Query\Builder::whereJsonDoesntContain($column, $value, $boolean);
+            }
+         
+            /**
+             * Add a "or where JSON not contains" clause to the query.
+             *
+             * @param string $column
+             * @param mixed $value
+             * @return $this 
+             * @static 
+             */ 
+            public static function orWhereJsonDoesntContain($column, $value)
+            {    
+                return \Illuminate\Database\Query\Builder::orWhereJsonDoesntContain($column, $value);
             }
          
             /**
@@ -14729,6 +15167,14 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
 
     class View extends \Illuminate\Support\Facades\View {}
+
+    class EloquentView extends \Jwz104\EloquentView\Facades\EloquentView {}
+
+    class Rbac extends \App\Facades\Rbac {}
+
+    class Date extends \Jenssegers\Date\Date {}
+
+    class Socialite extends \Laravel\Socialite\Facades\Socialite {}
  
 }
 

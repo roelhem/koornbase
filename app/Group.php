@@ -2,10 +2,11 @@
 
 namespace App;
 
-use App\Traits\Group\HasMembers;
-use App\Traits\HasAssignedRoles;
+use App\Interfaces\Rbac\RbacModel;
+use App\Traits\Rbac\HasAssignedRoles;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
+use App\Traits\Rbac\ImplementRbacModel;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,14 +29,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read string $style
  */
-class Group extends Model
+class Group extends Model implements RbacModel
 {
 
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
 
-    use HasShortName, HasDescription, HasAssignedRoles;
+    use HasShortName, HasDescription, ImplementRbacModel;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -61,6 +62,18 @@ class Group extends Model
 
     public function getStyleAttribute() {
         return $this->category->style;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- RBAC DEFINITIONS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @inheritdoc
+     */
+    public function inheritsRolesFrom()
+    {
+        return [$this->category];
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

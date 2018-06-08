@@ -2,13 +2,18 @@
 
 namespace App\Providers;
 
+use App\Contracts\Rbac\RbacAuthorizer;
+use App\Contracts\Rbac\RbacBuilder;
 use App\Contracts\Rbac\RbacChecker;
 use App\Contracts\Rbac\RbacGraph;
 use App\Services\Navigation\BreadcrumbService;
 use App\Services\Navigation\NavbarService;
 use App\Services\Navigation\NavigationItemRepository;
 use App\Services\Navigation\SitemapService;
+use App\Services\Rbac\Authorizers\SimpleRbacAuthorizer;
+use App\Services\Rbac\DatabaseRbacBuilder;
 use App\Services\Rbac\DatabaseRbacGraph;
+use App\Services\Rbac\RbacGenerator;
 use App\Services\Rbac\SimpleRbacChecker;
 use App\Services\Sorters\CertificateCategorySorter;
 use App\Services\Sorters\CertificateSorter;
@@ -43,14 +48,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
-        $this->app->singleton(DatabaseRbacGraph::class);
-        $this->app->bind(RbacGraph::class, DatabaseRbacGraph::class);
-
-
-        $this->app->singleton(SimpleRbacChecker::class);
-        $this->app->bind(RbacChecker::class, SimpleRbacChecker::class);
-
         
         $this->app->singleton(PersonSorter::class);
         $this->app->singleton(GroupSorter::class);

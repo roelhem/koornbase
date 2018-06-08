@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Rbac;
 
+use App\Interfaces\Rbac\RbacAuthorizable;
+use App\Interfaces\Rbac\RbacPermissionAuthorizable;
 use App\Permission;
 use App\Role;
 use Tests\TestCase;
@@ -92,48 +94,48 @@ class PermissionTest extends TestCase
     /**
      * Checks if the given model has the given permission.
      *
-     * @param $model
+     * @param RbacPermissionAuthorizable $model
      * @param $permission
+     * @throws
      */
     public function assertHasPerm($model, $permission, $message = null) {
         if($message === null) {
             $message = "Asserting a model has the permission: $permission.";
         }
 
-        return $this->assertTrue($model->hasPermission($permission), $message);
+        $this->assertTrue($model->hasPermission($permission), $message);
     }
 
     /**
      * Checks if the given model does not have the given permission
      *
-     * @param $model
+     * @param RbacPermissionAuthorizable $model
      * @param $permission
+     * @throws
      */
     public function assertHasNoPerm($model, $permission, $message = null) {
         if($message === null) {
             $message = "Asserting a model does not have the permission: $permission.";
         }
 
-        return $this->assertFalse($model->hasPermission($permission), $message);
+        $this->assertFalse($model->hasPermission($permission), $message);
     }
 
     /**
      * Checks if a role with the specified id exists in the database.
      *
      * @param $role_id
-     * @return $this
      */
     public function assertRoleExists($role_id) {
-        return $this->assertDatabaseHas('roles', ['id' => $role_id]);
+        $this->assertDatabaseHas('roles', ['id' => $role_id]);
     }
 
     /**
      * Checks if a permission with the specified id exists in the database.
      *
      * @param $permission_id
-     * @return $this
      */
     public function assertPermissionExists($permission_id) {
-        return $this->assertDatabaseHas('permissions', ['id' => $permission_id]);
+        $this->assertDatabaseHas('permissions', ['id' => $permission_id]);
     }
 }

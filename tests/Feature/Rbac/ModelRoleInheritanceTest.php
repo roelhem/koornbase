@@ -42,7 +42,7 @@ class ModelRoleInheritanceTest extends TestCase
         $permissionB = $permissionFactory->create();
         $unusedPermission = $permissionFactory->create();
 
-        $role->assign($childRole, $permissionA);
+        $role->assignAll([$childRole, $permissionA]);
         $childRole->assign($permissionB);
         $unusedRole->assign($unusedPermission);
 

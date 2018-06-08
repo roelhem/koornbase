@@ -2,11 +2,11 @@
 
 namespace App;
 
-use App\Traits\HasAssignedRoles;
+use App\Interfaces\Rbac\RbacModel;
 use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
-use App\Traits\HasStringPrimaryKey;
+use App\Traits\Rbac\ImplementRbacModel;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,7 +21,7 @@ use Wildside\Userstamps\Userstamps;
  * @property boolean $is_required
  * @property string $style
  */
-class GroupCategory extends Model
+class GroupCategory extends Model implements RbacModel
 {
 
     use SoftDeletes;
@@ -30,7 +30,7 @@ class GroupCategory extends Model
 
     use HasShortName, HasDescription;
 
-    use HasOptions, HasAssignedRoles;
+    use HasOptions, ImplementRbacModel;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

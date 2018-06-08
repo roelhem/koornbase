@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::name('api.')->group(function() {
+Route::name('api.')->middleware('rbac')->group(function() {
 
     Route::apiResources([
         'users'                  => 'Api\UserController',
