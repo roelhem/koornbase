@@ -58,8 +58,17 @@ interface RbacPermission extends RbacNode, RbacPermissionAssignable, RbacPermiss
      * The permissions will be children of this Permission
      *
      * @param iterable $permissions
-     * @return mixed
+     * @return $this
      */
     public function assignAll(iterable $permissions);
+
+    /**
+     * Adds a new constraint to this permission.
+     *
+     * @param string $constraint
+     * @param array|null $params
+     * @return $this
+     */
+    public function addConstraint($constraint, $params = null);
 
 }

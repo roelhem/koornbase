@@ -6,6 +6,7 @@ use App\GroupCategory;
 use App\Http\Resources\Api\GroupCategoryResource;
 use App\Http\Resources\Api\Resource;
 use App\Services\Sorters\GroupCategorySorter;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -15,6 +16,19 @@ class GroupCategoryController extends Controller
     protected $modelClass = GroupCategory::class;
     protected $resourceClass = GroupCategoryResource::class;
     protected $sorterClass = GroupCategorySorter::class;
+
+
+    public function index(Request $request) {
+        $sorter = resolve($this->sorterClass);
+
+        $query = GroupCategory::query();
+        $query = $sorter->addList($query, $this->getSortList($request));
+        $query->with($this->getAskedRelations($request));
+
+        $paginate = $this->getPaginate($query, $request);
+
+        return GroupCategoryResource::collection($paginate);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -41,12 +55,15 @@ class GroupCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\GroupCategory  $groupCategory
-     * @param  Request             $request
+     * @param  \App\GroupCategory $groupCategory
+     * @param  Request $request
      * @return Resource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(GroupCategory $groupCategory, Request $request)
     {
+        $this->authorize('view', $groupCategory);
+
         return $this->prepare($groupCategory, $request);
     }
 

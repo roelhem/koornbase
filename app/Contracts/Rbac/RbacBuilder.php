@@ -7,6 +7,7 @@
  */
 
 namespace App\Contracts\Rbac;
+use App\Interfaces\Rbac\RbacConstraint;
 use App\Interfaces\Rbac\RbacPermission;
 use App\Interfaces\Rbac\RbacRole;
 
@@ -40,5 +41,21 @@ interface RbacBuilder
      * @return RbacRole
      */
     public function role(string $id, $name = null, $description = null) : RbacRole;
+
+    /**
+     * Defines a constraint.
+     *
+     * @param string $id
+     * @param string|null $name
+     * @param string|null $description
+     * @return RbacConstraint
+     */
+    public function constraint(string $id, $name = null, $description = null) : RbacConstraint;
+
+    /**
+     * @param string $prefix
+     * @param callable $definitions
+     */
+    public function group(string $prefix, callable $definitions);
 
 }

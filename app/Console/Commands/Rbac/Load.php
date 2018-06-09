@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\Rbac;
 
+use App\Permission;
+use App\Role;
 use App\Services\Rbac\RbacGenerator;
 use Illuminate\Console\Command;
 
@@ -12,7 +14,7 @@ class Load extends Command
      *
      * @var string
      */
-    protected $signature = 'rbac:load';
+    protected $signature = 'rbac:load {--reload}';
 
     /**
      * The console command description.
@@ -47,6 +49,12 @@ class Load extends Command
      */
     public function handle()
     {
+
+        if($this->option('reload')) {
+            Permission::query()->delete();
+            Role::doesntHave('users')->doesntHave('groups')->doesntHave('groupCategories')->delete();
+        }
+
         $this->generator->run();
     }
 }

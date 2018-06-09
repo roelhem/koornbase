@@ -14,6 +14,7 @@ use App\Contracts\Rbac\RbacBuilder;
 use App\Contracts\Rbac\RbacProvider;
 use App\Contracts\Rbac\RbacRequestHandler;
 use App\Contracts\Rbac\RbacService;
+use App\Interfaces\Rbac\RbacConstraint;
 use App\Interfaces\Rbac\RbacPermission;
 use App\Interfaces\Rbac\RbacRole;
 
@@ -93,6 +94,22 @@ abstract class AbstractService implements RbacService
     public function role(string $id, $name = null, $description = null): RbacRole
     {
         return $this->builder->role($id, $name, $description);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function constraint(string $id, $name = null, $description = null): RbacConstraint
+    {
+        return $this->builder->constraint($id, $name, $description);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function group(string $prefix, callable $definitions)
+    {
+        return $this->builder->group($prefix, $definitions);
     }
 
     // -------------------------------------------------------------------------------------------------------- //

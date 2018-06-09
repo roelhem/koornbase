@@ -2,6 +2,10 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Interfaces\Rbac\RbacPermission;
+use App\Interfaces\Rbac\RbacPermissionAuthorizable;
+use App\Permission;
+
 class UserResource extends Resource
 {
     /**
@@ -22,6 +26,8 @@ class UserResource extends Resource
                 'githubAccount' => new UserAccountResource($this->whenLoaded('githubAccount')),
                 'googleAccount' => new UserAccountResource($this->whenLoaded('googleAccount')),
                 'twitterAccount' => new UserAccountResource($this->whenLoaded('twitterAccount')),
+
+                'assignedRoles' => RoleResource::collection($this->whenLoaded('assignedRoles')),
             ] + $this->tailArray($request);
     }
 
@@ -35,5 +41,13 @@ class UserResource extends Resource
 
     public function fieldAvatar($request) {
         return $this->avatar;
+    }
+
+    public function fieldRoles($request) {
+        return RoleResource::collection(collect($this->resource->getRoles())->values());
+    }
+
+    public function fieldPermissions($request) {
+        return PermissionResource::collection(collect($this->resource->getPermissions())->flatten());
     }
 }

@@ -40,4 +40,8 @@ final class MembershipStatus extends Enum
             default: return 'Onbekend';
         }
     }
+
+    public static function getRoleId(int $value) {
+        return 'membership_status.'.snake_case(self::getKey($value));
+    }
 }

@@ -37,7 +37,7 @@ trait HasParentPermissions
         }
 
         if(is_string($permission)) {
-            $this->parentPermissions()->attach($permission);
+            $this->parentPermissions()->syncWithoutDetaching([$permission]);
         }
 
         return $this;

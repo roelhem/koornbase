@@ -42,13 +42,47 @@ class Role extends Model implements RbacRole
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
+    public function roles() {
+        $rolePaths = <<<SQL
+        WITH RECURSIVE roles_graph(id, child_id, path_length, path) AS (
+        
+            SELECT
+              r.id,
+              r.id,
+              0,
+              ARRAY[]::VARCHAR[]
+            FROM roles r
+            WHERE r.id = ? 
+        
+          UNION ALL
+        
+            SELECT
+              rg.id,
+              rr.child_id,
+              path_length + 1,
+              rg.path || rr.child_id
+            FROM roles_graph rg, role_role rr
+            WHERE rr.parent_id = rg.child_id
+        
+        )
+        SELECT
+          rg.id as start_id,
+          rg.child_id as end_id,
+          rg.path_length,
+          array_to_json(rg.path) as path
+        FROM roles_graph rg;
+SQL;
+
+        return \DB::select($rolePaths, [$this->id]);
+    }
+
     /**
      * Gives all the Users where this Role is assigned to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function users() {
-        return $this->morphedByMany(User::class, 'assignable');
+        return $this->morphedByMany(User::class, 'assignable','role_assignments');
     }
 
     /**
@@ -57,7 +91,16 @@ class Role extends Model implements RbacRole
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function groups() {
-        return $this->morphedByMany(Group::class, 'assignable');
+        return $this->morphedByMany(Group::class, 'assignable','role_assignments');
+    }
+
+    /**
+     * Gives all the Persons where this Role is assigned to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function persons() {
+        return $this->morphedByMany(Person::class, 'assignable','role_assignments');
     }
 
     /**
@@ -66,7 +109,7 @@ class Role extends Model implements RbacRole
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function groupCategories() {
-        return $this->morphedByMany(GroupCategory::class, 'assignable');
+        return $this->morphedByMany(GroupCategory::class, 'assignable','role_assignments');
     }
 
     /**

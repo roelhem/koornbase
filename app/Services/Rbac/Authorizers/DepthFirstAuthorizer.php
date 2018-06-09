@@ -114,19 +114,14 @@ class DepthFirstAuthorizer extends AbstractAuthorizer
             $result[$id] = $authorizable;
         }
 
-        $subList = [];
         foreach ($authorizable->getChildPermissions() as $childPermission) {
-            $subList[] = $this->getPermissions($childPermission);
+            $result = $result + $this->getPermissions($childPermission);
         }
 
-        $result = array_merge($result, ...$subList);
-
         if($authorizable instanceof RbacAuthorizable) {
-            $subList = [];
             foreach ($authorizable->getChildRoles() as $childRole) {
-                $subList[] = $this->getPermissions($childRole);
+                $result = $result + $this->getPermissions($childRole);
             }
-            $result = array_merge($result, $subList);
         }
 
         return $result;

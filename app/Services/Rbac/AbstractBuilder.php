@@ -16,14 +16,16 @@ use App\Interfaces\Rbac\RbacRole;
 abstract class AbstractBuilder extends AbstractServiceComponent implements RbacBuilder
 {
 
+    protected $prefix = '';
+
     /**
      * @inheritdoc
      */
     public function role(string $id, $name = null, $description = null) : RbacRole
     {
-        $role = $this->service->getRoleById($id);
+        $role = $this->service->getRoleById($this->prefix.$id);
         if($role === null) {
-            return $this->createRole($id, $name, $description);
+            return $this->createRole($this->prefix.$id, $name, $description);
         } else {
 
             if(is_string($name)) {
@@ -43,21 +45,35 @@ abstract class AbstractBuilder extends AbstractServiceComponent implements RbacB
      */
     public function permission(string $id, $name = null, $description = null): RbacPermission
     {
-        $permission = $this->service->getPermissionById($id);
-        if($permission === null) {
-            return $this->createPermission($id, $name, $description);
+        $permission = $this->service->getPermissionById($this->prefix.$id);
+        if ($permission === null) {
+            return $this->createPermission($this->prefix.$id, $name, $description);
         } else {
 
-            if(is_string($name)) {
+            if (is_string($name)) {
                 $permission->name($name);
             }
 
-            if(is_string($description)) {
+            if (is_string($description)) {
                 $permission->description($description);
             }
 
             return $permission;
         }
+    }
+
+    /**
+     * @param string $prefix
+     * @param callable $definitions
+     */
+    public function group(string $prefix, callable $definitions)
+    {
+        $oldPrefix = $this->prefix;
+        $this->prefix .= $prefix;
+
+        $definitions();
+
+        $this->prefix = $oldPrefix;
     }
 
     /**

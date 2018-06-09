@@ -15,8 +15,6 @@ Rbac::role('guest','Guest','Role voor als er geen gebruiker is ingelogd.')->requ
 Rbac::role('user','Gebruiker','Role voor iedere gebruiker die is ingelogd.')->required();
 
 
-
-
 // SPECIAL ROLES
 Rbac::role('super','Super','Role die alle beveiligingen omzeilt.')->required();
 
@@ -29,26 +27,19 @@ Rbac::role('person','Persoon','Gebruikers die gekoppeld zijn aan een persoon.')-
 
 
 // By membership state
-Rbac::role(
-    'membership_status.outsider',
-    'Buitenstaander',
-    'Gebruikers van personen die als buitenstaander staan geregistreerd.'
-)->required();
 
 Rbac::role(
-    'membership_status.novice',
-    'Kennismaker',
-    'Gebruikers van personen die als kennismaker staan geregistreerd.'
-)->required();
+    'membership_status',
+    'Lidstatus parent-role.',
+    'Een role die de parent is van alle lidstatus-rollen. Deze rol is voor testdoeleinden en voor ondersteuning van gebruikers met een andere lidstatus.'
+);
 
-Rbac::role(
-    'membership_status.member',
-    'Lid',
-    'Gebruikers van personen die als lid staan geregistreerd.'
-)->required();
-
-Rbac::role(
-    'membership_status.former_member',
-    'Oud-lid',
-    'Gebruikers van personen die als oud-lid staan geregistreerd.'
-)->required();
+foreach (\App\Enums\MembershipStatus::getValues() as $value) {
+    Rbac::role(
+        \App\Enums\MembershipStatus::getRoleId($value),
+        \App\Enums\MembershipStatus::getLabel($value),
+        "Automatisch toegekend aan gebruikers met personen die voor hun huidige lidstatus als '".
+        \App\Enums\MembershipStatus::getLabel($value).
+        "' geregistreerd staan. Als de lidstatus van de persoon veranderd, verliest hij of zij automatisch deze rol."
+    )->assignToRole('membership_status');
+}

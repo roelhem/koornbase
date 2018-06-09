@@ -10,31 +10,30 @@ namespace App\Traits\Rbac;
 
 
 use App\Role;
+use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Services\Rbac\Traits\DefaultRbacModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-trait ImplementRbacModel
+trait HasChildRoles
 {
 
-    use DefaultRbacModel, HasAssignedRoles;
+    use HasAssignedRoles;
 
-    public function getRbacId() {
-        return $this->id;
+    public function getChildRoles()
+    {
+        return $this->childRoles()->get();
     }
 
-    public function getRbacType() {
-        return get_class($this);
-    }
-
-    public function getComputedRoles()
+    public function getChildPermissions()
     {
         return [];
     }
 
-    public function inheritsRolesFrom()
-    {
-        return [];
-    }
+    /**
+     * @return Builder
+     */
+    abstract public function childRoles();
 
     /**
      * @return MorphToMany

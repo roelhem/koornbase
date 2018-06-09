@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.24 on 2018-06-08 12:09:13.
+ * Generated for Laravel 5.6.24 on 2018-06-08 17:44:16.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -12584,6 +12584,30 @@ namespace App\Facades {
         {
             //Method inherited from \App\Services\Rbac\AbstractService            
             return \App\Services\Rbac\DatabaseService::role($id, $name, $description);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function constraint($id, $name = null, $description = null)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::constraint($id, $name, $description);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function group($prefix, $definitions)
+        {
+            //Method inherited from \App\Services\Rbac\AbstractService            
+            return \App\Services\Rbac\DatabaseService::group($prefix, $definitions);
         }
         
         /**

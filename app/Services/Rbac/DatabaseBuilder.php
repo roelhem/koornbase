@@ -9,6 +9,8 @@
 namespace App\Services\Rbac;
 
 
+use App\Constraint;
+use App\Interfaces\Rbac\RbacConstraint;
 use App\Interfaces\Rbac\RbacPermission;
 use App\Interfaces\Rbac\RbacRole;
 use App\Permission;
@@ -39,5 +41,24 @@ class DatabaseBuilder extends AbstractBuilder
             'name' => $name,
             'description' => $description
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function constraint(string $id, $name = null, $description = null) : RbacConstraint
+    {
+        $constraint = Constraint::firstOrNew(['id' => $id]);
+        if(!($constraint instanceof Constraint)) {
+            abort(500);
+        }
+        if ($name !== null) {
+            $constraint->name = $name;
+        }
+        if ($description !== null) {
+            $constraint->description = $description;
+        }
+        $constraint->save();
+        return $constraint;
     }
 }

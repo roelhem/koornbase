@@ -2,11 +2,12 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacModel;
-use App\Traits\Rbac\HasAssignedRoles;
+use App\Interfaces\Rbac\RbacAuthorizable;
+use App\Interfaces\Rbac\RbacRoleAssignable;
+use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
-use App\Traits\Rbac\ImplementRbacModel;
+use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,14 +30,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read string $style
  */
-class Group extends Model implements RbacModel
+class Group extends Model implements RbacRoleAssignable, RbacAuthorizable
 {
 
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
 
-    use HasShortName, HasDescription, ImplementRbacModel;
+    use HasShortName, HasDescription, HasChildRoles, DefaultRbacAuthorizable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -79,6 +80,14 @@ class Group extends Model implements RbacModel
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+
+    public function childRoles() {
+        return $this->assignedRoles()->orWhere([
+            ['role_assignments.assignable_id', '=', $this->category_id],
+            ['role_assignments.assignable_type', '=', GroupCategory::class]
+        ]);
+    }
 
     /**
      * Gives the GroupCategory where this Group belongs to.

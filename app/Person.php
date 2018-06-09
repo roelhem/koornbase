@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Enums\MembershipStatus;
-use App\Interfaces\Rbac\RbacModel;
+use App\Interfaces\Rbac\RbacAuthorizable;
+use App\Interfaces\Rbac\RbacRoleAssignable;
+use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
@@ -11,9 +13,10 @@ use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
-use App\Traits\Rbac\ImplementRbacModel;
+use App\Traits\Rbac\HasChildRoles;
 use App\Types\AvatarType;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -42,7 +45,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read Collection $users
  * @property-read Collection $debtors
  */
-class Person extends Model implements RbacModel
+class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
 {
 
     use SoftDeletes;
@@ -51,7 +54,7 @@ class Person extends Model implements RbacModel
     use HasRemarks;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
-    use ImplementRbacModel;
+    use HasChildRoles, DefaultRbacAuthorizable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -82,13 +85,29 @@ class Person extends Model implements RbacModel
         }
 
         if($age === null) {
-            $age = $this->birth_date->age() + 1;
+            $age = $this->birth_date->age + 1;
         }
 
         $result = clone $this->birth_date;
         $result->addYears($age);
 
         return $result;
+    }
+
+    public function childRoles() {
+
+        return Role::query()->whereHas('groups', function(Builder $query) {
+            return $query->whereHas('persons', function(Builder $query) {
+                return $query->where('id','=',$this->id);
+            });
+        })->orWhereHas('groupCategories', function (Builder $query) {
+            return $query->whereHas('groups', function(Builder $query) {
+                return $query->whereHas('persons', function(Builder $query) {
+                    return $query->where('id','=',$this->id);
+                });
+            });
+        })->orWhere('id','=','person')
+        ->orWhere('id', '=', MembershipStatus::getRoleId($this->membership_status));
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

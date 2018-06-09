@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Pivots\PermissionConstraint;
 use App\Traits\HasDescription;
 use App\Interfaces\Rbac\RbacPermission;
 use App\Traits\Rbac\ImplementRbacPermission;
@@ -69,6 +70,11 @@ class Permission extends Model implements RbacPermission
     public function assignedPermissions() {
         return $this->belongsToMany(Permission::class, 'permission_permission',
             'parent_id','child_id');
+    }
+
+    public function constraints() {
+        return $this->belongsToMany(Constraint::class, 'permission_constraint',
+            'permission_id','constraint_id')->using(PermissionConstraint::class);
     }
 
 }

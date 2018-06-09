@@ -2,9 +2,10 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacModel;
-use App\Traits\Rbac\HasAssignedRoles;
-use App\Traits\Rbac\ImplementRbacModel;
+use App\Interfaces\Rbac\RbacAuthorizable;
+use App\Interfaces\Rbac\RbacRoleAssignable;
+use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
+use App\Traits\Rbac\HasChildRoles;
 use App\Types\AvatarType;
 use App\Enums\OAuthProviders;
 use Illuminate\Notifications\Notifiable;
@@ -31,14 +32,12 @@ use Laravel\Passport\HasApiTokens;
  * @property-read AvatarType $avatar
  *
  * @inheritdoc
- *
- * @method static User findOrFail(integer $id)
  */
-class User extends Authenticatable implements RbacModel
+class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignable
 {
     use Notifiable;
     use HasApiTokens;
-    use ImplementRbacModel;
+    use HasChildRoles, DefaultRbacAuthorizable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -130,32 +129,29 @@ class User extends Authenticatable implements RbacModel
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
-    // ----- INTERFACE IMPLEMENTATION: RbacInheriting ----------------------------------------------------------- //
+    // ----- INTERFACE IMPLEMENTATION: RbacAuthorizable --------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
-    /**
-     * @inheritdoc
-     */
-    public function inheritsRolesFrom()
-    {
-        if($this->person) {
-            return [$this->person];
-        } else {
-            return [];
-        }
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function getComputedRoles()
-    {
-        $role = Role::find('user');
-        if($role instanceof Role) {
-            return [$role];
-        } else {
-            return [];
+    public function childRoles() {
+        $select = [
+            'roles.id',
+            'roles.name',
+            'roles.description',
+            'roles.is_required',
+            'roles.is_visible',
+            'roles.created_at',
+            'roles.updated_at',
+            'roles.created_by',
+            'roles.updated_by'
+        ];
+
+        $query = Role::query()->where('id','=', 'user')->select($select);
+        $query->union($this->assignedRoles()->select($select));
+        if($this->person) {
+            $query->union($this->person->childRoles()->select($select));
         }
+        return $query;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

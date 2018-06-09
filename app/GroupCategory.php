@@ -2,11 +2,13 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacModel;
+use App\Interfaces\Rbac\RbacAuthorizable;
+use App\Interfaces\Rbac\RbacRoleAssignable;
+use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
-use App\Traits\Rbac\ImplementRbacModel;
+use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,7 +23,7 @@ use Wildside\Userstamps\Userstamps;
  * @property boolean $is_required
  * @property string $style
  */
-class GroupCategory extends Model implements RbacModel
+class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizable
 {
 
     use SoftDeletes;
@@ -30,7 +32,7 @@ class GroupCategory extends Model implements RbacModel
 
     use HasShortName, HasDescription;
 
-    use HasOptions, ImplementRbacModel;
+    use HasOptions, HasChildRoles, DefaultRbacAuthorizable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -52,6 +54,11 @@ class GroupCategory extends Model implements RbacModel
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+
+    public function childRoles() {
+        return $this->assignedRoles();
+    }
 
     /**
      * Gives all the Groups that belong to this GroupCategory.

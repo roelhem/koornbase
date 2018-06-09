@@ -20,7 +20,7 @@ trait DefaultRbacAuthorizable
 
     use DefaultRbacRoleAuthorizable, DefaultRbacPermissionAuthorizable;
 
-    public function has(RbacNode $node) {
+    public function hasNode(RbacNode $node) {
         if($this instanceof RbacAuthorizable) {
             return Rbac::authorizer()->has($this, $node);
         }

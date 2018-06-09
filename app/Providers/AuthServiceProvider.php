@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\GroupCategory;
 use App\Permission;
+use App\Policies\GroupCategoryPolicy;
 use App\Role;
 use App\User;
 use Illuminate\Routing\Route;
@@ -18,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        GroupCategory::class => GroupCategoryPolicy::class
     ];
 
     /**

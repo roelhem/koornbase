@@ -24,7 +24,7 @@ interface RbacAuthorizable extends RbacPermissionAuthorizable, RbacRoleAuthoriza
      * @param RbacNode $node
      * @return boolean
      */
-    public function has(RbacNode $node);
+    public function hasNode(RbacNode $node);
 
     /**
      * Returns if this object has all the provided rbac-nodes.

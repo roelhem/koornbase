@@ -10,6 +10,7 @@ namespace App\Traits\Rbac;
 use App\Interfaces\Rbac\RbacPermissionAssignable;
 use App\Interfaces\Rbac\RbacPermission as PermissionInterface;
 use App\Services\Rbac\Traits\DefaultRbacPermissionAuthorizable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Routing\Route;
 
 /**
@@ -93,6 +94,19 @@ trait ImplementRbacPermission
     {
         return $this->getAssignedPermissions();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function addConstraint($constraint, $params = null) {
+        $this->constraints()->attach($constraint, ['params' => $params]);
+        return $this;
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    abstract public function constraints();
 
 
 }

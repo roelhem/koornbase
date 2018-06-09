@@ -31,6 +31,8 @@ class RbacGenerator
      */
     public function fromRbacFolder() {
 
+        require_once( __DIR__.'/../../../rbac/constraints/common.php');
+
         require_once( __DIR__.'/../../../rbac/required.php' );
         require_once( __DIR__.'/../../../rbac/groups.php' );
         require_once( __DIR__.'/../../../rbac/crud.php' );

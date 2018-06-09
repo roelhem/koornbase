@@ -36,7 +36,7 @@ trait HasParentRoles
         }
 
         if(is_string($role)) {
-            $this->parentRoles()->attach($role);
+            $this->parentRoles()->syncWithoutDetaching([$role]);
         }
         return $this;
     }
