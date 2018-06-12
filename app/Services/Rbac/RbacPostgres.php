@@ -72,7 +72,6 @@ SQL;
     }
 
 
-
     const ROLE_ALL_CHILDREN_MULTIPLE = <<<SQL
         WITH RECURSIVE role_graph(id, child_id) AS(
             SELECT r.id, r.id
@@ -262,37 +261,6 @@ SQL;
             $this->permissionsToPostgresArray($permissions)
         ])->get();
     }
-
-
-
-
-
-
-
-    const ROLE_TO_PERMISSION_EXISTS_SINGLE = <<<SQL
-            
-        WITH RECURSIVE permission_graph(id, child_id) AS (
-          WITH avoiding_constraints AS (
-            SELECT permission_id FROM permission_constraint
-            WHERE NOT constraint_id = ANY(?)
-          )
-          SELECT p.id,
-            p.id
-          FROM permissions p
-          WHERE NOT EXISTS(SELECT FROM avoiding_constraints WHERE permission_id = p.id)
-        
-          UNION ALL
-        
-          SELECT pg.id,
-            pp.child_id
-          FROM permission_graph pg, permission_permission pp
-          WHERE pp.parent_id = pg.child_id AND NOT EXISTS(SELECT FROM avoiding_constraints WHERE permission_id = pp.child_id)
-        
-        )
-        SELECT EXISTS(SELECT FROM permission_graph WHERE child_id = ?)
-SQL;
-
-
 
 
 

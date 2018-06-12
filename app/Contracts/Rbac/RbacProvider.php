@@ -8,8 +8,11 @@
 
 namespace App\Contracts\Rbac;
 use App\Interfaces\Rbac\RbacPermission;
+use App\Interfaces\Rbac\RbacPermissionAuthorizable;
 use App\Interfaces\Rbac\RbacRole;
+use App\Interfaces\Rbac\RbacRoleAuthorizable;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Collection;
 
 /**
  * Contract RbacProvider
@@ -46,6 +49,22 @@ interface RbacProvider
     public function getRoleById( string $id );
 
     /**
+     * Returns all the direct child roles of a RbacRoleAuthorizable object.
+     *
+     * @param RbacRoleAuthorizable $authorizable
+     * @return Collection
+     */
+    public function getChildRoles( RbacRoleAuthorizable $authorizable );
+
+    /**
+     * Returns all the direct child roles of a RbacRoleAuthorizable object.
+     *
+     * @param RbacRoleAuthorizable $authorizable
+     * @return Collection
+     */
+    public function getChildRoleIds( RbacRoleAuthorizable $authorizable );
+
+    /**
      * Returns a permission based on the $permission parameter. Returns null if no permission was found.
      *
      * @param RbacPermission|string $permission
@@ -68,6 +87,22 @@ interface RbacProvider
      * @return RbacPermission|null
      */
     public function getPermissionById( string $id );
+
+    /**
+     * Returns all the direct child-permissions of a RbacPermissionAuthorizable object.
+     *
+     * @param RbacPermissionAuthorizable $authorizable
+     * @return Collection
+     */
+    public function getChildPermissions( RbacPermissionAuthorizable $authorizable );
+
+    /**
+     * Returns all the direct child-permissions of a RbacPermissionAuthorizable object.
+     *
+     * @param RbacPermissionAuthorizable $authorizable
+     * @return mixed
+     */
+    public function getChildPermissionIds( RbacPermissionAuthorizable $authorizable );
 
     /**
      * Returns the permission that belongs to the given $route. Returns null if no permission was found.

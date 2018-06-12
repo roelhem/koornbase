@@ -124,5 +124,33 @@ abstract class AbstractAuthorizer extends AbstractServiceComponent implements Rb
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getRoleIds(RbacRoleAuthorizable $authorizable)
+    {
+        return $this->getRoles($authorizable)->map(function($role) {
+            if($role instanceof RbacRole) {
+                return $role->getId();
+            } else {
+                return $role;
+            }
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPermissionIds(RbacPermissionAuthorizable $authorizable)
+    {
+        return $this->getPermissions($authorizable)->map(function($permission) {
+            if($permission instanceof RbacPermission) {
+                return $permission->getId();
+            } else {
+                return $permission;
+            }
+        });
+    }
+
 
 }

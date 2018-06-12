@@ -116,11 +116,27 @@ interface RbacAuthorizer
     public function getRoles(RbacRoleAuthorizable $authorizable);
 
     /**
+     * Returns all the ids if the roles of the RbacRoleAuthorizable object.
+     *
+     * @param RbacRoleAuthorizable $authorizable
+     * @return Collection
+     */
+    public function getRoleIds(RbacRoleAuthorizable $authorizable);
+
+    /**
      * Returns all the permissions of a RbacPermissionAuthorizable object.
      *
      * @param RbacPermissionAuthorizable $authorizable
      * @return Collection
      */
     public function getPermissions(RbacPermissionAuthorizable $authorizable);
+
+    /**
+     * Returns all the ids of the permissions of a RbacPermissionAuthorizable object.
+     *
+     * @param RbacPermissionAuthorizable $authorizable
+     * @return Collection
+     */
+    public function getPermissionIds(RbacPermissionAuthorizable $authorizable);
 
 }
