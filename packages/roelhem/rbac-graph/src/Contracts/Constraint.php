@@ -12,6 +12,36 @@ namespace Roelhem\RbacGraph\Contracts;
 interface Constraint
 {
 
-    public function run( $parameters );
+    /**
+     * Returns the id of this constraint.
+     *
+     * @return integer
+     */
+    public function getId();
+
+
+    /**
+     * Returns the name of this constraint.
+     *
+     * @return string
+     */
+    public function getName();
+
+
+    /**
+     * Return the title of this constraint.
+     *
+     * @return string
+     */
+    public function getTitle();
+
+
+    /**
+     * Returns the description of this constraint.
+     *
+     * @return string
+     */
+    public function getDescription();
+
 
 }

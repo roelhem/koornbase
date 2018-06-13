@@ -5,6 +5,8 @@ namespace Tests\Unit\Rbac;
 use Roelhem\RbacGraph\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Contracts\Edge;
 use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Iterators\BreathFirstGraphIterator;
+use Roelhem\RbacGraph\Iterators\DepthFirstGraphIterator;
 use Roelhem\RbacGraph\Traveler;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -47,6 +49,20 @@ class TravelerTest extends TestCase
                 ->assignTo('roleA','roleB');
         });
 
+
+
+        $b->group('cycle.', function(RbacBuilder $b) {
+            $b->role('X');
+            $b->role('Y')->assignTo('cycle.X');
+            $b->role('Z')->assignTo('cycle.Y');
+
+            $b->permission('a')->assignTo('cycle.Z');
+            $b->permission('b')->assignTo('cycle.a');
+            $b->permission('c')->assignTo('cycle.b');
+        });
+
+
+
         print_r($b->getNodes()->map(function(Node $node) {
             return $node->getType().": ".$node->getName();
         }));
@@ -59,12 +75,20 @@ class TravelerTest extends TestCase
             return str_pad($parentString,40).' -> '.str_pad($childString, 40);
         }));
 
-        $traveler = new Traveler($b);
+        $this->assertTrue(true);
 
-        foreach ($traveler->depthFirst('superParentRole') as $node) {
-            if($node instanceof Node) {
-                echo "[ {$node->getType()->getName()}: {$node->getName()} ]\n -> ";
-            }
+        $iterator = new DepthFirstGraphIterator($b, 'cycle.Z');
+
+        foreach ($iterator as $id => $node) {
+            echo str_pad('['.$id.'] : ', 12).$node->getName().PHP_EOL;
+        }
+
+        echo PHP_EOL.PHP_EOL;
+
+        $iterator = new BreathFirstGraphIterator($b, 'cycle.Z');
+
+        foreach ($iterator as $id => $node) {
+            echo str_pad('['.$id.'] : ', 12).$node->getName().PHP_EOL;
         }
     }
 }
