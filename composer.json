@@ -19,7 +19,8 @@
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "^1.0",
-        "wildside/userstamps": "0.5.1"
+        "wildside/userstamps": "0.5.1",
+        "roelhem/rbac-graph": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
@@ -29,6 +30,15 @@
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url":"packages/roelhem/rbac-graph",
+            "options":{
+                "symlink":true
+            }
+        }
+    ],
     "autoload": {
         "classmap": [
             "database/seeds",
