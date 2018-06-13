@@ -14,7 +14,12 @@ use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 class RbacBuilder implements BuilderContract
 {
 
-    use HasNodeDictionaries;
+    use HasNodeDictionaries {
+        hasNodeName as protected dictionaryHasNodeName;
+        getNodeName as protected dictionaryGetNodeName;
+        getNodeByName as protected dictionaryGetNodeByName;
+        getNodeId as protected dictionaryGetNodeId;
+    }
     use HasEdgeArray;
     use HasIdSequenceGenerator;
 
@@ -43,17 +48,86 @@ class RbacBuilder implements BuilderContract
     }
 
     /**
+     * Returns the full name of the a nodeName, including the prefixes.
+     *
+     * @param string $inputName
+     * @return null|string
+     */
+    protected function nodeNameWithPrefixes(string $inputName) {
+        for($i = 0; $i <= count($this->prefixes); $i++) {
+            $searchName = $this->getPrefix($i).$inputName;
+            if($this->dictionaryHasNodeName($searchName)) {
+                return $searchName;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasNodeName($name)
+    {
+        return $this->nodeNameWithPrefixes($name) !== null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNodeByName($name)
+    {
+        return $this->dictionaryGetNodeByName($this->nodeNameWithPrefixes($name));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNodeId($node)
+    {
+        if(is_string($node)) {
+            $node = $this->nodeNameWithPrefixes($node);
+        }
+        return $this->dictionaryGetNodeId($node);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNodeName($node)
+    {
+        if(is_string($node)) {
+            $node = $this->nodeNameWithPrefixes($node);
+        }
+        return $this->dictionaryGetNodeName($node);
+    }
+
+
+
+
+
+
+
+    /**
      * @inheritdoc
      */
     public function find(string $name)
     {
-        for($i = 0; $i <= count($this->prefixes); $i++) {
-            $searchName = $this->getPrefix($i).$name;
-            if($this->hasNodeName($searchName)) {
-                return $this->getNodeByName($searchName);
-            }
+        try {
+            return $this->getNodeByName($name);
+        } catch (NodeNotFoundException $exception) {
+            return null;
         }
-        return null;
     }
 
     /**

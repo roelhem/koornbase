@@ -5,6 +5,7 @@ namespace Tests\Unit\Rbac;
 use Roelhem\RbacGraph\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Contracts\Edge;
 use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Iterators\BreathFirstGraphIterator;
 use Roelhem\RbacGraph\Iterators\DepthFirstGraphIterator;
 use Roelhem\RbacGraph\Traveler;
@@ -45,7 +46,7 @@ class TravelerTest extends TestCase
             $b->permission('four');
 
             $b->permission('all')
-                ->assign('perm-group.one','perm-group.two',['perm-group.tree','perm-group.four'])
+                ->assign('one','two',['tree','perm-group.four'])
                 ->assignTo('roleA','roleB');
         });
 
@@ -53,13 +54,26 @@ class TravelerTest extends TestCase
 
         $b->group('cycle.', function(RbacBuilder $b) {
             $b->role('X');
-            $b->role('Y')->assignTo('cycle.X');
-            $b->role('Z')->assignTo('cycle.Y');
+            $b->role('Y')->assignTo('X');
+            $b->role('Z')->assignTo('Y');
 
-            $b->permission('a')->assignTo('cycle.Z');
-            $b->permission('b')->assignTo('cycle.a');
-            $b->permission('c')->assignTo('cycle.b');
+            $b->permission('a')->assignTo('Z');
+            $b->permission('b')->assignTo('a');
+            $b->permission('c')->assignTo('b');
+
+            $b->group('and.', function(RbacBuilder $b) {
+                $b->permission('d');
+                $b->create(NodeType::PERMISSION, 'c');
+
+                $b->role('test')->assign('d','and.c');
+            });
+
         });
+
+        $this->assertTrue($b->hasEdge('perm-group.all','perm-group.one'));
+        $this->assertTrue($b->hasEdge('perm-group.all','perm-group.two'));
+        $this->assertTrue($b->hasEdge('perm-group.all','perm-group.tree'));
+        $this->assertTrue($b->hasEdge('perm-group.all','perm-group.four'));
 
 
 
