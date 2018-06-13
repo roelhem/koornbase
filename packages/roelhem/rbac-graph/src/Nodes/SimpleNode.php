@@ -17,20 +17,16 @@ class SimpleNode implements MutableNode
      * SimpleNode constructor.
      *
      * @param Graph $graph
-     * @param null|int $type
+     * @param integer|NodeType $type
      * @param null|string $name
      * @param null|int $id
      * @throws NodeTypeNotFoundException
      */
-    public function __construct(Graph $graph, ?int $type = null, ?string $name = null, ?int $id = null)
+    public function __construct(Graph $graph, $type, ?string $name = null, ?int $id = null)
     {
         $this->graph = $graph;
 
-        if($type === null) {
-            $type = NodeType::defaultValue();
-        }
-        NodeType::ensureValid($type);
-        $this->type = $type;
+        $this->type = NodeType::get($type);
 
         if($id === null) {
             $id = $this->graph->getNodes()->count();
@@ -41,7 +37,7 @@ class SimpleNode implements MutableNode
         $this->id = $id;
 
         if($name === null) {
-            $name = NodeType::getName($this->type).'.id'.$this->id;
+            $name = mb_strtolower($this->type->getName()).'.id'.$this->id;
         }
         $this->name = $name;
     }

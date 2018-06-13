@@ -12,6 +12,7 @@ namespace Roelhem\RbacGraph\Builders;
 use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
 use Roelhem\RbacGraph\Enums\NodeType;
+use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeTypeNotFoundException;
 use Roelhem\RbacGraph\Nodes\Traits\HasNodeProperties;
@@ -26,18 +27,15 @@ class NodeBuilder implements NodeBuilderContract
     /**
      * NodeBuilder constructor.
      * @param BuilderContract $builder
-     * @param int $type
+     * @param int|NodeType $type
      * @param string $name
      * @param int $id
-     * @throws NodeTypeNotFoundException
      */
-    public function __construct(BuilderContract $builder, int $type, string $name, int $id)
+    public function __construct(BuilderContract $builder, $type, string $name, int $id)
     {
         $this->graph = $builder;
 
-        NodeType::ensureValid($type);
-
-        $this->type = $type;
+        $this->type = NodeType::get($type);
         $this->name = $name;
         $this->id = $id;
     }
@@ -74,6 +72,7 @@ class NodeBuilder implements NodeBuilderContract
      *
      * @param $child
      * @throws NodeNotFoundException
+     * @throws EdgeNotAllowedException
      */
     public function assignOne($child) {
         $builder = $this->getBuilder();
@@ -94,6 +93,7 @@ class NodeBuilder implements NodeBuilderContract
     /**
      * @param $parent
      * @throws NodeNotFoundException
+     * @throws EdgeNotAllowedException
      */
     public function assignToOne($parent) {
         $builder = $this->getBuilder();

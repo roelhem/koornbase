@@ -8,7 +8,7 @@ use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasIdSequenceGenerator;
 use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
+use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 class RbacBuilder implements BuilderContract
@@ -72,8 +72,7 @@ class RbacBuilder implements BuilderContract
     /**
      * @inheritdoc
      */
-    public function create(int $type, string $name) {
-        NodeType::ensureValid($type);
+    public function create($type, string $name) {
 
         $prefix = $this->getPrefix();
         $builder = new NodeBuilder($this, $type, $prefix.$name, $this->getNextId());
@@ -86,8 +85,9 @@ class RbacBuilder implements BuilderContract
     /**
      * @inheritdoc
      */
-    public function node(int $type, string $name)
+    public function node($type, string $name)
     {
+        $type = NodeType::get($type);
         $builder = $this->find($name);
         if(($builder instanceof NodeBuilderContract) && $builder->getType() === $type) {
             return $builder;
@@ -101,7 +101,7 @@ class RbacBuilder implements BuilderContract
      */
     public function role(string $name)
     {
-        return $this->node(NodeType::ROLE, $name);
+        return $this->node(NodeType::ROLE(), $name);
     }
 
     /**
@@ -109,7 +109,7 @@ class RbacBuilder implements BuilderContract
      */
     public function permission(string $name)
     {
-        return $this->node(NodeType::PERMISSION, $name);
+        return $this->node(NodeType::PERMISSION(), $name);
     }
 
     /**
@@ -131,9 +131,17 @@ class RbacBuilder implements BuilderContract
         if ($this->hasEdge($parent, $child)) {
             return $this->getEdge($parent, $child);
         } else {
-            $edge = new EdgeBuilder($this, $parent, $child);
-            $this->storeEdge($edge);
-            return $edge;
+            $parent = $this->getNode($parent);
+            $child = $this->getNode($child);
+            if($parent->getType()->allowChildNode($child)) {
+                $edge = new EdgeBuilder($this, $parent, $child);
+                $this->storeEdge($edge);
+                return $edge;
+            } else {
+                $parentTypeName = $parent->getType()->getName();
+                $childTypeName = $child->getType()->getName();
+                throw new EdgeNotAllowedException("A node of type $parentTypeName can't have a node of type $childTypeName as a child.");
+            }
         }
     }
 

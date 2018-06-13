@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph\Nodes\Traits;
 
 use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Enums\NodeType;
 
 trait HasNodeProperties
 {
@@ -18,7 +19,7 @@ trait HasNodeProperties
     protected $id;
 
     /**
-     * @var integer
+     * @var NodeType
      */
     protected $type;
 
@@ -54,7 +55,7 @@ trait HasNodeProperties
     }
 
     /**
-     * @return int
+     * @return NodeType
      */
     public function getType()
     {

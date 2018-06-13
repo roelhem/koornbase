@@ -3,64 +3,87 @@
 namespace Roelhem\RbacGraph\Enums;
 
 
+use MabeEnum\EnumSet;
+use Roelhem\RbacGraph\Contracts\Node;
 use Roelhem\RbacGraph\Exceptions\NodeTypeNotFoundException;
+use MabeEnum\Enum;
 
-final class NodeType
+/**
+ * Class NodeType
+ * @package Roelhem\RbacGraph\Enums
+ *
+ * @method static NodeType ROLE();
+ * @method static NodeType PERMISSION();
+ */
+final class NodeType extends Enum
 {
     const ROLE = 0;
-    const PERMISSION = 4;
+    const PERMISSION = 1;
+
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  EXTRA METHODS  --------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Returns the name of the node-type that can be used in node names.
+     * Returns a set of the types that are allowed to be child-nodes of this node-type.
      *
-     * @param integer $value
-     * @return string
-     * @throws NodeTypeNotFoundException
+     * @return EnumSet
      */
-    public static function getName( $value )
-    {
-        switch ($value) {
-            case self::ROLE:
-                return 'role';
-            case self::PERMISSION:
-                return 'permission';
-            default:
-                throw new NodeTypeNotFoundException("Can't find a NodeType with value '$value''.");
+    public function getAllowedChildTypes() {
+        $enumSet = new EnumSet(self::class);
+
+        // ROLE allowed as a child-node.
+        if ($this->is(self::ROLE)) {
+            $enumSet->attach(self::ROLE);
         }
+
+        // PERMISSION allowed as a child-node.
+        if($this->is(self::ROLE) || $this->is(self::PERMISSION)) {
+            $enumSet->attach(self::PERMISSION);
+        }
+
+        return $enumSet;
     }
 
     /**
-     * @param integer $value
+     * Returns if the $otherType is allowed to be a child of this node-type.
+     *
+     * @param NodeType|integer $otherType
      * @return bool
      */
-    public static function isValid( $value )
-    {
-        switch ($value) {
-            case self::ROLE: case self::PERMISSION:
-                return true;
-            default:
-                return false;
-        }
+    public function allowChildType( $otherType ) {
+        return $this->getAllowedChildTypes()->contains($otherType);
     }
 
     /**
-     * @param integer $value
-     * @throws NodeTypeNotFoundException
-     */
-    public static function ensureValid( $value )
-    {
-        if(!self::isValid($value)) {
-            throw new NodeTypeNotFoundException("Can't find a NodeType with value '$value''.");
-        }
-    }
-
-    /**
-     * Returns the value of the default NodeType.
+     * Returns if the $otherType is allowed to be a parent of this node-type.
      *
-     * @return int
+     * @param NodeType|integer $otherType
+     * @return bool
      */
-    public static function defaultValue() {
-        return self::PERMISSION;
+    public function allowParentType( $otherType ) {
+        return self::get($otherType)->allowChildType($this);
+    }
+
+    /**
+     * Returns if the provided $node is allowed to be the child of a node of this node-type.
+     *
+     * @param Node $node
+     * @return bool
+     */
+    public function allowChildNode( Node $node ) {
+        return $this->allowChildType($node->getType());
+    }
+
+    /**
+     * Returns if the provided $node is allowed to be the parent of a node of this node-type.
+     *
+     * @param Node $node
+     * @return bool
+     */
+    public function allowParentNode( Node $node ) {
+        return $this->allowParentType($node->getType());
     }
 
 }

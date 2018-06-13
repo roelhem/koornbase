@@ -2,6 +2,8 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 
+use Roelhem\RbacGraph\Enums\NodeType;
+
 /**
  * Interface NodeContract
  *
@@ -27,7 +29,7 @@ interface Node
     /**
      * Returns the type of this NodeContract. The value is a value in the NodeTypes enum.
      *
-     * @return integer
+     * @return NodeType
      */
     public function getType();
 

@@ -3,9 +3,10 @@
 namespace Roelhem\RbacGraph\Contracts;
 
 
+use Roelhem\RbacGraph\Enums\NodeType;
+use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
-use Roelhem\RbacGraph\Exceptions\NodeTypeNotFoundException;
 
 interface Builder extends Graph
 {
@@ -32,25 +33,23 @@ interface Builder extends Graph
     /**
      * Creates a new `NodeBuilder` for a node with type $type and name $name.
      *
-     * @param int $type
+     * @param integer|NodeType $type
      * @param string $name
      * @return NodeBuilder
-     * @throws NodeTypeNotFoundException
      * @throws NodeNameNotUniqueException
      */
-    public function create(int $type, string $name);
+    public function create($type, string $name);
 
     /**
      * Returns the `NodeBuilder` for the node with name $name and `NodeType` $type. Creates a new `NodeBuilder`
      * if the node does not exists yet.
      *
-     * @param int $type
+     * @param integer|NodeType $type
      * @param string $name
      * @return NodeBuilder
-     * @throws NodeTypeNotFoundException
      * @throws NodeNameNotUniqueException
      */
-    public function node(int $type, string $name);
+    public function node($type, string $name);
 
     /**
      * Creates or edits the role with the provided name.
@@ -84,6 +83,7 @@ interface Builder extends Graph
      * @param Node|string|integer $child
      * @return Edge
      * @throws NodeNotFoundException
+     * @throws EdgeNotAllowedException
      */
     public function edge($parent, $child);
 

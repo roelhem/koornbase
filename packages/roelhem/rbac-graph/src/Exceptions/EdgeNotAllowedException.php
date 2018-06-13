@@ -3,15 +3,13 @@
  * Created by PhpStorm.
  * User: roel
  * Date: 13-06-18
- * Time: 03:17
+ * Time: 09:50
  */
 
 namespace Roelhem\RbacGraph\Exceptions;
 
 
-class NodeTypeNotFoundException extends RbacGraphException
+class EdgeNotAllowedException extends RbacGraphException
 {
-
-
 
 }

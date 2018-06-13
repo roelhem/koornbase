@@ -2,6 +2,8 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 
+use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
+
 interface NodeBuilder extends Node
 {
 
@@ -26,6 +28,7 @@ interface NodeBuilder extends Node
      *
      * @param array ...$children
      * @return $this
+     * @throws EdgeNotAllowedException
      */
     public function assign( ...$children );
 
@@ -34,6 +37,7 @@ interface NodeBuilder extends Node
      *
      * @param array ...$parents
      * @return $this
+     * @throws EdgeNotAllowedException
      */
     public function assignTo( ...$parents );
 

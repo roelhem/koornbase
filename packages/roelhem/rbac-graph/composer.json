@@ -9,16 +9,18 @@
         }
     ],
     "autoload": {
-        "prs-4" : {
+        "psr-0" : {
             "Roelhem\\RbacGraph\\" : "src"
         }
     },
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "marc-mabe/php-enum":"^3"
+    },
     "extra": {
         "laravel": {
             "providers":[
-                "Roelhem\\RbacGraph\\RbacServiceProvider"
+
             ]
         }
     }
