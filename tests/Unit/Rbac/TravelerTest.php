@@ -4,7 +4,9 @@ namespace Tests\Unit\Rbac;
 
 use Roelhem\RbacGraph\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Contracts\Edge;
+use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Iterators\BreathFirstGraphIterator;
 use Roelhem\RbacGraph\Iterators\DepthFirstGraphIterator;
@@ -75,34 +77,13 @@ class TravelerTest extends TestCase
         $this->assertTrue($b->hasEdge('perm-group.all','perm-group.tree'));
         $this->assertTrue($b->hasEdge('perm-group.all','perm-group.four'));
 
+        $graph = resolve(DatabaseGraph::class);
 
-
-        print_r($b->getNodes()->map(function(Node $node) {
-            return $node->getType().": ".$node->getName();
-        }));
-
-        print_r($b->getEdges()->map(function(Edge $edge) {
-            $parent = $edge->getParent();
-            $child = $edge->getChild();
-            $parentString = '[ '.$parent->getType().": ".$parent->getName().' ]';
-            $childString = '[ '.$child->getType().": ".$child->getName().' ]';
-            return str_pad($parentString,40).' -> '.str_pad($childString, 40);
-        }));
-
-        $this->assertTrue(true);
-
-        $iterator = new DepthFirstGraphIterator($b, 'cycle.Z');
-
-        foreach ($iterator as $id => $node) {
-            echo str_pad('['.$id.'] : ', 12).$node->getName().PHP_EOL;
+        if(!($graph instanceof DatabaseGraph)) {
+            $this->assertTrue(false);
         }
 
-        echo PHP_EOL.PHP_EOL;
-
-        $iterator = new BreathFirstGraphIterator($b, 'cycle.Z');
-
-        foreach ($iterator as $id => $node) {
-            echo str_pad('['.$id.'] : ', 12).$node->getName().PHP_EOL;
-        }
+        $graph->addNodes($b->getNodes());
+        $graph->addEdges($b->getEdges());
     }
 }

@@ -176,7 +176,7 @@ interface Graph
      * Returns all the children of a specific node
      *
      * @param $node
-     * @return Collection|Edge[]
+     * @return Collection|Node[]
      * @throws NodeNotFoundException
      */
     public function getChildren( $node );
@@ -185,7 +185,7 @@ interface Graph
      * Returns all the parents of a specific node
      *
      * @param $node
-     * @return Collection|Edge[]
+     * @return Collection|Node[]
      * @throws NodeNotFoundException
      */
     public function getParents( $node );

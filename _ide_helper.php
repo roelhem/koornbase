@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.24 on 2018-06-08 17:44:16.
+ * Generated for Laravel 5.6.25 on 2018-06-13 20:04:11.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1929,6 +1929,17 @@ namespace Illuminate\Support\Facades {
         public static function authenticate()
         {
             return \Illuminate\Auth\SessionGuard::authenticate();
+        }
+        
+        /**
+         * Determine if the guard has a user instance.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasUser()
+        {
+            return \Illuminate\Auth\SessionGuard::hasUser();
         }
         
         /**
@@ -10674,12 +10685,12 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $name
          * @param mixed $disk
-         * @return void 
+         * @return $this 
          * @static 
          */ 
         public static function set($name, $disk)
         {
-            \Illuminate\Filesystem\FilesystemManager::set($name, $disk);
+            return \Illuminate\Filesystem\FilesystemManager::set($name, $disk);
         }
         
         /**
@@ -12504,240 +12515,6 @@ namespace Jwz104\EloquentView\Facades {
         public static function dropIfExists($view)
         {
             \Jwz104\EloquentView\ViewBuilder::dropIfExists($view);
-        }
-         
-    }
- 
-}
-
-namespace App\Facades { 
-
-    class Rbac {
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function authorizer()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::authorizer();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function builder()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::builder();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function provider()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::provider();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function handler()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::handler();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function permission($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::permission($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function role($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::role($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function constraint($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::constraint($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function group($prefix, $definitions)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::group($prefix, $definitions);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function hasPermission($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::hasPermission($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function hasRole($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::hasRole($role);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function userRoles()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::userRoles();
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function userPermissions()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::userPermissions();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermission($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermission($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionId($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionId($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionById($id)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionById($id);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionByRoute($route)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionByRoute($route);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRole($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRole($role);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRoleId($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRoleId($role);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRoleById($id)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRoleById($id);
         }
          
     }
@@ -14694,7 +14471,7 @@ namespace  {
              * Constrain the query to the next "page" of results after a given ID.
              *
              * @param int $perPage
-             * @param int $lastId
+             * @param int|null $lastId
              * @param string $column
              * @return \Illuminate\Database\Query\Builder|static 
              * @static 
@@ -15193,8 +14970,6 @@ namespace  {
     class View extends \Illuminate\Support\Facades\View {}
 
     class EloquentView extends \Jwz104\EloquentView\Facades\EloquentView {}
-
-    class Rbac extends \App\Facades\Rbac {}
 
     class Date extends \Jenssegers\Date\Date {}
 

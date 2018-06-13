@@ -2842,7 +2842,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/roelhem/rbac-graph",
-                "reference": "4aaab4c831c69056b535e0932185043d1eb8841f",
+                "reference": "9d2eaf34c6169c597dff499e40cf82288e1a52e1",
                 "shasum": null
             },
             "require": {
@@ -2851,7 +2851,9 @@
             "type": "laravel-plugin",
             "extra": {
                 "laravel": {
-                    "providers": []
+                    "providers": [
+                        "Roelhem\\RbacGraph\\RbacServiceProvider"
+                    ]
                 }
             },
             "autoload": {

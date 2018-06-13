@@ -165,8 +165,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\AttributeServiceProvider::class,
         App\Providers\AddressingProvider::class,
-        App\Providers\ModelFinderServiceProvider::class,
-        App\Providers\RbacServiceProvider::class
+        App\Providers\ModelFinderServiceProvider::class
 
     ],
 
@@ -218,8 +217,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'EloquentView' => Jwz104\EloquentView\Facades\EloquentView::class,
-
-        'Rbac' => App\Facades\Rbac::class,
     ],
 
 ];

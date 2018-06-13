@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph;
 
 use Illuminate\Support\ServiceProvider;
+use Roelhem\RbacGraph\Database\DatabaseGraph;
 
 /**
  * Class RbacServiceProvider
@@ -21,6 +22,8 @@ class RbacServiceProvider extends ServiceProvider
      */
     public function boot() {
 
+        $this->loadMigrationsFrom(__DIR__.'/../migrations');
+
     }
 
     /**
@@ -29,6 +32,8 @@ class RbacServiceProvider extends ServiceProvider
      * @return void
      */
     public function register() {
+
+        $this->app->singleton(DatabaseGraph::class);
 
     }
 
