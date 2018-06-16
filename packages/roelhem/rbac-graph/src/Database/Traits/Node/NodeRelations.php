@@ -59,7 +59,7 @@ trait NodeRelations
      */
     public function children()
     {
-        return $this->belongsToMany(Node::class,'rbac_edges','child_id','parent_id')
+        return $this->belongsToMany(Node::class,'rbac_edges','parent_id','child_id')
             ->as('edge')->using(Edge::class);
     }
 }

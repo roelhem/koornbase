@@ -6,6 +6,9 @@
 DEFAULT_NODE:
   description:
     The default node-type. This is only defined for completeness and shouldn't be used in a normal graph.
+  style:
+    console:
+      fg-color: black
   edges: false
   assignable: false
 
@@ -17,6 +20,9 @@ DEFAULT_NODE:
 ROLE:
   description:
     A node that models a standard rbac-role.
+  style:
+    console:
+      fg-color: blue
   edges:
     parents: ROLE
   assignable: true
@@ -31,6 +37,10 @@ SUPER_ROLE:
     When an authorizer discovers a node of this type during an authorization, it will immediately accept the
     authorization. This way, it bypasses any further authorization checks. Using a role of this type can easily lead
     to security issues.
+  style:
+    console:
+      fg-color: blue
+      options: [ bold ]
   edges: false
   assignable: true
   default-values:
@@ -43,6 +53,9 @@ ABSTRACT_ROLE:
   description:
     A role that can't be assigned to an authorizable model (like a user). It can only be acquired trough the
     parent-nodes of this role.
+  style:
+    console:
+      fg-color: blue
   edges: !like ROLE
   assignable: false
 
@@ -53,6 +66,10 @@ ABSTRACT_ROLE:
 DYNAMIC_ROLE:
   description:
     A role that is dynamically assigned to an model based on the attributes of the model.
+  style:
+    console:
+      fg-color: blue
+      options: [ bold ]
   edges:
     children: !like ROLE
   assignable: false
@@ -64,6 +81,9 @@ DYNAMIC_ROLE:
 TASK:
   description:
     An role that can't have other roles as it child. Provides some extra structure in the graph.
+  style:
+    console:
+      fg-color: cyan
   edges:
     parents: [ TASK, ROLE ]
   assignable: false
@@ -77,6 +97,9 @@ TASK:
 PERMISSION:
   description:
     A node that models a standard rbac-permission
+  style:
+    console:
+      fg-color: green
   edges:
     parents: [ ROLE, TASK ]
     children:
@@ -87,6 +110,9 @@ PERMISSION:
 ROUTE_PERMISSION:
   description:
     A permission that is needed to access a certain route.
+  style:
+    console:
+      fg-color: green
   edges: !like PERMISSION
   options:
     route: !required string
@@ -99,6 +125,9 @@ ROUTE_PERMISSION:
 ABILITY:
   description:
     A special kind of permission which is compatible with the default Laravel-authorization.
+  style:
+    console:
+      fg-color: green
   edges: !like PERMISSION
   options:
     ability: !required string
@@ -110,6 +139,9 @@ MODEL_ABILITY:
   description:
     An ability that requires a model instance or classname to be passed if it is called with the default
     Laravel-authorization.
+  style:
+    console:
+      fg-color: green
   edges: !like ABILITY
   options:
     ability: !required string
@@ -121,6 +153,10 @@ MODEL_ABILITY:
 PERMISSION_SET:
   description:
     A smaller subset of permissions.
+  style:
+      console:
+        fg-color: green
+        options: [ underscore ]
   edges:
     parents: !like PERMISSION
     children: PERMISSION
@@ -131,6 +167,10 @@ CRUD_ABILITY_SET:
   description:
     A set of CRUD (Create Read Update Write) abilities on a model. All model-ability nodes that are children of
     this node, should have the same model class as this ability-set.
+  style:
+      console:
+        fg-color: green
+        options: [ underscore ]
   edges:
     parents: !like ABILITY
     children: MODEL_ABILITY
@@ -155,6 +195,9 @@ CRUD_ABILITY_SET:
 RULE:
   description:
     A node that can only be traversed by an authorizer if the attributes have some predefined condition.
+  style:
+    console:
+      fg-color: red
   edges:
     parents: [ ROLE, TASK, RULE ]
     children: [ TASK, PERMISSION ]
@@ -168,6 +211,9 @@ SCOPE_RULE:
   description:
     A node can only be traversed by an authorizer if the session has a certain scope. Which scopes an sessin has,
     can be determined before the authorizer starts the authorization-algorithm.
+  style:
+      console:
+        fg-color: red
   edges: !like RULE
   options:
     scope: !required string
@@ -179,6 +225,9 @@ SCOPE_RULE:
 MODEL_RULE:
   description:
     A rule that only depend on the user attributes and the attributes of a certain model.
+  style:
+      console:
+        fg-color: red
   edges: !like RULE
   options:
     handler: !required string

@@ -8,6 +8,7 @@ use MabeEnum\EnumMap;
 use MabeEnum\EnumSet;
 use Roelhem\RbacGraph\Contracts\Node;
 use MabeEnum\Enum;
+use Roelhem\RbacGraph\Enums\Traits\HasConsoleFormatStyle;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\Component\Yaml\Yaml;
 
@@ -20,6 +21,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class NodeType extends Enum
 {
+
+    use HasConsoleFormatStyle;
+
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
     // ---------------------------------------------------------------------------------------------------------- //

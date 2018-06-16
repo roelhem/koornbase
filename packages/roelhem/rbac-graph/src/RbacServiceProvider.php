@@ -5,6 +5,7 @@ namespace Roelhem\RbacGraph;
 use Illuminate\Support\ServiceProvider;
 use Roelhem\RbacGraph\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\InitCommand;
+use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
 use Roelhem\RbacGraph\Contracts\Builder;
 use Roelhem\RbacGraph\Contracts\Graph;
@@ -37,7 +38,8 @@ class RbacServiceProvider extends ServiceProvider
         if($this->app->runningInConsole()) {
             $this->commands([
                 InitCommand::class,
-                TypesCommand::class
+                TypesCommand::class,
+                NodesCommand::class,
             ]);
         }
 
