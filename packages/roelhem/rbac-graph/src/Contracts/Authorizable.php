@@ -19,5 +19,12 @@ interface Authorizable
 {
 
 
+    /**
+     * Returns the graph on which this authorizable object can be authorized.
+     *
+     * @return Graph
+     */
+    public function getGraph();
+
 
 }

@@ -10,6 +10,7 @@ namespace Roelhem\RbacGraph\Graphs;
 
 
 use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasEdgeDictionaries;
 use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
 
@@ -18,6 +19,7 @@ class DictionaryGraph implements Graph
 
     use HasNodeDictionaries;
     use HasEdgeDictionaries;
+    use HasAssignmentArray;
 
     public function equals($other): bool
     {

@@ -8,6 +8,7 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 use Illuminate\Support\Collection;
+use Roelhem\RbacGraph\Exceptions\AssignmentNotFoundException;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
@@ -47,6 +48,13 @@ interface Graph
      * @return Collection|Edge[]
      */
     public function getEdges();
+
+    /**
+     * Returns a collection of all the assignments in this graph.
+     *
+     * @return Collection|Assignment[]
+     */
+    public function getAssignments();
 
     // ------------------------------------------------------------------------------------------------------------ //
     // ---------  CHECKING FOR EXISTENCE  ------------------------------------------------------------------------- //
@@ -189,6 +197,61 @@ interface Graph
      * @throws NodeNotFoundException
      */
     public function getParents( $node );
+
+    // ------------------------------------------------------------------------------------------------------------ //
+    // ---------  GETTING ASSIGNMENTS  ---------------------------------------------------------------------------- //
+    // ------------------------------------------------------------------------------------------------------------ //
+
+    /**
+     * Returns whether or not this graph has a assignment from the $node to the $assignable.
+     *
+     * @param Assignable $assignable
+     * @param Node|string|integer $node      An instance, name or id of the node.
+     * @return bool
+     */
+    public function hasAssignment( $assignable, $node );
+
+    /**
+     * Returns the assignment of the $node to the $assignable object.
+     *
+     * @param Assignable $assignable
+     * @param Node|string|integer $node     An instance, name or id of the node.
+     * @return Assignment
+     * @throws AssignmentNotFoundException
+     */
+    public function getAssignment( $assignable, $node );
+
+    /**
+     * Returns a collection of all the assignments of a specific $node.
+     *
+     * @param Node|string|integer $node    An instance, name or id of the node.
+     * @return Collection|Assignment[]
+     */
+    public function getNodeAssignments( $node );
+
+    /**
+     * Returns a collection of all the assignments of one sepecific $assignable object.
+     *
+     * @param Assignable $assignable
+     * @return Collection|Assignment[]
+     */
+    public function getAssignableAssignments( $assignable );
+
+    /**
+     * Returns a collection of all the assignable objects that are assigned to this node.
+     *
+     * @param Node|string|integer $node    An instance, name or id of the node.
+     * @return Collection|Assignable[]
+     */
+    public function getNodeAssignables( $node );
+
+    /**
+     * Returns a collection of all the nodes that were assigned to the $assignable object.
+     *
+     * @param Assignable $assignable
+     * @return Collection|Node[]
+     */
+    public function getAssignedNodes( $assignable );
 
 
 

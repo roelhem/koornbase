@@ -7,6 +7,7 @@ use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
+use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasIdSequenceGenerator;
 use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
@@ -24,6 +25,7 @@ class RbacBuilder implements BuilderContract
         getNodeId as protected dictionaryGetNodeId;
     }
     use HasEdgeArray;
+    use HasAssignmentArray;
     use HasIdSequenceGenerator;
     use ImplementBuilderShortcuts;
 
