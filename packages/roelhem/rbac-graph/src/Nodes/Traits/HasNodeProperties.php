@@ -39,6 +39,11 @@ trait HasNodeProperties
     protected $description;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * @return Graph
      */
     public function getGraph()
@@ -108,6 +113,32 @@ trait HasNodeProperties
         } else {
             $this->description = null;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getOption($key, $default = null)
+    {
+        return array_get($this->options, $key, $default);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setOption($key, $value) {
+        array_set($this->options, $key, $value);
     }
 
 }

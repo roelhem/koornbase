@@ -52,7 +52,8 @@ class DatabaseGraph implements MutableGraph
             'name' => $node->getName(),
             'type' => $node->getType(),
             'title' => $node->getTitle(),
-            'description' => $node->getDescription()
+            'description' => $node->getDescription(),
+            'options' => $node->getOptions(),
         ]);
     }
 
@@ -102,7 +103,7 @@ class DatabaseGraph implements MutableGraph
             throw new EdgeNotUniqueException("There already exists an Edge from node '$parent_name' to node '$child_name'.");
         }
 
-        if(!$parent->type->allowChildNode($child)) {
+        if(!$parent->type->allowChild($child)) {
             throw new EdgeNotAllowedException("The NodeType {$parent->type->getName()} is not allowed to have child-nodes of the type {$child->type->getName()}.");
         }
 
@@ -155,7 +156,7 @@ class DatabaseGraph implements MutableGraph
         $invalidTypes = $edges->filter(function(EdgeContract $edge) {
             $child  = $this->getNodeByName($edge->getChildName());
             $parent = $this->getNodeByName($edge->getParentName());
-            return !$parent->type->allowChildNode($child);
+            return !$parent->type->allowChild($child);
         });
         if($invalidTypes->count() > 0) {
             $invalidTypesStr = $invalidTypes->map(function(EdgeContract $edge) {

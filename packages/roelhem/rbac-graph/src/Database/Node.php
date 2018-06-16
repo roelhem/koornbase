@@ -2,6 +2,8 @@
 
 namespace Roelhem\RbacGraph\Database;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Builder;
 use Roelhem\RbacGraph\Contracts\AdjacencyNode;
 use Roelhem\RbacGraph\Contracts\MutableNode;
@@ -22,6 +24,8 @@ use Roelhem\RbacGraph\Exceptions\NodeNotUniqueException;
  * @property NodeType $type
  * @property string|null $title
  * @property string|null $description
+ *
+ * @property array $options
  */
 class Node extends Model implements AdjacencyNode, MutableNode
 {
@@ -34,7 +38,7 @@ class Node extends Model implements AdjacencyNode, MutableNode
 
     protected $table = 'rbac_nodes';
 
-    protected $fillable = ['name','type','title','description'];
+    protected $fillable = ['name','type','title','description', 'options'];
 
     protected $dates = ['created_at','updated_at'];
 
@@ -48,7 +52,7 @@ class Node extends Model implements AdjacencyNode, MutableNode
      * @param integer $value
      * @return NodeType
      */
-    protected function getTypeAttribute($value) {
+    public function getTypeAttribute($value) {
         return NodeType::get($value);
     }
 
@@ -57,9 +61,86 @@ class Node extends Model implements AdjacencyNode, MutableNode
      *
      * @param NodeType|integer $newValue
      */
-    protected function setTypeAttribute($newValue) {
+    public function setTypeAttribute($newValue) {
         $type = NodeType::get($newValue);
         $this->attributes['type'] = $type->getValue();
+    }
+
+    /**
+     * @param string $value
+     * @return array
+     */
+    public function getOptionsAttribute($value) {
+        if($value === null) {
+            return [];
+        } else {
+            return json_decode($value, true);
+        }
+    }
+
+    /**
+     * @param $newValue
+     * @throws \ErrorException
+     */
+    public function setOptionsAttribute($newValue) {
+
+        if(is_scalar($newValue)) {
+            throw new \ErrorException('Options cannot be a scalar.');
+        }
+
+        if($newValue === null) {
+            $this->attributes['options'] = null;
+            return;
+        }
+
+        if($newValue instanceof Jsonable) {
+            $this->attributes['options'] = $newValue->toJson();
+            return;
+        }
+
+        if($newValue instanceof Arrayable) {
+            $newValue = $newValue->toArray();
+        }
+
+        if(is_array($newValue) || $newValue instanceof \ArrayAccess) {
+            if(count($newValue) === 0) {
+                $this->attributes['options'] = null;
+            } else {
+                $this->attributes['options'] = json_encode($newValue);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- NODE OPTIONS IMPLEMENTATION ------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @return array
+     */
+    public function getOptions() {
+        return $this->options;
+    }
+
+    /**
+     * @param array|int|string $key
+     * @param null $default
+     * @return mixed
+     */
+    public function getOption($key, $default = null)
+    {
+        return array_get($this->options, $key, $default);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setOption($key, $value)
+    {
+        $options = $this->options;
+        array_set($options, $key, $value);
+        $this->options = $options;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

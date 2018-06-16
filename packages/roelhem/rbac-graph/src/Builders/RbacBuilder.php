@@ -2,7 +2,10 @@
 
 namespace Roelhem\RbacGraph\Builders;
 
+use Roelhem\RbacGraph\Builders\Traits\ImplementBuilderShortcuts;
 use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
+use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
 use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasIdSequenceGenerator;
@@ -22,8 +25,10 @@ class RbacBuilder implements BuilderContract
     }
     use HasEdgeArray;
     use HasIdSequenceGenerator;
+    use ImplementBuilderShortcuts;
 
     protected $prefixes = [];
+
 
     /**
      * @inheritdoc
@@ -173,22 +178,6 @@ class RbacBuilder implements BuilderContract
     /**
      * @inheritdoc
      */
-    public function role(string $name)
-    {
-        return $this->node(NodeType::ROLE(), $name);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function permission(string $name)
-    {
-        return $this->node(NodeType::PERMISSION(), $name);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function group(string $prefix, callable $definitions)
     {
         array_push($this->prefixes, $prefix);
@@ -207,7 +196,7 @@ class RbacBuilder implements BuilderContract
         } else {
             $parent = $this->getNode($parent);
             $child = $this->getNode($child);
-            if($parent->getType()->allowChildNode($child)) {
+            if($parent->getType()->allowChild($child)) {
                 $edge = new EdgeBuilder($this, $parent, $child);
                 $this->storeEdge($edge);
                 return $edge;
@@ -222,9 +211,21 @@ class RbacBuilder implements BuilderContract
     /**
      * @inheritdoc
      */
-    public function build()
+    public function build(MutableGraph $graph)
     {
-        return $this;
+        $graph->addNodes($this->getNodes());
+        $graph->addEdges($this->getEdges());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function reset()
+    {
+        $this->edges = [];
+        $this->nodes = [];
+        $this->nodeNamesToIds = [];
+        $this->idSequence = 0;
     }
 
 

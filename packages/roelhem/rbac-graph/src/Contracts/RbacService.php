@@ -1,28 +1,48 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 14-06-18
+ * Time: 01:04
+ */
 
 namespace Roelhem\RbacGraph\Contracts;
-
-
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
-interface Builder extends Graph, BuilderShortcuts
+/**
+ * Contract RbacService
+ * @package Roelhem\RbacGraph\Contracts
+ */
+interface RbacService extends BuilderShortcuts
 {
 
-    /**
-     * Returns the NodeBuilder with the provided name.
-     *
-     * First, it will search for the name, then it will search for the name with the current prefix.
-     *
-     * @param string $name
-     * @return NodeBuilder|null
-     */
-    public function find(string $name);
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GRAPH METHODS  --------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Same as the `find(string $name)` method, but throws an exception if no `NodeBuilder` was found.
+     * Returns the graph that is used for the default authorization.
+     *
+     * @return Graph
+     */
+    public function graph();
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  BUILDER METHODS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns the Builder instance used by this RbacService.
+     *
+     * @return Builder
+     */
+    public function builder();
+
+    /**
+     * Gets the node with a specific name from the Rbac-structure inside the Builder.
      *
      * @param string $name
      * @return NodeBuilder
@@ -31,7 +51,7 @@ interface Builder extends Graph, BuilderShortcuts
     public function get(string $name);
 
     /**
-     * Creates a new `NodeBuilder` for a node with type $type and name $name.
+     * Creates a new `NodeBuilder` for a node with the provided type and name.
      *
      * @param integer|NodeType $type
      * @param string $name
@@ -50,6 +70,7 @@ interface Builder extends Graph, BuilderShortcuts
      * @throws NodeNameNotUniqueException
      */
     public function node($type, string $name);
+
 
     /**
      * Runs all the builder commands within the callable object. The names of all the nodes created within this
@@ -70,19 +91,5 @@ interface Builder extends Graph, BuilderShortcuts
      * @throws EdgeNotAllowedException
      */
     public function edge($parent, $child);
-
-    /**
-     * Build the rbac-structure of this RbacBuilder onto another graph.
-     *
-     * @param MutableGraph $graph
-     */
-    public function build(MutableGraph $graph);
-
-    /**
-     * Removes the rbac-structure saved within this builder.
-     *
-     * @return void
-     */
-    public function reset();
 
 }

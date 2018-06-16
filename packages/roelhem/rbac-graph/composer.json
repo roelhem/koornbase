@@ -21,7 +21,10 @@
         "laravel": {
             "providers":[
                 "Roelhem\\RbacGraph\\RbacServiceProvider"
-            ]
+            ],
+            "aliases":{
+                "Rbac": "Roelhem\\RbacGraph\\Facades\\Rbac"
+            }
         }
     }
 }

@@ -24,11 +24,19 @@ interface NodeBuilder extends Node
     public function description( $description );
 
     /**
+     * Sets the options in a fluent way. The keys of the array refer to the option keys you want to set and the values
+     * the value you want to update.
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function options( $options );
+
+    /**
      * Assigns one or multiple roles to this node as children.
      *
      * @param array ...$children
      * @return $this
-     * @throws EdgeNotAllowedException
      */
     public function assign( ...$children );
 
@@ -37,7 +45,6 @@ interface NodeBuilder extends Node
      *
      * @param array ...$parents
      * @return $this
-     * @throws EdgeNotAllowedException
      */
     public function assignTo( ...$parents );
 

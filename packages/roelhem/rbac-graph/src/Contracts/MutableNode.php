@@ -28,4 +28,13 @@ interface MutableNode extends Node
      */
     public function setDescription( $description );
 
+    /**
+     * Sets the option with the provided key for this node.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setOption($key, $value);
+
 }

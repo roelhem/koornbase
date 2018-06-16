@@ -54,4 +54,20 @@ interface Node
      */
     public function getGraph();
 
+    /**
+     * Returns the option values of this node.
+     *
+     * @return array
+     */
+    public function getOptions();
+
+    /**
+     * Returns the option with the specified key. If the key doesn't exist, the default value is returned.
+     *
+     * @param string|array|integer $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getOption($key, $default = null);
+
 }

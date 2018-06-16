@@ -21,6 +21,8 @@ class CreateRbacNodesTable extends Migration
 
             $table->string('title')->nullable();
             $table->text('description')->nullable();
+
+            $table->jsonb('options')->nullable();
             
             $table->timestamps();
         });

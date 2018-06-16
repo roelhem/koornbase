@@ -1,0 +1,184 @@
+
+# ------------------------------------------------------------------------------------------------------------------
+#  NODES
+# ------------------------------------------------------------------------------------------------------------------
+
+DEFAULT_NODE:
+  description:
+    The default node-type. This is only defined for completeness and shouldn't be used in a normal graph.
+  edges: false
+  assignable: false
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  ROLES
+# ------------------------------------------------------------------------------------------------------------------
+
+ROLE:
+  description:
+    A node that models a standard rbac-role.
+  edges:
+    parents: ROLE
+  assignable: true
+
+
+
+SUPER_ROLE:
+  label: Super-user Role
+  description: >
+    A role that is authorized for everything. Can be used to give an user access to everything.
+
+    When an authorizer discovers a node of this type during an authorization, it will immediately accept the
+    authorization. This way, it bypasses any further authorization checks. Using a role of this type can easily lead
+    to security issues.
+  edges: false
+  assignable: true
+  default-values:
+    name: 'super'
+
+
+
+
+ABSTRACT_ROLE:
+  description:
+    A role that can't be assigned to an authorizable model (like a user). It can only be acquired trough the
+    parent-nodes of this role.
+  edges: !like ROLE
+  assignable: false
+
+
+
+
+
+DYNAMIC_ROLE:
+  description:
+    A role that is dynamically assigned to an model based on the attributes of the model.
+  edges:
+    children: !like ROLE
+  assignable: false
+
+
+
+
+
+TASK:
+  description:
+    An role that can't have other roles as it child. Provides some extra structure in the graph.
+  edges:
+    parents: [ TASK, ROLE ]
+  assignable: false
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  PERMISSIONS
+# ------------------------------------------------------------------------------------------------------------------
+
+
+PERMISSION:
+  description:
+    A node that models a standard rbac-permission
+  edges:
+    parents: [ ROLE, TASK ]
+    children:
+
+
+
+
+ROUTE_PERMISSION:
+  description:
+    A permission that is needed to access a certain route.
+  edges: !like PERMISSION
+  options:
+    route: !required string
+  default-values:
+    name-prefix: 'ROUTE:'
+
+
+
+
+ABILITY:
+  description:
+    A special kind of permission which is compatible with the default Laravel-authorization.
+  edges: !like PERMISSION
+  options:
+    ability: !required string
+
+
+
+
+MODEL_ABILITY:
+  description:
+    An ability that requires a model instance or classname to be passed if it is called with the default
+    Laravel-authorization.
+  edges: !like ABILITY
+  options:
+    ability: !required string
+    modelClass: !required string
+
+
+
+
+PERMISSION_SET:
+  description:
+    A smaller subset of permissions.
+  edges:
+    parents: !like PERMISSION
+    children: PERMISSION
+
+
+
+CRUD_ABILITY_SET:
+  description:
+    A set of CRUD (Create Read Update Write) abilities on a model. All model-ability nodes that are children of
+    this node, should have the same model class as this ability-set.
+  edges:
+    parents: !like ABILITY
+    children: MODEL_ABILITY
+  options:
+    modelClass: string
+  default-values:
+    name: crud
+    delimiter: "."
+    crud-abilities:
+      - create
+      - view
+      - update
+      - delete
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  SCOPES
+# ------------------------------------------------------------------------------------------------------------------
+
+
+RULE:
+  description:
+    A node that can only be traversed by an authorizer if the attributes have some predefined condition.
+  edges:
+    parents: [ ROLE, TASK, RULE ]
+    children: [ TASK, PERMISSION ]
+  options:
+    handler: !required string
+
+
+
+
+SCOPE_RULE:
+  description:
+    A node can only be traversed by an authorizer if the session has a certain scope. Which scopes an sessin has,
+    can be determined before the authorizer starts the authorization-algorithm.
+  edges: !like RULE
+  options:
+    scope: !required string
+
+
+
+
+
+MODEL_RULE:
+  description:
+    A rule that only depend on the user attributes and the attributes of a certain model.
+  edges: !like RULE
+  options:
+    handler: !required string

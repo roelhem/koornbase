@@ -61,6 +61,17 @@ class NodeBuilder implements NodeBuilderContract
     /**
      * @inheritdoc
      */
+    public function options($options)
+    {
+        foreach ($options as $key => $value) {
+            $this->setOption($key, $value);
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function assign(...$children)
     {
         collect($children)->flatten()->each([$this, 'assignOne']);

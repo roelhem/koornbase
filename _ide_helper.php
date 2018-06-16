@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.25 on 2018-06-13 20:04:11.
+ * Generated for Laravel 5.6.25 on 2018-06-16 10:57:35.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -12625,6 +12625,217 @@ namespace Laravel\Socialite\Facades {
  
 }
 
+namespace Roelhem\RbacGraph\Facades { 
+
+    class Rbac {
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function graph()
+        {
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::graph();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function builder()
+        {
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::builder();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function get($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::get($name);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function create($type, $name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::create($type, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function node($type, $name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::node($type, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function group($prefix, $definitions)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::group($prefix, $definitions);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function edge($parent, $child)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::edge($parent, $child);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function role($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::role($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function superRole($name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::superRole($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function abstractRole($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::abstractRole($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function dynamicRole($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::dynamicRole($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function task($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::task($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function permission($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::permission($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function permissionSet($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::permissionSet($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function routePermission($route, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::routePermission($route, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function ability($ability, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::ability($ability, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function modelAbility($ability, $modelClass, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::modelAbility($ability, $modelClass, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function crudAbilities($modelClass, $name = null, $crudAbilities = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::crudAbilities($modelClass, $name, $crudAbilities);
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -14974,6 +15185,8 @@ namespace  {
     class Date extends \Jenssegers\Date\Date {}
 
     class Socialite extends \Laravel\Socialite\Facades\Socialite {}
+
+    class Rbac extends \Roelhem\RbacGraph\Facades\Rbac {}
  
 }
 
