@@ -17,7 +17,7 @@ class PersonSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        factory(Person::class, 100)->create()->each(function(Person $person) use ($faker) {
+        factory(Person::class, 30)->create()->each(function(Person $person) use ($faker) {
 
             // ADD SOME CONTACT INFORMATION
             // Add email addresses

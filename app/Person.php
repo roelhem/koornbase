@@ -3,9 +3,6 @@
 namespace App;
 
 use App\Enums\MembershipStatus;
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
@@ -45,7 +42,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read Collection $users
  * @property-read Collection $debtors
  */
-class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
+class Person extends Model
 {
 
     use SoftDeletes;
@@ -54,7 +51,7 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
     use HasRemarks;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
-    use HasChildRoles, DefaultRbacAuthorizable;
+    use HasChildRoles;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -155,54 +152,6 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
         } else {
             return $bd->age;
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RBAC DEFINITIONS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @inheritdoc
-     */
-    public function getComputedRoles()
-    {
-        $res = [];
-        $personRole = Role::find('person');
-        if($personRole instanceof Role) {
-            $res[] = $personRole;
-        }
-
-        switch ($this->membership_status) {
-            case MembershipStatus::Outsider:
-                $membershipRole = Role::find('membership_status.outsider');
-                break;
-            case MembershipStatus::Novice:
-                $membershipRole = Role::find('membership_status.novice');
-                break;
-            case MembershipStatus::Member:
-                $membershipRole = Role::find('membership_status.member');
-                break;
-            case MembershipStatus::FormerMember:
-                $membershipRole = Role::find('membership_status.former_member');
-                break;
-            default:
-                $membershipRole = null;
-                break;
-        }
-
-        if($membershipRole instanceof Role) {
-            $res[] = $membershipRole;
-        }
-
-        return collect($res);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function inheritsRolesFrom()
-    {
-        return $this->groups;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

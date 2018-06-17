@@ -183,6 +183,15 @@ final class NodeType extends Enum
     }
 
     /**
+     * Returns if this type is allowed to be directly assigned to an Assignable object.
+     *
+     * @return bool
+     */
+    public function allowAssignment() {
+        return $this->conf('assignable', false);
+    }
+
+    /**
      * Returns if the $other node-type is allowed to be a child of this node-type.
      *
      * @param NodeType|integer|string|Node $other

@@ -1,33 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 17-06-18
+ * Time: 00:12
+ */
 
-use Illuminate\Database\Seeder;
-use \App\Services\Rbac\RbacGenerator;
-
-class RbacSeeder extends Seeder
+class RbacSeeder extends \Roelhem\RbacGraph\Seeders\RbacGraphSeeder
 {
 
-    /**
-     * @var RbacGenerator
-     */
-    protected $generator;
+    protected $buildFiles = [
+        __DIR__.'/../../rbac/roles.php',
+        __DIR__.'/../../rbac/groups.php'
+    ];
 
-    /**
-     * RbacSeeder constructor.
-     *
-     * @param RbacGenerator $generator
-     */
-    public function __construct(RbacGenerator $generator)
-    {
-        $this->generator = $generator;
-    }
-
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $this->generator->run();
-    }
 }

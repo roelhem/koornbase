@@ -44,7 +44,7 @@ SUPER_ROLE:
   edges: false
   assignable: true
   default-values:
-    name: 'super'
+    name: 'Super'
 
 
 

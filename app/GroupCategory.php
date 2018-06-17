@@ -23,7 +23,7 @@ use Wildside\Userstamps\Userstamps;
  * @property boolean $is_required
  * @property string $style
  */
-class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizable
+class GroupCategory extends Model
 {
 
     use SoftDeletes;
@@ -32,7 +32,7 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
 
     use HasShortName, HasDescription;
 
-    use HasOptions, HasChildRoles, DefaultRbacAuthorizable;
+    use HasOptions;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -42,7 +42,7 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    protected $fillable = ['name','name_short', 'slug','style','description','is_required','groups'];
+    protected $fillable = ['name','name_short', 'slug','style','description','is_required', 'options'];
 
     protected function defaultOptions(): array
     {
@@ -55,10 +55,6 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
-
-    public function childRoles() {
-        return $this->assignedRoles();
-    }
 
     /**
      * Gives all the Groups that belong to this GroupCategory.

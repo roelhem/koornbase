@@ -11,6 +11,8 @@ use App\Enums\OAuthProviders;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 
 /**
  * Class User
@@ -33,11 +35,11 @@ use Laravel\Passport\HasApiTokens;
  *
  * @inheritdoc
  */
-class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignable
+class User extends Authenticatable implements RbacDatabaseAssignable
 {
     use Notifiable;
     use HasApiTokens;
-    use HasChildRoles, DefaultRbacAuthorizable;
+    use HasMorphedRbacAssignments;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -126,32 +128,6 @@ class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignab
         }
 
         return $res;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- INTERFACE IMPLEMENTATION: RbacAuthorizable --------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-
-    public function childRoles() {
-        $select = [
-            'roles.id',
-            'roles.name',
-            'roles.description',
-            'roles.is_required',
-            'roles.is_visible',
-            'roles.created_at',
-            'roles.updated_at',
-            'roles.created_by',
-            'roles.updated_by'
-        ];
-
-        $query = Role::query()->where('id','=', 'user')->select($select);
-        $query->union($this->assignedRoles()->select($select));
-        if($this->person) {
-            $query->union($this->person->childRoles()->select($select));
-        }
-        return $query;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

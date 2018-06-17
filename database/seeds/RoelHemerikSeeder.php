@@ -11,6 +11,7 @@ class RoelHemerikSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws
      */
     public function run()
     {
@@ -24,11 +25,16 @@ class RoelHemerikSeeder extends Seeder
 
         if($person instanceof Person) {
 
-            $person->users()->create([
+            $user = $person->users()->create([
                 'name' => 'roelhem',
                 'email' => 'ik@roelweb.com',
                 'password' => '$2y$10$PHXEplWPGB03vQc9x4OVu.hV4V9V3FZyk9kLBVimSFcN11etJU8Aq',
             ]);
+
+            if($user instanceof \App\User) {
+                $user->assignNode('MasterDeveloper');
+                $user->assignNode('Webmaster');
+            }
 
             $person->memberships()->create([
                 'application' => Carbon::createFromDate(2013, 9, 1),
