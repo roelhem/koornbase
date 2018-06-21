@@ -10,34 +10,62 @@ namespace Roelhem\RbacGraph\Builders;
 
 
 use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
+use Roelhem\RbacGraph\Contracts\MutableNode;
+use Roelhem\RbacGraph\Contracts\Node as NodeContract;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
-use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
-use Roelhem\RbacGraph\Exceptions\NodeTypeNotFoundException;
-use Roelhem\RbacGraph\Nodes\Traits\HasNodeProperties;
-
+use Roelhem\RbacGraph\Exceptions\RbacGraphException;
 
 
 class NodeBuilder implements NodeBuilderContract
 {
 
-    use HasNodeProperties;
+    /**
+     * The builder of this NodeBuilder.
+     *
+     * @var BuilderContract
+     */
+    protected $builder;
+
+    /**
+     * The node of this NodeBuilder.
+     *
+     * @var NodeContract
+     */
+    protected $node;
 
     /**
      * NodeBuilder constructor.
      * @param BuilderContract $builder
-     * @param int|NodeType $type
-     * @param string $name
-     * @param int $id
+     * @param NodeContract $node
      */
-    public function __construct(BuilderContract $builder, $type, string $name, int $id)
+    public function __construct(BuilderContract $builder, NodeContract $node)
     {
-        $this->graph = $builder;
+        $this->builder = $builder;
+        $this->node = $node;
+    }
 
-        $this->type = NodeType::get($type);
-        $this->name = $name;
-        $this->id = $id;
+    /**
+     * @inheritdoc
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGraph()
+    {
+        return $this->getNode()->getGraph();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNode()
+    {
+        return $this->node;
     }
 
     /**
@@ -45,7 +73,12 @@ class NodeBuilder implements NodeBuilderContract
      */
     public function description($description)
     {
-        $this->setDescription($description);
+        $node = $this->getNode();
+        if($node instanceof MutableNode) {
+            $node->setDescription($description);
+        } else {
+            throw new RbacGraphException("The node in this builder is not mutable.");
+        }
         return $this;
     }
 
@@ -54,7 +87,12 @@ class NodeBuilder implements NodeBuilderContract
      */
     public function title($title)
     {
-        $this->setTitle($title);
+        $node = $this->getNode();
+        if($node instanceof MutableNode) {
+            $node->setTitle($title);
+        } else {
+            throw new RbacGraphException("The node in this builder is not mutable.");
+        }
         return $this;
     }
 
@@ -63,8 +101,13 @@ class NodeBuilder implements NodeBuilderContract
      */
     public function options($options)
     {
-        foreach ($options as $key => $value) {
-            $this->setOption($key, $value);
+        $node = $this->getNode();
+        if($node instanceof MutableNode) {
+            foreach ($options as $key => $value) {
+                $node->setOption($key, $value);
+            }
+        } else {
+            throw new RbacGraphException("The node in this builder is not mutable.");
         }
         return $this;
     }
@@ -74,22 +117,10 @@ class NodeBuilder implements NodeBuilderContract
      */
     public function assign(...$children)
     {
-        collect($children)->flatten()->each([$this, 'assignOne']);
+        collect($children)->flatten()->each(function($child) {
+            $this->getBuilder()->edge($this, $child);
+        });
         return $this;
-    }
-
-    /**
-     * Helper method for the assign method.
-     *
-     * @param $child
-     * @throws NodeNotFoundException
-     * @throws EdgeNotAllowedException
-     */
-    public function assignOne($child) {
-        $builder = $this->getBuilder();
-        if($builder->hasNode($child)) {
-            $builder->edge($this, $child);
-        }
     }
 
     /**
@@ -97,28 +128,10 @@ class NodeBuilder implements NodeBuilderContract
      */
     public function assignTo(...$parents)
     {
-        collect($parents)->flatten()->each([$this, 'assignToOne']);
+        collect($parents)->flatten()->each(function($parent) {
+            $this->getBuilder()->edge($parent, $this);
+        });
         return $this;
-    }
-
-    /**
-     * @param $parent
-     * @throws NodeNotFoundException
-     * @throws EdgeNotAllowedException
-     */
-    public function assignToOne($parent) {
-        $builder = $this->getBuilder();
-        if ($builder->hasNode($parent)) {
-            $builder->edge($parent, $this);
-        }
-    }
-
-    /**
-     * @return BuilderContract
-     */
-    public function getBuilder()
-    {
-        return $this->graph;
     }
 
 }

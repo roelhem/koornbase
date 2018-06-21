@@ -18,6 +18,7 @@ use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
 class AdjacencyGraph implements Graph
 {
 
+    use GraphDefaultContains;
     use HasNodeDictionaries;
     use HasAdjacencyNodes;
     use HasAssignmentArray;

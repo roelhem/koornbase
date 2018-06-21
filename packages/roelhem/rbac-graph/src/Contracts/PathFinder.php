@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: roel
- * Date: 20-06-18
- * Time: 18:44
- */
 
 namespace Roelhem\RbacGraph\Contracts;
 

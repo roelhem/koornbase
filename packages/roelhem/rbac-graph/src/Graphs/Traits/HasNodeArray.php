@@ -15,8 +15,6 @@ use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 trait HasNodeArray
 {
-
-    use GraphDefaultContains;
     use GraphDefaultNodeGetters;
     use GraphHasNodeFromGetterMethods;
 

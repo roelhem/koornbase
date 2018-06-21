@@ -16,8 +16,21 @@ use Symfony\Component\Yaml\Yaml;
  * Class NodeType
  * @package Roelhem\RbacGraph\Enums
  *
- * @method static NodeType ROLE();
- * @method static NodeType PERMISSION();
+ * @method static NodeType DEFAULT_NODE()
+ * @method static NodeType ROLE()
+ * @method static NodeType SUPER_ROLE()
+ * @method static NodeType ABSTRACT_ROLE()
+ * @method static NodeType DYNAMIC_ROLE()
+ * @method static NodeType TASK()
+ * @method static NodeType PERMISSION()
+ * @method static NodeType ROUTE_PERMISSION()
+ * @method static NodeType ABILITY()
+ * @method static NodeType MODEL_ABILITY()
+ * @method static NodeType PERMISSION_SET()
+ * @method static NodeType CRUD_ABILITY_SET()
+ * @method static NodeType RULE()
+ * @method static NodeType SCOPE_RULE()
+ * @method static NodeType MODEL_RULE()
  */
 final class NodeType extends Enum
 {

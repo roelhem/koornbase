@@ -22,7 +22,7 @@ trait HasEdgeDictionaries
 
     use HasEdgeArray;
 
-    protected $edgeChildToParent;
+    protected $edgeChildToParent = [];
 
     /**
      * Stores an edge in the dictionary structure.

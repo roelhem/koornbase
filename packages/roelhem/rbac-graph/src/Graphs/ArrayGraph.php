@@ -10,6 +10,7 @@ namespace Roelhem\RbacGraph\Graphs;
 
 
 use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
 use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasNodeArray;
@@ -17,6 +18,7 @@ use Roelhem\RbacGraph\Contracts\Traits\HasNodeArray;
 class ArrayGraph implements Graph
 {
 
+    use GraphDefaultContains;
     use HasNodeArray;
     use HasEdgeArray;
     use HasAssignmentArray;

@@ -4,120 +4,62 @@ namespace Roelhem\RbacGraph\Builders;
 
 use Roelhem\RbacGraph\Builders\Traits\ImplementBuilderShortcuts;
 use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
-use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\Edge;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
+use Roelhem\RbacGraph\Contracts\Node;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
-use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasIdSequenceGenerator;
-use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
+use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
+use Roelhem\RbacGraph\Helpers\NamePrefixStack;
 
 class RbacBuilder implements BuilderContract
 {
 
-    use HasNodeDictionaries {
-        hasNodeName as protected dictionaryHasNodeName;
-        getNodeName as protected dictionaryGetNodeName;
-        getNodeByName as protected dictionaryGetNodeByName;
-        getNodeId as protected dictionaryGetNodeId;
-    }
-    use HasEdgeArray;
-    use HasAssignmentArray;
-    use HasIdSequenceGenerator;
     use ImplementBuilderShortcuts;
 
-    protected $prefixes = [];
-
+    /**
+     * @var MutableGraph
+     */
+    protected $graph;
 
     /**
-     * Returns the current name prefix or the prefix till the provided depth.
-     *
-     * @param integer|null $depth
-     * @return string
+     * @var NamePrefixStack
      */
-    protected function getPrefix($depth = null) {
-        if($depth === null) {
-            $prefixes = $this->prefixes;
-        } else {
-            $prefixes = array_slice($this->prefixes, 0, intval($depth));
-        }
-        return implode('', $prefixes);
-    }
+    protected $prefix;
 
     /**
-     * Returns the full name of the a nodeName, including the prefixes.
-     *
-     * @param string $inputName
-     * @return null|string
+     * RbacBuilder constructor.
+     * @param MutableGraph $graph
      */
-    protected function nodeNameWithPrefixes(string $inputName) {
-        for($i = 0; $i <= count($this->prefixes); $i++) {
-            $searchName = $this->getPrefix($i).$inputName;
-            if($this->dictionaryHasNodeName($searchName)) {
-                return $searchName;
-            }
-        }
-        return null;
-    }
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function hasNodeName($name)
+    public function __construct(MutableGraph $graph)
     {
-        return $this->nodeNameWithPrefixes($name) !== null;
+        $this->graph = $graph;
+        $this->prefix = new NamePrefixStack($graph);
     }
+
+    /**
+     * @return MutableGraph
+     */
+    public function getGraph()
+    {
+        return $this->graph;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  NODE BUILDER GETTERS/FINDERS  ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
      * @inheritdoc
      */
-    public function getNodeByName($name)
+    public function get(string $name)
     {
-        return $this->dictionaryGetNodeByName($this->nodeNameWithPrefixes($name));
+        $name = $this->prefix->name($name);
+        $node = $this->getGraph()->getNodeByName($name);
+        $nodeBuilder = new NodeBuilder($this, $node);
+        return $nodeBuilder;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getNodeId($node)
-    {
-        if(is_string($node)) {
-            $node = $this->nodeNameWithPrefixes($node);
-        }
-        return $this->dictionaryGetNodeId($node);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getNodeName($node)
-    {
-        if(is_string($node)) {
-            $node = $this->nodeNameWithPrefixes($node);
-        }
-        return $this->dictionaryGetNodeName($node);
-    }
-
-
-
-
-
-
 
     /**
      * @inheritdoc
@@ -125,103 +67,137 @@ class RbacBuilder implements BuilderContract
     public function find(string $name)
     {
         try {
-            return $this->getNodeByName($name);
+            return $this->get($name);
         } catch (NodeNotFoundException $exception) {
             return null;
         }
     }
 
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  NODE BUILDER CREATORS  ------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
     /**
      * @inheritdoc
      */
-    public function get(string $name)
-    {
-        $builder = $this->find($name);
-        if($builder !== null) {
-            return $builder;
-        }
-        $prefixes = '[\'' . implode('\', \'', $this->prefixes) . '\']';
-        throw new NodeNotFoundException("Couldn't get a NodeBuilder node from the string '$name'. Current prefixes: $prefixes.");
+    public function create($type, string $name, $options = []) {
+
+        $name = $this->prefix->prefix($name);
+        $node = $this->getGraph()->createNode($type, $name, $options);
+        $nodeBuilder = new NodeBuilder($this, $node);
+
+        return $nodeBuilder;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function create($type, string $name) {
 
-        $prefix = $this->getPrefix();
-        $builder = new NodeBuilder($this, $type, $prefix.$name, $this->getNextId());
-
-        $this->storeNode($builder);
-
-        return $builder;
-    }
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  NODE BUILDER INITIALISATION HELPERS  ----------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
      * @inheritdoc
      */
-    public function node($type, string $name)
+    public function node($type, string $name, $options = [])
     {
         $type = NodeType::get($type);
-        $builder = $this->find($name);
-        if(($builder instanceof NodeBuilderContract) && $builder->getType() === $type) {
-            return $builder;
+        $nodeBuilder = $this->find($name);
+        if(($nodeBuilder instanceof NodeBuilderContract) && $nodeBuilder->getNode()->getType() === $type) {
+            return $nodeBuilder;
         } else {
-            return $this->create($type, $name);
+            return $this->create($type, $name, $options);
         }
     }
+
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  ASSIGNMENT BUILDER  ---------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @param NodeBuilderContract|Node|string|integer $input
+     * @return Node
+     * @throws NodeNotFoundException
+     */
+    protected function parseNode($input) {
+        if(is_string($input)) {
+            $name = $this->prefix->name($input);
+        } elseif($input instanceof Node) {
+            $name = $input->getName();
+        } elseif($input instanceof NodeBuilderContract) {
+            $name = $input->getNode()->getName();
+        } else {
+            $name = $this->getGraph()->getNodeName($input);
+        }
+
+        return $this->getGraph()->getNodeByName($name);
+    }
+
+    /**
+     * @param NodeBuilderContract|Node|string|integer $parent
+     * @param NodeBuilderContract|Node|string|integer $child
+     * @throws NodeNotFoundException
+     * @return Edge
+     */
+    public function createEdge($parent, $child) {
+        $parent = $this->parseNode($parent);
+        $child = $this->parseNode($child);
+
+        return $this->getGraph()->createEdge($parent, $child);
+    }
+
+    /**
+     * @param NodeBuilderContract|Node|string|integer $parent
+     * @param NodeBuilderContract|Node|string|integer $child
+     * @throws NodeNotFoundException
+     * @throws EdgeNotFoundException
+     * @return Edge
+     */
+    public function getEdge($parent, $child) {
+        $parent = $this->parseNode($parent);
+        $child = $this->parseNode($child);
+
+        return $this->getGraph()->getEdge($parent, $child);
+    }
+
+    /**
+     * @param NodeBuilderContract|Node|string|integer $parent
+     * @param NodeBuilderContract|Node|string|integer $child
+     * @return bool
+     * @throws NodeNotFoundException
+     */
+    public function hasEdge($parent, $child) {
+        $parent = $this->parseNode($parent);
+        $child = $this->parseNode($child);
+
+        return $this->getGraph()->hasEdge($parent, $child);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function edge($parent, $child) {
+        if($this->hasEdge($parent, $child)) {
+            return $this->getEdge($parent, $child);
+        } else {
+            return $this->createEdge($parent, $child);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GROUP BUILDER  --------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
 
     /**
      * @inheritdoc
      */
     public function group(string $prefix, callable $definitions)
     {
-        array_push($this->prefixes, $prefix);
+        $this->prefix->push($prefix);
         $definitions($this);
-        array_pop($this->prefixes);
+        $this->prefix->pop();
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function edge($parent, $child)
-    {
-        if ($this->hasEdge($parent, $child)) {
-            return $this->getEdge($parent, $child);
-        } else {
-            $parent = $this->getNode($parent);
-            $child = $this->getNode($child);
-            if($parent->getType()->allowChild($child)) {
-                $edge = new EdgeBuilder($this, $parent, $child);
-                $this->storeEdge($edge);
-                return $edge;
-            } else {
-                $parentTypeName = $parent->getType()->getName();
-                $childTypeName = $child->getType()->getName();
-                throw new EdgeNotAllowedException("A node of type $parentTypeName can't have a node of type $childTypeName as a child.");
-            }
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function build(MutableGraph $graph)
-    {
-        $graph->addNodes($this->getNodes());
-        $graph->addEdges($this->getEdges());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function reset()
-    {
-        $this->edges = [];
-        $this->nodes = [];
-        $this->nodeNamesToIds = [];
-        $this->idSequence = 0;
     }
 
 

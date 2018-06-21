@@ -18,12 +18,10 @@ use Roelhem\RbacGraph\Exceptions\WrongGraphException;
 
 trait HasEdgeArray
 {
-
-    use GraphDefaultContains;
     use GraphHasEdgeFromGetterMethods;
     use GraphRelatedFromEdgeMethods;
 
-    protected $edges;
+    protected $edges = [];
 
     /**
      * @param Edge $edge

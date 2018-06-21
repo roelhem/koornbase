@@ -7,25 +7,25 @@ namespace Roelhem\RbacGraph\Edges;
 use Roelhem\RbacGraph\Contracts\Edge;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
+use Roelhem\RbacGraph\Exceptions\EdgeNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
+use Roelhem\RbacGraph\Traits\HasGraphProperty;
 
 class SimpleEdge implements Edge
 {
 
-    /**
-     * @var Graph
-     */
-    protected $graph;
+    use HasGraphProperty;
 
     /**
-     * @var int
+     * @var Node
      */
-    protected $parentId;
+    protected $parent;
 
     /**
-     * @var int
+     * @var Node
      */
-    protected $childId;
+    protected $child;
 
     /**
      * SimpleEdge constructor.
@@ -33,72 +33,74 @@ class SimpleEdge implements Edge
      * @param Node|string|integer $parent
      * @param Node|string|integer $child
      * @throws NodeNotFoundException
+     * @throws EdgeNotAllowedException
+     * @throws EdgeNotUniqueException
      */
     public function __construct(Graph $graph, $parent, $child)
     {
-        $this->graph = $graph;
-        $this->parentId = $graph->getNodeId($parent);
-        $this->childId = $graph->getNodeId($child);
+        if($graph->hasEdge($parent, $child)) {
+            $parentName = $graph->getNodeName($parent);
+            $childName = $graph->getNodeName($child);
+            throw new EdgeNotUniqueException("There already exists an edge from $parentName to $childName in the graph.");
+        }
+
+        $this->initGraph($graph);
+        $this->parent = $graph->getNode($parent);
+        $this->child = $graph->getNode($child);
+
+        if(!$this->parent->getType()->allowChild($this->child)) {
+            $parentTypeName = $this->parent->getType()->getName();
+            $childTypeName = $this->child->getType()->getName();
+            throw new EdgeNotAllowedException("A node of type $parentTypeName is not allowed to have a child of type $childTypeName.");
+        }
     }
 
     /**
-     * @return Graph
-     */
-    public function getGraph()
-    {
-        return $this->graph;
-    }
-
-    /**
-     * @return int
+     * @inheritdoc
      */
     public function getParentId()
     {
-        return $this->parentId;
+        return $this->getGraph()->getNodeId($this->parent);
     }
 
     /**
-     * @return string
-     * @throws NodeNotFoundException
+     * @inheritdoc
      */
     public function getParentName()
     {
-        return $this->graph->getNodeName($this->parentId);
+        return $this->getGraph()->getNodeName($this->parent);
     }
 
     /**
-     * @return Node
-     * @throws NodeNotFoundException
+     * @inheritdoc
      */
     public function getParent()
     {
-        return $this->graph->getNodeById($this->parentId);
+        return $this->parent;
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getChildId()
     {
-        return $this->childId;
+        return $this->getGraph()->getNodeId($this->child);
     }
 
     /**
-     * @return string
-     * @throws NodeNotFoundException
+     * @inheritdoc
      */
     public function getChildName()
     {
-        return $this->graph->getNodeName($this->childId);
+        return $this->getGraph()->getNodeName($this->child);
     }
 
     /**
-     * @return Node
-     * @throws NodeNotFoundException
+     * @inheritdoc
      */
     public function getChild()
     {
-        return $this->graph->getNodeById($this->childId);
+        return $this->child;
     }
 
 }

@@ -29,9 +29,11 @@ trait HasGraphProperty
             throw new \LogicException('The graph of this object is already set.');
         }
 
-        if($graph instanceof Graph) {
+        if(!($graph instanceof Graph)) {
             throw new \InvalidArgumentException('The provided parameter is not an instance of $graph.');
         }
+
+        $this->graph = $graph;
     }
 
     /**

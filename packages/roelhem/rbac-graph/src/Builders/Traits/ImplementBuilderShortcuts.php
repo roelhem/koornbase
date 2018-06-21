@@ -94,7 +94,9 @@ trait ImplementBuilderShortcuts
             $name = $type->conf('default-values.name-prefix').$route;
         }
 
-        return $this->node(NodeType::ROUTE_PERMISSION, $name)->options(['route' => $route]);
+        return $this->node(NodeType::ROUTE_PERMISSION, $name, [
+            'route' => $route
+        ]);
     }
 
     /**
@@ -106,7 +108,9 @@ trait ImplementBuilderShortcuts
         if($name === null) {
             $name = $ability;
         }
-        return $this->node(NodeType::ABILITY, $name)->options(['ability' => $ability]);
+        return $this->node(NodeType::ABILITY, $name, [
+            'ability' => $ability
+        ]);
     }
 
     /**
@@ -119,7 +123,7 @@ trait ImplementBuilderShortcuts
         if($name === null) {
             $name = $ability;
         }
-        return $this->node(NodeType::MODEL_ABILITY, $name)->options([
+        return $this->node(NodeType::MODEL_ABILITY, $name, [
             'ability' => $ability,
             'modelClass' => $modelClass
         ]);
@@ -141,7 +145,7 @@ trait ImplementBuilderShortcuts
         }
         $prefix = $name.$type->conf('default-values.delimiter','.');
 
-        $abilitySet = $this->node(NodeType::CRUD_ABILITY_SET, $name)->options([
+        $abilitySet = $this->node(NodeType::CRUD_ABILITY_SET, $name, [
             'modelClass' => $modelClass,
             'prefix' => $prefix,
             'abilities' => $crudAbilities
@@ -150,10 +154,11 @@ trait ImplementBuilderShortcuts
         $this->group($prefix, function(Builder $builder) use ($crudAbilities, $modelClass, $abilitySet) {
             foreach ($crudAbilities as $key => $value) {
                 if(is_string($key)) {
-                    $builder->modelAbility($key, $modelClass, $value)->assignTo($abilitySet);
+                    $abilityNode = $builder->modelAbility($key, $modelClass, $value);
                 } else {
-                    $builder->modelAbility($value, $modelClass)->assignTo($abilitySet);
+                    $abilityNode = $builder->modelAbility($value, $modelClass);
                 }
+                $abilityNode->assignTo($abilitySet);
             }
         });
 

@@ -8,7 +8,7 @@ use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
-interface Builder extends Graph, BuilderShortcuts
+interface Builder extends BuilderShortcuts, BelongsToGraph
 {
 
     /**
@@ -46,10 +46,11 @@ interface Builder extends Graph, BuilderShortcuts
      *
      * @param integer|NodeType $type
      * @param string $name
+     * @param array $options
      * @return NodeBuilder
      * @throws NodeNameNotUniqueException
      */
-    public function node($type, string $name);
+    public function node($type, string $name, $options = []);
 
     /**
      * Runs all the builder commands within the callable object. The names of all the nodes created within this
@@ -71,18 +72,5 @@ interface Builder extends Graph, BuilderShortcuts
      */
     public function edge($parent, $child);
 
-    /**
-     * Build the rbac-structure of this RbacBuilder onto another graph.
-     *
-     * @param MutableGraph $graph
-     */
-    public function build(MutableGraph $graph);
-
-    /**
-     * Removes the rbac-structure saved within this builder.
-     *
-     * @return void
-     */
-    public function reset();
 
 }

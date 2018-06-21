@@ -9,53 +9,37 @@
 namespace Roelhem\RbacGraph\Contracts;
 
 
-use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
-use Roelhem\RbacGraph\Exceptions\EdgeNotUniqueException;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
-use Roelhem\RbacGraph\Exceptions\NodeNotUniqueException;
+use Roelhem\RbacGraph\Enums\NodeType;
 
 interface MutableGraph extends Graph
 {
 
+    // ------------------------------------------------------------------------------------------------------------ //
+    // ---------  NODES  ------------------------------------------------------------------------------------------ //
+    // ------------------------------------------------------------------------------------------------------------ //
+
     /**
-     * Adds the provided node to this Graph.
+     * Creates a new node for this MutableGraph and adds the newly created node to the graph.
      *
-     * @param Node $node
+     * @param integer|NodeType $type
+     * @param string $name
+     * @param integer|null $id
+     * @param array $options
      * @return Node
-     * @throws NodeNotUniqueException
      */
-    public function addNode( Node $node );
+    public function createNode( $type, $name, $options = [], $id = null );
+
+    // ------------------------------------------------------------------------------------------------------------ //
+    // ---------  EDGES  ------------------------------------------------------------------------------------------ //
+    // ------------------------------------------------------------------------------------------------------------ //
 
     /**
-     * Adds multiple nodes to this Graph.
+     * Creates a new edge for this MutableGraph and adds the newly created edge to the graph.
      *
-     * @param iterable|Collection|Node[] $nodes
-     * @return Collection|Node[] $nodes
-     * @throws NodeNotUniqueException
-     */
-    public function addNodes( iterable $nodes );
-
-    /**
-     * Adds the provided edge to this Graph.
-     *
-     * @param Edge $edge
+     * @param Node|string|integer $parent
+     * @param Node|string|integer $child
      * @return Edge
-     * @throws NodeNotFoundException
-     * @throws EdgeNotUniqueException
-     * @throws EdgeNotAllowedException
      */
-    public function addEdge( Edge $edge );
-
-    /**
-     * Adds multiple edges to this Graph.
-     *
-     * @param iterable $edges
-     * @return Collection|Edge[]
-     * @throws NodeNotFoundException
-     * @throws EdgeNotUniqueException
-     * @throws EdgeNotAllowedException
-     */
-    public function addEdges( iterable $edges );
+    public function createEdge( $parent, $child );
 
 }

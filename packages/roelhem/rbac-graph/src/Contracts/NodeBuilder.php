@@ -2,10 +2,22 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 
-use Roelhem\RbacGraph\Exceptions\EdgeNotAllowedException;
-
-interface NodeBuilder extends Node
+interface NodeBuilder extends BelongsToGraph
 {
+
+    /**
+     * Returns the node that this NodeBuilder manages.
+     *
+     * @return Node
+     */
+    public function getNode();
+
+    /**
+     * Returns the builder instance where this NodeBuilder belongs to.
+     *
+     * @return Builder
+     */
+    public function getBuilder();
 
     /**
      * Sets the title of this node in a fluent way.
@@ -47,10 +59,5 @@ interface NodeBuilder extends Node
      * @return $this
      */
     public function assignTo( ...$parents );
-
-    /**
-     * @return Builder
-     */
-    public function getBuilder();
 
 }

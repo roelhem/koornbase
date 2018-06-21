@@ -9,8 +9,9 @@
         }
     ],
     "autoload": {
-        "psr-0" : {
-            "Roelhem\\RbacGraph\\" : "src"
+        "psr-4" : {
+            "Roelhem\\RbacGraph\\" : "src",
+            "Roelhem\\RbacGraph\\Tests\\" : "tests"
         }
     },
     "minimum-stability": "dev",
