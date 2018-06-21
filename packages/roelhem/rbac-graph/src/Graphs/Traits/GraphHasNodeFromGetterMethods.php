@@ -50,7 +50,7 @@ trait GraphHasNodeFromGetterMethods
         }
 
         if ($node instanceof Node) {
-            if($this->equals($node->getGraph())) {
+            if($this->contains($node)) {
                 return true;
             } else {
                 try {

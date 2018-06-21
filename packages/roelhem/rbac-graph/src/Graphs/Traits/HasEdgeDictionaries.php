@@ -32,7 +32,7 @@ trait HasEdgeDictionaries
      * @throws WrongGraphException
      */
     protected function storeEdge( Edge $edge ) {
-        if($this->equals($edge->getGraph())) {
+        if($this->contains($edge)) {
 
             $parentId = $edge->getParentId();
             $childId = $edge->getChildId();

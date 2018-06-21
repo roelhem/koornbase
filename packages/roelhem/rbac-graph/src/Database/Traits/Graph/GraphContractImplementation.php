@@ -3,7 +3,9 @@
 namespace Roelhem\RbacGraph\Database\Traits\Graph;
 
 use Illuminate\Support\Collection;
+use Roelhem\RbacGraph\Contracts\BelongsToGraph;
 use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
@@ -13,14 +15,22 @@ trait GraphContractImplementation
 {
 
     /**
-     * Returns if this graph can be regarded as equal to the object in the parameter.
+     * Returns if this graph is able to contain the provided $other object.
      *
      * @param mixed $other
      * @return boolean
      */
-    public function equals($other): bool
+    public function contains( $other )
     {
-        return is_object($other) && get_class($other) === get_class($this);
+        if($other instanceof DatabaseGraph) {
+            return true;
+        }
+
+        if($other instanceof BelongsToGraph) {
+            return $this->contains($other->getGraph());
+        }
+
+        return false;
     }
 
     /**

@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
  *
  * @package Roelhem\RbacGraph\Contracts
  */
-interface GraphIterator extends \Iterator
+interface GraphIterator extends \Iterator, BelongsToGraph
 {
 
     /**
@@ -48,10 +48,5 @@ interface GraphIterator extends \Iterator
      * @return Collection|Node[]
      */
     public function getNotVisited();
-
-    /**
-     * @return Graph
-     */
-    public function getGraph();
 
 }

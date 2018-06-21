@@ -50,7 +50,7 @@ class SimpleAssignment extends AbstractAssignment
         $graph = $this->assignable->getGraph();
 
         if($node instanceof Node) {
-            if($graph->equals($node->getGraph())) {
+            if($graph->contains($node)) {
                 $this->node = $node;
             } else {
                 throw new WrongGraphException('The authorizable object and the node belong to different graphs.');

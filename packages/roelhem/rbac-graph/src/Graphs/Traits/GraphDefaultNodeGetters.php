@@ -38,7 +38,7 @@ trait GraphDefaultNodeGetters
         }
 
         if ($node instanceof Node) {
-            if($this->equals($node->getGraph())) {
+            if($this->contains($node)) {
                 return $node;
             } else {
                 return $this->getNodeByName($node->getName());

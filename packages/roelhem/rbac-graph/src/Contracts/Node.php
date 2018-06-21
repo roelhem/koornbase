@@ -9,7 +9,7 @@ use Roelhem\RbacGraph\Enums\NodeType;
  *
  * An interface for a node in a Rbac-graph.
  */
-interface Node
+interface Node extends BelongsToGraph
 {
 
     /**
@@ -46,13 +46,6 @@ interface Node
      * @return string|null
      */
     public function getDescription();
-
-    /**
-     * Returns the graph where this Node belongs to.
-     *
-     * @return Graph
-     */
-    public function getGraph();
 
     /**
      * Returns the option values of this node.

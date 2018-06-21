@@ -15,16 +15,8 @@ namespace Roelhem\RbacGraph\Contracts;
  *
  * @package Roelhem\RbacGraph\Contracts
  */
-interface Assignment
+interface Assignment extends BelongsToGraph
 {
-
-
-    /**
-     * Returns the graph of this assignment.
-     *
-     * @return Graph
-     */
-    public function getGraph();
 
     /**
      * Returns the node that is assigned to an authorizable object.

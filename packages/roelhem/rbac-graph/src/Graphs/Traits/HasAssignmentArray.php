@@ -26,6 +26,8 @@ use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 trait HasAssignmentArray
 {
 
+    use GraphDefaultContains;
+
     /**
      * @var Assignment[]
      */

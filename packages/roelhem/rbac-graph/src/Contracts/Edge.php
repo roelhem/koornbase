@@ -9,15 +9,8 @@
 namespace Roelhem\RbacGraph\Contracts;
 
 
-interface Edge
+interface Edge extends BelongsToGraph
 {
-
-    /**
-     * Returns the graph where this edge belongs to.
-     *
-     * @return Graph
-     */
-    public function getGraph();
 
     /**
      * Returns the node on the 'parent' side of the edge.

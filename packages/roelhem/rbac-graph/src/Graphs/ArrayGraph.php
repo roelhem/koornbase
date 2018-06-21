@@ -21,8 +21,4 @@ class ArrayGraph implements Graph
     use HasEdgeArray;
     use HasAssignmentArray;
 
-    public function equals($other): bool
-    {
-        return $this === $other;
-    }
 }

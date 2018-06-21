@@ -15,7 +15,8 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "marc-mabe/php-enum":"^3"
+        "marc-mabe/php-enum":"^3",
+        "raphhh/trex-reflection":"^1"
     },
     "extra": {
         "laravel": {

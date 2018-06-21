@@ -22,14 +22,13 @@ use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
  */
 interface Graph
 {
-
     /**
-     * Returns if this graph can be regarded as equal to the object in the parameter.
+     * Returns if the provided argument is contained in this graph.
      *
      * @param mixed $other
      * @return boolean
      */
-    public function equals( $other ) : bool ;
+    public function contains( $other );
 
     // ------------------------------------------------------------------------------------------------------------ //
     // ---------  RETRIEVING OBJECTS  ----------------------------------------------------------------------------- //

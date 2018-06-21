@@ -7,6 +7,7 @@ use Roelhem\RbacGraph\Contracts\Builder as BuilderContract;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\NodeBuilder as NodeBuilderContract;
+use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
 use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
 use Roelhem\RbacGraph\Contracts\Traits\HasIdSequenceGenerator;
@@ -31,13 +32,6 @@ class RbacBuilder implements BuilderContract
 
     protected $prefixes = [];
 
-
-    /**
-     * @inheritdoc
-     */
-    public function equals( $other ) : bool {
-        return $this === $other;
-    }
 
     /**
      * Returns the current name prefix or the prefix till the provided depth.

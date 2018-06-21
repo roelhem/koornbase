@@ -19,6 +19,7 @@ use Roelhem\RbacGraph\Exceptions\WrongGraphException;
 trait HasEdgeArray
 {
 
+    use GraphDefaultContains;
     use GraphHasEdgeFromGetterMethods;
     use GraphRelatedFromEdgeMethods;
 
@@ -30,7 +31,7 @@ trait HasEdgeArray
      * @throws WrongGraphException
      */
     protected function storeEdge( Edge $edge ) {
-        if($this->equals($edge->getGraph())) {
+        if($this->contains($edge)) {
             $this->edges[] = $edge;
         } else {
             throw new WrongGraphException;

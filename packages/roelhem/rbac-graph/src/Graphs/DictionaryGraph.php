@@ -20,10 +20,4 @@ class DictionaryGraph implements Graph
     use HasNodeDictionaries;
     use HasEdgeDictionaries;
     use HasAssignmentArray;
-
-    public function equals($other): bool
-    {
-        return $this === $other;
-    }
-
 }

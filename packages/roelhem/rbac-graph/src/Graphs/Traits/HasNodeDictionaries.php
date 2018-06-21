@@ -27,7 +27,7 @@ trait HasNodeDictionaries
      * @inheritdoc
      */
     protected function storeNode( Node $node ) {
-        if($this->equals($node->getGraph())) {
+        if($this->contains($node)) {
 
             $id = $node->getId();
             $name = $node->getName();

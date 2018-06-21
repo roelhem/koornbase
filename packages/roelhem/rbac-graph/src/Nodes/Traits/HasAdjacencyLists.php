@@ -43,7 +43,7 @@ trait HasAdjacencyLists
      * @throws EdgeNotUniqueException
      */
     public function addEdge(Edge $edge) {
-        if($this->getGraph()->equals($edge->getGraph())) {
+        if($this->getGraph()->contains($edge)) {
             $id = $this->getId();
             if($edge->getParentId() === $id) {
 
