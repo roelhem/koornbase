@@ -12,6 +12,7 @@ namespace Roelhem\RbacGraph\Graphs\SubGraphs;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\Node;
 use Roelhem\RbacGraph\Contracts\NodeFilter;
+use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Exceptions\RbacGraphException;
 use Roelhem\RbacGraph\Filters\CallbackNodeFilter;
 use Roelhem\RbacGraph\Graphs\SubGraphs\Traits\HasInducedEdges;
@@ -22,6 +23,7 @@ class NodeFilterSubGraph extends AbstractSubGraph
 
     use HasInducedEdges;
     use HasContainsNodeMethod;
+    use GraphDefaultEquals;
 
     /**
      * @var NodeFilter

@@ -14,6 +14,13 @@ use Roelhem\RbacGraph\Enums\NodeType;
 interface MutableGraph extends Graph
 {
 
+    /**
+     * Returns a builder instance to build this graph.
+     *
+     * @return Builder
+     */
+    public function builder();
+
     // ------------------------------------------------------------------------------------------------------------ //
     // ---------  NODES  ------------------------------------------------------------------------------------------ //
     // ------------------------------------------------------------------------------------------------------------ //
@@ -23,11 +30,18 @@ interface MutableGraph extends Graph
      *
      * @param integer|NodeType $type
      * @param string $name
-     * @param integer|null $id
      * @param array $options
      * @return Node
      */
-    public function createNode( $type, $name, $options = [], $id = null );
+    public function createNode( $type, $name, $options = []);
+
+    /**
+     * Adds a new node to this MutableGraph based on the provided $node.
+     *
+     * @param Node $node
+     * @return Node
+     */
+    public function addNode(Node $node);
 
     // ------------------------------------------------------------------------------------------------------------ //
     // ---------  EDGES  ------------------------------------------------------------------------------------------ //
@@ -41,5 +55,13 @@ interface MutableGraph extends Graph
      * @return Edge
      */
     public function createEdge( $parent, $child );
+
+    /**
+     * Adds a new edge to this MutableGraph based on the provided $node.
+     *
+     * @param Edge $edge
+     * @return Edge
+     */
+    public function addEdge(Edge $edge);
 
 }

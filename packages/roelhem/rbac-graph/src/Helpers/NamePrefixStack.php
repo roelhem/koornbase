@@ -50,7 +50,7 @@ class NamePrefixStack implements BelongsToGraph, \Countable
      */
     public function push(string $prefix)
     {
-        array_push($stack, $prefix);
+        array_push($this->stack, $prefix);
     }
 
     /**
@@ -60,7 +60,7 @@ class NamePrefixStack implements BelongsToGraph, \Countable
      */
     public function pop()
     {
-        return array_pop($stack);
+        return array_pop($this->stack);
     }
 
     /**
@@ -110,7 +110,7 @@ class NamePrefixStack implements BelongsToGraph, \Countable
         if($value === null) {
             return $prefix;
         } else {
-            return $value;
+            return $prefix.$value;
         }
     }
 

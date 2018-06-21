@@ -21,7 +21,6 @@ class ArrayGraphTest extends TestCase
         $graph = new ArrayGraph();
 
         $this->assertInstanceOf(Graph::class, $graph);
-
     }
 
 }

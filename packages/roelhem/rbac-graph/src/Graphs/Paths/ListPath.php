@@ -12,6 +12,9 @@ namespace Roelhem\RbacGraph\Graphs\Paths;
 use Roelhem\RbacGraph\Contracts\Edge;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutablePath;
+use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Exceptions\PathEmptyException;
 use Roelhem\RbacGraph\Exceptions\PathWrongEdgeException;
 use Roelhem\RbacGraph\Exceptions\WrongGraphException;
 use Roelhem\RbacGraph\Graphs\Paths\Traits\HasEdgesArray;
@@ -28,15 +31,21 @@ class ListPath implements MutablePath
     use HasNodesArray;
     use HasEdgesArray;
     use SubGraphDefaultContains;
+    use GraphDefaultEquals;
 
     /**
      * ListPath constructor.
      *
      * @param Graph $graph
+     * @param iterable|array $nodes
      */
-    public function __construct(Graph $graph)
+    public function __construct(Graph $graph, $nodes = [])
     {
         $this->initGraph($graph);
+
+        foreach ($nodes as $node) {
+            $this->pushNode($node);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -55,6 +64,52 @@ class ListPath implements MutablePath
         }
 
         array_push($this->nodes, $node);
+    }
+
+    /** @inheritdoc */
+    public function popNode()
+    {
+        if($this->count() <= 0) {
+            throw new PathEmptyException("Can't pop a node from the path because the path is already empty.");
+        }
+
+        $node = array_pop($this->nodes);
+
+        if(count($this->edges) > 0) {
+            array_pop($this->edges);
+        }
+
+        return $node;
+    }
+
+    /** @inheritdoc */
+    public function unshiftNode($node)
+    {
+        $node = $this->getGraph()->getNode($node);
+
+        if($this->count() > 0) {
+            $firstNode = $this->getFirstNode();
+            $edge = $this->getGraph()->getEdge($node, $firstNode);
+            array_unshift($this->edges, $edge);
+        }
+
+        array_unshift($this->nodes, $node);
+    }
+
+    /** @inheritdoc */
+    public function shiftNode()
+    {
+        if($this->count() <= 0) {
+            throw new PathEmptyException("Can't shift a node from the path because the path is already empty.");
+        }
+
+        $node = array_shift($this->nodes);
+
+        if(count($this->edges) > 0) {
+            array_shift($this->edges);
+        }
+
+        return $node;
     }
 
     /** @inheritdoc */
@@ -82,6 +137,14 @@ class ListPath implements MutablePath
         array_push($this->nodes, $edge->getChild());
     }
 
+    public function __toString()
+    {
+        return "ListPath(size={$this->count()}): { ".
+            collect($this->getNodeList())->map(function(Node $node) {
+                return $node->getType()->getName().'['.$node->getName().']';
+            })->implode('  >  ').
+            " }";
+    }
 
 
 }

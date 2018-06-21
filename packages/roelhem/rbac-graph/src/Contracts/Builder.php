@@ -35,10 +35,11 @@ interface Builder extends BuilderShortcuts, BelongsToGraph
      *
      * @param integer|NodeType $type
      * @param string $name
+     * @param array $options
      * @return NodeBuilder
      * @throws NodeNameNotUniqueException
      */
-    public function create($type, string $name);
+    public function create($type, string $name, $options = []);
 
     /**
      * Returns the `NodeBuilder` for the node with name $name and `NodeType` $type. Creates a new `NodeBuilder`

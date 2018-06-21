@@ -55,10 +55,11 @@ interface RbacService extends BuilderShortcuts
      *
      * @param integer|NodeType $type
      * @param string $name
+     * @param array $options
      * @return NodeBuilder
      * @throws NodeNameNotUniqueException
      */
-    public function create($type, string $name);
+    public function create($type, string $name, array $options = []);
 
     /**
      * Returns the `NodeBuilder` for the node with name $name and `NodeType` $type. Creates a new `NodeBuilder`
@@ -66,10 +67,11 @@ interface RbacService extends BuilderShortcuts
      *
      * @param integer|NodeType $type
      * @param string $name
+     * @param array $options
      * @return NodeBuilder
      * @throws NodeNameNotUniqueException
      */
-    public function node($type, string $name);
+    public function node($type, string $name, array $options = []);
 
 
     /**

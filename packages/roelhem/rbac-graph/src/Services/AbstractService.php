@@ -31,7 +31,7 @@ abstract class AbstractService implements RbacService
     /**
      * @inheritdoc
      */
-    public function create($type, string $name)
+    public function create($type, string $name, array $options = [])
     {
         return $this->builder()->create($type, $name);
     }
@@ -39,7 +39,7 @@ abstract class AbstractService implements RbacService
     /**
      * @inheritdoc
      */
-    public function node($type, string $name)
+    public function node($type, string $name, array $options = [])
     {
         return $this->builder()->node($type, $name);
     }

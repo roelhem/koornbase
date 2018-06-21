@@ -47,7 +47,7 @@ trait HasEdgeDictionaries
             $this->edges[$parentId][$childId] = $edge;
 
 
-            if(!array_key_exists($childId, $this->edgeChildToParent) || !is_array($this->edges[$childId])) {
+            if(!array_key_exists($childId, $this->edgeChildToParent) || !is_array($this->edgeChildToParent[$childId])) {
                 $this->edgeChildToParent[$childId] = [];
             }
             $this->edgeChildToParent[$childId][] = $parentId;

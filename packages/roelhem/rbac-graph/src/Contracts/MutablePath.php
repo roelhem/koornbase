@@ -27,6 +27,30 @@ interface MutablePath extends Path
     public function pushNode( $node );
 
     /**
+     * Removes the last node from the path and returns it.
+     *
+     * @return Node
+     */
+    public function popNode();
+
+    /**
+     * Adds the provided node to the beginning of the path.
+     *
+     * @param Node|string|integer $node
+     * @return void
+     * @throws NodeNotFoundException
+     * @throws EdgeNotFoundException
+     */
+    public function unshiftNode( $node );
+
+    /**
+     * Removes the first node from the path and returns it.
+     *
+     * @return Node
+     */
+    public function shiftNode();
+
+    /**
      * Adds the provided edge to the end of the path.
      *
      * @param Edge $edge

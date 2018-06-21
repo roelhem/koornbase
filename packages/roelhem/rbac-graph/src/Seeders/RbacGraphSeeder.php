@@ -42,16 +42,9 @@ class RbacGraphSeeder extends Seeder
 
         // run the files
         foreach ($this->buildFiles() as $buildFile) {
-            require ($buildFile);
+            require($buildFile);
         }
 
-        // get the graph and builder
-        $builder = \Rbac::builder();
-        $graph = \Rbac::graph();
-
-        if($graph instanceof MutableGraph) {
-            $builder->build($graph);
-        }
 
     }
 

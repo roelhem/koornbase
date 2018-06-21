@@ -19,10 +19,10 @@ class CallbackNodeFilter extends AbstractNodeFilter
     use HasGraphProperty;
 
 
-    protected const NODE_TYPE_ORIGINAL = 0;
-    protected const NODE_TYPE_INSTANCE = 1;
-    protected const NODE_TYPE_ID       = 2;
-    protected const NODE_TYPE_NAME     = 3;
+    public const NODE_TYPE_ORIGINAL = 0;
+    public const NODE_TYPE_INSTANCE = 1;
+    public const NODE_TYPE_ID       = 2;
+    public const NODE_TYPE_NAME     = 3;
 
     /**
      * A callback that takes a node as its first argument and a graph as its second argument. It should return
@@ -46,8 +46,6 @@ class CallbackNodeFilter extends AbstractNodeFilter
      * CallbackNodeFilter constructor.
      * @param Graph $graph
      * @param callable $callback
-     *
-     * @throws RbacGraphException
      */
     public function __construct($graph, callable $callback)
     {
@@ -87,13 +85,24 @@ class CallbackNodeFilter extends AbstractNodeFilter
      */
     protected function initNodeParameter(\ReflectionParameter $parameter) {
         if($parameter->hasType()) {
-            $type = new TypeReflection($parameter->getType());
-            if($type->isInteger()) {
-                $this->nodeParamType = self::NODE_TYPE_ID;
-            } elseif($type->isString()) {
-                $this->nodeParamType = self::NODE_TYPE_NAME;
-            } elseif($type->isObject()) {
-                $this->nodeParamType = self::NODE_TYPE_INSTANCE;
+            $type = strval($parameter->getType());
+            switch ($type) {
+                case 'int':
+                    $this->nodeParamType = self::NODE_TYPE_ID;
+                    break;
+                case 'string':
+                    $this->nodeParamType = self::NODE_TYPE_NAME;
+                    break;
+                case Node::class:
+                    $this->nodeParamType = self::NODE_TYPE_INSTANCE;
+                    break;
+                default:
+                    if (is_subclass_of($type, Node::class)) {
+                        $this->nodeParamType = self::NODE_TYPE_INSTANCE;
+                    } else {
+                        throw new \InvalidArgumentException("The node-argument type-hinting is not recognized '$type'.");
+                    }
+                    break;
             }
         } else {
             $this->nodeParamType = self::NODE_TYPE_ORIGINAL;
@@ -135,6 +144,15 @@ class CallbackNodeFilter extends AbstractNodeFilter
             default:
                 throw new \LogicException('Invalid nodeParamType.');
         }
+    }
+
+    /**
+     * Returns the param-type of the node parameter.
+     *
+     * @return int
+     */
+    public function getNodeParamType() {
+        return $this->nodeParamType;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

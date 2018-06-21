@@ -17,6 +17,7 @@ use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\Node as NodeContract;
 use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\MutableGraphContractImplementation;
 use Roelhem\RbacGraph\Exceptions\AssignmentNotFoundException;
@@ -36,6 +37,7 @@ class DatabaseGraph implements MutableGraph
 
     use GraphContractImplementation;
     use MutableGraphContractImplementation;
+    use GraphDefaultEquals;
 
 
     /**

@@ -19,6 +19,9 @@ class BuilderTest extends TestCase
         $this->assertInstanceOf(Builder::class, $builder);
     }
 
+    /**
+     * @throws \Roelhem\RbacGraph\Exceptions\NodeNotFoundException
+     */
     public function testBuilding() {
 
         $graph = new DictionaryGraph();
@@ -50,6 +53,24 @@ class BuilderTest extends TestCase
         $this->assertTrue($graph->hasEdge('role', 'task'));
         $this->assertTrue($graph->hasEdge('task', 'permission'));
         $this->assertFalse($graph->hasEdge('role', 'permission'));
+
+    }
+
+    public function testPrefixGroups() {
+        $graph = new DictionaryGraph();
+        $builder = new RbacBuilder($graph);
+
+        $builder->role('a');
+
+        $builder->group('test.', function(Builder $builder) {
+            $builder->permission('x');
+            $builder->role('a')->assign('x');
+        });
+
+        $this->assertTrue($graph->hasNode('a'));
+        $this->assertTrue($graph->hasNode('test.x'));
+        $this->assertFalse($graph->hasNode('test.a'));
+        $this->assertTrue($graph->hasEdge('a','test.x'));
 
     }
 

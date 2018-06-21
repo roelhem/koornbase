@@ -1,6 +1,7 @@
 <?php
 
 namespace Roelhem\RbacGraph\Contracts;
+use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 /**
  * Contract PathFinder
@@ -18,6 +19,7 @@ interface PathFinder extends BelongsToGraph
      * @param Node|string|integer $start
      * @param Node|string|integer $end
      * @return boolean
+     * @throws NodeNotFoundException
      */
     public function exists( $start, $end );
 
@@ -27,6 +29,7 @@ interface PathFinder extends BelongsToGraph
      * @param Node|string|integer $start
      * @param Node|string|integer $end
      * @return boolean
+     * @throws NodeNotFoundException
      */
     public function count( $start, $end );
 
@@ -36,6 +39,7 @@ interface PathFinder extends BelongsToGraph
      * @param Node|string|integer $start
      * @param Node|string|integer $end
      * @return Path|null
+     * @throws NodeNotFoundException
      */
     public function find( $start, $end );
 
@@ -44,7 +48,8 @@ interface PathFinder extends BelongsToGraph
      *
      * @param Node|string|integer $start
      * @param Node|string|integer $end
-     * @return Path[]
+     * @return array|Path[]
+     * @throws NodeNotFoundException
      */
     public function findAll( $start, $end );
 
