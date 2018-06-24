@@ -34,6 +34,13 @@ interface RbacDatabaseAssignable extends Assignable
      */
     public function assignments();
 
+    /**
+     * Assigns the provided node to the assignable object.
+     *
+     * @param Node|string|integer $node
+     */
+    public function assignNode( $node );
+
 
     /**
      * The relation to all the nodes in the database graph that were assigned to this model.

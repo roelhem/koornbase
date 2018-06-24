@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: roel
- * Date: 13-06-18
- * Time: 20:47
- */
 
 namespace Roelhem\RbacGraph\Database;
 

@@ -6,18 +6,34 @@ namespace Roelhem\RbacGraph\Contracts;
 /**
  * Contract Authorizer
  *
- * A contract for objects that handle an authorization with a the authorization-graph.
+ * A contract for objects that handle an authorization with an authorization-graph.
  *
  * @package Roelhem\RbacGraph\Contracts
  */
-interface Authorizer
+interface Authorizer extends BelongsToGraph
 {
 
     /**
-     * The graph on which the authorizer should preform the authorization.
+     * Returns the authorizable graph on which this authorizer performs its authorization.
      *
-     * @return Graph
+     * @return AuthorizableGraph
      */
     public function getGraph();
+
+    /**
+     * Returns the authorizable object which is authorized by this authorizer.
+     *
+     * @return Authorizable
+     */
+    public function getAutorizable();
+
+    /**
+     * Authorizes the provided node and returns the verdict.
+     *
+     * @param Node|string|integer $node
+     * @param array $attributes
+     * @return boolean
+     */
+    public function authorize($node, $attributes);
 
 }

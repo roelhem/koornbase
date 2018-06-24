@@ -34,12 +34,4 @@ interface Assignable extends Authorizable
      */
     public function getId();
 
-    /**
-     * Assigns a node to this assignable model, and thereby create a new assignment in the graph.
-     *
-     * @param Node|string|integer $node
-     */
-    public function assignNode( $node );
-
-
 }
