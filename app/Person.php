@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Roelhem\RbacGraph\Contracts\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -42,7 +45,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read Collection $users
  * @property-read Collection $debtors
  */
-class Person extends Model
+class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {
 
     use SoftDeletes;
@@ -51,7 +54,7 @@ class Person extends Model
     use HasRemarks;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
-    use HasChildRoles;
+    use HasMorphedRbacAssignments;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -197,5 +200,18 @@ class Person extends Model
         return $this->hasMany(Certificate::class, 'person_id');
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getAuthorizables()
+    {
+        return $this->users;
+    }
+
+    public function getAuthorizableGroups()
+    {
+        return $this->groups;
+    }
 
 }

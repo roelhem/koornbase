@@ -15,6 +15,25 @@ Rbac::role('Admin')->title('Admin')->assign(
     Rbac::role('Moderator')->title('Moderator')
 );
 
+// ---------------------------------------------------------------------------------------------------------------- //
+// -------  ABSTRACT ROLES  --------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------- //
+
+Rbac::abstractRole('DBCleaner')->title("'Schoonmaker' van de database")
+    ->description('Heeft alle Clean-up taken.')
+    ->assignTo('AdminDB');
+
+Rbac::abstractRole('ModelManager')->title('Model-beheerder')
+    ->description('Heeft alle "Manage"-taken van modellen.')
+    ->assignTo('Moderator');
+
+Rbac::abstractRole('ModelRestorer')->title('Model-hersteller')
+    ->description('Heeft alle "Restore"-taken van alle modellen die soft-deletes ondersteunen.')
+    ->assignTo('AdminDB');
+
+Rbac::abstractRole('ModelInspector')->title('Model-inspecteur')
+    ->description('Heeft de "Inspect"-taken van alle modellen.')
+    ->assignTo('AdminDB');
 
 // ---------------------------------------------------------------------------------------------------------------- //
 // -------  DEVELOPMENT ROLES  ------------------------------------------------------------------------------------ //
@@ -92,3 +111,5 @@ Rbac::group('membership_status.', function () {
 // ---------------------------------------------------------------------------------------------------------------- //
 
 Rbac::role('NoviceTutors')->title('Begeleiden van Kennismakers');
+
+Rbac::role('Commissielid');

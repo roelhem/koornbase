@@ -12,6 +12,10 @@ use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Roelhem\RbacGraph\Contracts\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -22,8 +26,10 @@ use Wildside\Userstamps\Userstamps;
  * @property integer $id
  * @property boolean $is_required
  * @property string $style
+ *
+ * @property-read Collection|Group[] $groups
  */
-class GroupCategory extends Model
+class GroupCategory extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {
 
     use SoftDeletes;
@@ -31,8 +37,9 @@ class GroupCategory extends Model
     use Sluggable;
 
     use HasShortName, HasDescription;
-
     use HasOptions;
+
+    use HasMorphedRbacAssignments;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -65,5 +72,18 @@ class GroupCategory extends Model
         return $this->hasMany(Group::class, 'category_id');
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getAuthorizables()
+    {
+        return $this->groups;
+    }
+
+    public function getAuthorizableGroups()
+    {
+        return collect([]);
+    }
 
 }

@@ -25,6 +25,15 @@ class GroupSeeder extends Seeder
                 'name','name_short','slug','description','style','is_required','options'
             ]);
             $category = GroupCategory::create($attrs);
+            if(!($category instanceof GroupCategory)) {
+                abort(500);
+            }
+
+            // GROUP-CATEGORY RBAC-ASSIGNMENTS
+            $assignValues = array_get($groupCategory, 'assign',[]);
+            foreach ($assignValues as $assignValue) {
+                $category->assignNode($assignValue);
+            }
 
             // GROUPS
             $groupValues = array_get($groupCategory, 'groups', []);

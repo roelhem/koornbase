@@ -117,8 +117,10 @@
       email_addresses:
         - introduckie@koornbeurs.nl
         - introducki@koornbeurs.nl
-      assing:
+      assign:
         - NoviceTutors
+  assign:
+    - Commissielid
 
 - name: Secundaire commissie
   style: group-secondary
@@ -138,8 +140,10 @@
     - name: Geeki
       email_addresses:
         - geeki@koornbeurs.nl
-      assing:
+      assign:
         - DevReviewer
+  assign:
+    - Commissielid
 
 - name: Disputen
   name_short: Dispuut

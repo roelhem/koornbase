@@ -194,5 +194,18 @@ class User extends Authenticatable implements RbacDatabaseAssignable
                     ->where('provider','=','twitter');
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: Authorizable ----------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getAuthorizableGroups()
+    {
+        if($this->person === null) {
+            return collect([]);
+        } else {
+            return collect([$this->person]);
+        }
+    }
+
 
 }

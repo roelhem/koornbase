@@ -12,6 +12,8 @@ use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
+use Roelhem\RbacGraph\Contracts\AuthorizableGroup;
 use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
@@ -29,10 +31,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property boolean $is_required
  *
  * @property-read GroupCategory $category
+ * @property-read Collection|Person[] $persons
  *
  * @property-read string $style
  */
-class Group extends Model implements RbacDatabaseAssignable
+class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {
 
     use SoftDeletes;
@@ -96,6 +99,21 @@ class Group extends Model implements RbacDatabaseAssignable
      */
     public function emailAddresses() {
         return $this->hasMany(GroupEmailAddress::class, 'group_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+
+    public function getAuthorizables()
+    {
+        return $this->persons;
+    }
+
+    public function getAuthorizableGroups()
+    {
+        return collect([$this->category]);
     }
 
 }
