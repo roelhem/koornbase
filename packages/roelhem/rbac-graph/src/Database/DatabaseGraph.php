@@ -43,11 +43,17 @@ class DatabaseGraph implements MutableGraph, AuthorizableGraph
      */
     public function getEntryNodes($authorizable)
     {
-        if($authorizable instanceof RbacDatabaseAssignable) {
-            return $this->getAssignedNodes($authorizable);
-        } else {
-            return collect([]);
+        $res = [];
+
+        foreach ($authorizable->getAuthorizableGroups() as $group) {
+            $res[] = $this->getEntryNodes($group);
         }
+
+        if($authorizable instanceof RbacDatabaseAssignable) {
+            $res[] = $this->getAssignedNodes($authorizable);
+        }
+
+        return collect($res)->flatten();
     }
 
 }

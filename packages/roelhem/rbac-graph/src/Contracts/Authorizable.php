@@ -7,6 +7,7 @@
  */
 
 namespace Roelhem\RbacGraph\Contracts;
+use Illuminate\Support\Collection;
 
 /**
  * Interface Authorizable
@@ -18,5 +19,11 @@ namespace Roelhem\RbacGraph\Contracts;
 interface Authorizable
 {
 
+    /**
+     * Returns a collection of all the authorizable groups where this authorizable object belongs to.
+     *
+     * @return Collection|AuthorizableGroup[]
+     */
+    public function getAuthorizableGroups();
 
 }
