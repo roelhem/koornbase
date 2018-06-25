@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Interfaces\Rbac\RbacPermission;
-use App\Interfaces\Rbac\RbacPermissionAuthorizable;
 use App\Permission;
 
 class UserResource extends Resource

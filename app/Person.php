@@ -10,7 +10,6 @@ use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
-use App\Traits\Rbac\HasChildRoles;
 use App\Types\AvatarType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -204,14 +203,43 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
     // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
     // ---------------------------------------------------------------------------------------------------------- //
 
+    /** @inheritdoc */
     public function getAuthorizables()
     {
         return $this->users;
     }
 
+    /** @inheritdoc */
     public function getAuthorizableGroups()
     {
         return $this->groups;
+    }
+
+    /** @inheritdoc */
+    public function getDynamicRoles()
+    {
+        $graph = $this->getGraph();
+
+        $res = [
+            $graph->getNodeByName('Person'),
+        ];
+
+        switch ($this->membership_status) {
+            case MembershipStatus::Outsider:
+                $res[] = $graph->getNodeByName('membership_status.Outsider');
+                break;
+            case MembershipStatus::Novice:
+                $res[] = $graph->getNodeByName('membership_status.Novice');
+                break;
+            case MembershipStatus::Member:
+                $res[] = $graph->getNodeByName('membership_status.Member');
+                break;
+            case MembershipStatus::FormerMember:
+                $res[] = $graph->getNodeByName('membership_status.FormerMember');
+                break;
+        }
+
+        return collect($res);
     }
 
 }

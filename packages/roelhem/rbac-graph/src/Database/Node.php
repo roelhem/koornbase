@@ -26,6 +26,8 @@ use Roelhem\RbacGraph\Exceptions\NodeNotUniqueException;
  * @property string|null $description
  *
  * @property array $options
+ *
+ * @method static Builder type(NodeType|integer|string $type)
  */
 class Node extends Model implements AdjacencyNode, MutableNode
 {
@@ -154,7 +156,8 @@ class Node extends Model implements AdjacencyNode, MutableNode
      * @param NodeContract|string|integer $node   an instance, name or id of the searched node.
      * @return Builder
      */
-    public function scopeNode(Builder $query, $node) {
+    public function scopeNode(Builder $query, $node)
+    {
         if(is_string($node)) {
             return $query->where('name','=',$node);
         }
@@ -165,6 +168,21 @@ class Node extends Model implements AdjacencyNode, MutableNode
             return $query->where('id','=',$node);
         }
         return $query->whereRaw('FALSE');
+    }
+
+    /**
+     * This scope only gives the nodes of one specific NodeType.
+     *
+     * @param Builder $query
+     * @param NodeType|string|integer $type
+     * @return Builder
+     */
+    public function scopeType(Builder $query, $type)
+    {
+        if(!is_integer($type)) {
+            $type = NodeType::by($type)->getValue();
+        }
+        return $query->where('type','=',$type);
     }
 
 

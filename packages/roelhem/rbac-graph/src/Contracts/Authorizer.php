@@ -1,6 +1,7 @@
 <?php
 
 namespace Roelhem\RbacGraph\Contracts;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -34,6 +35,22 @@ interface Authorizer extends BelongsToGraph
      * @param array $attributes
      * @return boolean
      */
-    public function authorize($node, $attributes);
+    public function allows($node, $attributes = []);
+
+    /**
+     * Returns if there is at least one node in the provided nodes for which the user is authorized.
+     *
+     * @param Collection|array|\Illuminate\Database\Eloquent\Builder $nodes
+     * @param array $attributes
+     * @return boolean
+     */
+    public function any($nodes, $attributes = []);
+
+    /**
+     * Returns if the authorizable in this authorizer is a super-user.
+     *
+     * @return boolean
+     */
+    public function isSuper();
 
 }

@@ -2,13 +2,10 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
+
 use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
-use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -82,6 +79,11 @@ class GroupCategory extends Model implements RbacDatabaseAssignable, Authorizabl
     }
 
     public function getAuthorizableGroups()
+    {
+        return collect([]);
+    }
+
+    public function getDynamicRoles()
     {
         return collect([]);
     }

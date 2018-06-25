@@ -23,6 +23,26 @@ use Roelhem\RbacGraph\Tests\TestCase;
 class PathTest extends TestCase
 {
 
+    public function testDatabaseGraph() {
+
+        $graph = resolve(DatabaseGraph::class);
+
+        if(!($graph instanceof DatabaseGraph)) {
+            $this->assertFalse(true);
+        } else {
+            $this->assertTrue(true);
+        }
+
+        $graph->getPotentialDynamicRoles(Person::class)->each(function($node) {
+            echo ' + '.$node.PHP_EOL;
+        });
+
+        $graph->getPotentialDynamicRoles(User::class)->each(function($node) {
+            echo ' + '.$node.PHP_EOL;
+        });
+
+    }
+
     /**
      * @throws
      */
@@ -71,8 +91,11 @@ class PathTest extends TestCase
 
         echo PHP_EOL.PHP_EOL;
 
-        $graph->getEntryNodes($user)->each(function($node) {
+        $graph->getEntryNodes($user)->each(function(Node $node) {
             echo $node.PHP_EOL;
+            $node->offspring->each(function(Node $node) {
+                echo '  + '.$node.PHP_EOL;
+            });
         });
     }
 

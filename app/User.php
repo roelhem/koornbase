@@ -2,10 +2,7 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
-use App\Traits\Rbac\HasChildRoles;
+
 use App\Types\AvatarType;
 use App\Enums\OAuthProviders;
 use Illuminate\Notifications\Notifiable;
@@ -205,6 +202,11 @@ class User extends Authenticatable implements RbacDatabaseAssignable
         } else {
             return collect([$this->person]);
         }
+    }
+
+    public function getDynamicRoles()
+    {
+        return collect([]);
     }
 
 

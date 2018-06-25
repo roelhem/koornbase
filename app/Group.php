@@ -2,12 +2,8 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
-use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -114,6 +110,11 @@ class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
     public function getAuthorizableGroups()
     {
         return collect([$this->category]);
+    }
+
+    public function getDynamicRoles()
+    {
+        return collect([]);
     }
 
 }

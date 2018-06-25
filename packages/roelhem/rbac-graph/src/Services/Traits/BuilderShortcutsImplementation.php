@@ -4,6 +4,7 @@ namespace Roelhem\RbacGraph\Services\Traits;
 
 
 use Roelhem\RbacGraph\Contracts\Builder;
+use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 
 trait BuilderShortcutsImplementation
 {
@@ -25,8 +26,8 @@ trait BuilderShortcutsImplementation
         return $this->builder()->abstractRole($name);
     }
 
-    public function dynamicRole(string $name) {
-        return $this->builder()->dynamicRole($name);
+    public function dynamicRole(DynamicRole $rule, ?string $name = null) {
+        return $this->builder()->dynamicRole($rule, $name);
     }
 
     public function task(string $name) {

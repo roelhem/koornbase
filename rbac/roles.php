@@ -78,32 +78,13 @@ Rbac::abstractRole('Dev')->title('Systeemontwikkeling')
 // -------  DYNAMIC ROLES  ---------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------- //
 
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\PersonRole);
 
-Rbac::dynamicRole('User')->title('Gebruiker')
-    ->description('Rol die automatisch wordt toegekend aan iedere gebruiker die is ingelogd.');
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Outsider));
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Novice));
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Member));
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::FormerMember));
 
-
-
-Rbac::dynamicRole('Person')->title('Persoon')
-    ->description('Rol die automatisch wordt toegekend aan iedere gebruiker die in de database is gekoppeld aan een persoon.');
-
-
-
-Rbac::group('membership_status.', function () {
-
-    Rbac::dynamicRole('Outsider')->title('Buitenstaander')
-        ->description('Rol die automatisch wordt toegekend aan iedere gebruiker met een gekoppeld persoon die als Buitenstaander staat geregistreerd.');
-
-    Rbac::dynamicRole('Novice')->title('Kennismaker')
-        ->description('Rol die automatisch wordt toegekend aan iedere gebruiker met een gekoppeld persoon die als Kennismaker staat geregistreerd.');
-
-    Rbac::dynamicRole('Member')->title('Lid')
-        ->description('Rol die automatisch wordt toegekend aan iedere gebruiker met een gekoppeld persoon die als Lid staat geregistreerd.');
-
-    Rbac::dynamicRole('FormerMember')->title('Oud-lid')
-        ->description('Rol die automatisch wordt toegekend aan iedere gebruiker met een gekoppeld persoon die als Oud-lid staat geregistreerd.');
-
-});
 
 
 // ---------------------------------------------------------------------------------------------------------------- //

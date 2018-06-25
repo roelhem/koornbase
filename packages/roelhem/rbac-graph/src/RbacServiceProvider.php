@@ -2,16 +2,19 @@
 
 namespace Roelhem\RbacGraph;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Roelhem\RbacGraph\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\InitCommand;
 use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
+use Roelhem\RbacGraph\Contracts\AuthorizableGraph;
 use Roelhem\RbacGraph\Contracts\Builder;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\PathFinder;
 use Roelhem\RbacGraph\Contracts\RbacService;
+use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\Edge;
@@ -20,6 +23,7 @@ use Roelhem\RbacGraph\Database\Observers\EdgeObserver;
 use Roelhem\RbacGraph\Database\Observers\NodeObserver;
 use Roelhem\RbacGraph\Database\Observers\PathObserver;
 use Roelhem\RbacGraph\Database\Path;
+use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Services\DefaultRbacService;
 
 /**
@@ -51,9 +55,63 @@ class RbacServiceProvider extends ServiceProvider
             ]);
         }
 
+        // Observers
         Node::observe(NodeObserver::class);
         Edge::observe(EdgeObserver::class);
         Path::observe(PathObserver::class);
+
+
+        // Gates
+        \Gate::before(function($user, $ability, $arguments = []) {
+
+            $authorizer = new DatabaseAuthorizer($user);
+            $graph = $authorizer->getGraph();
+
+
+            if($authorizer->any(Node::type(NodeType::SUPER_ROLE))) {
+                return true;
+            }
+
+
+            // MODEL ABILITY
+            if(count($arguments) > 0) {
+                $firstArgument = $arguments[0];
+                $modelClass = null;
+
+                if($firstArgument instanceof Model) {
+                    $modelClass = get_class($firstArgument);
+                } elseif(is_string($firstArgument) && is_subclass_of($firstArgument, Model::class)) {
+                    $modelClass = $firstArgument;
+                }
+
+                if($modelClass !== null) {
+                    $modelAbilitiesQuery = Node::type(NodeType::MODEL_ABILITY)
+                        ->whereJsonContains('options',[
+                            'ability' => $ability,
+                            'modelClass' => $modelClass
+                        ]);
+                    if($modelAbilitiesQuery->count() > 0) {
+                        return $authorizer->any($modelAbilitiesQuery, $arguments);
+                    }
+                }
+            }
+
+            // ABILITY
+            $abilityQuery = Node::type(NodeType::ABILITY())->whereJsonContains('options', [
+                'ability' => $ability
+            ]);
+
+            if($abilityQuery->count() > 0) {
+                return $authorizer->any($abilityQuery, $arguments);
+            }
+
+            // OTHERS
+            if($graph->hasNodeName($ability)) {
+                return $authorizer->allows($ability, $arguments);
+            }
+
+            return null;
+        });
 
     }
 
@@ -67,6 +125,7 @@ class RbacServiceProvider extends ServiceProvider
 
         // The graphs
         $this->app->singleton(DatabaseGraph::class);
+        $this->app->bind(AuthorizableGraph::class, DatabaseGraph::class);
         $this->app->bind(MutableGraph::class, DatabaseGraph::class);
         $this->app->bind(Graph::class, DatabaseGraph::class);
 

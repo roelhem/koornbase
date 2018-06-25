@@ -5,6 +5,7 @@ namespace Roelhem\RbacGraph\Builders\Traits;
 use Illuminate\Routing\Route;
 use Roelhem\RbacGraph\Contracts\Builder;
 use Roelhem\RbacGraph\Contracts\NodeBuilder;
+use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 use Roelhem\RbacGraph\Enums\NodeType;
 
 trait ImplementBuilderShortcuts
@@ -47,11 +48,33 @@ trait ImplementBuilderShortcuts
     }
 
     /**
+     * @param DynamicRole $rule
      * @param string $name
      * @return NodeBuilder
      */
-    public function dynamicRole(string $name) {
-        return $this->node(NodeType::DYNAMIC_ROLE, $name);
+    public function dynamicRole(DynamicRole $rule, ?string $name = null) {
+
+        if($name === null) {
+            $name = $rule->defaultNodeName();
+        }
+
+        $options = [];
+        $options['rule'] = [];
+        $options['rule']['constr'] = $rule->constructor();
+        $attrs = $rule->constructorAttributes();
+        if(is_array($attrs) && count($attrs) > 0) {
+            $options['rule']['constrAttrs'] = $attrs;
+        }
+
+        $for = $rule->forAuthorizableTypes();
+        if(is_array($for) && count($for) > 0) {
+            $options['for'] = $for;
+        }
+
+        $node = $this->node(NodeType::DYNAMIC_ROLE, $name, $options);
+
+        $node->title($rule->defaultNodeTitle());
+        $node->description($rule->defaultNodeDescription());
     }
 
     /**

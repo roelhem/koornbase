@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph\Database\Traits\Node;
 
 
+use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -132,7 +133,11 @@ trait NodeRelations
      * @return MorphToMany
      */
     protected function assignableRelation($className) {
-        return $this->morphedByMany($className, 'assignable','rbac_assignments','node_id')
+        return $this->morphedByMany($className, 'assignable','rbac_assignments')
             ->as('assignment')->using(Assignment::class);
+    }
+    
+    public function assignedUsers() {
+        return $this->assignableRelation(User::class);
     }
 }

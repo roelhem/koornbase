@@ -10,6 +10,7 @@ namespace Roelhem\RbacGraph\Contracts;
 
 
 use Illuminate\Routing\Route;
+use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 
 interface BuilderShortcuts
 {
@@ -33,10 +34,11 @@ interface BuilderShortcuts
     public function abstractRole(string $name);
 
     /**
-     * @param string $name
+     * @param DynamicRole $rule
+     * @param string|null $name
      * @return NodeBuilder
      */
-    public function dynamicRole(string $name);
+    public function dynamicRole(DynamicRole $rule, ?string $name = null);
 
     /**
      * @param string $name

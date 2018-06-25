@@ -43,7 +43,7 @@ class Assignment extends MorphPivot implements AssignmentContract
 
     protected $dates = ['created_at','updated_at'];
 
-    protected $fillable = ['node_id'];
+    protected $fillable = ['node_id','assignable_id','assignable_type'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- SCOPE ---------------------------------------------------------------------------------------------- //

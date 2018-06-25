@@ -315,16 +315,16 @@
         },
         {
             "name": "commerceguys/intl",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/commerceguys/intl.git",
-                "reference": "44abbda26e6d2d51021ad49766429b020c053151"
+                "reference": "22156e447530d6ebd387bfee51ef1ae2c70a5ff0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/commerceguys/intl/zipball/44abbda26e6d2d51021ad49766429b020c053151",
-                "reference": "44abbda26e6d2d51021ad49766429b020c053151",
+                "url": "https://api.github.com/repos/commerceguys/intl/zipball/22156e447530d6ebd387bfee51ef1ae2c70a5ff0",
+                "reference": "22156e447530d6ebd387bfee51ef1ae2c70a5ff0",
                 "shasum": ""
             },
             "require": {
@@ -355,7 +355,7 @@
                 }
             ],
             "description": "Internationalization library powered by CLDR data.",
-            "time": "2018-05-28T00:56:04+00:00"
+            "time": "2018-06-21T14:03:04+00:00"
         },
         {
             "name": "cviebrock/eloquent-sluggable",
@@ -2033,16 +2033,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "7.1.1",
+            "version": "7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "2e47fa7fcad3b207cfbefa0a0e26af00445f3906"
+                "reference": "8184f771d43ea7305ddbb893d0daf6f0352ec5fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/2e47fa7fcad3b207cfbefa0a0e26af00445f3906",
-                "reference": "2e47fa7fcad3b207cfbefa0a0e26af00445f3906",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/8184f771d43ea7305ddbb893d0daf6f0352ec5fd",
+                "reference": "8184f771d43ea7305ddbb893d0daf6f0352ec5fd",
                 "shasum": ""
             },
             "require": {
@@ -2099,7 +2099,7 @@
                 "secure",
                 "server"
             ],
-            "time": "2018-05-21T14:01:37+00:00"
+            "time": "2018-06-23T16:57:59+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -4379,16 +4379,16 @@
         },
         {
             "name": "laravel/homestead",
-            "version": "v7.8.0",
+            "version": "v7.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/homestead.git",
-                "reference": "5b2e6fb35a80314af38328dca04273d782b36724"
+                "reference": "986f3db020de89c4651d018667ad034301caa738"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/homestead/zipball/5b2e6fb35a80314af38328dca04273d782b36724",
-                "reference": "5b2e6fb35a80314af38328dca04273d782b36724",
+                "url": "https://api.github.com/repos/laravel/homestead/zipball/986f3db020de89c4651d018667ad034301caa738",
+                "reference": "986f3db020de89c4651d018667ad034301caa738",
                 "shasum": ""
             },
             "require": {
@@ -4426,7 +4426,7 @@
                 }
             ],
             "description": "A virtual machine for web artisans.",
-            "time": "2018-06-18T13:10:20+00:00"
+            "time": "2018-06-24T16:38:19+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -5173,16 +5173,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.2.4",
+            "version": "7.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "00bc0b93f0ff4f557e9ea766557fde96da9a03dd"
+                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/00bc0b93f0ff4f557e9ea766557fde96da9a03dd",
-                "reference": "00bc0b93f0ff4f557e9ea766557fde96da9a03dd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/400a3836ee549ae6f665323ac3f21e27eac7155f",
+                "reference": "400a3836ee549ae6f665323ac3f21e27eac7155f",
                 "shasum": ""
             },
             "require": {
@@ -5198,7 +5198,7 @@
                 "php": "^7.1",
                 "phpspec/prophecy": "^1.7",
                 "phpunit/php-code-coverage": "^6.0.7",
-                "phpunit/php-file-iterator": "^2.0",
+                "phpunit/php-file-iterator": "^2.0.1",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.0",
                 "sebastian/comparator": "^3.0",
@@ -5253,7 +5253,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-05T03:40:05+00:00"
+            "time": "2018-06-21T13:13:39+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

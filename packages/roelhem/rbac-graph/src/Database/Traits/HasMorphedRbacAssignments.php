@@ -38,7 +38,7 @@ trait HasMorphedRbacAssignments
      * @return string
      */
     public function getType() {
-        return static::class;
+        return get_class($this);
     }
 
     /**
@@ -69,7 +69,7 @@ trait HasMorphedRbacAssignments
      * @return MorphMany
      */
     public function assignments() {
-        return $this->morphMany(Assignment::class, 'assignable', $this->getType());
+        return $this->morphMany(Assignment::class, 'assignable');
     }
 
     /**
@@ -78,7 +78,8 @@ trait HasMorphedRbacAssignments
      * @return MorphToMany
      */
     public function assignedNodes() {
-        return $this->morphToMany(Node::class, 'assignable','rbac_assignments')->withTimestamps();
+        return $this->morphToMany(Node::class, 'assignable','rbac_assignments')
+            ->as('assignment')->using(Assignment::class);
     }
 
 }

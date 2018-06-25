@@ -8,6 +8,7 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 use Illuminate\Support\Collection;
+use Roelhem\RbacGraph\Enums\NodeType;
 
 
 /**
@@ -29,5 +30,21 @@ interface AuthorizableGraph extends Graph
      * @return Collection|Node[]
      */
     public function getEntryNodes($authorizable);
+
+    /**
+     * Returns if there exists a node in the graph with the provided parameters.
+     *
+     * @param array $params
+     * @return boolean
+     */
+    public function hasNodesWith($params = []);
+
+    /**
+     * Returns the nodes in the graph that have the provided parameters.
+     *
+     * @param array $params
+     * @return Collection|Node[]
+     */
+    public function getNodesWith($params = []);
 
 }

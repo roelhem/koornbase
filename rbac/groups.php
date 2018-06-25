@@ -74,7 +74,10 @@ Rbac::group('models:',function() {
 
 
     Rbac::group('group-email-addresses:', function() {
+
         Rbac::crudAbilities(\App\GroupEmailAddress::class);
+
+        Rbac::ability('group-mail-list');
 
         Rbac::task('Inspect')
             ->assign('crud.view','groups:Inspect')

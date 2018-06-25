@@ -26,4 +26,20 @@ interface Authorizable
      */
     public function getAuthorizableGroups();
 
+    /**
+     * A function that returns a string that can uniquely identify this assignable object in combination with the
+     * id.
+     *
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * A function that returns the id of this authorizable object. In combination with the type, this should be
+     * able to uniquely identify this assignable object from all other assignable objects.
+     *
+     * @return string|integer
+     */
+    public function getId();
+
 }
