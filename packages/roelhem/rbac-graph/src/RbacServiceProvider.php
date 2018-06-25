@@ -12,6 +12,12 @@ use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\RbacService;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
+use Roelhem\RbacGraph\Database\Edge;
+use Roelhem\RbacGraph\Database\Node;
+use Roelhem\RbacGraph\Database\Observers\EdgeObserver;
+use Roelhem\RbacGraph\Database\Observers\NodeObserver;
+use Roelhem\RbacGraph\Database\Observers\PathObserver;
+use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Services\DefaultRbacService;
 
 /**
@@ -42,6 +48,10 @@ class RbacServiceProvider extends ServiceProvider
                 NodesCommand::class,
             ]);
         }
+
+        Node::observe(NodeObserver::class);
+        Edge::observe(EdgeObserver::class);
+        Path::observe(PathObserver::class);
 
     }
 

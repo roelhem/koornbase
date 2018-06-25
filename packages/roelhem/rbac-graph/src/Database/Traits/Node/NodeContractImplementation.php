@@ -14,6 +14,7 @@ use Roelhem\RbacGraph\Contracts\Node as NodeContract;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Database\Node;
+use Roelhem\RbacGraph\Database\Traits\BelongsToDatabaseGraph;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
@@ -21,15 +22,8 @@ use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 trait NodeContractImplementation
 {
-    /**
-     * Returns the graph where this Node belongs to.
-     *
-     * @return Graph
-     */
-    public function getGraph()
-    {
-        return resolve(DatabaseGraph::class);
-    }
+
+    use BelongsToDatabaseGraph;
 
     /**
      * Returns the unique identifier integer for this node in the graph.

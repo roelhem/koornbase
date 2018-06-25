@@ -28,7 +28,7 @@ interface PathFinder extends BelongsToGraph
      *
      * @param Node|string|integer $start
      * @param Node|string|integer $end
-     * @return boolean
+     * @return integer
      * @throws NodeNotFoundException
      */
     public function count( $start, $end );

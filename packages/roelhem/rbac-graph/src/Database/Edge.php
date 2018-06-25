@@ -64,4 +64,36 @@ class Edge extends Pivot implements EdgeContract
         ]);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- PATH ----------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns that path that belongs to this edge.
+     *
+     * @return Path
+     */
+    public function getPathAttribute() {
+        $path = $this->path()->firstOrFail();
+        if(!($path instanceof Path)) {
+            throw new \LogicException("Wrong type for Path.");
+        }
+        return $path;
+    }
+
+    /**
+     * Returns a query that finds the path that belongs to this edge.
+     *
+     * @return Builder
+     */
+    public function path() {
+        return Path::edge($this);
+    }
+
+
+    public function __toString()
+    {
+        return $this->parent.'->'.$this->child;
+    }
+
 }

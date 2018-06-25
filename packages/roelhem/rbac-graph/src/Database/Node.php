@@ -168,6 +168,10 @@ class Node extends Model implements AdjacencyNode, MutableNode
     }
 
 
+    public function __toString()
+    {
+        return $this->type->getName()."({$this->id}:'{$this->name}')";
+    }
 
 
 }
