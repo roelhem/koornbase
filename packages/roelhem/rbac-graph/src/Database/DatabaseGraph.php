@@ -3,19 +3,18 @@
 namespace Roelhem\RbacGraph\Database;
 
 
-
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Assignable;
 use Roelhem\RbacGraph\Contracts\Assignment as AssignmentContract;
+use Roelhem\RbacGraph\Contracts\Authorizable;
+use Roelhem\RbacGraph\Contracts\AuthorizableGraph;
 use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
 use Roelhem\RbacGraph\Contracts\Node as NodeContract;
 use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Database\Traits\Graph\GraphAssignmentsImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\MutableGraphContractImplementation;
-use Roelhem\RbacGraph\Exceptions\AssignmentNotFoundException;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\WrongGraphException;
 
 
@@ -26,105 +25,29 @@ use Roelhem\RbacGraph\Exceptions\WrongGraphException;
  *
  * @package Roelhem\RbacGraph\Database
  */
-class DatabaseGraph implements MutableGraph
+class DatabaseGraph implements MutableGraph, AuthorizableGraph
 {
 
     use GraphContractImplementation;
     use MutableGraphContractImplementation;
+    use GraphAssignmentsImplementation;
     use GraphDefaultEquals;
 
-
     /**
-     * Returns a collection of all the assignments in this graph.
+     * Returns the nodes that are authorized for the given authorizable object in the initial state.
      *
-     * @return Collection|Assignment[]
-     */
-    public function getAssignments()
-    {
-        return Assignment::query()->get();
-    }
-
-    /**
-     * Returns whether or not this graph has a assignment from the $node to the $assignable.
+     * (These are the the nodes that are granted to the authorizable before walking trough the graph.)
      *
-     * @param Assignable $assignable
-     * @param NodeContract|string|integer $node An instance, name or id of the node.
-     * @return bool
-     */
-    public function hasAssignment($assignable, $node)
-    {
-        return Assignment::query()->assignment($assignable, $node)->exists();
-    }
-
-    /**
-     * Returns the assignment of the $node to the $assignable object.
-     *
-     * @param Assignable $assignable
-     * @param NodeContract|string|integer $node An instance, name or id of the node.
-     * @return Assignment
-     * @throws AssignmentNotFoundException
-     */
-    public function getAssignment($assignable, $node)
-    {
-        $res = Assignment::query()->assignment($assignable, $node)->first();
-        if($res instanceof Assignment) {
-            return $res;
-        } else {
-            throw new AssignmentNotFoundException("There exists no assignment in this graph between the provided assignable and node.");
-        }
-    }
-
-    /**
-     * Returns a collection of all the assignments of a specific $node.
-     *
-     * @param NodeContract|string|integer $node An instance, name or id of the node.
-     * @return Collection|Assignment[]
-     * @throws NodeNotFoundException
-     */
-    public function getNodeAssignments($node)
-    {
-        return $this->getNode($node)->assignments;
-    }
-
-    /**
-     * Returns a collection of all the assignments of one sepecific $assignable object.
-     *
-     * @param Assignable $assignable
-     * @return Collection|Assignment[]
-     * @throws WrongGraphException
-     */
-    public function getAssignableAssignments($assignable)
-    {
-        if(!($assignable instanceof RbacDatabaseAssignable)) {
-            throw new WrongGraphException('Only models with the RbacDatabaseAssignable contract can use DatabaseGraph.');
-        }
-        return $assignable->assignments;
-    }
-
-    /**
-     * Returns a collection of all the assignable objects that are assigned to this node.
-     *
-     * @param NodeContract|string|integer $node An instance, name or id of the node.
-     * @return Collection|RbacDatabaseAssignable[]
-     * @throws NodeNotFoundException
-     */
-    public function getNodeAssignables($node)
-    {
-        return $this->getNode($node)->assignments->pluck('assignable');
-    }
-
-    /**
-     * Returns a collection of all the nodes that were assigned to the $assignable object.
-     *
-     * @param Assignable $assignable
+     * @param Authorizable $authorizable
      * @return Collection|Node[]
-     * @throws WrongGraphException
      */
-    public function getAssignedNodes($assignable)
+    public function getEntryNodes($authorizable)
     {
-        if(!($assignable instanceof RbacDatabaseAssignable)) {
-            throw new WrongGraphException('Only models with the RbacDatabaseAssignable contract can use DatabaseGraph.');
+        if($authorizable instanceof RbacDatabaseAssignable) {
+            return $this->getAssignedNodes($authorizable);
+        } else {
+            return collect([]);
         }
-        return $assignable->assignedNodes;
     }
+
 }

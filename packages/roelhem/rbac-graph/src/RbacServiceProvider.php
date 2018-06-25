@@ -10,8 +10,10 @@ use Roelhem\RbacGraph\Commands\TypesCommand;
 use Roelhem\RbacGraph\Contracts\Builder;
 use Roelhem\RbacGraph\Contracts\Graph;
 use Roelhem\RbacGraph\Contracts\MutableGraph;
+use Roelhem\RbacGraph\Contracts\PathFinder;
 use Roelhem\RbacGraph\Contracts\RbacService;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
+use Roelhem\RbacGraph\Database\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Observers\EdgeObserver;
@@ -67,6 +69,10 @@ class RbacServiceProvider extends ServiceProvider
         $this->app->singleton(DatabaseGraph::class);
         $this->app->bind(MutableGraph::class, DatabaseGraph::class);
         $this->app->bind(Graph::class, DatabaseGraph::class);
+
+        // The pathfinder
+        $this->app->singleton(DatabasePathFinder::class);
+        $this->app->bind(PathFinder::class, DatabasePathFinder::class);
 
 
         // The builders
