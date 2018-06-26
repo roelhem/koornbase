@@ -10,8 +10,8 @@ namespace Roelhem\RbacGraph\Graphs\SubGraphs\Traits;
 
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 trait HasContainsNodeMethod

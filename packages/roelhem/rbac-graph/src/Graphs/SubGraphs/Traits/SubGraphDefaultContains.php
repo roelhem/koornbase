@@ -10,10 +10,9 @@ namespace Roelhem\RbacGraph\Graphs\SubGraphs\Traits;
 
 
 use Roelhem\RbacGraph\Contracts\BelongsToGraph;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\SubGraph;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 
 trait SubGraphDefaultContains
 {

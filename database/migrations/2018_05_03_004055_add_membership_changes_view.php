@@ -16,17 +16,17 @@ class AddMembershipChangesView extends Migration
     {
         $novices = DB::table('memberships')
             ->select('person_id','id AS membership_id','application AS date')
-            ->addSelect(DB::raw(MembershipStatus::Novice.' AS status'))
+            ->addSelect(DB::raw(MembershipStatus::NOVICE.' AS status'))
             ->whereNotNull('application');
 
         $members = DB::table('memberships')
             ->select('person_id','id AS membership_id','start AS date')
-            ->addSelect(DB::raw(MembershipStatus::Member.' AS status'))
+            ->addSelect(DB::raw(MembershipStatus::MEMBER.' AS status'))
             ->whereNotNull('start');
 
         $formerMembers = DB::table('memberships')
             ->select('person_id','id AS membership_id','end AS date')
-            ->addSelect(DB::raw(MembershipStatus::FormerMember.' AS status'))
+            ->addSelect(DB::raw(MembershipStatus::FORMER_MEMBER.' AS status'))
             ->whereNotNull('end');
 
         $novices->union($members)->union($formerMembers);

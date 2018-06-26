@@ -1,0 +1,128 @@
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  FACEBOOK
+# ------------------------------------------------------------------------------------------------------------------
+
+FACEBOOK:
+  displayName: Facebook
+  title: Facebook Graph API
+  usage: Wordt oofdzakelijk gebruikt voor inloggen met een Facebook account en het ophalen van avatar-afbeeldingen.
+
+  active: true
+
+  ranking:
+    avatar: 100
+    secure:  80
+
+  style:
+    bootstrap:
+      icons:
+        fa: fa-facebook
+      button: btn-facebook
+
+  links:
+    - title: Client Dashboard
+      description: Instellingen de client-app beheren.
+      url: https://developers.facebook.com/apps/
+      icons:
+        fa: fa-tachometer
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  GOOGLE
+# ------------------------------------------------------------------------------------------------------------------
+
+
+GOOGLE:
+  displayName: Google
+  title: Google APIs
+
+  active: false
+
+  ranking:
+    avatar:  90
+    secure: 100
+
+  style:
+    bootstrap:
+      icons:
+        fa: fa-google
+      button: btn-google
+
+  links:
+    - title: Client Dashboard
+      description: Instellingen van de client-app beheren voor de vershillende API's die google levert.
+      url: https://console.developers.google.com/apis/dashboard
+      icons:
+        fa: fa-tachometer
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  TWITTER
+# ------------------------------------------------------------------------------------------------------------------
+
+
+TWITTER:
+  displayName: Twitter
+
+  active: false
+
+  ranking:
+    avatar:  80
+    secure:  70
+
+  style:
+    bootstrap:
+      icons:
+        fa: fa-twitter
+      button: btn-twitter
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  GITHUB
+# ------------------------------------------------------------------------------------------------------------------
+
+GITHUB:
+  displayName: GitHub
+  title: GitHub Developer
+
+  active: true
+
+  ranking:
+    avatar:  10
+    secure:  60
+
+  style:
+    bootstrap:
+      icons:
+        fa: fa-github-alt
+      button: btn-github
+
+  links:
+    - title: Developer Settings
+      url: https://github.com/settings/applications
+      icons:
+        fa: fa-tachometer
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  TUDELFT
+# ------------------------------------------------------------------------------------------------------------------
+
+
+TUDELFT:
+  displayName: TU-Delft
+
+  active: false
+
+  ranking:
+    avatar:  50
+    secure:  50
+
+  style:
+    bootstrap:
+      icons:
+        fa: fa-university
+      button: btn-outline-primary

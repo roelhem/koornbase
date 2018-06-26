@@ -3,14 +3,12 @@
 namespace Unit\Filters;
 
 
-use Roelhem\RbacGraph\Contracts\MutableNode;
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\NodeFilter;
+use Roelhem\RbacGraph\Contracts\Nodes\MutableNode;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
+use Roelhem\RbacGraph\Contracts\Tools\NodeFilter;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Filters\CallbackNodeFilter;
+use Roelhem\RbacGraph\Graphs\Tools\Filters\CallbackNodeFilter;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
-use Roelhem\RbacGraph\Nodes\SimpleNode;
 use Roelhem\RbacGraph\Tests\TestCase;
 
 class CallbackNodeFilterTest extends TestCase

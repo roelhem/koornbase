@@ -5,6 +5,7 @@ namespace Tests\Feature\Rbac;
 use App\Group;
 use App\Person;
 use App\User;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Roelhem\RbacGraph\Database\Assignment;
 use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
@@ -32,6 +33,68 @@ class GateTest extends TestCase
         $this->assertFalse(\Gate::allows('test'));
         $this->assertFalse($user->can('test2'));
     }
+
+    /**
+     * @throws
+     */
+    public function testSimpleUsage()
+    {
+
+        $b = \Rbac::builder();
+
+        $b->role('RoleA');
+        $b->role('RoleB');
+
+        $b->task('TaskA')->assignTo('RoleA');
+        $b->task('TaskB')->assignTo('RoleB');
+        $b->task('TaskC')->assignTo('RoleB');
+
+        $b->crudAbilities(Group::class, 'group')->assignTo('TaskA');
+        $b->crudAbilities(Person::class, 'person')->assignTo('TaskB');
+
+        $b->task('TaskC')->assign('group.view');
+
+        $userA = factory(User::class)->create();
+        if(!($userA instanceof User)) {
+            $this->assertFalse(true);
+        }
+        $userA->assignNode('RoleA');
+        $userA->load('assignedNodes');
+        $gateA = \Gate::forUser($userA);
+        if(!($gateA instanceof Gate)) {
+            $this->assertFalse(true);
+        }
+
+        $this->assertTrue($gateA->allows('view', Group::class));
+        $this->assertTrue($gateA->allows('delete', Group::class));
+        $this->assertFalse($gateA->allows('view', Person::class));
+        $this->assertFalse($gateA->allows('view'));
+
+
+        $userB = factory(User::class)->create();
+        if(!($userB instanceof User)) {
+            $this->assertFalse(true);
+        }
+        $userB->assignNode('RoleB');
+        $userB->load('assignedNodes');
+        $gateB = \Gate::forUser($userB);
+        if(!($gateB instanceof Gate)) {
+            $this->assertFalse(true);
+        }
+
+        $this->assertTrue($gateB->allows('view', Group::class));
+        $this->assertFalse($gateB->allows('delete', Group::class));
+        $this->assertTrue($gateB->allows('view', Person::class));
+        $this->assertFalse($gateB->allows('view'));
+
+
+    }
+
+
+
+
+
+
 
     /**
      * Tests the abilities in the gate.

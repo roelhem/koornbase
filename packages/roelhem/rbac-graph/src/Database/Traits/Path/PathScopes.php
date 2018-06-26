@@ -3,8 +3,8 @@
 namespace Roelhem\RbacGraph\Database\Traits\Path;
 
 use Illuminate\Database\Eloquent\Builder;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
-use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Edges\Edge as EdgeContract;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 

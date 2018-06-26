@@ -9,9 +9,9 @@
 namespace Roelhem\RbacGraph\Database\Traits\Graph;
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Assignable;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\Assignable;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Assignment;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Exceptions\AssignmentNotFoundException;

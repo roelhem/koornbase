@@ -12,12 +12,8 @@ namespace Feature;
 use App\Group;
 use App\Person;
 use App\User;
-use Roelhem\RbacGraph\Contracts\Authorizable;
-use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
-use Roelhem\RbacGraph\Database\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\Node;
-use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Tests\TestCase;
 
 class PathTest extends TestCase

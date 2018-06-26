@@ -2,9 +2,8 @@
 
 namespace Roelhem\RbacGraph\Tests\Unit;
 
-use Roelhem\RbacGraph\Builders\RbacBuilder;
-use Roelhem\RbacGraph\Contracts\Builder;
-use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
+use Roelhem\RbacGraph\Contracts\Services\Builder;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
 use Roelhem\RbacGraph\Tests\TestCase;
 

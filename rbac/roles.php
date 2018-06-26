@@ -78,14 +78,13 @@ Rbac::abstractRole('Dev')->title('Systeemontwikkeling')
 // -------  DYNAMIC ROLES  ---------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------------------------- //
 
+Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\ActiveUserRole);
+
 Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\PersonRole);
 
-Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Outsider));
-Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Novice));
-Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::Member));
-Rbac::dynamicRole(new \App\AuthRules\DynamicRoles\MembershipStatusRole(\App\Enums\MembershipStatus::FormerMember));
-
-
+foreach (\App\Enums\MembershipStatus::getEnumerators() as $membershipStatus) {
+    Rbac::dynamicRole($membershipStatus);
+}
 
 // ---------------------------------------------------------------------------------------------------------------- //
 // -------  KOORNBEURS SPECIFIC ROLES  ---------------------------------------------------------------------------- //

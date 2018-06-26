@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Roelhem\RbacGraph\Database\Traits\Edge\EdgeContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Edge\EdgeRelations;
-use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Edges\Edge as EdgeContract;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 /**

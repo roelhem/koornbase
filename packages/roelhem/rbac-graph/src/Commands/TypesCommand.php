@@ -11,7 +11,6 @@ namespace Roelhem\RbacGraph\Commands;
 
 use Illuminate\Console\Command;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Symfony\Component\Yaml\Yaml;
 
 class TypesCommand extends Command
 {

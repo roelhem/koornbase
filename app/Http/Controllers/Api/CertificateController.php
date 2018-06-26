@@ -25,6 +25,8 @@ class CertificateController extends Controller
      */
     public function store(Request $request, FinderCollection $finders)
     {
+        $this->authorize('create',Certificate::class);
+
         $validatedData = $request->validate([
             'person' => 'required|finds:person',
             'category' => 'required|finds:certificate_category',
@@ -53,9 +55,12 @@ class CertificateController extends Controller
      * @param  Request $request
      * @param  \App\Certificate  $certificate
      * @return Resource
+     * @throws
      */
     public function show(Request $request, Certificate $certificate)
     {
+        $this->authorize('view', $certificate);
+
         return $this->prepare($certificate, $request);
     }
 
@@ -69,6 +74,8 @@ class CertificateController extends Controller
      */
     public function update(Request $request, Certificate $certificate)
     {
+        $this->authorize('update',$certificate);
+
         $validatedData = $request->validate([
             'passed' => 'boolean',
             'examination_at' => 'nullable|date',
@@ -91,6 +98,8 @@ class CertificateController extends Controller
      */
     public function destroy(Certificate $certificate)
     {
+        $this->authorize('delete', $certificate);
+
         $certificate->delete();
     }
 }

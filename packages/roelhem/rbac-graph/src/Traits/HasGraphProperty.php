@@ -3,8 +3,7 @@
 namespace Roelhem\RbacGraph\Traits;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Exceptions\RbacGraphException;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 
 /**
  * Trait HasSuperGraphProperty

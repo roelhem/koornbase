@@ -77,11 +77,11 @@ trait HasStartEnd
      */
     public function getChronologyAttribute() {
         if($this->isPast()) {
-            return Chronology::Past;
+            return Chronology::PAST;
         } elseif($this->isFuture()) {
-            return Chronology::Future;
+            return Chronology::FUTURE;
         } else {
-            return Chronology::Now;
+            return Chronology::NOW;
         }
     }
 
@@ -137,11 +137,11 @@ trait HasStartEnd
      */
     public function scopeChronology($query, $chronology = 0, $at = null) {
         switch ($chronology) {
-            case Chronology::Past:
+            case Chronology::PAST:
                 return $this->scopePast($query, $at);
-            case Chronology::Now:
+            case Chronology::NOW:
                 return $this->scopeNow($query, $at);
-            case Chronology::Future:
+            case Chronology::FUTURE:
                 return $this->scopeFuture($query, $at);
         }
     }

@@ -9,11 +9,11 @@
 namespace Roelhem\RbacGraph\Graphs\Paths;
 
 
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\MutablePath;
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\MutablePath;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Exceptions\PathEmptyException;
 use Roelhem\RbacGraph\Exceptions\PathWrongEdgeException;
 use Roelhem\RbacGraph\Exceptions\WrongGraphException;

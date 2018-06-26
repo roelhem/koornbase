@@ -9,8 +9,8 @@
 namespace Roelhem\RbacGraph\Services;
 
 
-use Roelhem\RbacGraph\Contracts\Builder;
-use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\Services\Builder;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 
 /**
  * Class DefaultRbacService

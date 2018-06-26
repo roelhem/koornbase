@@ -9,12 +9,12 @@
 namespace Roelhem\RbacGraph\Graphs;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
-use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasEdgeArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasNodeArray;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultContains;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Graphs\Traits\HasAssignmentArray;
+use Roelhem\RbacGraph\Graphs\Traits\HasEdgeArray;
+use Roelhem\RbacGraph\Graphs\Traits\HasNodeArray;
 
 class ArrayGraph implements Graph
 {

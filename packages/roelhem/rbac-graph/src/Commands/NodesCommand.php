@@ -10,13 +10,10 @@ namespace Roelhem\RbacGraph\Commands;
 
 
 use Illuminate\Console\Command;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Facades\Rbac;
-use Roelhem\RbacGraph\Iterators\BreathFirstGraphIterator;
-use Roelhem\RbacGraph\Iterators\DepthFirstGraphIterator;
+use Roelhem\RbacGraph\Graphs\Tools\Iterators\DepthFirstGraphIterator;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Yaml\Yaml;
 
 class NodesCommand extends Command
 {
@@ -32,7 +29,7 @@ class NodesCommand extends Command
     public function handle() {
 
 
-        $graph = Rbac::graph();
+        $graph = \Rbac::graph();
 
         $iterator = new DepthFirstGraphIterator($graph);
 

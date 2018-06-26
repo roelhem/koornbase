@@ -28,7 +28,6 @@ class PersonAddressController extends Controller
      */
     public function store(PersonAddressStoreRequest $request, FinderCollection $finders)
     {
-
         $person = $finders->find($request->validated()['person'], 'person');
         $personAddress = $person->addresses()->create($request->validated());
 
@@ -46,9 +45,12 @@ class PersonAddressController extends Controller
      * @param  Request $request
      * @param  \App\PersonAddress  $personAddress
      * @return Resource
+     * @throws
      */
     public function show(Request $request, PersonAddress $personAddress)
     {
+        $this->authorize('view', $personAddress);
+
         return $this->prepare($personAddress, $request);
     }
 
@@ -81,6 +83,8 @@ class PersonAddressController extends Controller
      */
     public function destroy(PersonAddress $personAddress)
     {
+        $this->authorize('delete', $personAddress);
+
         $personAddress->delete();
     }
 }

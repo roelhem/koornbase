@@ -8,6 +8,7 @@
 
 namespace Roelhem\RbacGraph\Contracts;
 
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 
 /**
  * Interface BelongsToGraph

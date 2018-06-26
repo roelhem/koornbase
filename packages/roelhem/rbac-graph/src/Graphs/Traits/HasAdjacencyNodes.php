@@ -6,13 +6,13 @@
  * Time: 04:16
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\AdjacencyNode;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Nodes\AdjacencyNode;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 

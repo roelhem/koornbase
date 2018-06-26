@@ -10,8 +10,8 @@ use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\AuthorizableGroup;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 

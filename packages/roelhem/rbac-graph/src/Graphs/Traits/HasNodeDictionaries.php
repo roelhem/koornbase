@@ -6,11 +6,10 @@
  * Time: 00:03
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 
-use function GuzzleHttp\Psr7\str;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\NodeIdNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;

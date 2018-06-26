@@ -9,9 +9,7 @@
 namespace Roelhem\RbacGraph\Database\Traits\Node;
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
-use Roelhem\RbacGraph\Database\DatabaseGraph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Traits\BelongsToDatabaseGraph;

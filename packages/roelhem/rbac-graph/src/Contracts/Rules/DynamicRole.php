@@ -9,7 +9,8 @@
 namespace Roelhem\RbacGraph\Contracts\Rules;
 
 
-use Roelhem\RbacGraph\Contracts\Authorizable;
+
+use Roelhem\RbacGraph\Contracts\Models\Authorizable;
 
 interface DynamicRole extends BaseRule
 {

@@ -4,19 +4,18 @@ namespace Roelhem\RbacGraph;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Roelhem\RbacGraph\Builders\RbacBuilder;
-use Roelhem\RbacGraph\Commands\InitCommand;
+use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
-use Roelhem\RbacGraph\Contracts\AuthorizableGraph;
-use Roelhem\RbacGraph\Contracts\Builder;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Contracts\PathFinder;
-use Roelhem\RbacGraph\Contracts\RbacService;
-use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
+use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
+use Roelhem\RbacGraph\Contracts\Services\Builder;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
+use Roelhem\RbacGraph\Contracts\Tools\PathFinder;
+use Roelhem\RbacGraph\Contracts\Services\RbacService;
+use Roelhem\RbacGraph\Database\Tools\DatabaseAuthorizer;
+use Roelhem\RbacGraph\Database\Tools\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
-use Roelhem\RbacGraph\Database\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Observers\EdgeObserver;
@@ -49,7 +48,6 @@ class RbacServiceProvider extends ServiceProvider
         // Registering the commands
         if($this->app->runningInConsole()) {
             $this->commands([
-                InitCommand::class,
                 TypesCommand::class,
                 NodesCommand::class,
             ]);

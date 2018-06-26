@@ -45,9 +45,12 @@ class MembershipController extends Controller
      * @param Request $request
      * @param Membership $membership
      * @return Resource
+     * @throws 
      */
     public function show(Request $request, Membership $membership)
     {
+        $this->authorize('view', $membership);
+
         return $this->prepare($membership, $request);
     }
 
@@ -75,6 +78,8 @@ class MembershipController extends Controller
      */
     public function destroy(Membership $membership)
     {
+        $this->authorize('delete', $membership);
+
         $membership->delete();
     }
 

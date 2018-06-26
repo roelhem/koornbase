@@ -1,13 +1,14 @@
 <?php
 
 namespace Roelhem\RbacGraph\Database\Traits;
+
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Roelhem\RbacGraph\Database\Assignment;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Node;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Exceptions\AssignmentNotAllowedException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 

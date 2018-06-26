@@ -6,7 +6,7 @@
  * Time: 00:26
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 
 use Roelhem\RbacGraph\Contracts\BelongsToGraph;

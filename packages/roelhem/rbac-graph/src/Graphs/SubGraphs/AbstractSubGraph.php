@@ -3,8 +3,8 @@
 namespace Roelhem\RbacGraph\Graphs\SubGraphs;
 
 
-use Roelhem\RbacGraph\Contracts\SubGraph;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
+use Roelhem\RbacGraph\Contracts\Graphs\SubGraph;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultContains;
 use Roelhem\RbacGraph\Graphs\SubGraphs\Traits\HasNoAssignments;
 use Roelhem\RbacGraph\Graphs\SubGraphs\Traits\HasSuperGraph;
 

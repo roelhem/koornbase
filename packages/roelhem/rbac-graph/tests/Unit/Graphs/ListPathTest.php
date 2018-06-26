@@ -9,9 +9,9 @@
 namespace Unit\Graphs;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Path;
-use Roelhem\RbacGraph\Contracts\SubGraph;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\Path;
+use Roelhem\RbacGraph\Contracts\Graphs\SubGraph;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
 use Roelhem\RbacGraph\Graphs\Paths\ListPath;

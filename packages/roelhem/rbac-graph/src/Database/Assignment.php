@@ -11,10 +11,10 @@ namespace Roelhem\RbacGraph\Database;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
-use Roelhem\RbacGraph\Contracts\Assignable;
-use Roelhem\RbacGraph\Contracts\Assignment as AssignmentContract;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\Assignable;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Assignments\Assignment as AssignmentContract;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\RbacGraphException;
 use Roelhem\RbacGraph\Exceptions\WrongGraphException;

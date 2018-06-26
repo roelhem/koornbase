@@ -6,10 +6,10 @@
  * Time: 23:44
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 
-use Roelhem\RbacGraph\Contracts\Edge;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
 
 trait GraphRelatedFromEdgeMethods
 {

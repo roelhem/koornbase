@@ -23,10 +23,12 @@ class GroupEmailAddressController extends Controller
      * @param Request $request
      * @param FinderCollection $finders
      * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws
      */
     public function store(Request $request, FinderCollection $finders) {
+
+        $this->authorize('create', GroupEmailAddress::class);
+
         $validatedData = $request->validate([
             'email_address' => 'required|string|email|unique:group_email_addresses|max:255',
             'remarks' => 'nullable|string',
@@ -46,8 +48,12 @@ class GroupEmailAddressController extends Controller
      * @param Request $request
      * @param GroupEmailAddress $emailAddress
      * @return Resource
+     * @throws
      */
     public function show(Request $request, GroupEmailAddress $emailAddress) {
+
+        $this->authorize('view', $emailAddress);
+
         return $this->prepare($emailAddress, $request);
     }
 
@@ -60,6 +66,9 @@ class GroupEmailAddressController extends Controller
      * @throws \Throwable
      */
     public function update(Request $request, GroupEmailAddress $emailAddress) {
+
+        $this->authorize('update', $emailAddress);
+
         $validatedData = $request->validate([
             'email_address' => [
                 'sometimes',
@@ -84,6 +93,9 @@ class GroupEmailAddressController extends Controller
      * @throws \Exception
      */
     public function destroy(GroupEmailAddress $emailAddress) {
+
+        $this->authorize('delete', $emailAddress);
+
         $emailAddress->delete();
     }
 }

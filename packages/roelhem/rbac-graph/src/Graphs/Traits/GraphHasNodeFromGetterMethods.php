@@ -1,10 +1,8 @@
 <?php
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 trait GraphHasNodeFromGetterMethods

@@ -44,7 +44,7 @@ class SearchController extends Controller
                 $groups = explode(',', $groups);
             }
             foreach ($groups as $group) {
-                $query->groupMemberOf($group, Chronology::Now);
+                $query->groupMemberOf($group, Chronology::NOW);
             }
         }
 

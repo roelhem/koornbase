@@ -5,8 +5,6 @@ namespace Roelhem\RbacGraph\Seeders;
 
 
 use Illuminate\Database\Seeder;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Database\DatabaseGraph;
 
 /**
  * Class RbacGraphSeeder

@@ -5,15 +5,13 @@ namespace Roelhem\RbacGraph\Database;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Builder;
-use Roelhem\RbacGraph\Contracts\AdjacencyNode;
-use Roelhem\RbacGraph\Contracts\MutableNode;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Nodes\AdjacencyNode;
+use Roelhem\RbacGraph\Contracts\Nodes\MutableNode;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Illuminate\Database\Eloquent\Model;
 use Roelhem\RbacGraph\Database\Traits\Node\NodeContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Node\NodeRelations;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
-use Roelhem\RbacGraph\Exceptions\NodeNotUniqueException;
 
 /**
  * Class Node
@@ -70,7 +68,7 @@ class Node extends Model implements AdjacencyNode, MutableNode
 
     /**
      * @param string $value
-     * @return array
+     * @return array|\stdClass
      */
     public function getOptionsAttribute($value) {
         if($value === null) {

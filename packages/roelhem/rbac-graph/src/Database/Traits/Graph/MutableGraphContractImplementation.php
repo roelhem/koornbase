@@ -8,11 +8,11 @@
 
 namespace Roelhem\RbacGraph\Database\Traits\Graph;
 
-use Roelhem\RbacGraph\Builders\RbacBuilder;
-use Roelhem\RbacGraph\Contracts\Builder;
-use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
+use Roelhem\RbacGraph\Contracts\Services\Builder;
+use Roelhem\RbacGraph\Contracts\Edges\Edge as EdgeContract;
+use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Database\Edge;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Enums\NodeType;

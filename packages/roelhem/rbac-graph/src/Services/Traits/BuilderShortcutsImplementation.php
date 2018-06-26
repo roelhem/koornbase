@@ -3,7 +3,7 @@
 namespace Roelhem\RbacGraph\Services\Traits;
 
 
-use Roelhem\RbacGraph\Contracts\Builder;
+use Roelhem\RbacGraph\Contracts\Services\Builder;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 
 trait BuilderShortcutsImplementation

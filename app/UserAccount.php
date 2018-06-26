@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\OAuthProvider;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Laravel\Socialite\Two\User as OAuthUser;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $provider
+ * @property OAuthProvider $provider
  * @property string $token
  * @property string|null $refresh_token
  * @property integer|null $expires_in
@@ -72,6 +73,16 @@ class UserAccount extends Model
         return $result;
     }
 
+    /**
+     * Converts the string-value of the provider to an instance of OAuthProvider.
+     *
+     * @param string $value
+     * @return OAuthProvider
+     */
+    public function getProviderAttribute($value) {
+        return OAuthProvider::get($value);
+    }
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM MUTATORS ------------------------------------------------------------------------------------ //
     // ---------------------------------------------------------------------------------------------------------- //
@@ -96,6 +107,18 @@ class UserAccount extends Model
                 $this->expires_in = $user->expiresIn;
             }
         }
+    }
+
+
+    /**
+     * Ensures that the provider can be set by an OAuthProvider instance and that it will always be an element
+     * of OAuthProvider.
+     *
+     * @param OAuthProvider|string $newValue
+     */
+    public function setProviderAttribute($newValue)
+    {
+        $this->attributes['provider'] = OAuthProvider::get($newValue)->value;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

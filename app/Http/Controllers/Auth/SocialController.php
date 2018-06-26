@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\OAuthProviders;
+use App\Enums\OAuthProvider;
 use App\UserAccount;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Laravel\Socialite\Facades\Socialite;
 
 /**
  * Class SocialController
@@ -21,11 +19,11 @@ class SocialController extends Controller
     /**
      * Validates if the provider can be used.
      *
-     * @param $provider
+     * @param string $provider
      */
     protected function validateProvider($provider) {
 
-        if(!OAuthProviders::getIsActive($provider)) {
+        if(!OAuthProvider::get($provider)->active) {
             abort(404, "Couldn't find the OAuth provider $provider.");
         }
     }
@@ -33,13 +31,13 @@ class SocialController extends Controller
     /**
      * The action that redirects the user to the external provider.
      *
-     * @param $provider
+     * @param string $provider
      * @return mixed
      */
     public function redirectToProvider($provider) {
         $this->validateProvider($provider);
 
-        return Socialite::driver($provider)->redirect();
+        return \Socialite::driver($provider)->redirect();
     }
 
 
@@ -52,7 +50,7 @@ class SocialController extends Controller
     public function handleProviderCallback($provider) {
         $this->validateProvider($provider);
 
-        $user = Socialite::driver($provider)->user();
+        $user = \Socialite::driver($provider)->user();
 
 
         // Check if the user is also present in the database.

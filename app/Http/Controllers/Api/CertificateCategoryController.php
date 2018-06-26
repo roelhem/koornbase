@@ -21,9 +21,12 @@ class CertificateCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return Resource
+     * @throws
      */
     public function store(Request $request)
     {
+        $this->authorize('create', CertificateCategory::class);
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'name_short' => 'nullable|string|max:63',
@@ -42,9 +45,12 @@ class CertificateCategoryController extends Controller
      * @param  Request $request
      * @param  \App\CertificateCategory  $category
      * @return Resource
+     * @throws
      */
     public function show(Request $request, CertificateCategory $category)
     {
+        $this->authorize('view', $category);
+
         return $this->prepare($category, $request);
     }
 
@@ -58,6 +64,8 @@ class CertificateCategoryController extends Controller
      */
     public function update(Request $request, CertificateCategory $category)
     {
+        $this->authorize('update', $category);
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|max:255',
             'name_short' => 'nullable|string|max:63',
@@ -80,6 +88,8 @@ class CertificateCategoryController extends Controller
      */
     public function destroy(Request $request, CertificateCategory $category)
     {
+        $this->authorize('delete', $category);
+
         if($category->is_required) {
             abort(403, 'Dit certificaat is belangrijk voor het werken van het systeem.');
         } else {

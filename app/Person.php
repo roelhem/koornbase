@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Roelhem\RbacGraph\Contracts\AuthorizableGroup;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 
@@ -91,22 +91,6 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
         $result->addYears($age);
 
         return $result;
-    }
-
-    public function childRoles() {
-
-        return Role::query()->whereHas('groups', function(Builder $query) {
-            return $query->whereHas('persons', function(Builder $query) {
-                return $query->where('id','=',$this->id);
-            });
-        })->orWhereHas('groupCategories', function (Builder $query) {
-            return $query->whereHas('groups', function(Builder $query) {
-                return $query->whereHas('persons', function(Builder $query) {
-                    return $query->where('id','=',$this->id);
-                });
-            });
-        })->orWhere('id','=','person')
-        ->orWhere('id', '=', MembershipStatus::getRoleId($this->membership_status));
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -213,33 +197,6 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
     public function getAuthorizableGroups()
     {
         return $this->groups;
-    }
-
-    /** @inheritdoc */
-    public function getDynamicRoles()
-    {
-        $graph = $this->getGraph();
-
-        $res = [
-            $graph->getNodeByName('Person'),
-        ];
-
-        switch ($this->membership_status) {
-            case MembershipStatus::Outsider:
-                $res[] = $graph->getNodeByName('membership_status.Outsider');
-                break;
-            case MembershipStatus::Novice:
-                $res[] = $graph->getNodeByName('membership_status.Novice');
-                break;
-            case MembershipStatus::Member:
-                $res[] = $graph->getNodeByName('membership_status.Member');
-                break;
-            case MembershipStatus::FormerMember:
-                $res[] = $graph->getNodeByName('membership_status.FormerMember');
-                break;
-        }
-
-        return collect($res);
     }
 
 }

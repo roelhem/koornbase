@@ -9,12 +9,12 @@
 namespace Roelhem\RbacGraph\Graphs\SubGraphs;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\NodeFilter;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
+use Roelhem\RbacGraph\Contracts\Tools\NodeFilter;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Exceptions\RbacGraphException;
-use Roelhem\RbacGraph\Filters\CallbackNodeFilter;
+use Roelhem\RbacGraph\Graphs\Tools\Filters\CallbackNodeFilter;
 use Roelhem\RbacGraph\Graphs\SubGraphs\Traits\HasInducedEdges;
 use Roelhem\RbacGraph\Graphs\SubGraphs\Traits\HasContainsNodeMethod;
 

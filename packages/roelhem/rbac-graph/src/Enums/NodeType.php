@@ -3,10 +3,9 @@
 namespace Roelhem\RbacGraph\Enums;
 
 
-use Barryvdh\Reflection\DocBlock\Tag;
-use MabeEnum\EnumMap;
+use Illuminate\Contracts\Support\Arrayable;
 use MabeEnum\EnumSet;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use MabeEnum\Enum;
 use Roelhem\RbacGraph\Enums\Traits\HasConsoleFormatStyle;
 use Symfony\Component\Yaml\Tag\TaggedValue;
@@ -32,7 +31,7 @@ use Symfony\Component\Yaml\Yaml;
  * @method static NodeType SCOPE_RULE()
  * @method static NodeType MODEL_RULE()
  */
-final class NodeType extends Enum
+final class NodeType extends Enum implements Arrayable
 {
 
     use HasConsoleFormatStyle;
@@ -196,6 +195,15 @@ final class NodeType extends Enum
     }
 
     /**
+     * Returns the description of this NodeType
+     *
+     * @return string|null
+     */
+    public function getDescription() {
+        return $this->conf('description', null);
+    }
+
+    /**
      * Returns if this type is allowed to be directly assigned to an Assignable object.
      *
      * @return bool
@@ -254,6 +262,19 @@ final class NodeType extends Enum
             }
         }
         return $res;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  IMPLEMENTS: Arrayable  ------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+
+    public function toArray()
+    {
+        return [
+            'value' => $this->getValue(),
+            'name' => $this->getName()
+        ];
     }
 
 }

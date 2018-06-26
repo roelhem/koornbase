@@ -11,8 +11,8 @@ class RbacSeeder extends \Roelhem\RbacGraph\Seeders\RbacGraphSeeder
 
     protected $buildFiles = [
         __DIR__.'/../../rbac/roles.php',
-        __DIR__.'/../../rbac/groups.php',
-        __DIR__.'/../../rbac/persons.php'
+        __DIR__ . '/../../rbac/models.php',
+        __DIR__. '/../../rbac/me.php'
     ];
 
 }

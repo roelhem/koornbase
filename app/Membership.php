@@ -28,7 +28,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read boolean $started
  * @property-read boolean $ended
  *
- * @property-read integer $status
+ * @property-read MembershipStatus $status
  * @property-read Carbon|null $status_at
  */
 class Membership extends Model
@@ -83,17 +83,17 @@ class Membership extends Model
      *
      * The value is an enum element of \App|Enums\MembershipStatus .
      *
-     * @return int
+     * @return MembershipStatus
      */
     public function getStatusAttribute() {
         if ($this->ended) {
-            return MembershipStatus::FormerMember;
+            return MembershipStatus::FORMER_MEMBER();
         } elseif ($this->started) {
-            return MembershipStatus::Member;
+            return MembershipStatus::MEMBER();
         } elseif ($this->applied) {
-            return MembershipStatus::Novice;
+            return MembershipStatus::NOVICE();
         } else {
-            return MembershipStatus::Outsider;
+            return MembershipStatus::OUTSIDER();
         }
     }
 
@@ -103,13 +103,7 @@ class Membership extends Model
      * @return Carbon|null
      */
     public function getStatusAtAttribute() {
-        switch ($this->status) {
-            case MembershipStatus::FormerMember: return $this->end;
-            case MembershipStatus::Member: return $this->start;
-            case MembershipStatus::Novice: return $this->application;
-            case MembershipStatus::Outsider:
-            default: return null;
-        }
+        return $this->status->getTimestamp($this);
     }
 
 }

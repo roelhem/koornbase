@@ -2,13 +2,11 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Enums\MembershipStatus;
-use App\KoornbeursCard;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PersonResource extends Resource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -64,8 +62,8 @@ class PersonResource extends Resource
 
         $res = [
             'status' => $this->membership_status,
-            'name' => MembershipStatus::getDescription($this->membership_status),
-            'label' => MembershipStatus::getLabel($this->membership_status),
+            'name' => $this->membership_status->name,
+            'title' => $this->membership_status->title,
         ];
 
         $since = $this->membership_status_since;

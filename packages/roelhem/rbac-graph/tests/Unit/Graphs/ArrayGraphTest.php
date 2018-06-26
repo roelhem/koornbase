@@ -9,7 +9,7 @@
 namespace Roelhem\RbacGraph\Tests\Unit;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 use Roelhem\RbacGraph\Graphs\ArrayGraph;
 use Roelhem\RbacGraph\Tests\TestCase;
 

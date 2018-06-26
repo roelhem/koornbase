@@ -10,16 +10,13 @@ namespace Roelhem\RbacGraph\Services;
 
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Authorizable;
-use Roelhem\RbacGraph\Contracts\AuthorizableGraph;
-use Roelhem\RbacGraph\Contracts\Authorizer;
-use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
+use Roelhem\RbacGraph\Contracts\Models\Authorizable;
+use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
+use Roelhem\RbacGraph\Database\Tools\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 /**
  * Class CompatibilityService

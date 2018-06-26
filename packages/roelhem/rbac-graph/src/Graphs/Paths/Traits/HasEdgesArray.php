@@ -10,8 +10,8 @@ namespace Roelhem\RbacGraph\Graphs\Paths\Traits;
 
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Exceptions\PathIndexException;

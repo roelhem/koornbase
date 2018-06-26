@@ -13,11 +13,15 @@ class MeController extends Controller
      *
      * @param Request $request
      * @return UserResource
+     * @throws
      */
     public function me(Request $request) {
 
+        $this->authorize('view-me');
+
         $user = \Auth::user();
-        $user->load('person');
+        $user->setRelations([]);
+
         $user->load($this->getAskedRelations($request));
 
         return new UserResource($user);

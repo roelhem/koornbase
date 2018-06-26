@@ -43,9 +43,18 @@ class PersonController extends Controller
      * @param  \App\Person  $person
      * @param  Request      $request
      * @return Resource
+     * @throws
      */
     public function show(Person $person, Request $request)
     {
+        $this->authorize('view', $person);
+
+        $person->load([
+            'addresses' => function($query) {
+                return $query->where('id','=',1);
+            }
+        ]);
+
         return $this->prepare($person, $request);
     }
 
@@ -73,6 +82,8 @@ class PersonController extends Controller
      */
     public function destroy(Person $person)
     {
+        $this->authorize('delete', $person);
+
         $person->delete();
     }
 

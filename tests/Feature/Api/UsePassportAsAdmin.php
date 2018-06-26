@@ -26,14 +26,16 @@ trait UsePassportAsAdmin
      * Sets passport such that you can use test API-calls as an Admin-account.
      *
      * @return User  the user that is used to navigate the database.
+     * @throws
      */
     public function asAdmin() {
 
         $this->defaultHeaders = ['Accept','application/json'];
+        $super = \Rbac::superRole()->getNode();
 
         $user = factory(User::class)->create();
         if($user instanceof User) {
-            $user->assignRole('admin');
+            $user->assignNode($super);
         }
         Passport::actingAs($user);
         return $user;

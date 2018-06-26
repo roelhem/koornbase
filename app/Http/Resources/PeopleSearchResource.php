@@ -51,7 +51,7 @@ class PeopleSearchResource extends JsonResource
 
         if ($lastStatusChange === null) {
             return [
-                'status' => MembershipStatus::Outsider,
+                'status' => MembershipStatus::OUTSIDER(),
             ];
         } else {
             return [

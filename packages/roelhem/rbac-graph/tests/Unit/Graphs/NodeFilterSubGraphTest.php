@@ -9,9 +9,9 @@
 namespace Unit\Graphs;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\SubGraph;
-use Roelhem\RbacGraph\Filters\CallbackNodeFilter;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\SubGraph;
+use Roelhem\RbacGraph\Graphs\Tools\Filters\CallbackNodeFilter;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
 use Roelhem\RbacGraph\Graphs\SubGraphs\NodeFilterSubGraph;
 use Roelhem\RbacGraph\Tests\TestCase;

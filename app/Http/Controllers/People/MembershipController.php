@@ -37,7 +37,7 @@ class MembershipController extends Controller
         $at = Carbon::parse($request->get('at'));
 
         foreach($person->memberships as $membership) {
-            if($membership->status !== MembershipStatus::FormerMember) {
+            if($membership->status !== MembershipStatus::FORMER_MEMBER()) {
                 abort(400, 'There is an other membership currently active.');
             }
 

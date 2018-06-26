@@ -6,10 +6,10 @@
  * Time: 00:31
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 
-use Roelhem\RbacGraph\Contracts\Edge;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
 use Roelhem\RbacGraph\Exceptions\EdgeNotFoundException;
 
 trait GraphHasEdgeFromGetterMethods

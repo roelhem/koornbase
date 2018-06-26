@@ -10,8 +10,8 @@ namespace Roelhem\RbacGraph\Helpers;
 
 
 use Roelhem\RbacGraph\Contracts\BelongsToGraph;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Traits\HasGraphProperty;
 
 class IdGenerator implements BelongsToGraph

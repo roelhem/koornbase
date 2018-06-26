@@ -8,8 +8,7 @@
 
 namespace Roelhem\RbacGraph\Database\Traits\Edge;
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Database\DatabaseGraph;
+
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Traits\BelongsToDatabaseGraph;
 

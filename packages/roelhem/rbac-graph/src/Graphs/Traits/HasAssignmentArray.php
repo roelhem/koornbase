@@ -6,14 +6,13 @@
  * Time: 21:00
  */
 
-namespace Roelhem\RbacGraph\Contracts\Traits;
+namespace Roelhem\RbacGraph\Graphs\Traits;
 
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Assignable;
-use Roelhem\RbacGraph\Contracts\Assignment;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Models\Assignable;
+use Roelhem\RbacGraph\Contracts\Assignments\Assignment;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\AssignmentNotFoundException;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 
 /**

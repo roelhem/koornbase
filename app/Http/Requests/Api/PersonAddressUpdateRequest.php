@@ -25,7 +25,8 @@ class PersonAddressUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $personAddress = $this->findFromUrl('person_address');
+        return $this->user()->can('update', $personAddress);
     }
 
     /**

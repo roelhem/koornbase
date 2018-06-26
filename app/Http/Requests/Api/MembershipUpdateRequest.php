@@ -22,7 +22,8 @@ class MembershipUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $membership = $this->findFromUrl('membership');
+        return $this->user()->can('update', $membership);
     }
 
     /**

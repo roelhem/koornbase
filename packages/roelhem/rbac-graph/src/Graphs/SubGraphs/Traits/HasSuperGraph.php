@@ -9,7 +9,7 @@
 namespace Roelhem\RbacGraph\Graphs\SubGraphs\Traits;
 
 
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Traits\HasGraphProperty;
 

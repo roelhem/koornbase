@@ -4,11 +4,10 @@ namespace App;
 
 
 use App\Types\AvatarType;
-use App\Enums\OAuthProviders;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 
 /**
@@ -29,6 +28,8 @@ use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
  * @property-read string|null $name_short
  * @property-read string|null $avatar_letters
  * @property-read AvatarType $avatar
+ *
+ * @method static User|null find(integer $id)
  *
  * @inheritdoc
  */
@@ -114,16 +115,14 @@ class User extends Authenticatable implements RbacDatabaseAssignable
         $res = new AvatarType;
         $res->letters = $this->avatar_letters;
 
-        $query = $this->accounts()->whereNotNull('avatar');
+        $account = $this->accounts()->whereNotNull('avatar')->get()
+            ->sortByDesc(function(UserAccount $userAccount) {
+                return $userAccount->provider->conf('ranking.avatar', 0);
+            })->first();
 
-        foreach (OAuthProviders::ordeningAvatar() as $provider) {
-            $query->orderByRaw('"provider" = ? DESC', [$provider]);
-        }
-        $account = $query->first();
         if($account) {
             $res->image = $account->avatar;
         }
-
         return $res;
     }
 

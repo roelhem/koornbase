@@ -5,7 +5,7 @@
 
     <table class="table card-table">
         <tbody>
-        @foreach(\App\Enums\OAuthProviders::asOrderedArray('social') as $provider)
+        @foreach(\App\Enums\OAuthProvider::asOrderedArray('social') as $provider)
         <tr>
             <td class="w-1 p-2 px-3">
                 <b-button size="sm" block class="text-left {{ $provider['isActive'] ? $provider['buttonClass'] : 'disabled btn-gray' }}"

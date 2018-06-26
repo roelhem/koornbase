@@ -6,6 +6,7 @@ use App\Http\Requests\Api\Traits\CommonMethodsForPersonContactObjects;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Person;
+use App\PersonPhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -23,7 +24,7 @@ class PersonPhoneNumberStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', PersonPhoneNumber::class);
     }
 
     /**

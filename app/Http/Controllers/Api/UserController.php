@@ -35,6 +35,8 @@ class UserController extends Controller
      */
     public function store(Request $request, FinderCollection $finders)
     {
+        $this->authorize('store', User::class);
+
         $validatedData = $request->validate([
             'name' => 'required|unique:users|string|max:255',
             'email' => 'required|unique:users|email|max:255',
@@ -65,9 +67,12 @@ class UserController extends Controller
      * @param  Request    $request
      * @param  \App\User  $user
      * @return UserResource
+     * @throws
      */
     public function show(Request $request, User $user)
     {
+        $this->authorize('view', $user);
+
         $user->load($this->getAskedRelations($request));
         return new UserResource($user);
     }
@@ -83,6 +88,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user, FinderCollection $finders)
     {
+        $this->authorize('update', $user);
+
         $validatedData = $request->validate([
             'name' => ['sometimes','required','string','max:255', Rule::unique('users')->ignore($user->id)],
             'email' => ['sometimes','required','email','max:255', Rule::unique('users')->ignore($user->id)],
@@ -120,10 +127,12 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @throws \Exception
+     * @throws
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
+
         $user->delete();
     }
 }

@@ -6,20 +6,16 @@ namespace Roelhem\RbacGraph\Database;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Roelhem\RbacGraph\Contracts\Assignment as AssignmentContract;
-use Roelhem\RbacGraph\Contracts\Authorizable;
-use Roelhem\RbacGraph\Contracts\AuthorizableGraph;
-use Roelhem\RbacGraph\Contracts\Edge as EdgeContract;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
-use Roelhem\RbacGraph\Contracts\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Models\Authorizable;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
+use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphAssignmentsImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\MutableGraphContractImplementation;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\WrongGraphException;
 
 
 /**

@@ -10,12 +10,12 @@ namespace Feature\PathFinders;
 
 
 use Roelhem\RbacGraph\Contracts\BelongsToGraph;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Path;
-use Roelhem\RbacGraph\Contracts\PathFinder;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\Path;
+use Roelhem\RbacGraph\Contracts\Tools\PathFinder;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
-use Roelhem\RbacGraph\PathFinders\RecursivePathFinder;
+use Roelhem\RbacGraph\Graphs\Tools\PathFinders\RecursivePathFinder;
 use Roelhem\RbacGraph\Tests\TestCase;
 
 class PathFinderCommonTests extends TestCase

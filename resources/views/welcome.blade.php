@@ -50,7 +50,6 @@
 
                 <h2 class="my-8">Permissions!</h2>
 
-                <p>{{ var_dump(\App\Facades\Rbac::userRoles()) }}</p>
             </b-col>
 
             <b-col lg="4">

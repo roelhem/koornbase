@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\GroupCategory;
-use App\Policies\GroupCategoryPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -15,7 +13,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        GroupCategory::class => GroupCategoryPolicy::class
     ];
 
     /**
@@ -25,7 +22,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
 
         Passport::routes();
 

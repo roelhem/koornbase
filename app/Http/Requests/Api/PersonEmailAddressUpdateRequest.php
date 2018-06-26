@@ -23,7 +23,8 @@ class PersonEmailAddressUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $emailAddress = $this->findFromUrl('person_email_address');
+        return $this->user()->can('update', $emailAddress);
     }
 
     /**

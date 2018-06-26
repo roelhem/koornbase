@@ -23,7 +23,8 @@ class PersonPhoneNumberUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $phoneNumber = $this->findFromUrl('person_phone_number');
+        return $this->user()->can('update', $phoneNumber);
     }
 
     /**

@@ -9,12 +9,12 @@
 namespace Roelhem\RbacGraph\Graphs;
 
 
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
-use Roelhem\RbacGraph\Contracts\Traits\HasAdjacencyNodes;
-use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultContains;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Graphs\Traits\HasAdjacencyNodes;
+use Roelhem\RbacGraph\Graphs\Traits\HasAssignmentArray;
+use Roelhem\RbacGraph\Graphs\Traits\HasNodeDictionaries;
 
 class AdjacencyGraph implements Graph
 {

@@ -46,6 +46,8 @@ class PersonEmailAddressController extends Controller
      */
     public function show(Request $request, PersonEmailAddress $personEmailAddress)
     {
+        $this->authorize('view', $personEmailAddress);
+
         return $this->prepare($personEmailAddress, $request);
     }
 
@@ -78,6 +80,8 @@ class PersonEmailAddressController extends Controller
      */
     public function destroy(PersonEmailAddress $personEmailAddress)
     {
+        $this->authorize('delete', $personEmailAddress);
+
         $personEmailAddress->delete();
     }
 }

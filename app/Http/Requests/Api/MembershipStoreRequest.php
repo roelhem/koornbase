@@ -5,6 +5,7 @@ namespace App\Http\Requests\Api;
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
+use App\Membership;
 use App\Person;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,7 +22,7 @@ class MembershipStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', Membership::class);
     }
 
     /**

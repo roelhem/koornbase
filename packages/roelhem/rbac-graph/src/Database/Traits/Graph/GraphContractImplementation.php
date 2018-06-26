@@ -4,7 +4,7 @@ namespace Roelhem\RbacGraph\Database\Traits\Graph;
 
 use Illuminate\Support\Collection;
 use Roelhem\RbacGraph\Contracts\BelongsToGraph;
-use Roelhem\RbacGraph\Contracts\Node as NodeContract;
+use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Edge;

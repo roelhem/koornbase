@@ -9,11 +9,11 @@
 namespace Roelhem\RbacGraph\Tests\Unit;
 
 
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\Graph;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Contracts\MutableNode;
-use Roelhem\RbacGraph\Contracts\Node;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
+use Roelhem\RbacGraph\Contracts\Nodes\MutableNode;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Graphs\DictionaryGraph;
 use Roelhem\RbacGraph\Tests\TestCase;

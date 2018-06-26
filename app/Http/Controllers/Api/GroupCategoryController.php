@@ -39,6 +39,9 @@ class GroupCategoryController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('create', GroupCategory::class);
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'name_short' => 'nullable|string|max:63',
@@ -77,6 +80,8 @@ class GroupCategoryController extends Controller
      */
     public function update(Request $request, GroupCategory $groupCategory)
     {
+        $this->authorize('update', $groupCategory);
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'name_short' => 'nullable|string|max:63',
@@ -98,6 +103,9 @@ class GroupCategoryController extends Controller
      */
     public function destroy(GroupCategory $groupCategory)
     {
+
+        $this->authorize('delete', $groupCategory);
+
         if($groupCategory->is_required) {
             abort(403, 'Deze groep categorie kan niet worden verwijderd omdat deze groep categorie nodig is voor het goed functioneren van dit systeem.');
         } else {

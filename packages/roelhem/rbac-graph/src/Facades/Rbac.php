@@ -4,7 +4,7 @@ namespace Roelhem\RbacGraph\Facades;
 
 
 use Illuminate\Support\Facades\Facade;
-use Roelhem\RbacGraph\Contracts\RbacService;
+use Roelhem\RbacGraph\Contracts\Services\RbacService;
 
 /**
  * Class Rbac

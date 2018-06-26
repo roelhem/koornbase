@@ -8,7 +8,7 @@
 
 namespace Roelhem\RbacGraph\Services;
 
-use Roelhem\RbacGraph\Contracts\RbacService;
+use Roelhem\RbacGraph\Contracts\Services\RbacService;
 use Roelhem\RbacGraph\Services\Traits\BuilderShortcutsImplementation;
 
 abstract class AbstractService implements RbacService

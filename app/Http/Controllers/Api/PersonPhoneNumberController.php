@@ -43,9 +43,12 @@ class PersonPhoneNumberController extends Controller
      * @param  Request $request
      * @param  \App\PersonPhoneNumber  $personPhoneNumber
      * @return Resource
+     * @throws
      */
     public function show(Request $request, PersonPhoneNumber $personPhoneNumber)
     {
+        $this->authorize('view', $personPhoneNumber);
+
         return $this->prepare($personPhoneNumber, $request);
     }
 
@@ -78,6 +81,8 @@ class PersonPhoneNumberController extends Controller
      */
     public function destroy(PersonPhoneNumber $personPhoneNumber)
     {
+        $this->authorize('delete', $personPhoneNumber);
+
         $personPhoneNumber->delete();
     }
 }

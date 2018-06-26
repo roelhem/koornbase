@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-use BenSampo\Enum\Enum;
+use MabeEnum\Enum;
 
 final class Chronology extends Enum
 {
-    const Past = -1;
-    const Now = 0;
-    const Future = 1;
+    const PAST = -1;
+    const NOW = 0;
+    const FUTURE = 1;
 }

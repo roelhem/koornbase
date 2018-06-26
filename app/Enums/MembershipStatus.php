@@ -2,10 +2,15 @@
 
 namespace App\Enums;
 
+use App\Enums\Traits\HasConfigFile;
+use App\Membership;
 use App\Person;
-use BenSampo\Enum\Enum;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use MabeEnum\Enum;
+use Roelhem\RbacGraph\Contracts\Models\Authorizable;
+use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
+use Roelhem\RbacGraph\Enums\NodeType;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class MembershipStatus
@@ -13,35 +18,165 @@ use Illuminate\Support\Facades\DB;
  * The different membership status that a Person can have.
  *
  * @package App\Enums
+ *
+ * @method static MembershipStatus OUTSIDER()
+ * @method static MembershipStatus NOVICE()
+ * @method static MembershipStatus MEMBER()
+ * @method static MembershipStatus FORMER_MEMBER()
+ *
+ * @property-read string $label
+ * @property-read string|null $description
+ * @property-read array $style
+ * @property-read integer $value
  */
-final class MembershipStatus extends Enum
+final class MembershipStatus extends Enum implements DynamicRole
 {
-    const Outsider = 0;
-    const Novice = 1;
-    const Member = 2;
-    const FormerMember = 3;
 
-    public static function getBackgroundClass(int $value) {
-        switch ($value) {
-            case self::Outsider: return 'bg-secondary';
-            case self::Novice: return 'bg-warning';
-            case self::Member: return 'bg-success';
-            case self::FormerMember: return 'bg-danger';
-            default: return 'bg-light';
+    use HasConfigFile;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    const OUTSIDER = 0;
+    const NOVICE = 1;
+    const MEMBER = 2;
+    const FORMER_MEMBER = 3;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  USING THE CONFIG-FILE  ------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+
+    /**
+     * Returns the parsed content of the config file.
+     *
+     * @return array
+     */
+    protected static function parseFile()
+    {
+        $filename = str_replace('.php','.yaml',__FILE__);
+        return Yaml::parseFile($filename);
+    }
+
+    /**
+     * Returns the default config-file. This is used for the implementation of the magic methods.
+     *
+     * @return array
+     */
+    protected function defaultConfig()
+    {
+        return [
+            'title' => $this->getCamelCaseName(),
+            'description' => null,
+            'label' => $this->getCamelCaseName(),
+            'dynamicRole' => [
+                'name' => 'MembershipStatus.'.$this->getCamelCaseName(),
+                'title' => 'Lidstatus: '.$this->getCamelCaseName(),
+                'description' => null
+            ],
+            'style' => [
+                'bootstrap' => 'gray',
+            ]
+        ];
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  MEMBERSHIP HELPERS  ---------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns the timestamp of this element if it was the status of the provided $membership.
+     *
+     * @param Membership $membership
+     * @return Carbon|null
+     */
+    public function getTimestamp(Membership $membership) {
+        switch ($this->value) {
+            case MembershipStatus::FORMER_MEMBER: return $membership->end;
+            case MembershipStatus::MEMBER: return $membership->start;
+            case MembershipStatus::NOVICE: return $membership->application;
+            case MembershipStatus::OUTSIDER:
+            default: return null;
         }
     }
 
-    public static function getLabel(int $value) {
-        switch ($value) {
-            case self::Outsider: return 'Buitenstaander';
-            case self::Novice: return 'Kennismaker';
-            case self::Member: return 'Lid';
-            case self::FormerMember: return 'Oud-Lid';
-            default: return 'Onbekend';
-        }
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  FORMATTING GETTER-METHODS  --------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns a bootstrap background-class of this MembershipStatus.
+     *
+     * @return string
+     */
+    public function getBackgroundClass() {
+        return "bg-{$this->val('style.bootstrap')}";
     }
 
-    public static function getRoleId(int $value) {
-        return 'membership_status.'.snake_case(self::getKey($value));
+    /**
+     * Returns dynamic role of this MembershipStatus.
+     *
+     * @return \Roelhem\RbacGraph\Contracts\Nodes\Node
+     */
+    public function getNode() {
+        return \Rbac::get($this->defaultNodeName())->getNode();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  IMPLEMENTS DynamicRole  ------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    public function constructor()
+    {
+        return self::class.'::'.$this->name;
+    }
+
+    /** @inheritdoc */
+    public function constructorAttributes()
+    {
+        return null;
+    }
+
+    /** @inheritdoc */
+    public function nodeType()
+    {
+        return NodeType::DYNAMIC_ROLE();
+    }
+
+    /** @inheritdoc */
+    public function defaultNodeName()
+    {
+        return $this->val('dynamicRole.name');
+    }
+
+    /** @inheritdoc */
+    public function defaultNodeTitle()
+    {
+        return $this->val('dynamicRole.title');
+    }
+
+    /** @inheritdoc */
+    public function defaultNodeDescription()
+    {
+        return $this->val('dynamicRole.description');
+    }
+
+    /** @inheritdoc */
+    public function forAuthorizableTypes()
+    {
+        return [Person::class];
+    }
+
+    /**
+     * Returns if the dynamic role should be assigned to the provided authorizable object.
+     *
+     * @param Authorizable $authorizable
+     * @return boolean
+     */
+    public function shouldAssignTo($authorizable)
+    {
+        return $authorizable instanceof Person && $authorizable->membership_status === $this;
     }
 }

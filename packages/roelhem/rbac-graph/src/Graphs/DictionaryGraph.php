@@ -9,20 +9,19 @@
 namespace Roelhem\RbacGraph\Graphs;
 
 
-use Roelhem\RbacGraph\Builders\RbacBuilder;
-use Roelhem\RbacGraph\Contracts\Builder;
-use Roelhem\RbacGraph\Contracts\Edge;
-use Roelhem\RbacGraph\Contracts\MutableGraph;
-use Roelhem\RbacGraph\Contracts\Node;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultContains;
-use Roelhem\RbacGraph\Contracts\Traits\GraphDefaultEquals;
-use Roelhem\RbacGraph\Contracts\Traits\HasAssignmentArray;
-use Roelhem\RbacGraph\Contracts\Traits\HasEdgeDictionaries;
-use Roelhem\RbacGraph\Contracts\Traits\HasNodeDictionaries;
-use Roelhem\RbacGraph\Edges\SimpleEdge;
+use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
+use Roelhem\RbacGraph\Contracts\Edges\Edge;
+use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultContains;
+use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
+use Roelhem\RbacGraph\Graphs\Traits\HasAssignmentArray;
+use Roelhem\RbacGraph\Graphs\Traits\HasEdgeDictionaries;
+use Roelhem\RbacGraph\Graphs\Traits\HasNodeDictionaries;
+use Roelhem\RbacGraph\Graphs\Edges\SimpleEdge;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Helpers\IdGenerator;
-use Roelhem\RbacGraph\Nodes\SimpleNode;
+use Roelhem\RbacGraph\Graphs\Nodes\SimpleNode;
 
 class DictionaryGraph implements MutableGraph
 {
