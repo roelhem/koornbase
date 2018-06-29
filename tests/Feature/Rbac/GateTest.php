@@ -6,12 +6,10 @@ use App\Group;
 use App\Person;
 use App\User;
 use Illuminate\Contracts\Auth\Access\Gate;
-use Roelhem\RbacGraph\Database\Assignment;
-use Roelhem\RbacGraph\Database\DatabaseAuthorizer;
+use Roelhem\RbacGraph\Database\Tools\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Node;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GateTest extends TestCase

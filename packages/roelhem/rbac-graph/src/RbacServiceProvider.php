@@ -23,6 +23,7 @@ use Roelhem\RbacGraph\Database\Observers\NodeObserver;
 use Roelhem\RbacGraph\Database\Observers\PathObserver;
 use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Enums\NodeType;
+use Roelhem\RbacGraph\Services\CompatibilityService;
 use Roelhem\RbacGraph\Services\DefaultRbacService;
 
 /**
@@ -53,6 +54,11 @@ class RbacServiceProvider extends ServiceProvider
             ]);
         }
 
+        // Routes
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views','rbac-graph');
+
         // Observers
         Node::observe(NodeObserver::class);
         Edge::observe(EdgeObserver::class);
@@ -60,56 +66,7 @@ class RbacServiceProvider extends ServiceProvider
 
 
         // Gates
-        \Gate::before(function($user, $ability, $arguments = []) {
-
-            $authorizer = new DatabaseAuthorizer($user);
-            $graph = $authorizer->getGraph();
-
-
-            if($authorizer->any(Node::type(NodeType::SUPER_ROLE))) {
-                return true;
-            }
-
-
-            // MODEL ABILITY
-            if(count($arguments) > 0) {
-                $firstArgument = $arguments[0];
-                $modelClass = null;
-
-                if($firstArgument instanceof Model) {
-                    $modelClass = get_class($firstArgument);
-                } elseif(is_string($firstArgument) && is_subclass_of($firstArgument, Model::class)) {
-                    $modelClass = $firstArgument;
-                }
-
-                if($modelClass !== null) {
-                    $modelAbilitiesQuery = Node::type(NodeType::MODEL_ABILITY)
-                        ->whereJsonContains('options',[
-                            'ability' => $ability,
-                            'modelClass' => $modelClass
-                        ]);
-                    if($modelAbilitiesQuery->count() > 0) {
-                        return $authorizer->any($modelAbilitiesQuery, $arguments);
-                    }
-                }
-            }
-
-            // ABILITY
-            $abilityQuery = Node::type(NodeType::ABILITY())->whereJsonContains('options', [
-                'ability' => $ability
-            ]);
-
-            if($abilityQuery->count() > 0) {
-                return $authorizer->any($abilityQuery, $arguments);
-            }
-
-            // OTHERS
-            if($graph->hasNodeName($ability)) {
-                return $authorizer->allows($ability, $arguments);
-            }
-
-            return null;
-        });
+        resolve(CompatibilityService::class)->registerGate();
 
     }
 
@@ -139,6 +96,8 @@ class RbacServiceProvider extends ServiceProvider
         // The Services
         $this->app->singleton(DefaultRbacService::class);
         $this->app->bind(RbacService::class, DefaultRbacService::class);
+
+        $this->app->bind(CompatibilityService::class);
 
     }
 

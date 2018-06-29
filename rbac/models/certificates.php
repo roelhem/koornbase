@@ -5,6 +5,8 @@ Rbac::group('certificate-categories:', function() {
 
     Rbac::crudAbilities(\App\CertificateCategory::class, 'crud');
 
+    createTrashedAbilities(\App\CertificateCategory::class);
+
     Rbac::task('Manage')->assign('crud')
         ->assignTo('ModelManager');
 

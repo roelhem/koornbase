@@ -59,11 +59,9 @@ class CompatibilityService
 
     /**
      * Makes a native Laravel Gate compatible with the RbacGraph.
-     *
-     * @param Gate $gate
      */
-    public function registerGate(Gate $gate) {
-        $gate->before(function($user, $ability, $arguments = []) {
+    public function registerGate() {
+        \Gate::before(function($user, $ability, $arguments = []) {
             return $this->handleAuthRequest($user, $ability, $arguments);
         });
     }

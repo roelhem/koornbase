@@ -5,14 +5,9 @@ Rbac::group('group-categories:', function () {
 
     Rbac::crudAbilities(\App\GroupCategory::class, 'crud');
 
-    Rbac::group('trashed:', function () {
 
-        Rbac::modelAbility('view.trashed', \App\GroupCategory::class, 'view');
-        Rbac::modelAbility('update.trashed',\App\GroupCategory::class, 'update');
-        Rbac::modelAbility('restore',\App\GroupCategory::class);
-        Rbac::modelAbility('force-delete', \App\GroupCategory::class);
+    createTrashedAbilities(\App\GroupCategory::class);
 
-    });
 
     Rbac::task('Inspect')
         ->assign('crud.view')
@@ -21,14 +16,6 @@ Rbac::group('group-categories:', function () {
     Rbac::task('Manage')
         ->assign('crud')
         ->assignTo('ModelManager');
-
-    Rbac::task('Clean-up')
-        ->assign('trashed:view','trashed:force-delete')
-        ->assignTo('DBCleaner');
-
-    Rbac::task('Restore')
-        ->assign('trashed:view','trashed:restore')
-        ->assignTo('ModelRestorer');
 
 });
 
@@ -39,14 +26,7 @@ Rbac::group('groups:', function () {
 
     Rbac::crudAbilities(\App\Group::class, 'crud');
 
-    Rbac::group('trashed:', function () {
-
-        Rbac::modelAbility('view.trashed', \App\Group::class, 'view');
-        Rbac::modelAbility('update.trashed',\App\Group::class, 'update');
-        Rbac::modelAbility('restore',\App\Group::class);
-        Rbac::modelAbility('force-delete', \App\Group::class);
-
-    });
+    createTrashedAbilities(\App\Group::class);
 
     Rbac::task('Inspect')
         ->assign('crud.view','group-categories:Inspect')
@@ -61,14 +41,6 @@ Rbac::group('groups:', function () {
     Rbac::task('Manage')
         ->assign('crud', 'group-categories:crud.view')
         ->assignTo('ModelManager');
-
-    Rbac::task('Clean-up')
-        ->assign('trashed:view','trashed:force-delete')
-        ->assignTo('DBCleaner');
-
-    Rbac::task('Restore')
-        ->assign('trashed:view','trashed:restore')
-        ->assignTo('ModelRestorer');
 
 });
 

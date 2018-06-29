@@ -17,7 +17,7 @@ class PersonSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        factory(Person::class, 30)->create()->each(function(Person $person) use ($faker) {
+        factory(Person::class, 100)->create()->each(function(Person $person) use ($faker) {
 
             // ADD SOME CONTACT INFORMATION
             // Add email addresses
@@ -42,6 +42,15 @@ class PersonSeeder extends Seeder
                 ->limit($faker->numberBetween(1, 5))
                 ->get();
             $person->addGroups(...$groups);
+
+
+            // ADD AN USER
+            if($faker->boolean(80)) {
+                factory(\App\User::class)->create(['person_id' => $person->id]);
+            }
+            if($faker->boolean(5)) {
+                factory(\App\User::class)->create(['person_id' => $person->id]);
+            }
 
 
 
