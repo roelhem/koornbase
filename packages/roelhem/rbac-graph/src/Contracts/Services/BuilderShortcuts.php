@@ -11,6 +11,7 @@ namespace Roelhem\RbacGraph\Contracts\Services;
 
 use Illuminate\Routing\Route;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
+use Roelhem\RbacGraph\Contracts\Rules\GateRule;
 
 interface BuilderShortcuts
 {
@@ -87,5 +88,12 @@ interface BuilderShortcuts
      * @return NodeBuilder
      */
     public function crudAbilities(string $modelClass, ?string $name = null, ?iterable $crudAbilities = null);
+
+    /**
+     * @param string $name
+     * @param GateRule $rule
+     * @return NodeBuilder
+     */
+    public function gate(string $name, GateRule $rule);
 
 }

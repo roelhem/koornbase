@@ -66,10 +66,8 @@ final class NodeType extends Enum implements Arrayable
     public const PERMISSION_SET = 50;
     public const CRUD_ABILITY_SET = 51;
 
-    // RULES
-    public const RULE = 100;
-    public const SCOPE_RULE = 101;
-    public const MODEL_RULE = 102;
+    // GATES
+    public const GATE = 100;
 
 
     // ---------------------------------------------------------------------------------------------------------- //

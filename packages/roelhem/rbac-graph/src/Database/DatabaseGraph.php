@@ -11,6 +11,7 @@ use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
 use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
+use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
 use Roelhem\RbacGraph\Graphs\Traits\GraphDefaultEquals;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphAssignmentsImplementation;
 use Roelhem\RbacGraph\Database\Traits\Graph\GraphContractImplementation;
@@ -34,6 +35,21 @@ class DatabaseGraph implements MutableGraph, AuthorizableGraph
     use GraphDefaultEquals;
 
     /**
+     * @var RuleSerializer
+     */
+    protected $ruleSerializer;
+
+    /**
+     * DatabaseGraph constructor.
+     *
+     * @param RuleSerializer $ruleSerializer
+     */
+    public function __construct(RuleSerializer $ruleSerializer)
+    {
+        $this->ruleSerializer = $ruleSerializer;
+    }
+
+    /**
      * Returns the nodes that are authorized for the given authorizable object in the initial state.
      *
      * (These are the the nodes that are granted to the authorizable before walking trough the graph.)
@@ -55,20 +71,10 @@ class DatabaseGraph implements MutableGraph, AuthorizableGraph
 
         foreach($this->getPotentialDynamicRoles($authorizable->getType()) as $node) {
             if($node instanceof Node) {
-                $rule = $node->getOption('rule');
-                $constructor = array_get($rule,'constr');
-                $constructorAttributes = array_get($rule, 'constrAttrs', []);
+                $rule = $this->ruleSerializer->rule($node->getOption('rule'));
 
-                if(class_exists($constructor)) {
-                    $dynamicRole = new $constructor(...$constructorAttributes);
-                } elseif(is_callable($constructor)) {
-                    $dynamicRole = $constructor(...$constructorAttributes);
-                } else {
-                    $dynamicRole = null;
-                }
-
-                if($dynamicRole instanceof DynamicRole) {
-                    if($dynamicRole->shouldAssignTo($authorizable)) {
+                if($rule instanceof DynamicRole) {
+                    if($rule->shouldAssignTo($authorizable)) {
                         $res[] = $node;
                     }
                 }

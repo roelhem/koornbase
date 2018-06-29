@@ -2,6 +2,7 @@
 
 namespace Roelhem\RbacGraph\Services\Builders;
 
+use Roelhem\RbacGraph\Services\Builders\Traits\ImplementBuilderRuledShortcuts;
 use Roelhem\RbacGraph\Services\Builders\Traits\ImplementBuilderShortcuts;
 use Roelhem\RbacGraph\Contracts\Services\Builder as BuilderContract;
 use Roelhem\RbacGraph\Contracts\Edges\Edge;
@@ -17,6 +18,7 @@ class RbacBuilder implements BuilderContract
 {
 
     use ImplementBuilderShortcuts;
+    use ImplementBuilderRuledShortcuts;
 
     /**
      * @var MutableGraph
@@ -27,6 +29,7 @@ class RbacBuilder implements BuilderContract
      * @var NamePrefixStack
      */
     protected $prefix;
+
 
     /**
      * RbacBuilder constructor.

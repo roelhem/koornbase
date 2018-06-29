@@ -14,15 +14,67 @@ use Roelhem\RbacGraph\Enums\NodeType;
 abstract class DynamicRole extends BaseRule implements DynamicRoleContract
 {
 
-    protected $nodeType = NodeType::DYNAMIC_ROLE;
+    /**
+     * The default name of a node that uses this rule.
+     *
+     * @var string
+     */
+    protected $defaultNodeName;
 
+    /**
+     * The default title of a node that uses this rule.
+     *
+     * @var string|null
+     */
+    protected $defaultNodeTitle;
+
+    /**
+     * The default description of a node that uses this rule.
+     *
+     * @var string|null
+     */
+    protected $defaultNodeDescription;
+
+    /**
+     * @var array
+     */
     protected $forAuthorizableTypes = [];
 
-    public function nodeType()
+    /**
+     * Returns a default name for a node that contains this rule.
+     *
+     * @return string
+     */
+    public function defaultNodeName()
     {
-        return NodeType::DYNAMIC_ROLE();
+        return $this->defaultNodeName;
     }
 
+    /**
+     * Returns a default title for a node that contains this rule.
+     *
+     * @return string|null
+     */
+    public function defaultNodeTitle()
+    {
+        return $this->defaultNodeTitle;
+    }
+
+    /**
+     * Returns a default description for a node that contains this rule.
+     *
+     * @return string|null
+     */
+    public function defaultNodeDescription()
+    {
+        return $this->defaultNodeDescription;
+    }
+
+    /**
+     * An array of all the authorizable-types.
+     *
+     * @return array
+     */
     public function forAuthorizableTypes()
     {
         return $this->forAuthorizableTypes;

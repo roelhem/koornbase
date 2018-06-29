@@ -73,6 +73,8 @@ DYNAMIC_ROLE:
   edges:
     children: !like ROLE
   assignable: false
+  options:
+    rule: \Roelhem\RbacGraph\Contracts\Rules\DynamicRole
 
 
 
@@ -192,42 +194,16 @@ CRUD_ABILITY_SET:
 # ------------------------------------------------------------------------------------------------------------------
 
 
-RULE:
+GATE:
   description:
     A node that can only be traversed by an authorizer if the attributes have some predefined condition.
   style:
     console:
       fg-color: red
   edges:
-    parents: [ ROLE, TASK, RULE ]
+    parents: [ ROLE, TASK, GATE ]
     children: [ TASK, PERMISSION ]
   options:
-    handler: !required string
+    rule: \Roelhem\RbacGraph\Contracts\Rules\GateRule
 
 
-
-
-SCOPE_RULE:
-  description:
-    A node can only be traversed by an authorizer if the session has a certain scope. Which scopes an sessin has,
-    can be determined before the authorizer starts the authorization-algorithm.
-  style:
-      console:
-        fg-color: red
-  edges: !like RULE
-  options:
-    scope: !required string
-
-
-
-
-
-MODEL_RULE:
-  description:
-    A rule that only depend on the user attributes and the attributes of a certain model.
-  style:
-      console:
-        fg-color: red
-  edges: !like RULE
-  options:
-    handler: !required string

@@ -16,6 +16,28 @@ interface DynamicRole extends BaseRule
 {
 
     /**
+     * Returns a default name for a node that contains this rule.
+     *
+     * @return string
+     */
+    public function defaultNodeName();
+
+
+    /**
+     * Returns a default title for a node that contains this rule.
+     *
+     * @return string|null
+     */
+    public function defaultNodeTitle();
+
+    /**
+     * Returns a default description for a node that contains this rule.
+     *
+     * @return string|null
+     */
+    public function defaultNodeDescription();
+
+    /**
      * An array of all the authorizable-types.
      *
      * @return array

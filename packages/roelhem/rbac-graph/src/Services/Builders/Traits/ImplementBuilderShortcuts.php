@@ -16,7 +16,7 @@ trait ImplementBuilderShortcuts
      * @param string $name
      * @return NodeBuilder
      */
-    public abstract function node($type, string $name);
+    public abstract function node($type, string $name, $options = []);
 
     /**
      * @param string $name
@@ -45,38 +45,6 @@ trait ImplementBuilderShortcuts
      */
     public function abstractRole(string $name) {
         return $this->node(NodeType::ABSTRACT_ROLE, $name);
-    }
-
-    /**
-     * @param DynamicRole $rule
-     * @param string $name
-     * @return NodeBuilder
-     */
-    public function dynamicRole(DynamicRole $rule, ?string $name = null) {
-
-        if($name === null) {
-            $name = $rule->defaultNodeName();
-        }
-
-        $options = [];
-        $options['rule'] = [];
-        $options['rule']['constr'] = $rule->constructor();
-        $attrs = $rule->constructorAttributes();
-        if(is_array($attrs) && count($attrs) > 0) {
-            $options['rule']['constrAttrs'] = $attrs;
-        }
-
-        $for = $rule->forAuthorizableTypes();
-        if(is_array($for) && count($for) > 0) {
-            $options['for'] = $for;
-        }
-
-        $node = $this->node(NodeType::DYNAMIC_ROLE, $name, $options);
-
-        $node->title($rule->defaultNodeTitle());
-        $node->description($rule->defaultNodeDescription());
-
-        return $node;
     }
 
     /**

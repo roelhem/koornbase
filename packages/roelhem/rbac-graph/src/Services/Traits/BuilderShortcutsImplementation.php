@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph\Services\Traits;
 
 
+use Roelhem\RbacGraph\Contracts\Rules\GateRule;
 use Roelhem\RbacGraph\Contracts\Services\Builder;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 
@@ -56,5 +57,9 @@ trait BuilderShortcutsImplementation
 
     public function crudAbilities(string $modelClass, ?string $name = null, ?iterable $crudAbilities = null ) {
         return $this->builder()->crudAbilities($modelClass, $name, $crudAbilities);
+    }
+
+    public function gate(string $name, GateRule $rule) {
+        return $this->builder()->gate($name, $rule);
     }
 }

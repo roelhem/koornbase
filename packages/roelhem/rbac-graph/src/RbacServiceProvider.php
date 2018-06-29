@@ -4,6 +4,7 @@ namespace Roelhem\RbacGraph;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
 use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
@@ -25,6 +26,7 @@ use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Services\CompatibilityService;
 use Roelhem\RbacGraph\Services\DefaultRbacService;
+use Roelhem\RbacGraph\Services\RuleSerializerService;
 
 /**
  * Class RbacServiceProvider
@@ -97,7 +99,12 @@ class RbacServiceProvider extends ServiceProvider
         $this->app->singleton(DefaultRbacService::class);
         $this->app->bind(RbacService::class, DefaultRbacService::class);
 
+        // CompatibilityService
         $this->app->bind(CompatibilityService::class);
+
+        // RuleSerializer
+        $this->app->singleton(RuleSerializerService::class);
+        $this->app->bind(RuleSerializer::class, RuleSerializerService::class);
 
     }
 
