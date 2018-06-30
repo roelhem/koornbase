@@ -17,6 +17,8 @@ use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
 use Roelhem\RbacGraph\Database\Tools\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Enums\NodeType;
+use Roelhem\RbacGraph\Enums\RuleAttribute;
+use Roelhem\RbacGraph\Rules\CallbackBag;
 
 /**
  * Class CompatibilityService
@@ -77,6 +79,12 @@ class CompatibilityService
      */
     public function handleAuthRequest($user, $ability, $arguments = []) {
 
+        $bag = new CallbackBag([
+            RuleAttribute::USER => $user,
+            RuleAttribute::CALL_ABILITY => $ability,
+            RuleAttribute::ARGUMENTS => $arguments
+        ]);
+
         // Create the authorizer
         $authorizer = $this->createAuthorizer($user);
 
@@ -90,20 +98,25 @@ class CompatibilityService
         // Check if the request is for an modelAbility.
         $modelClass = $this->modelClassFromArguments($arguments);
         if($modelClass !== null && $this->nameUsedByModelAbilities($ability)) {
+            $bag[RuleAttribute::MODEL_CLASS] = $modelClass;
             $modelAbilities = $this->searchModelAbilities($ability, $modelClass);
-            return $authorizer->any($modelAbilities, $arguments);
+            $bag[RuleAttribute::CALL_MATCHES] = $modelAbilities;
+            return $authorizer->any($modelAbilities, $bag);
         }
 
         // Check if the request is for an normal ability.
         if($this->abilityNameExists($ability)) {
             $abilities = $this->searchAbilities($ability);
-            return $authorizer->any($abilities, $arguments);
+            $bag[RuleAttribute::CALL_MATCHES] = $abilities;
+            return $authorizer->any($abilities, $bag);
         }
 
 
         // Check if there is a node with exactly the same name as the ability.
         if($this->graph->hasNodeName($ability)) {
-            return $authorizer->allows($ability, $arguments);
+            $node = $this->graph->getNodeByName($ability);
+            $bag[RuleAttribute::CALL_MATCHES] = collect([$node]);
+            return $authorizer->allows($node, $bag);
         }
 
         // Return the null value (signals that laravel should make a decision by itself.)

@@ -19,6 +19,8 @@ use Roelhem\RbacGraph\Database\Traits\Path\PathContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Path\PathRelations;
 use Roelhem\RbacGraph\Database\Traits\Path\PathScopes;
 use Roelhem\RbacGraph\Database\Traits\Path\PathStaticCreators;
+use Roelhem\RbacGraph\Enums\NodeType;
+use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 use Roelhem\RbacGraph\Rules\BaseRule;
 
 /**
@@ -34,7 +36,9 @@ use Roelhem\RbacGraph\Rules\BaseRule;
  * @property integer $first_path_id
  * @property integer $last_path_id
  * @property array $path
- * @property array $rules
+ *
+ * @property-read integer $rules_count
+ * @property-read array $rules
  *
  * @method static Path findOrFail(integer $id)
  *
@@ -98,12 +102,52 @@ class Path extends Pivot implements PathContract
 
     /**
      * @param string|array $newValue
+     * @throws NodeNotFoundException
      */
     public function setPathAttribute($newValue) {
         if(is_string($newValue)) {
             $this->attributes['path'] = $newValue;
         } else {
-            $this->attributes['path'] = json_encode($newValue);
+            $nodes = collect($newValue)->map(function($node) {
+                return $this->getGraph()->getNode($node);
+            });
+            $this->attributes['path'] = $nodes->map(function(Node $node) {
+                return $node->id;
+            })->values()->toJson();
+
+
+
+            $lastNode = $this->getGraph()->getNode($this->last_node_id);
+
+            $rules = $nodes->filter(function(Node $node) use ($lastNode) {
+
+                if($node->getType()->is(NodeType::GATE)) {
+                    return true;
+                }
+
+                if($node->getType()->is(NodeType::MODEL_GATE)) {
+
+                    if($this->getGraph()->nodeEquals($node, $lastNode)) {
+                        return true;
+                    }
+
+                    $for = $node->getOption('for', []);
+                    if($lastNode->getType()->is(NodeType::MODEL_ABILITY) || $lastNode->getType()->is(NodeType::CRUD_ABILITY_SET)) {
+                        $modelClass = $lastNode->getOption('modelClass');
+                        if(in_array($modelClass, $for)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+
+            })->map(function(Node $node) {
+                return $node->getOption('rule');
+            });
+
+            $this->attributes['rules_count'] = $rules->count();
+            $this->attributes['rules'] = $rules->values()->toJson();
         }
     }
 
@@ -113,12 +157,6 @@ class Path extends Pivot implements PathContract
             $res[] = $this->ruleSerializer->rule($rule);
         };
         return $res;
-    }
-
-    public function setRulesAttribute($newValue) {
-        $this->attributes['rules'] = collect($newValue)->map(function($rule) {
-            return $this->ruleSerializer->option($rule);
-        })->unique()->toJson();
     }
 
     /**

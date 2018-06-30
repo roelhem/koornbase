@@ -68,6 +68,7 @@ final class NodeType extends Enum implements Arrayable
 
     // GATES
     public const GATE = 100;
+    public const MODEL_GATE = 141;
 
 
     // ---------------------------------------------------------------------------------------------------------- //

@@ -12,6 +12,7 @@ namespace Roelhem\RbacGraph\Services\Builders\Traits;
 use Roelhem\RbacGraph\Contracts\Rules\BaseRule;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 use Roelhem\RbacGraph\Contracts\Rules\GateRule;
+use Roelhem\RbacGraph\Contracts\Rules\ModelRule;
 use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
 use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Exceptions\NodeNameNotUniqueException;
@@ -88,7 +89,14 @@ trait ImplementBuilderRuledShortcuts
             'rule' => $this->getRuleOption($rule)
         ];
 
-        $node = $this->node(NodeType::GATE, $name, $options);
+        if($rule instanceof ModelRule) {
+            $type = NodeType::MODEL_GATE;
+            $options['for'] = $rule->for();
+        } else {
+            $type = NodeType::GATE;
+        }
+
+        $node = $this->node($type, $name, $options);
         return $node;
     }
 

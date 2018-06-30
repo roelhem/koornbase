@@ -190,13 +190,13 @@ CRUD_ABILITY_SET:
 
 
 # ------------------------------------------------------------------------------------------------------------------
-#  SCOPES
+#  GATES
 # ------------------------------------------------------------------------------------------------------------------
 
 
 GATE:
   description:
-    A node that can only be traversed by an authorizer if the attributes have some predefined condition.
+    A node that can only be traversed by an authorizer if it is allowed by a specific rule.
   style:
     console:
       fg-color: red
@@ -206,4 +206,14 @@ GATE:
   options:
     rule: \Roelhem\RbacGraph\Contracts\Rules\GateRule
 
-
+MODEL_GATE:
+  description:
+    When authorizing an ability of a model, this node can only be traversed by an authorizer if it is allowed
+    by a specific rule.
+  style:
+    console:
+      fg-color: red
+  edges: !like GATE
+  options:
+    for: array
+    rule: \Roelhem\RbacGraph\Contracts\Rules\ModelRule

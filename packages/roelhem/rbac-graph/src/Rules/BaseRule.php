@@ -21,7 +21,7 @@ abstract class BaseRule implements BaseRuleContract
      */
     public function constructor()
     {
-        return get_class($this);
+        return null;
     }
 
     /**

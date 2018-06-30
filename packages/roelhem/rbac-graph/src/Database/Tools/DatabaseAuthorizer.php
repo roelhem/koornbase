@@ -13,14 +13,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Roelhem\RbacGraph\Contracts\Models\Authorizable;
 use Roelhem\RbacGraph\Contracts\Rules\GateRule;
-use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
+use Roelhem\RbacGraph\Contracts\Rules\RuleAttributeBag;
 use Roelhem\RbacGraph\Contracts\Tools\Authorizer;
-use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Database\Node;
 use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Database\Traits\BelongsToDatabaseGraph;
 use Roelhem\RbacGraph\Enums\NodeType;
-use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
+use Roelhem\RbacGraph\Enums\RuleAttribute;
+use Roelhem\RbacGraph\Rules\CallbackBag;
 
 class DatabaseAuthorizer implements Authorizer
 {
@@ -33,9 +33,9 @@ class DatabaseAuthorizer implements Authorizer
     protected $authorizable;
 
     /**
-     * @var integer[]
+     * @var Collection|Node[]
      */
-    protected $entryNodeIds;
+    protected $entryNodes;
 
 
     /**
@@ -50,10 +50,9 @@ class DatabaseAuthorizer implements Authorizer
 
         $graph = $this->getGraph();
         $entryNodes = $graph->getEntryNodes($authorizable);
-        $entryNodeIds = $entryNodes->pluck('id');
 
         $this->authorizable = $authorizable;
-        $this->entryNodeIds = $entryNodeIds;
+        $this->entryNodes = $entryNodes;
     }
 
     /**
@@ -65,21 +64,30 @@ class DatabaseAuthorizer implements Authorizer
     }
 
     /**
-     * Returns an array of node ids.
+     * Creates a new RuleAttributeBag for this authorizer, based on the provided attribute bag.
      *
-     * @param Collection|array|\Illuminate\Database\Eloquent\Builder $nodes
-     * @return Collection|integer[]
+     * @param RuleAttributeBag|array|null $bag
+     * @return CallbackBag
      */
-    protected function nodeIds($nodes)
-    {
-        if($nodes instanceof Builder) {
-            return $nodes->pluck('id');
+    public function createBag($bag = null) {
+        if($bag instanceof CallbackBag) {
+            $bag = clone $bag;
+        } elseif($bag instanceof RuleAttributeBag) {
+            $bag = new CallbackBag($bag->getAll());
+        } elseif(is_array($bag)) {
+            $bag = new CallbackBag($bag);
         } else {
-            return collect($nodes)->map(function($node) {
-                return $this->getGraph()->getNodeId($node);
-            });
+            $bag = new CallbackBag();
         }
+
+        $bag->authorizer = $this;
+        $bag->graph = $this->getGraph();
+        $bag->authorizable = $this->getAutorizable();
+        $bag->entry_nodes = $this->entryNodes;
+
+        return $bag;
     }
+
 
     /**
      * Returns a query-builder with only the paths that start on an entry-node of the authorizable object.
@@ -88,47 +96,58 @@ class DatabaseAuthorizer implements Authorizer
      */
     protected function entryNodePathsQuery() {
         return Path::query()
-            ->whereIn('first_node_id', $this->entryNodeIds);
+            ->whereIn('first_node_id', $this->entryNodes->map(function(Node $node) {
+                return $node->id;
+            }))
+            ->orderBy('rules_count');
     }
 
     /**
      * @inheritdoc
      */
-    public function allows($node, $attributes = [])
+    public function allows($node, $bag = null)
     {
+        $bag = $this->createBag($bag);
+        $node = $this->getGraph()->getNode($node);
+        $bag[RuleAttribute::AUTHORIZED_NODE] = $node;
         $paths = $this->entryNodePathsQuery()->endsAt($node)->get();
-
-        return $this->allowsAnyPath($paths, $node, $attributes);
+        return $this->allowsAnyPath($paths, $bag);
     }
 
     /**
      * @inheritdoc
      */
-    public function any($nodes, $attributes = [])
+    public function any($nodes, $bag = null)
     {
-        $lastNodeIds = $this->nodeIds($nodes);
-
-        $paths = $this->entryNodePathsQuery()
-            ->whereIn('last_node_id', $lastNodeIds)
-            ->get();
-
-        foreach ($lastNodeIds as $node) {
-            if($this->allowsAnyPath($paths, $node, $attributes)) {
-                return true;
-            }
+        if($nodes instanceof Builder) {
+            $nodes = $nodes->get();
+        } else {
+            $nodes = collect($nodes)->map(function($node) {
+                return $this->getGraph()->getNode($node);
+            });
         }
-        return false;
+        $paths = $this->entryNodePathsQuery()
+            ->whereIn('last_node_id', $nodes->map(function(Node $node) {
+                return $node->id;
+            }))
+            ->get();
+        return $this->allowsAnyPath($paths, $this->createBag($bag));
     }
 
     /**
      * @param Path $path
-     * @param Node|string|integer $node
-     * @param array $attributes
+     * @param RuleAttributeBag $bag
      * @return bool
      */
-    protected function allowPath($path, $node, $attributes = []) {
-        foreach($path->rules as $rule) {
-            if(!($rule instanceof GateRule) || !$rule->allows($this->authorizable, $node, $attributes)) {
+    protected function allowPath($path, $bag) {
+        $rules = $path->rules;
+
+        $bag = clone $bag;
+        $bag->path = $path;
+        $bag->path_rules = $rules;
+
+        foreach($rules as $rule) {
+            if(!($rule instanceof GateRule) || !$rule->allows($bag)) {
                 return false;
             }
         }
@@ -137,13 +156,15 @@ class DatabaseAuthorizer implements Authorizer
 
     /**
      * @param array|Path[] $paths
-     * @param Node|string|integer $node
-     * @param array $attributes
+     * @param RuleAttributeBag $bag
      * @return bool
      */
-    protected function allowsAnyPath($paths, $node, $attributes = []) {
+    protected function allowsAnyPath($paths, $bag) {
+
+        $bag[RuleAttribute::POSSIBLE_PATHS] = $paths;
+
         foreach ($paths as $path) {
-            if($this->allowPath($path, $node, $attributes)) {
+            if($this->allowPath($path, $bag)) {
                 return true;
             }
         }

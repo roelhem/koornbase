@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: roel
- * Date: 29-06-18
- * Time: 22:38
- */
 
 namespace Roelhem\RbacGraph\Contracts\Rules;
 
 use Roelhem\RbacGraph\Contracts\Models\Authorizable;
+use Roelhem\RbacGraph\Contracts\Nodes\Node;
 
 /**
  * Contract GateRule
@@ -23,11 +18,9 @@ interface GateRule extends BaseRule
     /**
      * Returns true if the gate can be traversed, returns false otherwise.
      *
-     * @param Authorizable $authorizable
-     * @param string $node
-     * @param array $attributes
+     * @param RuleAttributeBag $attributeBag
      * @return boolean
      */
-    public function allows($authorizable, $node, $attributes = []);
+    public function allows($attributeBag);
 
 }

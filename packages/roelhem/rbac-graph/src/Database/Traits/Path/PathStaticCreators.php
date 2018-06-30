@@ -52,17 +52,7 @@ trait PathStaticCreators
         $path->first_node_id = $node->getId();
         $path->last_node_id = $node->getId();
         $path->size = 1;
-        $path->path = [$node->getId()];
-
-        $rules = [];
-        if($node->getType()->is(NodeType::GATE)) {
-            $rule = $node->getOption('rule');
-            if($rule !== null) {
-                $rules[] = $rule;
-            }
-        }
-
-        $path->rules = $rules;
+        $path->path = [$node];
 
         $path->save();
         return $path;
@@ -100,8 +90,6 @@ trait PathStaticCreators
         $path->size = 2;
         $path->path = [$parent_id, $child_id];
 
-        $path->rules = array_merge($parentPath->rules, $childPath->rules);
-
         $path->save();
 
         return $path;
@@ -137,8 +125,6 @@ trait PathStaticCreators
 
         $path->size = $firstPath->size + $lastPath->size - 1;
         $path->path = array_merge($firstPath->path, array_slice($lastPath->path,1));
-
-        $path->rules = array_merge($firstPath->rules, $lastPath->rules);
 
         return $path;
     }

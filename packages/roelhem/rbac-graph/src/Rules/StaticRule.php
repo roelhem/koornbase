@@ -10,13 +10,15 @@ namespace Roelhem\RbacGraph\Rules;
 
 use Illuminate\Foundation\Auth\User;
 use Roelhem\RbacGraph\Contracts\Rules\GateRule;
+use Roelhem\RbacGraph\Contracts\Rules\RuleAttributeBag;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
 
 /**
  * Class StaticRule
  * @package Roelhem\RbacGraph\Rules
  */
-class StaticRule implements GateRule
+class StaticRule extends BaseRule implements GateRule
 {
 
     /**
@@ -43,17 +45,6 @@ class StaticRule implements GateRule
         return $this->value;
     }
 
-
-    /**
-     * The class name of the rule or a callable string to a function that initiates this rule.
-     *
-     * @return string
-     */
-    public function constructor()
-    {
-        return static::class;
-    }
-
     /**
      * An array of attributes needed by the constructor to initiate the right rule.
      *
@@ -67,12 +58,10 @@ class StaticRule implements GateRule
     /**
      * Returns true if the gate can be traversed, returns false otherwise.
      *
-     * @param User $user
-     * @param string $node
-     * @param array $attributes
+     * @param RuleAttributeBag $attributeBag
      * @return boolean
      */
-    public function allows($user, $node, $attributes = [])
+    public function allows($attributeBag)
     {
         return $this->value;
     }
