@@ -25,11 +25,7 @@ class PersonRole extends DynamicRole
 
     public function shouldAssignTo($authorizable)
     {
-        if($authorizable instanceof Person) {
-            return true;
-        } else {
-            return false;
-        }
+        return $authorizable instanceof Person;
     }
 
 }

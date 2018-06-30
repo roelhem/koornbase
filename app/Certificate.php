@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Traits\BelongsToPerson;
 use App\Traits\HasRemarks;
 use App\Traits\HasStartEnd;
@@ -25,7 +26,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read CertificateCategory $category
  * @property-read boolean $is_valid
  */
-class Certificate extends Model
+class Certificate extends Model implements OwnedByPerson
 {
     use Userstamps;
 

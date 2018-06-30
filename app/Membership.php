@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Enums\MembershipStatus;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
@@ -31,7 +32,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read MembershipStatus $status
  * @property-read Carbon|null $status_at
  */
-class Membership extends Model
+class Membership extends Model implements OwnedByPerson
 {
 
     use Userstamps;

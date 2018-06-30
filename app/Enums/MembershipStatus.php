@@ -134,15 +134,9 @@ final class MembershipStatus extends Enum implements DynamicRole
     }
 
     /** @inheritdoc */
-    public function constructorAttributes()
+    public function constructorArguments()
     {
         return null;
-    }
-
-    /** @inheritdoc */
-    public function nodeType()
-    {
-        return NodeType::DYNAMIC_ROLE();
     }
 
     /** @inheritdoc */

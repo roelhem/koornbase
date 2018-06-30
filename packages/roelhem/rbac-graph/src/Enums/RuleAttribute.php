@@ -88,7 +88,8 @@ final class RuleAttribute extends Enum
      * @return mixed
      */
     public function getDefault($bag) {
-        $val = $this->getName();
+        $val = $this->getValue();
+
         switch ($val) {
 
             case self::GRAPH:

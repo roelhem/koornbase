@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\HasContactOptions;
@@ -31,7 +32,7 @@ use Wildside\Userstamps\Userstamps;
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
  */
-class PersonPhoneNumber extends Model
+class PersonPhoneNumber extends Model implements OwnedByPerson
 {
     use Userstamps;
 

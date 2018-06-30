@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\AddressingAttributeMapping;
@@ -41,7 +42,7 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property-read AddressFormat $addressFormat
  */
-class PersonAddress extends Model implements AddressInterface
+class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 {
 
     use Userstamps;

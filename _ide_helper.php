@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.25 on 2018-06-16 10:57:35.
+ * Generated for Laravel 5.6.26 on 2018-06-30 00:49:11.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -3349,7 +3349,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param mixed $payload
          * @param bool $unserialize
-         * @return string 
+         * @return mixed 
          * @throws \Illuminate\Contracts\Encryption\DecryptException
          * @static 
          */ 
@@ -9821,6 +9821,17 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Drop all views from the database.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function dropAllViews()
+        {
+            \Illuminate\Database\Schema\PostgresBuilder::dropAllViews();
+        }
+        
+        /**
          * Get the column listing for a given table.
          *
          * @param string $table
@@ -12669,10 +12680,10 @@ namespace Roelhem\RbacGraph\Facades {
          * @inheritdoc 
          * @static 
          */ 
-        public static function create($type, $name)
+        public static function create($type, $name, $options = array())
         {
             //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
-            return \Roelhem\RbacGraph\Services\DefaultRbacService::create($type, $name);
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::create($type, $name, $options);
         }
         
         /**
@@ -12681,10 +12692,10 @@ namespace Roelhem\RbacGraph\Facades {
          * @inheritdoc 
          * @static 
          */ 
-        public static function node($type, $name)
+        public static function node($type, $name, $options = array())
         {
             //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
-            return \Roelhem\RbacGraph\Services\DefaultRbacService::node($type, $name);
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::node($type, $name, $options);
         }
         
         /**
@@ -12749,10 +12760,10 @@ namespace Roelhem\RbacGraph\Facades {
          *
          * @static 
          */ 
-        public static function dynamicRole($name)
+        public static function dynamicRole($rule, $name = null)
         {
             //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
-            return \Roelhem\RbacGraph\Services\DefaultRbacService::dynamicRole($name);
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::dynamicRole($rule, $name);
         }
         
         /**
@@ -12830,6 +12841,17 @@ namespace Roelhem\RbacGraph\Facades {
         {
             //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
             return \Roelhem\RbacGraph\Services\DefaultRbacService::crudAbilities($modelClass, $name, $crudAbilities);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function gate($name, $rule)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::gate($name, $rule);
         }
          
     }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Traits\HasRemarks;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,7 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property-read Person|null $owner
  */
-class KoornbeursCard extends Model
+class KoornbeursCard extends Model implements OwnedByPerson
 {
 
     use Userstamps;
@@ -118,6 +119,26 @@ class KoornbeursCard extends Model
      */
     public function owner() {
         return $this->belongsTo(Person::class, 'owner_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- /
+
+    /**
+     * @inheritdoc
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOwnerId()
+    {
+        return $this->owner_id;
     }
 
 }

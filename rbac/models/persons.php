@@ -1,24 +1,6 @@
 <?php
 
 
-Rbac::group('persons:', function() {
-
-    Rbac::crudAbilities(\App\Person::class, 'crud');
-
-    createTrashedAbilities(\App\Person::class);
-
-    Rbac::task('Inspect')
-        ->assign('crud.view')
-        ->assignTo('ModelInspector','Moderator');
-
-    Rbac::task('Manage')
-        ->assign('crud')
-        ->assignTo('ModelManager');
-
-});
-
-
-
 Rbac::group('person-addresses:', function() {
 
     Rbac::crudAbilities(\App\PersonAddress::class, 'crud');
@@ -49,4 +31,29 @@ Rbac::group('person-phone-numbers:', function() {
         ->assignTo('ModelManager');
 
 });
+
+
+
+Rbac::group('persons:', function() {
+
+    Rbac::crudAbilities(\App\Person::class, 'crud');
+
+    createTrashedAbilities(\App\Person::class);
+
+    Rbac::task('Inspect')
+        ->assign('crud.view')
+        ->assignTo('ModelInspector','Moderator');
+
+    Rbac::task('Manage')
+        ->assign('crud')
+        ->assign('person-addresses:Manage', 'person-email-addresses:Manage', 'person-phone-numbers:Manage')
+        ->assignTo('ModelManager');
+
+    Rbac::task('ManageOwn')
+        ->assign(
+            Rbac::gate('Manage|owned', new \App\AuthRules\OwnedModelRule())->assign('Manage')
+        )->assignTo('Person');
+
+});
+
 

@@ -36,4 +36,24 @@ trait BelongsToPerson
         return $this->belongsTo(Person::class, 'person_id');
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @inheritdoc
+     */
+    public function getOwner()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOwnerId()
+    {
+        return $this->person_id;
+    }
+
 }

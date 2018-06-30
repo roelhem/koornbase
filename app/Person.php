@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Enums\MembershipStatus;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
@@ -44,7 +45,7 @@ use Wildside\Userstamps\Userstamps;
  * @property-read Collection $users
  * @property-read Collection $debtors
  */
-class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
+class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup, OwnedByPerson
 {
 
     use SoftDeletes;
@@ -197,6 +198,22 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup
     public function getAuthorizableGroups()
     {
         return $this->groups;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- /
+
+    /** @inheritdoc */
+    public function getOwner()
+    {
+        return $this;
+    }
+
+    /** @inheritdoc */
+    public function getOwnerId()
+    {
+        return $this->id;
     }
 
 }

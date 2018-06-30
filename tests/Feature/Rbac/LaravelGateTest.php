@@ -12,7 +12,7 @@ use Roelhem\RbacGraph\Database\Node;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class GateTest extends TestCase
+class LaravelGateTest extends TestCase
 {
 
     use RefreshDatabase;

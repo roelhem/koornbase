@@ -3,6 +3,8 @@
 namespace App;
 
 
+use App\Contracts\OwnedByPerson;
+use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,9 +22,7 @@ use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
  * @property string|null $email
  * @property string|null $password
  * @property string|null $remember_token
- * @property integer|null $person_id
  *
- * @property Person|null $person
  *
  * @property-read string|null $name_display
  * @property-read string|null $name_short
@@ -33,11 +33,12 @@ use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
  *
  * @inheritdoc
  */
-class User extends Authenticatable implements RbacDatabaseAssignable
+class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPerson
 {
     use Notifiable;
     use HasApiTokens;
     use HasMorphedRbacAssignments;
+    use BelongsToPerson;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -129,16 +130,6 @@ class User extends Authenticatable implements RbacDatabaseAssignable
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this User belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person()
-    {
-        return $this->belongsTo(Person::class, 'person_id');
-    }
 
     /**
      * Gives the UserAccounts that belong to this User.
