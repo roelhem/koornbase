@@ -42,12 +42,12 @@ Rbac::group('persons:', function() {
 
     Rbac::task('Inspect')
         ->assign('crud.view')
-        ->assignTo('ModelInspector','Moderator');
+        ->assignTo();
 
     Rbac::task('Manage')
         ->assign('crud')
         ->assign('person-addresses:Manage', 'person-email-addresses:Manage', 'person-phone-numbers:Manage')
-        ->assignTo('ModelManager');
+        ->assignTo();
 
     Rbac::task('ManageOwn')
         ->assign(

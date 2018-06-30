@@ -61,6 +61,10 @@ class RbacServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views','rbac-graph');
 
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/rbac-graph')
+        ], 'public');
+
         // Observers
         Node::observe(NodeObserver::class);
         Edge::observe(EdgeObserver::class);

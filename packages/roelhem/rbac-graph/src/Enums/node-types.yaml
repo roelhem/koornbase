@@ -9,6 +9,9 @@ DEFAULT_NODE:
   style:
     console:
       fg-color: black
+    bootstrap:
+      bg-color: gray-dark
+      fg-color: white
   edges: false
   assignable: false
 
@@ -23,6 +26,9 @@ ROLE:
   style:
     console:
       fg-color: blue
+    bootstrap:
+      bg-color: blue
+      fg-color: white
   edges:
     parents: ROLE
   assignable: true
@@ -41,6 +47,9 @@ SUPER_ROLE:
     console:
       fg-color: blue
       options: [ bold ]
+    bootstrap:
+      bg-color: gray-dark
+      fg-color: red
   edges: false
   assignable: true
   default-values:
@@ -56,6 +65,9 @@ ABSTRACT_ROLE:
   style:
     console:
       fg-color: blue
+    bootstrap:
+      bg-color: blue
+      fg-color: white
   edges: !like ROLE
   assignable: false
 
@@ -70,6 +82,9 @@ DYNAMIC_ROLE:
     console:
       fg-color: blue
       options: [ bold ]
+    bootstrap:
+      bg-color: cyan
+      fg-color: white
   edges:
     children: !like ROLE
   assignable: false
@@ -86,6 +101,9 @@ TASK:
   style:
     console:
       fg-color: cyan
+    bootstrap:
+      bg-color: teal
+      fg-color: white
   edges:
     parents: [ TASK, ROLE ]
   assignable: false
@@ -102,6 +120,9 @@ PERMISSION:
   style:
     console:
       fg-color: green
+    bootstrap:
+      bg-color: green
+      fg-color: white
   edges:
     parents: [ ROLE, TASK ]
     children:
@@ -115,6 +136,9 @@ ROUTE_PERMISSION:
   style:
     console:
       fg-color: green
+    bootstrap:
+      bg-color: green
+      fg-color: white
   edges: !like PERMISSION
   options:
     route: !required string
@@ -130,6 +154,9 @@ ABILITY:
   style:
     console:
       fg-color: green
+    bootstrap:
+      bg-color: yellow
+      fg-color: white
   edges: !like PERMISSION
   options:
     ability: !required string
@@ -144,6 +171,9 @@ MODEL_ABILITY:
   style:
     console:
       fg-color: green
+    bootstrap:
+      bg-color: yellow
+      fg-color: white
   edges: !like ABILITY
   options:
     ability: !required string
@@ -156,9 +186,12 @@ PERMISSION_SET:
   description:
     A smaller subset of permissions.
   style:
-      console:
-        fg-color: green
-        options: [ underscore ]
+    console:
+      fg-color: green
+      options: [ underscore ]
+    bootstrap:
+      bg-color: light
+      fg-color: green
   edges:
     parents: !like PERMISSION
     children: PERMISSION
@@ -170,9 +203,12 @@ CRUD_ABILITY_SET:
     A set of CRUD (Create Read Update Write) abilities on a model. All model-ability nodes that are children of
     this node, should have the same model class as this ability-set.
   style:
-      console:
-        fg-color: green
-        options: [ underscore ]
+    console:
+      fg-color: green
+      options: [ underscore ]
+    bootstrap:
+      bg-color: light
+      fg-color: yellow
   edges:
     parents: !like ABILITY
     children: MODEL_ABILITY
@@ -200,6 +236,9 @@ GATE:
   style:
     console:
       fg-color: red
+    bootstrap:
+      bg-color: red
+      fg-color: white
   edges:
     parents: [ ROLE, TASK, GATE ]
     children: [ TASK, PERMISSION ]
@@ -213,6 +252,9 @@ MODEL_GATE:
   style:
     console:
       fg-color: red
+    bootstrap:
+      bg-color: red
+      fg-color: white
   edges: !like GATE
   options:
     for: array

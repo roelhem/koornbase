@@ -1,0 +1,21 @@
+
+@import "~bootstrap/scss/bootstrap";
+
+@each $vendor, $color in $colors {
+  .bg-#{$vendor} {
+    background-color: $color;
+  }
+
+  .text-#{$vendor} {
+    color: $color;
+  }
+
+  .border-#{$vendor} {
+    border-color: $color;
+  }
+
+  .badge-#{$vendor} {
+    color: $white;
+    background-color: $color;
+  }
+}

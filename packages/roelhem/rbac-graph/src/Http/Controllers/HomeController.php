@@ -10,11 +10,15 @@ namespace Roelhem\RbacGraph\Http\Controllers;
 
 
 
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
+
 class HomeController extends Controller
 {
 
-    public function index() {
-        return view('rbac-graph::index');
+    public function index(Graph $graph) {
+        return view('rbac-graph::index', [
+            'graph' => $graph
+        ]);
     }
 
 }
