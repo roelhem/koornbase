@@ -23,6 +23,7 @@ class CreateRbacPathsTable extends Migration
 
             $table->integer('size')->default(0);
             $table->jsonb('path')->default('[]')->unique();
+            $table->jsonb('rules')->default('[]');
 
             $table->foreign('first_node_id')->references('id')->on('rbac_nodes')
                 ->onUpdate('restrict')->onDelete('cascade');

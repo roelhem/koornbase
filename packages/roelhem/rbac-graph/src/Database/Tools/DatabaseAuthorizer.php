@@ -12,6 +12,8 @@ namespace Roelhem\RbacGraph\Database\Tools;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Roelhem\RbacGraph\Contracts\Models\Authorizable;
+use Roelhem\RbacGraph\Contracts\Rules\GateRule;
+use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
 use Roelhem\RbacGraph\Contracts\Tools\Authorizer;
 use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Database\Node;
@@ -35,6 +37,7 @@ class DatabaseAuthorizer implements Authorizer
      */
     protected $entryNodeIds;
 
+
     /**
      * DatabaseAuthorizer constructor.
      * @param Authorizable $authorizable
@@ -54,9 +57,7 @@ class DatabaseAuthorizer implements Authorizer
     }
 
     /**
-     * Returns the authorizable object which is authorized by this authorizer.
-     *
-     * @return Authorizable
+     * @inheritdoc
      */
     public function getAutorizable()
     {
@@ -86,43 +87,71 @@ class DatabaseAuthorizer implements Authorizer
      * @return Builder
      */
     protected function entryNodePathsQuery() {
-        return Path::query()->whereIn('first_node_id', $this->entryNodeIds);
+        return Path::query()
+            ->whereIn('first_node_id', $this->entryNodeIds);
     }
 
     /**
-     * Authorizes the provided node and returns the verdict.
-     *
-     * @param NodeContract|string|integer $node
-     * @param array $attributes
-     * @return boolean
-     * @throws NodeNotFoundException
+     * @inheritdoc
      */
     public function allows($node, $attributes = [])
     {
-        return $this->entryNodePathsQuery()->endsAt($node)->exists();
+        $paths = $this->entryNodePathsQuery()->endsAt($node)->get();
+
+        return $this->allowsAnyPath($paths, $node, $attributes);
     }
 
     /**
-     * Returns if there is at least one node in the provided nodes for which the user is authorized.
-     *
-     * @param Collection|array|\Illuminate\Database\Eloquent\Builder $nodes
-     * @param array $attributes
-     * @return boolean
+     * @inheritdoc
      */
     public function any($nodes, $attributes = [])
     {
         $lastNodeIds = $this->nodeIds($nodes);
 
-        $query = $this->entryNodePathsQuery()
-            ->whereIn('last_node_id', $lastNodeIds);
+        $paths = $this->entryNodePathsQuery()
+            ->whereIn('last_node_id', $lastNodeIds)
+            ->get();
 
-        return $query->exists();
+        foreach ($lastNodeIds as $node) {
+            if($this->allowsAnyPath($paths, $node, $attributes)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Returns if the authorizable in this authorizer is a super-user.
-     *
-     * @return boolean
+     * @param Path $path
+     * @param Node|string|integer $node
+     * @param array $attributes
+     * @return bool
+     */
+    protected function allowPath($path, $node, $attributes = []) {
+        foreach($path->rules as $rule) {
+            if(!($rule instanceof GateRule) || !$rule->allows($this->authorizable, $node, $attributes)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param array|Path[] $paths
+     * @param Node|string|integer $node
+     * @param array $attributes
+     * @return bool
+     */
+    protected function allowsAnyPath($paths, $node, $attributes = []) {
+        foreach ($paths as $path) {
+            if($this->allowPath($path, $node, $attributes)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function isSuper()
     {

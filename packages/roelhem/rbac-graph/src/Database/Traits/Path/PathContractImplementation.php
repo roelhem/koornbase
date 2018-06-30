@@ -40,12 +40,6 @@ trait PathContractImplementation
     }
 
     /** @inheritdoc */
-    public function count()
-    {
-        return $this->size;
-    }
-
-    /** @inheritdoc */
     public function getNodes()
     {
         return $this->nodes()->get();

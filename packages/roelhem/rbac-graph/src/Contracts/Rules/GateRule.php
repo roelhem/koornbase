@@ -8,7 +8,7 @@
 
 namespace Roelhem\RbacGraph\Contracts\Rules;
 
-use Illuminate\Foundation\Auth\User;
+use Roelhem\RbacGraph\Contracts\Models\Authorizable;
 
 /**
  * Contract GateRule
@@ -23,11 +23,11 @@ interface GateRule extends BaseRule
     /**
      * Returns true if the gate can be traversed, returns false otherwise.
      *
-     * @param User $user
+     * @param Authorizable $authorizable
      * @param string $node
      * @param array $attributes
      * @return boolean
      */
-    public function allows($user, $node, $attributes = []);
+    public function allows($authorizable, $node, $attributes = []);
 
 }

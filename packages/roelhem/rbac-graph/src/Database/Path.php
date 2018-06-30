@@ -12,11 +12,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection;
 use Roelhem\RbacGraph\Contracts\Graphs\Path as PathContract;
+use Roelhem\RbacGraph\Contracts\Rules\GateRule;
+use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
 use Roelhem\RbacGraph\Database\Traits\BelongsToDatabaseGraph;
 use Roelhem\RbacGraph\Database\Traits\Path\PathContractImplementation;
 use Roelhem\RbacGraph\Database\Traits\Path\PathRelations;
 use Roelhem\RbacGraph\Database\Traits\Path\PathScopes;
 use Roelhem\RbacGraph\Database\Traits\Path\PathStaticCreators;
+use Roelhem\RbacGraph\Rules\BaseRule;
 
 /**
  * Model Path
@@ -31,6 +34,7 @@ use Roelhem\RbacGraph\Database\Traits\Path\PathStaticCreators;
  * @property integer $first_path_id
  * @property integer $last_path_id
  * @property array $path
+ * @property array $rules
  *
  * @method static Path findOrFail(integer $id)
  *
@@ -51,9 +55,34 @@ class Path extends Pivot implements PathContract
 
     protected $table = 'rbac_paths';
 
-    protected $fillable = ['id','size','first_node_id','last_node_id', 'path'];
+    protected $fillable = ['id','size','first_node_id','last_node_id', 'path','rules'];
 
     public $timestamps = false;
+
+    /**
+     * @var RuleSerializer
+     */
+    protected $ruleSerializer;
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->ruleSerializer = resolve(RuleSerializer::class);
+        parent::__construct($attributes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count($columns = null)
+    {
+        if($columns === null) {
+            return $this->size;
+        }
+        return parent::count($columns);
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS and MUTATORS ---------------------------------------------------------------------- //
@@ -76,6 +105,20 @@ class Path extends Pivot implements PathContract
         } else {
             $this->attributes['path'] = json_encode($newValue);
         }
+    }
+
+    public function getRulesAttribute($value) {
+        $res = [];
+        foreach(json_decode($value, true) as $rule) {
+            $res[] = $this->ruleSerializer->rule($rule);
+        };
+        return $res;
+    }
+
+    public function setRulesAttribute($newValue) {
+        $this->attributes['rules'] = collect($newValue)->map(function($rule) {
+            return $this->ruleSerializer->option($rule);
+        })->unique()->toJson();
     }
 
     /**

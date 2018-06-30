@@ -2,13 +2,35 @@
 
 namespace Roelhem\RbacGraph\Database\Traits\Path;
 
+use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 use Roelhem\RbacGraph\Database\Path;
 use Roelhem\RbacGraph\Contracts\Nodes\Node as NodeContract;
 use Roelhem\RbacGraph\Contracts\Edges\Edge as EdgeContract;
+use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Exceptions\NodeNotFoundException;
 
 trait PathStaticCreators
 {
+
+    /**
+     * @param Graph $graph
+     * @param iterable $nodes
+     * @return array
+     */
+    private static function getRules(Graph $graph, iterable $nodes) {
+        $res = [];
+        foreach($nodes as $node) {
+            try {
+                $node = $graph->getNode($node);
+                if ($node->getType()->is(NodeType::GATE)) {
+                    $res[] = $node->getOption('rule');
+                }
+            } catch (NodeNotFoundException $exception) {
+
+            }
+        }
+        return $res;
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- STATIC HELPER CREATORS ----------------------------------------------------------------------------- //
@@ -25,12 +47,23 @@ trait PathStaticCreators
     {
         $path = new Path();
 
-        $nodeId = $path->getGraph()->getNodeId($node);
+        $node = $path->getGraph()->getNode($node);
 
-        $path->first_node_id = $nodeId;
-        $path->last_node_id = $nodeId;
+        $path->first_node_id = $node->getId();
+        $path->last_node_id = $node->getId();
         $path->size = 1;
-        $path->path = [$nodeId];
+        $path->path = [$node->getId()];
+
+        $rules = [];
+        if($node->getType()->is(NodeType::GATE)) {
+            $rule = $node->getOption('rule');
+            if($rule !== null) {
+                $rules[] = $rule;
+            }
+        }
+
+        $path->rules = $rules;
+
         $path->save();
         return $path;
     }
@@ -46,19 +79,29 @@ trait PathStaticCreators
         $parent_id = $edge->getParentId();
         $child_id = $edge->getChildId();
 
-        $parent_path_id = Path::singleton($parent_id)->value('id');
-        $child_path_id = Path::singleton($child_id)->value('id');
+        $parentPath = Path::singleton($parent_id)->first();
+        $childPath  = Path::singleton($child_id)->first();
+
+        if(!($parentPath instanceof Path)) {
+            trigger_error("The parent-node of the edge has no singleton path yet.");
+        }
+        if(!($childPath instanceof Path)) {
+            trigger_error("The child-node of the edge has no singleton path yet.");
+        }
 
         $path = new Path();
 
         $path->first_node_id = $parent_id;
         $path->last_node_id = $child_id;
 
-        $path->first_path_id = $parent_path_id;
-        $path->last_path_id = $child_path_id;
+        $path->first_path_id = $parentPath->id;
+        $path->last_path_id = $childPath->id;
 
         $path->size = 2;
         $path->path = [$parent_id, $child_id];
+
+        $path->rules = array_merge($parentPath->rules, $childPath->rules);
+
         $path->save();
 
         return $path;
@@ -94,6 +137,8 @@ trait PathStaticCreators
 
         $path->size = $firstPath->size + $lastPath->size - 1;
         $path->path = array_merge($firstPath->path, array_slice($lastPath->path,1));
+
+        $path->rules = array_merge($firstPath->rules, $lastPath->rules);
 
         return $path;
     }
