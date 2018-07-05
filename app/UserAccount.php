@@ -4,6 +4,7 @@ namespace App;
 
 use App\Enums\OAuthProvider;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -40,6 +41,7 @@ use Laravel\Socialite\Two\User as OAuthUser;
 class UserAccount extends Model
 {
     use Userstamps;
+    use Filterable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

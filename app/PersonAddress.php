@@ -15,6 +15,7 @@ use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
 use CommerceGuys\Addressing\AddressInterface;
 use CommerceGuys\Addressing\Formatter\FormatterInterface;
 use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -46,6 +47,7 @@ class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable;
 
     use HasRemarks, BelongsToPerson;
 

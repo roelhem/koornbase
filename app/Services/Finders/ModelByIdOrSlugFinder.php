@@ -52,7 +52,13 @@ class ModelByIdOrSlugFinder extends ModelByIdFinder
         }
 
         if (!$this->accepts($input)) {
-            throw new InputNotAcceptedException;
+
+            if(is_object($input)) {
+                $type = get_class($input);
+            } else {
+                $type = gettype($input);
+            }
+            throw new InputNotAcceptedException("Can't accept an input of type $type.");
         }
 
         $modelClass = $this->modelClass();

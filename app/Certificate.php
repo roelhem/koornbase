@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Contracts\OwnedByPerson;
 use App\Traits\BelongsToPerson;
 use App\Traits\HasRemarks;
 use App\Traits\HasStartEnd;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -29,6 +31,7 @@ use Wildside\Userstamps\Userstamps;
 class Certificate extends Model implements OwnedByPerson
 {
     use Userstamps;
+    use Filterable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -122,12 +125,49 @@ class Certificate extends Model implements OwnedByPerson
 
         return $query->where('passed', true)
             ->where(function($subQuery) use ($at) {
-                return $subQuery->whereNull('examination_at')->orWhereDate('examination_at', '<', $at);
+                return $subQuery->whereNull('examination_at')->orWhereDate('examination_at', '<=', $at);
             })->where(function($subQuery) use ($at) {
-                return $subQuery->whereNull('valid_at')->orWhereDate('valid_at', '<', $at);
+                return $subQuery->whereNull('valid_at')->orWhereDate('valid_at', '<=', $at);
             })->where(function($subQuery) use ($at) {
                 return $subQuery->whereNull('expired_at')->orWhereDate('expired_at', '>', $at);
             });
+    }
+
+    /**
+     * A scope that only gives the certificates that are invalid at the given time.
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeInvalid($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->where('passed', false)
+            ->orWhere('examination_at','>',$at)
+            ->orWhere('valid_at', '>', $at)
+            ->orWhere('expired_at','<=', $at);
+    }
+
+    /**
+     * A scope that only gives the certificates that have one of the specified categories
+     *
+     * @param Builder $query
+     * @param mixed $categories
+     * @return Builder
+     */
+    public function scopeCategory($query, $categories) {
+        $categories = collect($categories);
+        $category_ids = $categories->map(function($category) {
+            if(is_integer($category)) {
+                return $category;
+            } else {
+                return resolve(FinderCollection::class)->find($category, 'certificate_category')->id;
+            }
+        });
+        return $query->whereIn('category_id',$category_ids);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

@@ -6,6 +6,7 @@ namespace App;
 use App\Contracts\OwnedByPerson;
 use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
+use EloquentFilter\Filterable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -39,6 +40,7 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     use HasApiTokens;
     use HasMorphedRbacAssignments;
     use BelongsToPerson;
+    use Filterable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

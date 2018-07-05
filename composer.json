@@ -7,7 +7,6 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-ide-helper": "v2.4.3",
-        "marc-mabe/php-enum":"^3",
         "commerceguys/addressing": "^1",
         "commerceguys/intl": "^1",
         "cviebrock/eloquent-sluggable": "^4.5",
@@ -19,8 +18,10 @@
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "^1.0",
-        "wildside/userstamps": "0.5.1",
-        "roelhem/rbac-graph": "*"
+        "marc-mabe/php-enum": "^3",
+        "roelhem/rbac-graph": "*",
+        "tucker-eric/eloquentfilter": "^1.3",
+        "wildside/userstamps": "0.5.1"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

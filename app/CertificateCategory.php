@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
@@ -22,6 +23,7 @@ class CertificateCategory extends Model
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
+    use Filterable;
 
     use HasShortName, HasDescription;
 

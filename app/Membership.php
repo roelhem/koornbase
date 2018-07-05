@@ -7,6 +7,7 @@ use App\Enums\MembershipStatus;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -36,6 +37,7 @@ class Membership extends Model implements OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable;
 
     use HasRemarks, BelongsToPerson;
 

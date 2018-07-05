@@ -9,6 +9,7 @@ use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\HasCountryCode;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
@@ -35,6 +36,7 @@ use Wildside\Userstamps\Userstamps;
 class PersonPhoneNumber extends Model implements OwnedByPerson
 {
     use Userstamps;
+    use Filterable;
 
     use HasRemarks, BelongsToPerson;
 

@@ -53,20 +53,30 @@ class Controller extends ParentController
      * The default index action. Shows a paginating list of all the models.
      *
      * @param Request $request
-     * @param FilterServiceContract $filterService
      * @return ResourceCollection
      * @throws
      */
-    public function index(Request $request, FilterServiceContract $filterService) {
+    public function index(Request $request) {
         $modelClass = $this->modelClass;
         $resourceClass = $this->resourceClass;
         $sorter = resolve($this->sorterClass);
 
-        $queryFilter = new RbacQueryFilter($modelClass);
 
+
+        // Initializing the query
         $query = $modelClass::query();
+
+        // Apply the filter from the RBAC-graph.
+        $queryFilter = new RbacQueryFilter($modelClass);
         $query = $queryFilter->filter($query);
-        $query = $filterService->applyFiltersOn($query, $request);
+
+        // Apply the filters from the request.
+        $filters = $request->query('filter');
+        if(is_array($filters)) {
+            $query = $query->filter($filters);
+        }
+
+        // Apply the sorters
         $query = $sorter->addList($query, $this->getSortList($request));
 
         $query->with($this->getEagerLoadingRelations($request));

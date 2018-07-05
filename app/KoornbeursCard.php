@@ -5,6 +5,7 @@ namespace App;
 use App\Contracts\OwnedByPerson;
 use App\Traits\HasRemarks;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -27,6 +28,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable;
 
     use HasRemarks;
 
@@ -55,7 +57,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
             $at = Carbon::parse($at);
         }
 
-        if($this->activated_at === null || $this->activated_at > $at) {
+        if($this->activated_at === null || $this->activated_at >= $at) {
             return false;
         }
 
@@ -92,10 +94,6 @@ class KoornbeursCard extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeActive($query, $at = null) {
-        if($at === null) {
-            $at = Carbon::now();
-        }
-
         if(!($at instanceof Carbon)) {
             $at = Carbon::parse($at);
         }
@@ -103,8 +101,27 @@ class KoornbeursCard extends Model implements OwnedByPerson
         $query->whereNotNull('activated_at')
             ->where('activated_at','<=',$at)
             ->where(function($subQuery) use ($at) {
-                return $subQuery->where('deactivated_at','>=',$at)->orWhereNull('deactivated_at');
+                return $subQuery->where('deactivated_at','>',$at)->orWhereNull('deactivated_at');
             });
+
+        return $query;
+    }
+
+    /**
+     * Scope that gives only the inactive KoornbeursCard instances.
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeInactive($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        $query->whereNull('activated_at')
+            ->orWhere('activated_at','>', $at)
+            ->orWhere('deactivated_at','<=', $at);
 
         return $query;
     }

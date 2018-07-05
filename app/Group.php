@@ -2,9 +2,12 @@
 
 namespace App;
 
+use App\Contracts\Finders\FinderCollection;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -34,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {
 
+    use Filterable;
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
@@ -95,6 +99,29 @@ class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
      */
     public function emailAddresses() {
         return $this->hasMany(GroupEmailAddress::class, 'group_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOPES --------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Scope that only passes the groups that are in one of the specified categories.
+     *
+     * @param Builder $query
+     * @param array|string|integer $categories
+     * @return Builder
+     */
+    public function scopeCategory($query, $categories) {
+        $categories = collect($categories);
+        $category_ids = $categories->map(function($category) {
+            if(is_integer($category)) {
+                return $category;
+            } else {
+                return resolve(FinderCollection::class)->find($category, 'group_category')->id;
+            }
+        });
+        return $query->whereIn('category_id',$category_ids);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

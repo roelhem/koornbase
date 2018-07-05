@@ -7,6 +7,7 @@ use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
@@ -29,6 +30,7 @@ use Carbon\Carbon;
 class PersonEmailAddress extends Model implements OwnedByPerson
 {
     use Userstamps;
+    use Filterable;
 
     use HasRemarks, BelongsToPerson;
 
