@@ -11,19 +11,9 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return ResourceCollection
-     */
-    public function index(Request $request)
-    {
-        $query = User::query();
-        $query->with($this->getAskedRelations($request));
 
-        return UserResource::collection($query->paginate());
-    }
+    protected $modelClass = User::class;
+    protected $resourceClass = UserResource::class;
 
     /**
      * Store a new User in the database.

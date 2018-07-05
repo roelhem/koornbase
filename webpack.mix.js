@@ -11,6 +11,19 @@ let mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    module: {
+        rules: [{
+            test: /\.ya?ml$/,
+            use: [
+                {
+                    loader:path.resolve(__dirname, 'yaml-loader.js')
+                }
+            ]
+        }]
+    }
+});
+
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
 

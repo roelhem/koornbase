@@ -194,10 +194,5 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
         }
     }
 
-    public function getDynamicRoles()
-    {
-        return collect([]);
-    }
-
 
 }

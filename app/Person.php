@@ -116,11 +116,11 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
      * @return AvatarType
      */
     public function getAvatarAttribute() {
-        /*foreach ($this->users as $user) {
+        foreach ($this->users as $user) {
             if($user->avatar !== null) {
                 return $user->avatar;
             }
-        }*/
+        }
         $res = new AvatarType;
         $res->letters = $this->avatar_letters;
         return $res;
@@ -164,6 +164,13 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
     }
 
     /**
+     * Gives the primary KoornbeursCard that belong to this Person.
+     */
+    public function activeCards() {
+        return $this->cards()->active();
+    }
+
+    /**
      * Gives all the KoornbeursCards that belong to this Person.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -202,7 +209,13 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- /
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    public function owner()
+    {
+        return $this->belongsTo(Person::class, 'id','id');
+    }
 
     /** @inheritdoc */
     public function getOwner()
@@ -214,6 +227,12 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
     public function getOwnerId()
     {
         return $this->id;
+    }
+
+    /** @inheritdoc */
+    public function scopeOwnedBy($query, $person_id)
+    {
+        return $query->where('id','=',$person_id);
     }
 
 }

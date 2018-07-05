@@ -36,6 +36,16 @@ class RoelHemerikSeeder extends Seeder
                 $user->assignNode('Webmaster');
             }
 
+            $superUser = $person->users()->create([
+                'name' => 'super',
+                'email' => 'super@roelweb.com',
+                'password' => '$2y$10$PHXEplWPGB03vQc9x4OVu.hV4V9V3FZyk9kLBVimSFcN11etJU8Aq'
+            ]);
+
+            if($superUser instanceof \App\User) {
+                $superUser->assignNode('Super');
+            }
+
             $person->memberships()->create([
                 'application' => Carbon::createFromDate(2013, 9, 1),
                 'start' => Carbon::createFromDate(2013, 10, 1)

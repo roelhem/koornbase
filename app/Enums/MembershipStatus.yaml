@@ -62,6 +62,7 @@ MEMBER:
 
 FORMER_MEMBER:
   title: Oud-lid
+  label: FormerMember
   description: Iemand die ooit lid- of kennismaker is geweest bij O.J.V. de Koornbeurs, maar nu niet meer lid is.
 
   dynamicRole:

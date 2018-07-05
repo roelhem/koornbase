@@ -20,6 +20,7 @@ use Wildside\Userstamps\Userstamps;
  * @property Carbon|null $activated_at
  * @property Carbon|null $deactivated_at
  *
+ * @property-read boolean $is_active
  * @property-read Person|null $owner
  */
 class KoornbeursCard extends Model implements OwnedByPerson
@@ -125,20 +126,22 @@ class KoornbeursCard extends Model implements OwnedByPerson
     // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- /
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function getOwner()
     {
         return $this->owner;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function getOwnerId()
     {
         return $this->owner_id;
+    }
+
+    /** @inheritdoc */
+    public function scopeOwnedBy($query, $person_id)
+    {
+        return $query->where('owner_id','=',$person_id);
     }
 
 }

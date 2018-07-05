@@ -1,0 +1,137 @@
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    CONNECTION WITH APP                                                                                          #
+# --------------------------------------------------------------------------------------------------------------- #
+
+class: App\Group
+
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    DISPLAY INFORMATION                                                                                          #
+# --------------------------------------------------------------------------------------------------------------- #
+
+title: Groep
+description: Een groep van personen
+lang:
+  en:
+    single: group
+    plural: groups
+  nl:
+    single: groep
+    plural: groepen
+
+
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    FIELDS and ATTRIBUTES                                                                                        #
+# --------------------------------------------------------------------------------------------------------------- #
+
+
+fields:
+
+  id:
+    title: ID
+    column: true
+    sortable: true
+
+  category_id:
+    title: Categorie ID
+    description: De groep-categorie waar deze groep bij hoort.
+    column: true
+    required: true
+
+  slug:
+    title: Slug
+    column: true
+    sortable: true
+    required: true
+
+  name:
+    title: Naam
+    description: De volledige naam van de groep.
+    column: true
+    sortable: true
+    required: true
+
+  name_short:
+    title: Korte naam
+    description: Een kortere naam voor deze groep.
+    column: true
+    sortable: true
+
+  description:
+    title: Omschrijving
+    description: Een omschrijving van de functie van de groep.
+    columm: true
+    sortable: true
+
+  member_name:
+    title: Titel
+    description: Hoe je een persoon in de groep noemt.
+    column: true
+    sortable: true
+
+  is_required:
+    title: Verplicht
+    description: Geeft aan dat de groep moet bestaan om het systeem goed te laten werken. (De groep kan dus niet
+      verwijderd worden.)
+    column: true
+    sortable: true
+
+  style:
+    title: Stijl
+    description: De stijl waarin deze groep gepresenteerd moet worden.
+    dependsOn:
+      - !relation category
+
+  # Velden voor het bijhouden van veranderingen
+  created_at:
+    title: Aanmaakdatum
+    column: true
+    sortable: true
+
+  created_by:
+    title: Aangemaakt door
+    column: true
+
+  updated_at:
+    title: Bewerkdatum
+    column: true
+    sortable: true
+
+  updated_by:
+    title: Bewerkt door
+    column: true
+
+  deleted_at:
+    title: Verwijderdatum
+    column: true
+    sortable: true
+
+  deleted_by:
+    title: Verwijderd door
+    column: true
+
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    RELATIONS                                                                                                    #
+# --------------------------------------------------------------------------------------------------------------- #
+
+relations:
+
+  category:
+    title: Categorie
+    description: De groep-categorie waar deze groep bij hoort.
+    type: BelongsTo
+    related: !model GroupCategory
+
+  persons:
+    title: Personen
+    description: De personen die lid zijn van deze groep.
+    type: BelongsToMany
+    related: !model Person
+
+  emailAddresses:
+    title: E-mail adressen
+    description: De e-mailadressen die alle berichten doorsturen naar de leden van de groep.
+

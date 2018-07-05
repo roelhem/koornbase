@@ -9,6 +9,7 @@
 namespace App\AuthRules;
 
 
+use App\AuthRules\Traits\HasPersonPerspective;
 use App\Certificate;
 use App\Contracts\OwnedByPerson;
 use App\Debtor;
@@ -19,12 +20,14 @@ use App\PersonAddress;
 use App\PersonEmailAddress;
 use App\PersonPhoneNumber;
 use App\User;
-use Roelhem\RbacGraph\Contracts\Rules\ModelRule;
+use Roelhem\RbacGraph\Contracts\Rules\QueryRule;
 use Roelhem\RbacGraph\Contracts\Rules\RuleAttributeBag;
 use Roelhem\RbacGraph\Rules\BaseRule;
 
-class OwnedModelRule extends BaseRule implements ModelRule
+class OwnedModelRule extends BaseRule implements QueryRule
 {
+
+    use HasPersonPerspective;
 
     /**
      * Returns true if the gate can be traversed, returns false otherwise.
@@ -34,26 +37,33 @@ class OwnedModelRule extends BaseRule implements ModelRule
      */
     public function allows($attributeBag)
     {
-        // collect the right authorizables
-        $authorizable = $attributeBag->authorizable;
-        $person = null;
+        $personId = $this->getPersonId($attributeBag);
 
-        if($authorizable instanceof User) {
-            $person = $authorizable->person;
-        } elseif($authorizable instanceof Person) {
-            $person = $authorizable;
-        }
-
-        if($person === null) {
-            return null;
+        if($personId === null) {
+            return false;
         }
 
         $model = $attributeBag->model;
         if($model instanceof OwnedByPerson) {
-            return $model->getOwnerId() === $person->getId();
+            return $model->getOwnerId() === $personId;
         }
 
         return false;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param RuleAttributeBag $bag
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function queryFilter($query, $bag)
+    {
+        $personId = $this->getPersonId($bag);
+        if($personId !== null) {
+            return $query->ownedBy($personId);
+        } else {
+            return $query->whereRaw('FALSE');
+        }
     }
 
     /**

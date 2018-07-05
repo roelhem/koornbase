@@ -2,31 +2,43 @@
 
     <span>
         <span class="status-icon" :class="statusBackgroundClass"></span>
-        {{ label }}
+        <data-display title="Lid-status">{{ label }}</data-display>
+        <span v-if="since" class="small text-muted">
+            (sinds
+            <data-display title="Lid-status"
+                          class="text-muted-dark"
+            >{{ since | moment('dd D MMMM YYYY') }}</data-display>
+            )
+        </span>
     </span>
 
 </template>
 
 <script>
+    import DataDisplay from "./displays/data-display";
+
     export default {
+        components: {DataDisplay},
         name: "display-membership-status",
         props: {
-            value:{
-                type:[String,Number],
-                default:0,
-            },
+            status:[String,Number],
+            title:String,
+            since:String
         },
 
         computed: {
             intValue: function () {
-                let value = this.value;
+                let value = this.status;
                 if(typeof value === 'string') {
-                    value = parseInt(value);
+                    value = parseInt(status);
                 }
                 return value;
             },
 
             label: function() {
+                if(this.title) {
+                    return this.title;
+                }
                 switch (this.intValue) {
                     case 1: return 'Kennismaker';
                     case 2: return 'Lid';

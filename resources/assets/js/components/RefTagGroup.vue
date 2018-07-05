@@ -9,7 +9,6 @@
 <script>
     import BaseTag from "./BaseTag";
     import useServerEntity from "../mixins/useServerEntity";
-    import { GROUP_STYLES } from "../constants/styles";
 
     export default {
         components: {BaseTag},

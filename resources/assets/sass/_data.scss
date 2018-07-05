@@ -9,3 +9,13 @@
   border-bottom: 1px dotted;
 
 }
+
+.generated_address_html .given-name,
+.generated_address_html .family-name,
+.generated_address_html .family-name + br {
+  display: none;
+}
+
+.generated_address_html span:hover {
+  border-bottom: 1px dotted;
+}

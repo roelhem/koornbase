@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Roelhem\RbacGraph\Contracts\Models\Authorizable;
 use Roelhem\RbacGraph\Contracts\Rules\GateRule;
+use Roelhem\RbacGraph\Contracts\Rules\QueryRule;
 use Roelhem\RbacGraph\Contracts\Rules\RuleAttributeBag;
 use Roelhem\RbacGraph\Contracts\Tools\Authorizer;
 use Roelhem\RbacGraph\Database\Node;
@@ -100,6 +101,106 @@ class DatabaseAuthorizer implements Authorizer
                 return $node->id;
             }))
             ->orderBy('rules_count');
+    }
+
+    /**
+     * Adds some filters to a query such that only the models with permission are shown.
+     *
+     * @param Builder $query
+     * @param Node|string|integer $node
+     * @param RuleAttributeBag $bag
+     * @return Builder
+     */
+    public function queryFilter($query, $node, $bag = null)
+    {
+        $bag = $this->createBag($bag);
+        $paths = $this->entryNodePathsQuery()->endsAt($node)->get();
+        $bag[RuleAttribute::POSSIBLE_PATHS] = $paths;
+
+        $subQueries = [];
+        foreach ($paths as $path) {
+            if($path instanceof Path) {
+                // If there is a path that has no rule, all models are permitted, so no query should be send
+                if($path->rules_count === 0) {
+                    return $query;
+                }
+
+                // If there is a path with only query rules, a new subquery can be created.
+                if($this->checkQueryRules($path)) {
+                    $subQueries[] = function($query) use ($path, $bag) {
+                        return $this->pathQueryFilter($query, $path, $bag);
+                    };
+                }
+            }
+        }
+
+        // Stitching the queries together.
+        if(count($subQueries) > 0) {
+            return $query->where(function($query) use ($subQueries) {
+                foreach ($subQueries as $subQueryCallable) {
+                    $query->orWhere($subQueryCallable);
+                }
+                return $query;
+            });
+        }
+
+        // Block all entries if no valid rule was found.
+        return $query->whereRaw('FALSE');
+    }
+
+    /**
+     * Returns if the provided path has query-rules only.
+     *
+     * @param Path $path
+     * @return boolean
+     */
+    protected function checkQueryRules($path)
+    {
+        foreach ($path->rules as $rule) {
+            if(!($rule instanceof QueryRule)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Applies the query filters of one path.
+     *
+     * @param Builder $query
+     * @param Path $path
+     * @param RuleAttributeBag $bag
+     * @return Builder
+     */
+    protected function pathQueryFilter($query, $path, $bag)
+    {
+        $bag = clone $bag;
+        $bag[RuleAttribute::PATH] = $path;
+        $rules = $path->rules;
+        $bag[RuleAttribute::PATH_RULES] = $rules;
+        foreach ($rules as $rule) {
+            if($rule instanceof QueryRule) {
+                $query = $rule->queryFilter($query, $bag);
+            } else {
+                return $query->whereRaw('FALSE');
+            }
+        }
+        return $query;
+    }
+
+    /**
+     * Returns if the authorizable object and the provided node are connected.
+     *
+     * That is, there exists a path from the authorizable object to the provided node, but there may be some
+     * gates with rules that deny the access to that node.
+     *
+     * @param $node
+     * @return boolean
+     */
+    public function connected($node)
+    {
+        return $this->entryNodePathsQuery()->endsAt($node)->exists();
     }
 
     /**

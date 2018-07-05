@@ -10,6 +10,7 @@ namespace App\Traits;
 
 
 use App\Person;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Trait BelongsToPerson
@@ -41,6 +42,15 @@ trait BelongsToPerson
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
+     * Gives the owner of this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner() {
+        return $this->belongsTo(Person::class, 'person_id');
+    }
+
+    /**
      * @inheritdoc
      */
     public function getOwner()
@@ -54,6 +64,17 @@ trait BelongsToPerson
     public function getOwnerId()
     {
         return $this->person_id;
+    }
+
+    /**
+     * Scope that filters only the objects that are owned by the Person with the provided id.
+     *
+     * @param Builder $query
+     * @param integer $person_id
+     * @return Builder
+     */
+    public function scopeOwnedBy($query, $person_id) {
+        return $query->where('person_id', '=', $person_id);
     }
 
 }

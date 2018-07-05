@@ -23,33 +23,23 @@ use App\PersonEmailAddress;
  */
 trait HasEmailAddresses
 {
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
 
-    /**
-     * Returns the first primary email address of this Person.
-     *
-     * @return PersonEmailAddress|null
-     */
-    public function getEmailAddressAttribute() {
-        $res = $this->emailAddresses()->orderByDesc('is_primary')
-                                      ->where('for_emergency','=', false)
-                                      ->orderBy('label')->first();
-
-        if($res instanceof PersonEmailAddress) {
-            return $res;
-        } else {
-            return null;
-        }
-    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Gives all the PersonPhoneNumbers that belong to this Person.
+     * Returns the primary E-mail address of this Person.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function emailAddress() {
+        return $this->hasOne(PersonEmailAddress::class, 'person_id')->orderBy('index');
+    }
+
+    /**
+     * Gives all the E-mail addresses that belong to this Person.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

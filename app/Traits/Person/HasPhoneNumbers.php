@@ -17,36 +17,25 @@ use App\PersonPhoneNumber;
  *
  * @package App\Traits\Person
  *
- * @property-read PersonPhoneNumber|null $phone_number
- *
+ * @property-read PersonPhoneNumber|null $phoneNumber
  * @property-read PersonPhoneNumber[] $phoneNumbers
  */
 trait HasPhoneNumbers
 {
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
 
-    /**
-     * Returns the first primary phone number of this Person.
-     *
-     * @return PersonPhoneNumber|null
-     */
-    public function getPhoneNumberAttribute() {
-        $res = $this->phoneNumbers()->orderByDesc('is_primary')
-                                    ->where('for_emergency','=', false)
-                                    ->orderBy('label')->first();
-
-        if($res instanceof PersonPhoneNumber) {
-            return $res;
-        } else {
-            return null;
-        }
-    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Gives the primary PersonPhoneNumber of this Person.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function phoneNumber() {
+        return $this->hasOne(PersonPhoneNumber::class, 'person_id')->orderBy('index');
+    }
 
     /**
      * Gives all the PersonPhoneNumbers that belong to this Person.

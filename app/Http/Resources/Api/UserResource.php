@@ -24,8 +24,11 @@ class UserResource extends Resource
                 'githubAccount' => new UserAccountResource($this->whenLoaded('githubAccount')),
                 'googleAccount' => new UserAccountResource($this->whenLoaded('googleAccount')),
                 'twitterAccount' => new UserAccountResource($this->whenLoaded('twitterAccount')),
-                'assignedNodes' => $this->whenLoaded('assignedNodes')
             ] + $this->tailArray($request);
+    }
+
+    public function fieldPersonId() {
+        return $this->person_id;
     }
 
     public function fieldNameDisplay($request) {

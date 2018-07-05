@@ -26,14 +26,19 @@ class PersonResource extends Resource
                 'name_nickname' => $this->name_nickname,
                 'birth_date' => $this->formatDate($this->birth_date, $request),
 
+                'address' => new PersonAddressResource($this->whenLoaded('address')),
                 'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
+                'emailAddress' => new PersonEmailAddressResource($this->whenLoaded('emailAddress')),
                 'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+                'phoneNumber' => new PersonPhoneNumberResource($this->whenLoaded('phoneNumber')),
                 'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
 
                 'users' => UserResource::collection($this->whenLoaded('users')),
                 'groups' => GroupResource::collection($this->whenLoaded('groups')),
+                'memberships' => MembershipResource::collection($this->whenLoaded('memberships')),
                 'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
-                'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards'))
+                'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards')),
+                'activeCards' => KoornbeursCardResource::collection($this->whenLoaded('activeCards'))
 
             ] + $this->tailArray($request);
     }
@@ -51,6 +56,10 @@ class PersonResource extends Resource
         return $this->age;
     }
 
+    public function fieldAvatarLetters($request) {
+        return $this->avatar_letters;
+    }
+
     public function fieldAvatar($request) {
         return $this->avatar;
     }
@@ -61,7 +70,7 @@ class PersonResource extends Resource
         }
 
         $res = [
-            'status' => $this->membership_status,
+            'status' => $this->membership_status->value,
             'name' => $this->membership_status->name,
             'title' => $this->membership_status->title,
         ];

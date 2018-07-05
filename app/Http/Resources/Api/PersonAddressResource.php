@@ -34,6 +34,10 @@ class PersonAddressResource extends PersonContactEntryResource
         return $this->resource->format();
     }
 
+    public function fieldHtmlFormatted() {
+        return $this->resource->format(['html' => true, 'html_attributes' => ['translate' => 'no', 'class' => 'generated_address_html']]);
+    }
+
     public function fieldPostalLabel() {
         return $this->resource->postalLabel();
     }

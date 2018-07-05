@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Requests\Api\PersonUpdateRequest;
 use App\Http\Resources\Api\PersonResource;
-use App\Http\Resources\Api\Resource;
 use App\Person;
 use App\Services\Finders\GroupFinder;
 use App\Services\Sorters\PersonSorter;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-
 class PersonController extends Controller
 {
 
@@ -48,12 +46,6 @@ class PersonController extends Controller
     public function show(Person $person, Request $request)
     {
         $this->authorize('view', $person);
-
-        $person->load([
-            'addresses' => function($query) {
-                return $query->where('id','=',1);
-            }
-        ]);
 
         return $this->prepare($person, $request);
     }

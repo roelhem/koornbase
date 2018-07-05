@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\Filters\FilterServiceContract;
+use App\Services\Filters\FilterService;
+use App\Services\Filters\PersonFilterProvider;
 use App\Services\Navigation\BreadcrumbService;
 use App\Services\Navigation\NavbarService;
 use App\Services\Navigation\NavigationItemRepository;
@@ -47,6 +50,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CertificateCategorySorter::class);
         $this->app->singleton(KoornbeursCardSorter::class);
         $this->app->singleton(MembershipSorter::class);
+
+        $this->app->singleton(FilterService::class);
+        $this->app->bind(FilterServiceContract::class, FilterService::class);
+
+        $this->app->singleton(PersonFilterProvider::class);
         
 
         $this->app->singleton(NavigationItemRepository::class);

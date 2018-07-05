@@ -180,6 +180,19 @@ class Resource extends JsonResource
             if(in_array('_primaryKey', $metaFields) || in_array('_primaryKeyType', $metaFields)) {
                 $res['_primaryKeyType'] = $resource->getKeyType();
             }
+
+
+
+            if(in_array('_canView', $metaFields)) {
+                $res['_canView'] = \Gate::allows('view', $resource);
+            }
+            if(in_array('_canUpdate', $metaFields)) {
+                $res['_canUpdate'] = \Gate::allows('update', $resource);
+            }
+            if(in_array('_canDelete', $metaFields)) {
+                $res['_canDelete'] = \Gate::allows('delete', $resource);
+            }
+
         }
 
         return $res;

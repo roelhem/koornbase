@@ -6,6 +6,8 @@ use App\Enums\Traits\HasConfigFile;
 use App\Membership;
 use App\Person;
 use Carbon\Carbon;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use MabeEnum\Enum;
 use Roelhem\RbacGraph\Contracts\Models\Authorizable;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
@@ -29,7 +31,7 @@ use Symfony\Component\Yaml\Yaml;
  * @property-read array $style
  * @property-read integer $value
  */
-final class MembershipStatus extends Enum implements DynamicRole
+final class MembershipStatus extends Enum implements DynamicRole, \JsonSerializable
 {
 
     use HasConfigFile;
@@ -121,6 +123,20 @@ final class MembershipStatus extends Enum implements DynamicRole
      */
     public function getNode() {
         return \Rbac::get($this->defaultNodeName())->getNode();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  IMPLEMENTS Arrayable  -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->getName(),
+            'title' => $this->val('title'),
+            'label' => $this->val('label'),
+            'value' => $this->getValue(),
+        ];
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

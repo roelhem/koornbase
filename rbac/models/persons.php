@@ -44,6 +44,14 @@ Rbac::group('persons:', function() {
         ->assign('crud.view')
         ->assignTo();
 
+    Rbac::task('InspectMembers')
+        ->assign(
+            Rbac::gate('Inspect|membership_status.member', new \App\AuthRules\MembershipStatusRule(\App\Enums\MembershipStatus::MEMBER))
+                ->assign('Inspect'),
+            Rbac::gate('Inspect|membership_status.novice', new \App\AuthRules\MembershipStatusRule(\App\Enums\MembershipStatus::NOVICE))
+                ->assign('Inspect')
+        )->assignTo(\App\Enums\MembershipStatus::MEMBER()->getNode());
+
     Rbac::task('Manage')
         ->assign('crud')
         ->assign('person-addresses:Manage', 'person-email-addresses:Manage', 'person-phone-numbers:Manage')

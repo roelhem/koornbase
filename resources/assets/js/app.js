@@ -1,23 +1,23 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue';
+
 
 // Including and configuring BootstrapVue
-
 import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(BootstrapVue);
 
 
-// Including and configuring the vue-moment and moment.
 
+// Including and configuring the vue-moment and moment.
 const moment = require('moment');
 require('moment/locale/nl');
 
@@ -60,37 +60,21 @@ Vue.use(VueGoogleMaps, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('data-display', require('./components/displays/data-display'));
 
-Vue.component('crud-form', require('./components/forms/crud-form.vue'));
+import router from './router';
+import store from  './store';
 
-Vue.component('card-user-small', require('./components/cards/card-user-small.vue'));
-Vue.component('card-calendar', require('./components/cards/card-calendar.vue'));
 
-Vue.component('full-calendar', require('./components/FullCalendar'));
 
-Vue.component('person-page', require('./components/person/page'));
-Vue.component('person-form', require('./components/person/form/form'));
-Vue.component('base-avatar', require('./components/BaseAvatar'));
+store.dispatch('loadCurrentUser');
 
-Vue.component('the-page-home', require('./components/ThePageHome'));
-Vue.component('the-page-person-search', require('./components/ThePagePersonSearch'));
 
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
+Vue.component('the-layout', require('./components/TheLayout'));
+Vue.component('the-footer', require('./components/TheFooter'));
 
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
 
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
 
 const app = new Vue({
-    el: '#app'
-});
+    router,
+    store
+}).$mount('#app');

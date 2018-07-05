@@ -17,19 +17,6 @@ class GroupCategoryController extends Controller
     protected $resourceClass = GroupCategoryResource::class;
     protected $sorterClass = GroupCategorySorter::class;
 
-
-    public function index(Request $request) {
-        $sorter = resolve($this->sorterClass);
-
-        $query = GroupCategory::query();
-        $query = $sorter->addList($query, $this->getSortList($request));
-        $query->with($this->getAskedRelations($request));
-
-        $paginate = $this->getPaginate($query, $request);
-
-        return GroupCategoryResource::collection($paginate);
-    }
-
     /**
      * Store a newly created resource in storage.
      *

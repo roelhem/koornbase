@@ -4,7 +4,7 @@
         <data-display title="Geboortedatum">{{ birth_date | moment('D MMMM YYYY') }}</data-display>
         <small class="font-italic" :class="{'text-muted': !underAged, 'text-warning': underAged}">
             (
-            <data-display title="Leeftijd">{{ age }}</data-display> jaar
+            <data-display title="Leeftijd">{{ age }} jaar</data-display>
             )
         </small>
     </span>
@@ -14,8 +14,10 @@
 
 <script>
     import moment from 'moment';
+    import DataDisplay from "./displays/data-display";
 
     export default {
+        components: {DataDisplay},
         name: "display-person-birth-date",
         props:{
             birth_date:null

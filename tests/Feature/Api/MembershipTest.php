@@ -38,7 +38,7 @@ class MembershipTest extends TestCase
                         'application' => $membership->application->toDateString(),
                         'start' => $membership->start->toDateString(),
                         'end' => $membership->end->toDateString(),
-                        'status' => $membership->status
+                        'status' => $membership->status->jsonSerialize()
                     ];
                 })->all()
             ]);
@@ -134,7 +134,7 @@ class MembershipTest extends TestCase
                     'application' => $membershipA->application->toDateString(),
                     'start' => $membershipA->start->toDateString(),
                     'end' => $membershipA->end->toDateString(),
-                    'status' => $membershipA->status
+                    'status' => $membershipA->status->jsonSerialize()
                 ]
             ]);
 
@@ -147,7 +147,7 @@ class MembershipTest extends TestCase
                     'application' => $membershipB->application->toDateString(),
                     'start' => null,
                     'end' => null,
-                    'status' => $membershipB->status
+                    'status' => $membershipB->status->jsonSerialize()
                 ]
             ]);
     }
