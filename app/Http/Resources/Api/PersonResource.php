@@ -18,13 +18,17 @@ class PersonResource extends Resource
         return parent::toArray($request) + [
                 'name' => $this->name,
                 'name_short' => $this->name_short,
+                'name_formal' => $this->name_formal,
+                'name_full' => $this->name_full,
                 'name_first' => $this->name_first,
                 'name_middle' => $this->name_middle,
                 'name_prefix' => $this->name_prefix,
                 'name_last' => $this->name_last,
                 'name_initials' => $this->name_initials,
                 'name_nickname' => $this->name_nickname,
+                'avatar' => $this->avatar,
                 'birth_date' => $this->formatDate($this->birth_date, $request),
+                'age' => $this->age,
 
                 'address' => new PersonAddressResource($this->whenLoaded('address')),
                 'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
@@ -41,27 +45,6 @@ class PersonResource extends Resource
                 'activeCards' => KoornbeursCardResource::collection($this->whenLoaded('activeCards'))
 
             ] + $this->tailArray($request);
-    }
-
-
-    public function fieldNameFormal($request) {
-        return $this->name_formal;
-    }
-
-    public function fieldNameFull($request) {
-        return $this->name_full;
-    }
-
-    public function fieldAge($request) {
-        return $this->age;
-    }
-
-    public function fieldAvatarLetters($request) {
-        return $this->avatar_letters;
-    }
-
-    public function fieldAvatar($request) {
-        return $this->avatar;
     }
 
     public function fieldMembershipStatus($request) {

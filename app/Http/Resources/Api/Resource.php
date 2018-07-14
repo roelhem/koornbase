@@ -72,7 +72,7 @@ class Resource extends JsonResource
         $res = [];
         $res = $res + $this->getOptionalFields($request);
 
-        $res['remarks'] = $this->when($this->remarks !== null, $this->remarks);
+        $res['remarks'] = $this->when(isset($this->resource->remarks), $this->remarks);
         $res['is_required'] = $this->when($this->is_required, true);
 
         $res['creator'] = new UserResource($this->whenLoaded('creator'));

@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.26 on 2018-06-30 00:49:11.
+ * Generated for Laravel 5.6.26 on 2018-07-11 06:00:26.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -12636,6 +12636,191 @@ namespace Laravel\Socialite\Facades {
  
 }
 
+namespace Rebing\GraphQL\Support\Facades { 
+
+    class GraphQL {
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function schema($schema = null)
+        {
+            return \Rebing\GraphQL\GraphQL::schema($schema);
+        }
+        
+        /**
+         * 
+         *
+         * @param array $opts - additional options, like 'schema', 'context' or 'operationName'
+         * @static 
+         */ 
+        public static function query($query, $params = array(), $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::query($query, $params, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function queryAndReturnResult($query, $params = array(), $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::queryAndReturnResult($query, $params, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addTypes($types)
+        {
+            return \Rebing\GraphQL\GraphQL::addTypes($types);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addType($class, $name = null)
+        {
+            return \Rebing\GraphQL\GraphQL::addType($class, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function type($name, $fresh = false)
+        {
+            return \Rebing\GraphQL\GraphQL::type($name, $fresh);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function objectType($type, $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::objectType($type, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addSchema($name, $schema)
+        {
+            return \Rebing\GraphQL\GraphQL::addSchema($name, $schema);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearType($name)
+        {
+            return \Rebing\GraphQL\GraphQL::clearType($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearSchema($name)
+        {
+            return \Rebing\GraphQL\GraphQL::clearSchema($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearTypes()
+        {
+            return \Rebing\GraphQL\GraphQL::clearTypes();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearSchemas()
+        {
+            return \Rebing\GraphQL\GraphQL::clearSchemas();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getTypes()
+        {
+            return \Rebing\GraphQL\GraphQL::getTypes();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getSchemas()
+        {
+            return \Rebing\GraphQL\GraphQL::getSchemas();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function paginate($typeName, $customName = null)
+        {
+            return \Rebing\GraphQL\GraphQL::paginate($typeName, $customName);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function formatError($e)
+        {
+            return \Rebing\GraphQL\GraphQL::formatError($e);
+        }
+        
+        /**
+         * Check if the schema expects a nest URI name and return the formatted version
+         * Eg. 'user/me'
+         * will open the query path /graphql/user/me
+         *
+         * @param $name
+         * @param $schemaParameterPattern
+         * @param $queryRoute
+         * @return mixed 
+         * @static 
+         */ 
+        public static function routeNameTransformer($name, $schemaParameterPattern, $queryRoute)
+        {
+            return \Rebing\GraphQL\GraphQL::routeNameTransformer($name, $schemaParameterPattern, $queryRoute);
+        }
+         
+    }
+ 
+}
+
 namespace Roelhem\RbacGraph\Facades { 
 
     class Rbac {
@@ -15207,6 +15392,8 @@ namespace  {
     class Date extends \Jenssegers\Date\Date {}
 
     class Socialite extends \Laravel\Socialite\Facades\Socialite {}
+
+    class GraphQL extends \Rebing\GraphQL\Support\Facades\GraphQL {}
 
     class Rbac extends \Roelhem\RbacGraph\Facades\Rbac {}
  

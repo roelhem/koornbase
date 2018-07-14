@@ -15,7 +15,9 @@ class KoornbeursCardFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'owner' => ['membership_status']
+    ];
 
 
 

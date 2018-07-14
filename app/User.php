@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
+use Wildside\Userstamps\Userstamps;
 
 /**
  * Class User
@@ -41,6 +42,7 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     use HasMorphedRbacAssignments;
     use BelongsToPerson;
     use Filterable;
+    use Userstamps;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

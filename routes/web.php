@@ -23,8 +23,6 @@ Route::prefix('login')->group(function() {
 
 });
 
-Route::get('/', function() {
-    return "Homepage";
+Route::any('/', function(\Illuminate\Http\Request $request) {
+    return var_dump($request->post());
 });
-
-Route::any('/{path?}', 'AppController@index')->where('path','.*');

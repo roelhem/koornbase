@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Contracts\OwnedByPerson;
-use App\Enums\MembershipStatus;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
@@ -29,7 +28,6 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer $id
- * @property string|null $nickname
  * @property Carbon|null $birth_date
  *
  * @property Carbon|null $created_at
@@ -45,6 +43,8 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property-read Collection $users
  * @property-read Collection $debtors
+ * @property-read Collection $cards
+ * @property-read Collection $certificates
  */
 class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup, OwnedByPerson
 {
@@ -96,6 +96,21 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
         return $result;
     }
 
+    /**
+     * Returns the age of this person at the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return integer|null
+     */
+    public function getAge($at = null) {
+        $birth_date = $this->birth_date;
+        if($birth_date === null) {
+            return null;
+        } else {
+            return $birth_date->diffInYears($at, false);
+        }
+    }
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
@@ -118,7 +133,7 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
      * @return AvatarType
      */
     public function getAvatarAttribute() {
-        foreach ($this->users as $user) {
+        foreach ($this->users()->get() as $user) {
             if($user->avatar !== null) {
                 return $user->avatar;
             }
@@ -134,13 +149,7 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
      * @return integer|null
      */
     public function getAgeAttribute() {
-        $bd = $this->birth_date;
-
-        if($bd === null) {
-            return null;
-        } else {
-            return $bd->age;
-        }
+        return $this->getAge();
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -231,10 +240,14 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
         return $this->id;
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     * @param Builder $query
+     */
     public function scopeOwnedBy($query, $person_id)
     {
         return $query->where('id','=',$person_id);
     }
+
 
 }

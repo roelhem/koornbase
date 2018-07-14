@@ -19,7 +19,7 @@ use App\PersonEmailAddress;
  *
  * @property-read PersonEmailAddress|null $email_address
  *
- * @property-read PersonEmailAddress[] $phoneNumbers
+ * @property-read PersonEmailAddress[] $emailAddresses
  */
 trait HasEmailAddresses
 {

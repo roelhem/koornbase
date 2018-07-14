@@ -34,7 +34,12 @@ trait PathContractImplementation
     }
 
     /** @inheritdoc */
-    protected function getNodeIdList()
+    public function nodeList() {
+        return $this->nodes();
+    }
+
+    /** @inheritdoc */
+    public function getNodeIdList()
     {
         return $this->path;
     }

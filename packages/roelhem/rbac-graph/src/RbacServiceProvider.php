@@ -5,6 +5,7 @@ namespace Roelhem\RbacGraph;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
+use Roelhem\RbacGraph\Http\GraphQL\GraphQLService;
 use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
@@ -74,6 +75,11 @@ class RbacServiceProvider extends ServiceProvider
         // Gates
         resolve(CompatibilityService::class)->registerGate();
 
+
+        // GraphQL
+        resolve(GraphQLService::class)->register();
+
+
     }
 
     /**
@@ -109,6 +115,10 @@ class RbacServiceProvider extends ServiceProvider
         // RuleSerializer
         $this->app->singleton(RuleSerializerService::class);
         $this->app->bind(RuleSerializer::class, RuleSerializerService::class);
+
+
+        // GraphQL
+        $this->app->singleton(GraphQLService::class);
 
     }
 

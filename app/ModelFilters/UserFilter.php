@@ -10,7 +10,9 @@ class UserFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'person' => ['membership_status']
+    ];
 
 
     public function person($id)

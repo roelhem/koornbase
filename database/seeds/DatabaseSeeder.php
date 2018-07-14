@@ -12,6 +12,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        // First (system) account.
+        $system = factory(\App\User::class)->create([
+            'name' => 'system',
+            'email' => 'system@roelweb.com'
+        ]);
+
+        $system->created_by = $system->id;
+
+        Auth::login($system);
+
+
         // Default data seeders.
         $this->call([
             RbacSeeder::class,
@@ -29,6 +40,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PersonSeeder::class,
         ]);
+
+        Auth::logout();
 
 
     }

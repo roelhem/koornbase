@@ -37,6 +37,7 @@ ROLE:
 
 SUPER_ROLE:
   label: Super-user Role
+  graphQLType: SuperRole
   description: >
     A role that is authorized for everything. Can be used to give an user access to everything.
 

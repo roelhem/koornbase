@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Filters\FilterServiceContract;
+
 use App\Http\Controllers\Controller as ParentController;
 use App\Http\Resources\Api\Resource;
 use App\Services\Sorters\Sorter;

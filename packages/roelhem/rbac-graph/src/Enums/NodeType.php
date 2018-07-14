@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph\Enums;
 
 
+use GraphQL\Type\Definition\Type;
 use Illuminate\Contracts\Support\Arrayable;
 use MabeEnum\EnumSet;
 use Roelhem\RbacGraph\Contracts\Nodes\Node;
@@ -261,6 +262,16 @@ final class NodeType extends Enum implements Arrayable
             }
         }
         return $res;
+    }
+
+    /**
+     * Returns the GraphQL type of this element.
+     *
+     * @return string
+     */
+    public function getGraphQLType() {
+        $name = $this->conf('graphQLType', str_replace(' ','',$this->getLabel()));
+        return 'Rbac'.$name;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

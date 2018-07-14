@@ -14,6 +14,10 @@ class AddPersonIdToUser extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+
             $table->unsignedInteger('person_id')->nullable();
 
             $table->foreign('person_id')->references('id')->on('persons');

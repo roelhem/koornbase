@@ -15,7 +15,9 @@ class CertificateFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'person' => ['membership_status']
+    ];
 
     /**
      * Filter on the valid state of a certificate.
