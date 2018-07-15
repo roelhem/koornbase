@@ -8,6 +8,8 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -36,6 +38,7 @@ class PersonType extends GraphQLType
         'model' => Person::class
     ];
 
+    /** @inheritdoc */
     public function interfaces()
     {
         return [
@@ -51,42 +54,56 @@ class PersonType extends GraphQLType
         $ownedByPerson = GraphQL::type('OwnedByPerson');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPerson->getField('owner_id'),
             $ownedByPerson->getField('owner'),
             'name' => [
-                'type' => Type::nonNull(Type::string())
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The name of this Person that can be used for human display.',
+                'selectable' => false,
             ],
             'name_short' => [
-                'type' => Type::nonNull(Type::string())
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'A short name for this Person that can be used for human display.',
+                'selectable' => false,
             ],
             'name_full' => [
                 'type' => Type::nonNull(Type::string()),
+                'description' => 'The full name (including the middle names) of this Person that can be used vor human display.',
+                'selectable' => false,
             ],
             'name_formal' => [
                 'type' => Type::nonNull(Type::string()),
+                'description' => 'The name of this Person in a format suitable for formal conversation.',
+                'selectable' => true,
             ],
             'name_first' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The first name of the person.'
             ],
             'name_middle' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The middle names or other less important names of this Person.'
             ],
             'name_prefix' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The first part of the last name, often written in lowercase letters, that shouldn\'t be used when sorting on the last name. (Dutch: "tussenvoegsel")'
             ],
             'name_last' => [
-                'type' => Type::nonNull(Type::string())
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The last name of this Person.'
             ],
             'name_initials' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The initials of this Person.'
             ],
             'name_nickname' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The nickname of this Person that is used in the Koornbeurs.'
             ],
             'birth_date' => [
-                'type' => GraphQL::type('Date')
+                'type' => GraphQL::type('Date'),
+                'description' => 'The day on which this Person was born.'
             ],
             'age' => [
                 'type' => Type::int(),
@@ -97,14 +114,32 @@ class PersonType extends GraphQLType
                 ],
                 'resolve' => function(Person $root, $args) {
                     return $root->getAge(array_get($args, 'at'));
-                }
+                },
+                'selectable' => false,
             ],
-            'remarks' => [
-                'type' => Type::string()
+            'birth_anniversary' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The day on which this person becomes a certain age. If no age was given, the first birthday in the future will be shown.',
+                'args' => [
+                    'age' => [
+                        'type' => Type::int(),
+                        'description' => 'The age that this Person become on the searched anniversary.'
+                    ]
+                ],
+                'resolve' => function(Person $person, $args) {
+                    $age = array_get($args, 'age', null);
+                    return $person->getBirthDay($age);
+                },
+                'selectable' => false,
             ],
 
 
-            // CERTIFICATES
+            // RELATIONS
+
+            'groups' => [
+                'type' => Type::listOf(GraphQL::type('Group')),
+                'description' => 'The groups of this person.'
+            ],
 
             'certificates' => [
                 'type' => Type::listOf(GraphQL::type('Certificate')),
@@ -130,10 +165,18 @@ class PersonType extends GraphQLType
                 'type' => Type::listOf(GraphQL::type('PersonAddress')),
                 'description' => 'All the addresses of this person'
             ],
+            'address' => [
+                'type' => GraphQL::type('PersonAddress'),
+                'description' => 'The address that can be used as primary address for this Person.'
+            ],
 
             'emailAddresses' => [
                 'type' => Type::listOf(GraphQL::type('PersonEmailAddress')),
                 'description' => 'All the e-mail addresses of this person'
+            ],
+            'emailAddress' => [
+                'type' => GraphQL::type('PersonEmailAddress'),
+                'description' => 'The e-mail address that can be used as a primary e-mail address for this Person.'
             ],
 
             'phoneNumbers' => [
@@ -141,10 +184,32 @@ class PersonType extends GraphQLType
                 'description' => 'All the phone numbers of this person'
             ],
 
+            'phoneNumber' => [
+                'type' => GraphQL::type('PersonPhoneNumber'),
+                'description' => 'THe phone number that can be used as a primary phone number for this Person.'
+            ],
+
             'memberships' => [
                 'type' => Type::listOf(GraphQL::type('Membership')),
                 'description' => 'All the memberships of this person'
             ],
+
+
+            // CALCULATED
+
+            'membership_status' => [
+                'type' => GraphQL::type('MembershipStatus'),
+                'description' => 'The current membership status of this person.',
+                'selectable' => false,
+            ],
+            'membership_status_since' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the `membership_status` changed to the current value.'
+            ],
+
+            // OTHER FIELDS
+
+            'remarks' => RemarksField::class,
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

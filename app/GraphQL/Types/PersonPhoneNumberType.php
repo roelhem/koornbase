@@ -8,6 +8,12 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\CountryCodeField;
+use App\GraphQL\Fields\CountryField;
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -52,8 +58,7 @@ class PersonPhoneNumberType extends GraphQLType
         return [
             GraphQL::type('Model'),
             GraphQL::type('OwnedByPerson'),
-            GraphQL::type('PersonContactEntry'),
-            GraphQL::type('BelongsToCountry')
+            GraphQL::type('PersonContactEntry')
         ];
     }
 
@@ -63,20 +68,20 @@ class PersonPhoneNumberType extends GraphQLType
 
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
         $personContactEntryInterface = GraphQL::type('PersonContactEntry');
-        $belongsToCountryInterface = GraphQL::type('BelongsToCountry');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
 
-            $personContactEntryInterface->getField('person_id'),
-            $personContactEntryInterface->getField('person'),
+            'person_id' => PersonIdField::class,
+            'person' => PersonField::class,
             $personContactEntryInterface->getField('index'),
             $personContactEntryInterface->getField('label'),
 
             'phone_number' => [
                 'type' => Type::string(),
+                'description' => 'The phone number.',
                 'args' => [
                     'format' => [
                         'type' => GraphQL::type('PhoneNumberFormat'),
@@ -103,19 +108,25 @@ class PersonPhoneNumberType extends GraphQLType
                 }
             ],
 
-            $belongsToCountryInterface->getField('country_code'),
-            $belongsToCountryInterface->getField('country'),
+            'country_code' => CountryCodeField::class,
+            'country' => CountryField::class,
 
             'location' => [
                 'type' => Type::string(),
+                'description' => 'A description/approximation of the location based on the patterns in the phone number.',
                 'resolve' => function(PersonPhoneNumber $root) {
                     return $this->geocoder->getDescriptionForNumber($root->phone_number, 'nl_NL');
-                }
+                },
+                'selectable' => false
             ],
 
             'number_type' => [
-                'type' => GraphQL::type('PhoneNumberType')
+                'type' => GraphQL::type('PhoneNumberType'),
+                'description' => 'The kind of phone number (based on the patterns in the phone number.)',
+                'selectable' => false
             ],
+
+            'remarks' => RemarksField::class,
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

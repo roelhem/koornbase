@@ -11,6 +11,7 @@ namespace App\GraphQL\Interfaces;
 use App\Certificate;
 use App\CertificateCategory;
 use App\Debtor;
+use App\GraphQL\Fields\IdField;
 use App\GraphQL\Types\PersonType;
 use App\GraphQL\Types\UserAccountType;
 use App\GraphQL\Types\UserType;
@@ -39,10 +40,7 @@ class ModelInterface extends InterfaceType
     public function fields()
     {
         return [
-            'id' => [
-                'type' => Type::nonNull(Type::id()),
-                'description' => 'The primary key of the model in the database table.'
-            ]
+            'id' => IdField::class
         ];
     }
 

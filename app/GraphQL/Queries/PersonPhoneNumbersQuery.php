@@ -8,13 +8,11 @@
 
 namespace App\GraphQL\Queries;
 
-
 use App\PersonPhoneNumber;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
 
-class PersonPhoneNumbersQuery extends Query
+class PersonPhoneNumbersQuery extends ModelListQuery
 {
 
 
@@ -22,12 +20,12 @@ class PersonPhoneNumbersQuery extends Query
         'name' => 'PersonPhoneNumbers query'
     ];
 
-    public function type() {
-        return Type::listOf(GraphQL::type('PersonPhoneNumber'));
-    }
+    protected $typeName = 'PersonPhoneNumber';
 
-    public function resolve() {
-        return PersonPhoneNumber::all();
+    /** @inheritdoc */
+    public function query($args, $selectFields)
+    {
+        return PersonPhoneNumber::query();
     }
 
 }

@@ -8,6 +8,10 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -42,10 +46,85 @@ class MembershipType extends GraphQLType
 
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
+        $atArgs = [
+            'at' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date for which you want to check the value. You can leave this value empty or set to `null` if you want to check the value for the current date.',
+            ]
+        ];
+
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
+
+            'person_id' => PersonIdField::class,
+            'person' => PersonField::class,
+
+            'application' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the person applied for this membership. (And thus became a novice.)'
+            ],
+            'applied' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'If there was an application for this membership.',
+                'args' => $atArgs,
+                'selectable' => false,
+                'resolve' => function(Membership $membership, $args) {
+                    return $membership->getApplied(array_get($args, 'at'));
+                }
+            ],
+
+            'start' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the person became a full member for this membership.',
+            ],
+            'started' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'If the membership has started.',
+                'args' => $atArgs,
+                'selectable' => false,
+                'resolve' => function(Membership $membership, $args) {
+                    return $membership->getStarted(array_get($args, 'at'));
+                }
+            ],
+
+            'end' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the person stopped being a member.'
+            ],
+            'ended' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'If the membership has ended',
+                'args' => $atArgs,
+                'selectable' => false,
+                'resolve' => function(Membership $membership, $args) {
+                    return $membership->getEnded(array_get($args, 'at'));
+                }
+            ],
+
+            'status' => [
+                'type' => GraphQL::type('MembershipStatus'),
+                'description' => 'The current status of this membership.',
+                'args' => $atArgs,
+                'selectable' => false,
+                'resolve' => function(Membership $membership, $args) {
+                    return $membership->getStatus(array_get($args, 'at'));
+                }
+            ],
+            'status_since' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the membership status was changed to the status at the provided date.',
+                'args' => $atArgs,
+                'selectable' => false,
+                'resolve' => function(Membership $membership, $args) {
+                    return $membership->getStatusSince(array_get($args, 'at'));
+                }
+            ],
+
+
+            'remarks' => RemarksField::class,
+
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
             'creator'    => CreatorField::class,

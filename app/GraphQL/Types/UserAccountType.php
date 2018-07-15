@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -39,7 +40,48 @@ class UserAccountType extends GraphQLType
     public function fields()
     {
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
+
+            'user_id' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'The `ID` of the User where this UserAccount belongs to.'
+            ],
+            'user' => [
+                'type' => Type::nonNull(GraphQL::type('User')),
+                'description' => 'The User where this UserAccount belongs to.'
+            ],
+            'provider' => [
+                'type' => GraphQL::type('OAuthProvider'),
+                'description' => 'The OAuth2-provider of this UserAccount.'
+            ],
+            'token' => [
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The OAuth2 access-token of this UserAccount.'
+            ],
+            'refresh_token' => [
+                'type' => Type::string(),
+                'description' => 'The OAuth2 refresh-token on this UserAccount.'
+            ],
+            'expires_in' => [
+                'type' => Type::int(),
+                'description' => 'Describes when the access-token will be expired.'
+            ],
+            'ref_id' => [
+                'type' => Type::string(),
+                'description' => 'The `ID` (or other reference type) of this UserAccount that is used by the OAuth-server.'
+            ],
+            'nickname' => [
+                'type' => Type::string(),
+                'description' => 'The nickname of the OAuth-account.'
+            ],
+            'email' => [
+                'type' => Type::string(),
+                'description' => 'The e-mail address of the OAuth-account.'
+            ],
+            'avatar' => [
+                'type' => Type::string(),
+                'description' => 'A link to the avatar image of this OAuth-account.'
+            ],
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

@@ -22,7 +22,9 @@ class Sorter
     protected $columns = [];
 
     /**
-     * @inheritdoc
+     * Returns an array with all the sortNames.
+     *
+     * @return array
      */
     public function list():array {
         try {

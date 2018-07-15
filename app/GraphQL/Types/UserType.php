@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -43,21 +44,25 @@ class UserType extends GraphQLType
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
 
             'person_id' => [
                 'type' => Type::id(),
+                'description' => 'The `ID` of the Person that was associated with this User (or `null` if this account isn\'t associated with any Person.)'
             ],
             'person' => [
                 'type' => GraphQL::type('Person'),
+                'description' => 'The Person associated with this User.'
             ],
             'name' => [
                 'type' => Type::nonNull(Type::string()),
+                'description' => 'The username of this User.'
             ],
             'email' => [
                 'type' => Type::nonNull(Type::string()),
+                'description' => 'The e-mailaddress of this User'
             ],
 
             'created_at' => CreatedAtField::class,

@@ -12,21 +12,20 @@ namespace App\GraphQL\Queries;
 use App\PersonAddress;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
 
-class PersonAddressesQuery extends Query
+class PersonAddressesQuery extends ModelListQuery
 {
 
     protected $attributes = [
         'name' => 'PersonAddresses query'
     ];
 
-    public function type() {
-        return Type::listOf(GraphQL::type('PersonAddress'));
-    }
+    protected $typeName = 'PersonAddress';
 
-    public function resolve() {
-        return PersonAddress::all();
+    /** @inheritdoc */
+    public function query($args, $selectFields)
+    {
+        return PersonAddress::query();
     }
 
 

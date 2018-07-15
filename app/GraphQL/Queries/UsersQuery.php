@@ -12,10 +12,9 @@ namespace App\GraphQL\Queries;
 use App\User;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
 
 
-class UsersQuery extends Query
+class UsersQuery extends ModelListQuery
 {
 
 
@@ -23,14 +22,12 @@ class UsersQuery extends Query
         'name' => 'Users query'
     ];
 
-    public function type()
-    {
-        return Type::listOf(GraphQL::type('User'));
-    }
+    protected $typeName = 'User';
 
-    public function resolve()
+    /** @inheritdoc */
+    public function query($args, $selectFields)
     {
-        return User::all();
+        return User::query();
     }
 
 }

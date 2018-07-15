@@ -86,12 +86,55 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
+                // MODEL QUERIES
+                'certificateCategories' => \App\GraphQL\Queries\CertificateCategoriesQuery::class,
+                'certificateCategory' => \App\GraphQL\Queries\CertificateCategoryQuery::class,
+
+                'certificates' => \App\GraphQL\Queries\CertificatesQuery::class,
+                'certificate' => \App\GraphQL\Queries\CertificateQuery::class,
+
+                'debtors' => \App\GraphQL\Queries\DebtorsQuery::class,
+                'debtor' => \App\GraphQL\Queries\DebtorQuery::class,
+
+                'groupCategories' => \App\GraphQL\Queries\GroupCategoriesQuery::class,
+                'groupCategory' => \App\GraphQL\Queries\GroupCategoryQuery::class,
+
+                'groupEmailAddresses' => \App\GraphQL\Queries\GroupEmailAddressesQuery::class,
+                'groupEmailAddress' => \App\GraphQL\Queries\GroupEmailAddressQuery::class,
+
+                'groups' => \App\GraphQL\Queries\GroupsQuery::class,
+                'group' => \App\GraphQL\Queries\GroupQuery::class,
+
+                'koornbeursCards' => \App\GraphQL\Queries\KoornbeursCardsQuery::class,
+                'koornbeursCard' => \App\GraphQL\Queries\KoornbeursCardQuery::class,
+
+                'memberships' => \App\GraphQL\Queries\MembershipsQuery::class,
+                'membership' => \App\GraphQL\Queries\MembershipQuery::class,
+
                 'persons' => \App\GraphQL\Queries\PersonsQuery::class,
+                'person' => \App\GraphQL\Queries\PersonQuery::class,
+
                 'personPhoneNumbers' => \App\GraphQL\Queries\PersonPhoneNumbersQuery::class,
+                'personPhoneNumber' => \App\GraphQL\Queries\PersonPhoneNumberQuery::class,
+
                 'personAddresses' => \App\GraphQL\Queries\PersonAddressesQuery::class,
+                'personAddress' => \App\GraphQL\Queries\PersonAddressQuery::class,
+
+                'personEmailAddresses' => \App\GraphQL\Queries\PersonEmailAddressesQuery::class,
+                'personEmailAddress' => \App\GraphQL\Queries\PersonEmailAddressQuery::class,
+
                 'users' => \App\GraphQL\Queries\UsersQuery::class,
+                'user' => \App\GraphQL\Queries\UserQuery::class,
+
+                'userAccounts' => \App\GraphQL\Queries\UserAccountsQuery::class,
+                'userAccount' => \App\GraphQL\Queries\UserAccountQuery::class,
+
+                // QUERIES ABOUT THE CURRENT SESSION
+                'me' => \App\GraphQL\Queries\MeQuery::class
             ],
             'mutation' => [
+                'createPerson' => \App\GraphQL\Mutations\Crud\CreatePersonMutation::class,
+                'updatePerson' => \App\GraphQL\Mutations\Crud\UpdatePersonMutation::class,
             ],
             'middleware' => []
         ],
@@ -117,10 +160,12 @@ return [
         'Sluggable' => \App\GraphQL\Interfaces\SluggableInterface::class,
         'OwnedByPerson' => \App\GraphQL\Interfaces\OwnedByPersonInterface::class,
         'PersonContactEntry' => \App\GraphQL\Interfaces\PersonContactEntryInterface::class,
-        'BelongsToCountry' => \App\GraphQL\Interfaces\BelongsToCountryInterface::class,
 
         'PhoneNumberFormat' => \App\GraphQL\Enums\PhoneNumberFormatEnum::class,
         'PhoneNumberType' => \App\GraphQL\Enums\PhoneNumberTypeEnum::class,
+        'MembershipStatus' => \App\GraphQL\Enums\MembershipStatusEnum::class,
+        'OAuthProvider' => \App\GraphQL\Enums\OAuthProviderEnum::class,
+        'SortOrderDirection' => \App\GraphQL\Enums\SortOrderDirectionEnum::class,
 
         'Certificate' => \App\GraphQL\Types\CertificateType::class,
         'CertificateCategory' => \App\GraphQL\Types\CertificateCategoryType::class,
@@ -138,6 +183,7 @@ return [
         'UserAccount' => \App\GraphQL\Types\UserAccountType::class,
 
         'HtmlAttributes' => \App\GraphQL\Types\Inputs\HtmlAttributesType::class,
+        'SortOrder' => \App\GraphQL\Types\Inputs\SortOrderType::class,
 
         'Date' => \App\GraphQL\Types\Scalars\DateType::class,
         'DateTime' => \App\GraphQL\Types\Scalars\DateTimeType::class,

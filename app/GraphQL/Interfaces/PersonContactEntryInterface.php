@@ -9,6 +9,9 @@
 namespace App\GraphQL\Interfaces;
 
 
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\PersonAddress;
 use App\PersonEmailAddress;
 use App\PersonPhoneNumber;
@@ -28,14 +31,8 @@ class PersonContactEntryInterface extends InterfaceType
     public function fields()
     {
         return [
-            'person_id' => [
-                'type' => Type::nonNull(Type::id()),
-                'description' => 'The `ID` of the person where this contact-entry belongs to.'
-            ],
-            'person' => [
-                'type' => GraphQL::type('Person'),
-                'description' => 'The person where this contact-entry belongs to.'
-            ],
+            'person_id' => PersonIdField::class,
+            'person' => PersonField::class,
             'index' => [
                 'type' => Type::nonNull(Type::int()),
                 'description' => 'The index of this contact-entry. This number in combination with the person_id is unique.'
@@ -43,7 +40,8 @@ class PersonContactEntryInterface extends InterfaceType
             'label' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The label of this contact-entry.'
-            ]
+            ],
+            'remarks' => RemarksField::class,
         ];
     }
 

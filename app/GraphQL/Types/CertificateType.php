@@ -8,6 +8,10 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -44,9 +48,59 @@ class CertificateType extends GraphQLType
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
+
+
+            'person_id' => PersonIdField::class,
+            'person'    => PersonField::class,
+
+            'category_id' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'The `ID` of the CertificateCategory where this Certificate belongs to.'
+            ],
+            'category' => [
+                'type' => GraphQL::type('CertificateCategory'),
+                'description' => 'The CertificateCategory where this Certificate belongs to.'
+            ],
+
+
+            'examination_at' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date on which the examination for this Certificate was/is.'
+            ],
+            'valid_at' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date after which this Certificate is valid.'
+            ],
+            'expired_at' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'The date after which this Certificate is no longer valid.'
+            ],
+            'passed' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'Gives if the examination for is Certificate was passed successfully.'
+            ],
+
+
+            'is_valid' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'Gives if the certificate is valid at a certain moment.',
+                'args' => [
+                    'at' => [
+                        'type' => GraphQL::type('Date'),
+                        'description' => 'The date on which to check if this certificate is valid.'
+                    ]
+                ],
+                'resolve' => function(Certificate $certificate, $args) {
+                    $at = array_get($args, 'at', null);
+                    return $certificate->isValid($at);
+                },
+                'selectable' => false
+            ],
+
+            'remarks' => RemarksField::class,
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

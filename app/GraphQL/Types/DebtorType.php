@@ -8,6 +8,10 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -42,9 +46,16 @@ class DebtorType extends GraphQLType
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
+
+            'person_id' => PersonIdField::class,
+            'person'    => PersonField::class,
+
+
+            'remarks' => RemarksField::class,
+
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
             'creator'    => CreatorField::class,

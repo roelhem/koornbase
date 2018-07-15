@@ -8,6 +8,8 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -43,15 +45,46 @@ class KoornbeursCardType extends GraphQLType
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
+
             'ref' => [
                 'type' => Type::string(),
+                'description' => 'The unique reference on the card itself. Can be used in combination with `version` to uniquely identify a card.'
             ],
             'version' => [
                 'type' => Type::string(),
+                'description' => 'The version of the KoornbeursCard. Can be used in combination with `ref` to uniquely identify a card.'
             ],
+
+            'activated_at' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'The moment on which this KoornbeursCard was/is activated.',
+            ],
+            'deactivated_at' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'The moment on which this KoornbeursCard was/is deactivated.'
+            ],
+
+            'is_active' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'Returns if this KoornbeursCard is active at a specific moment.',
+                'args' => [
+                    'at' => [
+                        'type' => GraphQL::type('DateTime'),
+                        'description' => 'The moment to check.'
+                    ]
+                ],
+                'resolve' => function(KoornbeursCard $card, $args) {
+                    $at = array_get($args,'at',null);
+                    return $card->isActive($at);
+                },
+                'selectable' => false,
+            ],
+
+            'remarks' => RemarksField::class,
+
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
             'creator'    => CreatorField::class,

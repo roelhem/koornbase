@@ -9,6 +9,10 @@
 namespace App\GraphQL\Types;
 
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -46,25 +50,28 @@ class PersonEmailAddressType extends GraphQLType
         $personContactEntryInterface = GraphQL::type('PersonContactEntry');
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
 
-            $personContactEntryInterface->getField('person_id'),
-            $personContactEntryInterface->getField('person'),
+            'person_id' => PersonIdField::class,
+            'person' => PersonField::class,
             $personContactEntryInterface->getField('index'),
             $personContactEntryInterface->getField('label'),
 
             'email_address' => [
                 'type' => Type::string(),
+                'description' => 'The value of the e-mail address.'
+            ],
 
-                'created_at' => CreatedAtField::class,
-                'created_by' => CreatedByField::class,
-                'creator'    => CreatorField::class,
-                'updated_at' => UpdatedAtField::class,
-                'updated_by' => UpdatedByField::class,
-                'editor'     => EditorField::class,
-            ]
+            'remarks' => RemarksField::class,
+
+            'created_at' => CreatedAtField::class,
+            'created_by' => CreatedByField::class,
+            'creator'    => CreatorField::class,
+            'updated_at' => UpdatedAtField::class,
+            'updated_by' => UpdatedByField::class,
+            'editor'     => EditorField::class,
         ];
     }
 

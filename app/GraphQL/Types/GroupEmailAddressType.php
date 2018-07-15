@@ -8,6 +8,8 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -39,7 +41,24 @@ class GroupEmailAddressType extends GraphQLType
     public function fields()
     {
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
+
+            'group_id' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'The `ID` of the Group where this GroupEmailAddress belongs to.'
+            ],
+            'group' => [
+                'type' => GraphQL::type('Group'),
+                'description' => 'The Group where this GroupEmailAddress belongs to.'
+            ],
+
+            'email_address' => [
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The e-mail address.',
+            ],
+
+            'remarks' => RemarksField::class,
+
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
             'creator'    => CreatorField::class,

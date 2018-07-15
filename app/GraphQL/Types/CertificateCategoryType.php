@@ -8,6 +8,11 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\DescriptionField;
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\IsRequiredField;
+use App\GraphQL\Fields\NameField;
+use App\GraphQL\Fields\NameShortField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -44,8 +49,24 @@ class CertificateCategoryType extends GraphQLType
     {
 
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             GraphQL::type('Sluggable')->getField('slug'),
+
+            'name'        => NameField::class,
+            'name_short'  => NameShortField::class,
+            'description' => DescriptionField::class,
+
+            'default_expire_years' => [
+                'type' => Type::int(),
+                'description' => 'The default amount of years that a certificate of this category is valid.'
+            ],
+
+            'is_required' => IsRequiredField::class,
+
+            'certificates' => [
+                'type' => Type::listOf(GraphQL::type('Certificate')),
+                'description' => 'A list of all the certificates that belong to this CertificateCategory.'
+            ],
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

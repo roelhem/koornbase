@@ -51,6 +51,94 @@ class Membership extends Model implements OwnedByPerson
     protected $fillable = ['application','start','end','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- GETTER METHODS ------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns if the application date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getApplied($at = null) {
+        if($this->application === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->application <= $at;
+    }
+
+    /**
+     * Returns if the start date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getStarted($at = null) {
+        if($this->start === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->start < $at;
+    }
+
+    /**
+     * Returns if the end date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getEnded($at = null) {
+        if($this->end === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->end < $at;
+    }
+
+    /**
+     * Returns the status of this membership at the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return MembershipStatus
+     */
+    public function getStatus($at = null) {
+        if($this->getEnded($at)) {
+            return MembershipStatus::FORMER_MEMBER();
+        } elseif ($this->getStarted($at)) {
+            return MembershipStatus::MEMBER();
+        } elseif ($this->getApplied($at)) {
+            return MembershipStatus::NOVICE();
+        } else {
+            return MembershipStatus::OUTSIDER();
+        }
+    }
+
+    /**
+     * Returns the date on which the membership status changed to the status on the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return Carbon|null
+     */
+    public function getStatusSince($at = null) {
+        $status = $this->getStatus($at);
+        return $status->getTimestamp($this);
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
@@ -60,7 +148,7 @@ class Membership extends Model implements OwnedByPerson
      * @return bool
      */
     public function getAppliedAttribute() {
-        return $this->application !== null && $this->application->isPast();
+        return $this->getApplied();
     }
 
     /**
@@ -69,7 +157,7 @@ class Membership extends Model implements OwnedByPerson
      * @return bool
      */
     public function getStartedAttribute() {
-        return $this->start !== null && $this->start->isPast();
+        return $this->getStarted();
     }
 
     /**
@@ -78,7 +166,7 @@ class Membership extends Model implements OwnedByPerson
      * @return bool
      */
     public function getEndedAttribute() {
-        return $this->end !== null && $this->end->isPast();
+        return $this->getEnded();
     }
 
     /**
@@ -89,15 +177,7 @@ class Membership extends Model implements OwnedByPerson
      * @return MembershipStatus
      */
     public function getStatusAttribute() {
-        if ($this->ended) {
-            return MembershipStatus::FORMER_MEMBER();
-        } elseif ($this->started) {
-            return MembershipStatus::MEMBER();
-        } elseif ($this->applied) {
-            return MembershipStatus::NOVICE();
-        } else {
-            return MembershipStatus::OUTSIDER();
-        }
+        return $this->getStatus();
     }
 
     /**
@@ -106,7 +186,7 @@ class Membership extends Model implements OwnedByPerson
      * @return Carbon|null
      */
     public function getStatusAtAttribute() {
-        return $this->status->getTimestamp($this);
+        return $this->getStatusSince();
     }
 
 }

@@ -8,6 +8,11 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\CountryCodeField;
+use App\GraphQL\Fields\CountryField;
+use App\GraphQL\Fields\Relations\PersonField;
+use App\GraphQL\Fields\Relations\PersonIdField;
+use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -33,8 +38,7 @@ class PersonAddressType extends GraphQLType
         return [
             GraphQL::type('Model'),
             GraphQL::type('OwnedByPerson'),
-            GraphQL::type('PersonContactEntry'),
-            GraphQL::type('BelongsToCountry')
+            GraphQL::type('PersonContactEntry')
         ];
     }
 
@@ -44,48 +48,56 @@ class PersonAddressType extends GraphQLType
 
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
         $personContactEntryInterface = GraphQL::type('PersonContactEntry');
-        $belongsToCountryInterface = GraphQL::type('BelongsToCountry');
 
         return [
             GraphQL::type('Model')->getField('id'),
             $ownedByPersonInterface->getField('owner_id'),
             $ownedByPersonInterface->getField('owner'),
 
-            $personContactEntryInterface->getField('person_id'),
-            $personContactEntryInterface->getField('person'),
+            'person_id' => PersonIdField::class,
+            'person' => PersonField::class,
             $personContactEntryInterface->getField('index'),
             $personContactEntryInterface->getField('label'),
 
-            $belongsToCountryInterface->getField('country_code'),
-            $belongsToCountryInterface->getField('country'),
+            'country_code' => CountryCodeField::class,
+            'country' => CountryField::class,
 
             // Address fields
             'administrative_area' => [
                 'type' => Type::string(),
+                'description' => 'the `administrative_area` field to store an address in the xAL-format.'
             ],
             'locality' => [
                 'type' => Type::string(),
+                'description' => 'the `locality` field to store an address in the xAL-format.'
             ],
             'dependent_locality' => [
                 'type' => Type::string(),
+                'description' => 'the `dependent_locality` field to store an address in the xAL-format.'
             ],
             'postal_code' => [
                 'type' => Type::string(),
+                'description' => 'the `postal_code` field to store an address in the xAL-format.'
             ],
             'sorting_code' => [
                 'type' => Type::string(),
+                'description' => 'the `sorting_code` field to store an address in the xAL-format.'
             ],
             'address_line_1' => [
                 'type' => Type::string(),
+                'description' => 'the `address_line1` field to store an address in the xAL-format.'
             ],
             'address_line_2' => [
                 'type' => Type::string(),
+                'description' => 'the `address_line2` field to store an address in the xAL-format.'
             ],
             'organisation' => [
                 'type' => Type::string(),
+                'description' => 'the `organisation` field to store an address in the xAL-format.'
             ],
             'locale' => [
                 'type' => Type::string(),
+                'description' => 'the `locale` field to store an address in the xAL-format.'
             ],
 
             // Formatting
@@ -114,7 +126,8 @@ class PersonAddressType extends GraphQLType
                 ],
                 'resolve' => function(PersonAddress $root, $args) {
                     return $root->format($args);
-                }
+                },
+                'selectable' => false,
             ],
 
             'postal_label' => [
@@ -146,8 +159,11 @@ class PersonAddressType extends GraphQLType
                 ],
                 'resolve' => function(PersonAddress $root, $args) {
                     return $root->postalLabel($args);
-                }
+                },
+                'selectable' => false,
             ],
+
+            'remarks' => RemarksField::class,
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

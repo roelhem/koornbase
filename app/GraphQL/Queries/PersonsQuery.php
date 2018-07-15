@@ -2,24 +2,25 @@
 
 namespace App\GraphQL\Queries;
 
+use App\GraphQL\Queries\Traits\HasPaginationType;
 use App\Person;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
+use Rebing\GraphQL\Support\SelectFields;
 
-class PersonsQuery extends Query
+class PersonsQuery extends ModelListQuery
 {
 
     protected $attributes = [
         'name' => 'Persons query'
     ];
 
-    public function type() {
-        return Type::listOf(GraphQL::type('Person'));
-    }
+    protected $typeName = 'Person';
 
-    public function resolve() {
-        return Person::all();
+    /** @inheritdoc */
+    public function query($args, $selectFields)
+    {
+        return Person::query();
     }
 
 }

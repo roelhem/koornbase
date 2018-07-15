@@ -9,6 +9,11 @@
 namespace App\GraphQL\Types;
 
 
+use App\GraphQL\Fields\DescriptionField;
+use App\GraphQL\Fields\IdField;
+use App\GraphQL\Fields\IsRequiredField;
+use App\GraphQL\Fields\NameField;
+use App\GraphQL\Fields\NameShortField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -20,6 +25,7 @@ use App\GraphQL\Fields\Stamps\UpdatedAtField;
 use App\GraphQL\Fields\Stamps\UpdatedByField;
 use App\GroupCategory;
 use GraphQL;
+use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class GroupCategoryType extends GraphQLType
@@ -42,8 +48,24 @@ class GroupCategoryType extends GraphQLType
     public function fields()
     {
         return [
-            GraphQL::type('Model')->getField('id'),
+            'id' => IdField::class,
             GraphQL::type('Sluggable')->getField('slug'),
+
+            'name'        => NameField::class,
+            'name_short'  => NameShortField::class,
+            'description' => DescriptionField::class,
+
+            'style' => [
+                'type' => Type::string(),
+                'description' => 'The name of the style in which a Group of this GroupCategory should be displayed.'
+            ],
+
+            'groups' => [
+                'type' => Type::listOf(GraphQL::type('Group')),
+                'description' => 'A list of all the groups that have this category.'
+            ],
+
+            'is_required' => IsRequiredField::class,
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
