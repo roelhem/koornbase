@@ -5,7 +5,11 @@
         <div v-if="!noHeader" class="card-header" @click="headerClickHandler">
             <slot name="header">
                 <h3 class="card-title">
-                    <base-icon :icon="icon" :from="iconFrom" class="text-muted-dark mr-1" />
+                    <span v-if="isLoading && collapsed"
+                          class="loader mr-1"
+                          style="height: 1rem; display: inline-block; vertical-align: middle">
+                    </span>
+                    <base-icon v-else :icon="icon" :from="iconFrom" class="text-muted-dark mr-1" />
                     <slot name="title">{{ title }}</slot>
                 </h3>
 

@@ -30,4 +30,3 @@ Route::get('/developers','HomeController@developers')->name('developers');
 
 
 Route::any('/dashboard','AppController@index')->name('dashboard');
-Route::any('/dashboard/me','AppController@index')->name('me');

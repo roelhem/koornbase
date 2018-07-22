@@ -31,26 +31,24 @@ export function age(value) {
 }
 
 export function membershipStatusName(value) {
-    const num = Number.isInteger(value) ? value : Number.parseInt(value);
 
-    switch(num) {
-        case 0: return 'Buitenstaander';
-        case 1: return 'Kennismaker';
-        case 2: return 'Lid';
-        case 3: return 'Voormalig Lid';
-        default: return 'Onbekend';
+    switch(value) {
+        case 'OUTSIDER':      return 'Buitenstaander';
+        case 'NOVICE':        return 'Kennismaker';
+        case 'MEMBER':        return 'Lid';
+        case 'FORMER_MEMBER': return 'Voormalig Lid';
+        default:              return 'Onbekend';
     }
 }
 
 export function membershipStatusColor(value) {
-    const num = Number.isInteger(value) ? value : Number.parseInt(value);
 
-    switch(num) {
-        case 0: return 'bg-gray';
-        case 1: return 'bg-yellow';
-        case 2: return 'bg-green';
-        case 3: return 'bg-red';
-        default: return 'bg-gray-dark';
+    switch(value) {
+        case 'OUTSIDER':      return 'bg-gray';
+        case 'NOVICE':        return 'bg-yellow';
+        case 'MEMBER':        return 'bg-green';
+        case 'FORMER_MEMBER': return 'bg-red';
+        default:              return 'bg-gray-dark';
     }
 }
 

@@ -1,3 +1,25 @@
-{
-    hello
+query getUsersForTableQuery($page: Int = 1, $limit: Int = 10, $orderByField: String = "id", $orderByDirection: SortOrderDirection = ASC) {
+    users(page: $page, limit: $limit, orderBy: [{field: $orderByField, direction: $orderByDirection}]) {
+        current_page
+        per_page
+        total
+        from
+        to
+        data {
+            id
+            avatar {
+                image
+                letters
+            }
+            person {
+                id
+                name
+                membership_status
+                membership_status_since
+            }
+            name
+            email
+        }
+    }
 }
+

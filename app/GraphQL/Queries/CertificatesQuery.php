@@ -42,7 +42,12 @@ class CertificatesQuery extends ModelListQuery
             'categoryId' => [
                 'type' => Type::id(),
                 'description' => 'Filters all the certificates that belong to the CertificateCategory with the given id.'
-            ]
+            ],
+
+            'personId' => [
+                'type' => Type::id(),
+                'description' => 'Filters all the certificates that belong to the Person with the given id.'
+            ],
 
         ]);
     }

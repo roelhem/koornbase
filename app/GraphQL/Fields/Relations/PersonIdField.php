@@ -22,7 +22,7 @@ class PersonIdField extends Field
 
     public function type()
     {
-        return Type::nonNull(Type::int());
+        return Type::nonNull(Type::id());
     }
 
 }

@@ -13,14 +13,21 @@ let mix = require('laravel-mix');
 
 mix.webpackConfig({
     module: {
-        rules: [{
-            test: /\.ya?ml$/,
-            use: [
+        rules: [
                 {
-                    loader:path.resolve(__dirname, 'yaml-loader.js')
+                    test: /\.ya?ml$/,
+                    use: [
+                        {
+                            loader:path.resolve(__dirname, 'yaml-loader.js')
+                        }
+                    ]
+                },
+                {
+                    test: /\.(graphql|gql)$/,
+                    exclude: /node_modules/,
+                    loader: 'graphql-tag/loader',
                 }
             ]
-        }]
     }
 });
 

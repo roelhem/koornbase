@@ -2,45 +2,23 @@
 
     <div>
 
-        <b-container>
-
-            <b-row>
-
-                <!-- START: Small Pager -->
-                <b-col md="auto">
-                    <search-simple-pager v-if="meta.last_page"
-                                         v-model="page"
-                                         :lastPage="meta.last_page" />
-                </b-col>
-                <!-- END: Small Pager -->
-
-
-                <!-- START: Search Status -->
-                <b-col align-self="center">
-                    <search-status-display records-name="personen"
-                                           :is-loading="isLoading"
-                                           :has-error="hasError"
-                                           :meta="meta" />
-                </b-col>
-                <!-- END: Search Status -->
-
-
-                <!-- START: Other Actions -->
-                <b-col md="auto">
-                    <b-button variant="success" href="#">
-                        <base-icon :icon="{fa:'plus',fe:'plus'}"
-                                   :from="['fe','fa']"
-                                   class="mr-2" />
-                        Persoon Toevoegen
-                    </b-button>
-                </b-col>
-                <!-- END: Other Actions -->
-
-
-            </b-row>
-
-            <hr class="my-3" />
-        </b-container>
+        <!-- START: Search Header -->
+        <search-header-container v-model="page"
+                                 :from="persons.from"
+                                 :to="persons.to"
+                                 :total="persons.total"
+                                 :per-page="persons.per_page"
+                                 :is-loading="isLoading"
+                                 records-name="personen"
+        >
+            <b-button variant="success" href="#">
+                <base-icon :icon="{fa:'plus',fe:'plus'}"
+                           :from="['fe','fa']"
+                           class="mr-2" />
+                Persoon Toevoegen
+            </b-button>
+        </search-header-container>
+        <!-- END: Search Header -->
 
 
         <!-- START: Main Content -->
@@ -61,7 +39,7 @@
                         </b-col>
 
                         <b-col lg="4">
-                            <search-sort-input v-model="sort" :sortOrder.sync="sortOrder">
+                            <search-sort-input>
                                 <option value="null" disabled>-- Sorteren op --</option>
                                 <optgroup label="Naam">
                                     <option value="name_first">Voornaam</option>
@@ -90,13 +68,10 @@
                     <!-- START: The Search Table -->
                     <b-card no-body>
                         <b-table id="people_search_table" ref="searchTable" class="card-table"
-                                 :items="itemsProvider"
-                                 :fields="tableFields"
-                                 :current-page="page"
-                                 :per-page="perPage"
-                                 :busy.sync="isLoading"
-                                 :sort-by.sync="sortByColumn"
-                                 :sort-desc.sync="sortDesc">
+                                 :items="persons.data"
+                                 :fields="fields"
+                                 :busy="isLoading"
+                                 no-local-sorting>
 
 
                             <template slot="avatar" slot-scope="{ item }">
@@ -112,16 +87,16 @@
 
                             <template slot="birth_date" slot-scope="{ item }">
                                 <div>{{ item.birth_date | date('bday') }}</div>
-                                <div class="small text-muted">( {{item.birth_date | age }} jaar )</div>
+                                <div class="small text-muted">( {{item.age }} jaar )</div>
                             </template>
 
                             <template slot="membership_status" slot-scope="{ item }">
                                 <div>
-                                    <span class="status-icon" :class="item.membership_status.status | membershipStatusColor "></span>
-                                    {{ item.membership_status.status | membershipStatusName }}
+                                    <span class="status-icon" :class="item.membership_status | membershipStatusColor "></span>
+                                    {{ item.membership_status | membershipStatusName }}
                                 </div>
                                 <div class="small text-muted">
-                                    {{ item.membership_status.since | date('lg') }}
+                                    {{ item.membership_status_since | date('lg') }}
                                 </div>
                             </template>
 
@@ -139,8 +114,8 @@
 
 
                     <!-- START: The Bottom Paginator -->
-                    <b-pagination :total-rows="meta.total"
-                                  :per-page="perPage"
+                    <b-pagination :total-rows="persons.total"
+                                  :per-page="persons.per_page"
                                   :limit="11"
                                   v-model="page">
                     </b-pagination>
@@ -157,17 +132,15 @@
                 <b-col lg="3">
                     <search-column-select-card v-model="columns" :collapsed.sync="sidebarCards.columns.collaped" />
 
-                    <!--<search-filter-membership-status-card
+                    <search-filter-membership-status-card
                             :active.sync="filters.membershipStatus.active"
                             v-model="filters.membershipStatus.value"
-                            @input="refreshTable()" v-on:update:active="refreshTable()"
                     />
 
                     <search-filter-group-card
                             :active.sync="filters.groups.active"
                             v-model="filters.groups.value"
-                            @input="refreshTable()" v-on:update:active="refreshTable()"
-                    />-->
+                    />
 
                 </b-col>
                 <!-- END: The Sidebar Column -->
@@ -182,8 +155,6 @@
 </template>
 
 <script>
-    import SearchStatusDisplay from "../SearchStatusDisplay";
-    import SearchSimplePager from "../SearchSimplePager";
     import SearchColumnSelectCard from "../SearchColumnSelectCard";
     import SearchFilterMembershipStatusCard from "../SearchFilterMembershipStatusCard";
     import SearchFilterGroupCard from "../SearchFilterGroupCard";
@@ -193,8 +164,10 @@
     import BaseAvatar from "../BaseAvatar";
     import BaseIcon from "../BaseIcon";
 
-    import controlSearchTable from '../../mixins/controlSearchTable';
+    import { getPersonsForTableQuery } from "../../queries/persons.graphql";
+
     import displayFilters from '../../filters/display';
+    import SearchHeaderContainer from "../SearchHeaderContainer";
 
 
 
@@ -205,20 +178,18 @@
             name:'Avatar',
             visible:true,
             thStyle:{'width':'1px'},
-            tdClass:['p-3']
+            tdClass:'p-3'
         },
         {
             key:'id',
             label:'ID',
             name:'ID',
-            sortable:'id',
             visible:false
         },
         {
             key:'name',
             label:'Hele Naam',
             name:'Volledige Naam',
-            sortable:'name',
             visible:true,
             formatter:function(value, key, item) {
                 return item.name;
@@ -228,28 +199,24 @@
             key:'name_short',
             label: 'Naam',
             name:'Korte Naam',
-            sortable:'name_first',
             visible:false
         },
         {
             key:'name_nickname',
             label:'Bijnaam',
             name:'Bijnaam',
-            sortable:'name_nickname',
             visible:false,
         },
         {
             key:'birth_date',
             label:'Geboortedatum',
             name:'Geboortedatum',
-            sortable:'birth_date',
             visible:true,
         },
         {
             key:'membership_status',
             label:'Status Lidmaatschap',
             name:'Lidstatus',
-            sortable:'membership_status',
             visible:true
         },
         {
@@ -263,8 +230,7 @@
 
     export default {
         components: {
-            SearchSimplePager,
-            SearchStatusDisplay,
+            SearchHeaderContainer,
             SearchColumnSelectCard,
             SearchFilterMembershipStatusCard,
             SearchFilterGroupCard,
@@ -275,59 +241,56 @@
             BaseIcon
         },
 
-        mixins: [controlSearchTable],
         filters: displayFilters,
 
         name: "page-person-list",
 
+        apollo: {
+            persons: {
+                query: getPersonsForTableQuery,
+                variables() {
+                    return {
+                        page:this.page,
+                        limit:this.perPage,
+                        orderByField:this.sort
+                    }
+                }
+            },
+        },
+
         data: function() {
             return {
+                persons: {},
                 columns: peopleSearchColumns,
-                sort:'id',
+                page: 1,
+                perPage: 10,
                 sidebarCards: {
                     columns: {
                         collapsed:true,
-                    }
+                    },
                 },
                 filters: {
                     membershipStatus: {
-                        active:false,
-                        value:[]
+                        active: false,
+                        value: []
                     },
                     groups: {
-                        active:false,
-                        value:[]
+                        active: false,
+                        value: []
                     }
                 }
             }
         },
 
         computed: {
-            endpoint: function() {
-                return '/api/persons';
+
+            fields: function() {
+                return this.columns.filter(col => col.visible);
             },
 
-            params: function() {
-                let res = this.getDefaultParams();
-
-                res.fields = ['membership_status','avatar'];
-
-                if(this.filters.membershipStatus.active) {
-                    res.membership_status = this.filters.membershipStatus.value;
-                }
-
-                if(this.filters.groups.active) {
-                    res.groups = this.filters.groups.value.map(el => el.id);
-                }
-
-                return res;
-            }
-        },
-
-        methods: {
-            refreshTable() {
-                this.$refs.searchTable.refresh();
-            }
+            isLoading: function() {
+                return this.$apollo.queries.persons.loading;
+            },
         },
     }
 </script>

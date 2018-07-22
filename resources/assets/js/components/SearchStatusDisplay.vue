@@ -5,9 +5,9 @@
         </div>
         <div v-else-if="currentState === 'displaying'" key="message-displaying">
             Toont
-            <span style="font-weight: 700" class="mx-1">{{ meta.from }} - {{ meta.to }}</span>
+            <span style="font-weight: 700" class="mx-1">{{ from }} - {{ to }}</span>
             van de in totaal
-            <span style="font-weight: 700" class="mx-1">{{ meta.total }}</span>
+            <span style="font-weight: 700" class="mx-1">{{ total }}</span>
             gevonden {{ recordsName }}.
 
         </div>
@@ -30,8 +30,16 @@
                 default:false,
             },
 
-            meta: {
-                type:Object
+            from: {
+                type:Number
+            },
+
+            to: {
+                type:Number
+            },
+
+            total: {
+                type:Number
             },
 
             recordsName: {
@@ -45,7 +53,7 @@
             currentState:function() {
                 if(this.isLoading) {
                     return 'loading';
-                } else if(this.meta) {
+                } else if(this.total) {
                     return 'displaying';
                 }
             }

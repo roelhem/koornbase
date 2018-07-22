@@ -1,46 +1,80 @@
 <template>
 
-    <b-container>
+    <div>
 
-        <b-row>
-            <b-col>
-                <h1>HI</h1>
-            </b-col>
-        </b-row>
+        <search-header-container
+                v-model="page"
+                :is-loading="isLoading"
+                :from="apps.from"
+                :to="apps.to"
+                :total="apps.total"
+                :per-page="perPage"
+                records-name="apps"
+        >
 
-        <pre>
-            {{ apps }}
-        </pre>
-    </b-container>
+        </search-header-container>
 
+        <b-container>
+
+            <b-card no-body>
+                <b-table id="searchAppsTable" class="card-table"
+                         :items="apps.data"
+                         :busy="isLoading"
+                         no-local-sorting
+                >
+
+                </b-table>
+            </b-card>
+        </b-container>
+
+        <b-container>
+            <b-card>
+                <create-app-form />
+            </b-card>
+        </b-container>
+    </div>
 </template>
 
 <script>
-    import gql from 'graphql-tag';
+    import SearchHeaderContainer from "../SearchHeaderContainer";
+    import { getAppsForTable } from "../../queries/apps.graphql";
+    import CreateAppForm from "../forms/CreateAppForm";
 
     export default {
 
+        components: {
+            CreateAppForm,
+            SearchHeaderContainer},
         apollo: {
-            apps: gql`{
-                apps {
-                    from
-                    to
-                    total
-                    data {
-                        id
-                        name
-                        name_short
-                        description
+            apps: {
+                query: getAppsForTable,
+                variables() {
+                    return {
+                        page: this.page,
+                        perPage: this.perPage
                     }
                 }
-            }`,
+            },
         },
 
         data:function() {
             return {
-                apps:[]
+                page:1,
+                perPage:10,
+                apps:{
+                    from:0,
+                    to:0,
+                    total:0,
+                    data:[]
+                }
             }
         },
+
+        computed: {
+            isLoading() {
+                return this.$apollo.queries.apps.loading;
+            }
+        }
     }
 </script>
 

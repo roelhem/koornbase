@@ -23,8 +23,8 @@
                 </b-card>
 
                 <b-list-group>
-                    <b-list-group-item to="/me/personal">Mijn Persoonsgegevens</b-list-group-item>
-                    <b-list-group-item to="/me/kb">Mijn Koornbeurs</b-list-group-item>
+                    <b-list-group-item :to="{ name:'me.personal' }">Mijn Persoonsgegevens</b-list-group-item>
+                    <b-list-group-item :to="{ name:'me.kb' }">Mijn Koornbeurs</b-list-group-item>
                 </b-list-group>
 
             </b-col>

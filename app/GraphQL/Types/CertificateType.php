@@ -104,6 +104,20 @@ class CertificateType extends GraphQLType
                 'always' => ['examination_at','valid_at','expired_at','passed'],
             ],
 
+            'valid_since' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Returns the first date on which this certificate was valid. If it\'s value is `null`, it means that this date is unknown (or hidden), but the contract can still be valid.',
+                'selectable' => false,
+                'always' => ['passed','valid_at','examination_at'],
+            ],
+
+            'valid_till' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Returns the last date on which this certificate is valid. This field is just an alias of the `expired_at` field.',
+                'selectable' => false,
+                'always' => ['expired_at'],
+            ],
+
             'remarks' => RemarksField::class,
 
             'created_at' => CreatedAtField::class,

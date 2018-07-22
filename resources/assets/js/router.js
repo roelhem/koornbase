@@ -12,6 +12,7 @@ import PagePersonContact from './components/pages/PagePersonContact';
 import PagePersonDebug from './components/pages/PagePersonDebug';
 import PagePersonList from './components/pages/PagePersonList';
 import PagePersonOverview from './components/pages/PagePersonOverview';
+import PagePersonMembership from './components/pages/PagePersonMembership';
 
 Vue.use(VueRouter);
 
@@ -68,6 +69,11 @@ export const routes = [
                 name:'persons.view.contact',
                 path:'contact',
                 component:PagePersonContact,
+            },
+            {
+                name:'persons.view.membership',
+                path:'membership',
+                component:PagePersonMembership,
             },
             {
                 name:'persons.view.debug',

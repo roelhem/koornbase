@@ -55,9 +55,14 @@
                 default:1,
             },
 
-            lastPage: {
+            total: {
                 type:Number,
-                required:true,
+                default:0,
+            },
+
+            perPage: {
+                type:Number,
+                default:1
             },
 
             variant:{
@@ -99,6 +104,10 @@
             allowForward:function() {
                 return this.page < this.lastPage;
             },
+
+            lastPage:function() {
+                return Math.ceil(this.total / this.perPage);
+            }
         },
 
         methods: {

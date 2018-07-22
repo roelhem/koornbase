@@ -88,8 +88,6 @@ for(var i=0; i<metas.length; i++) {
     }
 }
 
-console.log(csrf);
-
 const httpLink = new HttpLink({
     uri: 'https://localhost:3000/graphql',
     credentials: 'include',

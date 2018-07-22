@@ -102,9 +102,52 @@ class Certificate extends Model implements OwnedByPerson
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
-    
-    public function getIsValidAttribute() {
+
+    /**
+     * Attribute that stores if this certificate is valid at the current time.
+     *
+     * @return bool
+     */
+    public function getIsValidAttribute()
+    {
         return $this->isValid();
+    }
+
+    /**
+     * Attribute that gives the first date on which this certificate is valid. It will return null if it can't
+     * find such a date.
+     *
+     * If a null value is returned, it can either mean that the certificate was never valid, or it means that
+     * the certificate is valid, but there is no information on when the certificate started to be valid.
+     *
+     * @return Carbon|null
+     */
+    public function getValidSinceAttribute()
+    {
+        if($this->passed === false) {
+            return null;
+        }
+
+        if($this->valid_at !== null) {
+            return $this->valid_at;
+        }
+
+        if($this->examination_at !== null) {
+            return $this->examination_at;
+        }
+
+        return null;
+    }
+
+    /**
+     * Attribute that gives the last date on which this certificate is valid. This is an alias of the expired_at
+     * attribute.
+     *
+     * @return Carbon|null
+     */
+    public function getValidTillAttribute()
+    {
+        return $this->expired_at;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

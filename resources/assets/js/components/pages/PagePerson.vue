@@ -40,6 +40,7 @@
             <b-nav tabs>
                 <b-nav-item :to="{name: 'persons.view.overview', params:{id: id}}">Overzicht</b-nav-item>
                 <b-nav-item :to="{name: 'persons.view.contact', params:{id: id}}">Contactgegevens</b-nav-item>
+                <b-nav-item :to="{name: 'persons.view.membership', params:{id: id}}">Lidmaatschap</b-nav-item>
                 <b-nav-item :to="{name: 'persons.view.debug', params:{id: id}}">Debug</b-nav-item>
 
 
@@ -70,14 +71,14 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import TablerBanner from "../TablerBanner";
     import BaseAvatar from "../BaseAvatar";
     import DataDisplay from "../displays/data-display";
     import KbGroupTag from "../KbGroupTag";
     import BaseIcon from "../BaseIcon";
-    import gql from 'graphql-tag';
     import TablerDimmer from "../TablerDimmer";
+
+    import { getPersonPageHeaderData } from "../../queries/persons.graphql";
 
     export default {
         components: {
@@ -96,18 +97,7 @@
 
         apollo: {
             person: {
-                query: gql`query getPersonInfo($id: ID!) {
-
-                    person(id: $id) {
-                        id name_first name_nickname name_prefix name_last
-                        avatar { image letters icon placeholder color }
-                        groups {
-                            id name name_short member_name description slug
-                            category { id name style }
-                        }
-                    }
-
-                }`,
+                query: getPersonPageHeaderData,
                 variables() {
                     return {
                         id:this.id

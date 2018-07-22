@@ -63,4 +63,14 @@ class CertificateFilter extends ModelFilter
         $this->where('category_id',$id);
     }
 
+    /**
+     * Filters the certificates that belong to the provided person.
+     *
+     * @param $id
+     */
+    public function personId($id)
+    {
+        $this->where('person_id',$id);
+    }
+
 }

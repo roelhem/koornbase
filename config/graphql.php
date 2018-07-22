@@ -142,6 +142,8 @@ return [
                 'updatePerson' => \App\GraphQL\Mutations\Crud\UpdatePersonMutation::class,
                 'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
+
+                'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class
             ],
             'middleware' => []
         ],

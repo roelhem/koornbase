@@ -11,6 +11,7 @@
             collapsible
             :collapsed="collapsed"
             v-on:update:collapsed="event => $emit('update:collapsed', event)"
+            :is-loading="$apollo.queries.person.loading"
             collapsibleWithHeader
     >
         <template slot="preview" slot-scope="{ item }">
@@ -35,6 +36,7 @@
 <script>
     import DataDisplay from "./displays/data-display";
     import TablerTableCard from "./TablerTableCard";
+    import { getPersonEmailAddressesData } from "../queries/persons.graphql";
 
     export default {
 
@@ -44,13 +46,21 @@
         },
         name: "show-email-addresses-of-person-card",
 
+        apollo: {
+            person: {
+                query: getPersonEmailAddressesData,
+                variables() {
+                    return {
+                        id:this.personId,
+                    };
+                }
+            }
+        },
 
         props: {
-            person: {
-                type: Object,
-                default: function() {
-                    return {};
-                }
+            personId: {
+                type: [Number,String],
+                required: true
             },
 
             collapsed: {
@@ -58,6 +68,14 @@
                 default: false
             }
         },
+
+        data: function() {
+            return {
+                person: {
+                    emailAddresses: []
+                }
+            }
+        }
     }
 </script>
 

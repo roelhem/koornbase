@@ -15,20 +15,26 @@
         :fullscreen="fullscreen"
         v-on:update:fullscreen="e => $emit('update:fullscreen', e)"
         :maximizable="maximizable"
+        :is-loading="isLoading"
     >
 
         <template slot="title">
             <slot name="title">{{title}}</slot>
 
-            <span v-if="!hideCount" class="text-muted">({{ rowCount }})</span>
+            <span v-if="!hideCount && !isLoading" class="text-muted">({{ rowCount }})</span>
 
             <span v-if="collapsed && hasRows" class="ml-3 text-muted small">
                 <slot name="preview" :item="rows[0]" />
             </span>
+
         </template>
 
         <table class="table card-table">
-            <tbody>
+            <tbody v-if="isLoading && rowCount === 0">
+                <tr><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td></tr>
+            </tbody>
+            <tbody v-else>
                 <tr v-for="(row, key) in rows" :key="key">
                     <slot name="row" :item="row">
                         <td>{{ row }}</td>
@@ -43,6 +49,7 @@
 
 <script>
     import TablerCard from "./TablerCard";
+    import TablerDimmer from "./TablerDimmer";
 
     export default {
 
@@ -120,7 +127,9 @@
             }
         },
 
-        components: {TablerCard},
+        components: {
+            TablerDimmer,
+            TablerCard},
         name: "tabler-table-card"
     }
 </script>
