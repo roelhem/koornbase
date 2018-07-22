@@ -8,11 +8,13 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\DescriptionField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\IsRequiredField;
 use App\GraphQL\Fields\NameField;
 use App\GraphQL\Fields\NameShortField;
+use App\GraphQL\Fields\SlugField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -26,6 +28,7 @@ use App\CertificateCategory;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class CertificateCategoryType extends GraphQLType
 {
@@ -39,8 +42,7 @@ class CertificateCategoryType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model'),
-            GraphQL::type('Sluggable')
+            GraphQL::type('Model')
         ];
     }
 
@@ -48,9 +50,11 @@ class CertificateCategoryType extends GraphQLType
     public function fields()
     {
 
+        $queryCallback = RbacQueryFilter::eagerLoadingContraintGraphQLClosure();
+
         return [
             'id' => IdField::class,
-            GraphQL::type('Sluggable')->getField('slug'),
+            'slug' => SlugField::class,
 
             'name'        => NameField::class,
             'name_short'  => NameShortField::class,
@@ -65,7 +69,8 @@ class CertificateCategoryType extends GraphQLType
 
             'certificates' => [
                 'type' => Type::listOf(GraphQL::type('Certificate')),
-                'description' => 'A list of all the certificates that belong to this CertificateCategory.'
+                'description' => 'A list of all the certificates that belong to this CertificateCategory.',
+                'query' => $queryCallback
             ],
 
             'created_at' => CreatedAtField::class,
@@ -76,7 +81,9 @@ class CertificateCategoryType extends GraphQLType
             'editor'     => EditorField::class,
             'deleted_at' => DeletedAtField::class,
             'deleted_by' => DeletedByField::class,
-            'destroyer'  => DestroyerField::class
+            'destroyer'  => DestroyerField::class,
+
+            'viewable' => ViewableField::class
         ];
     }
 

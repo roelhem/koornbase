@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Contracts\Filters\FilterServiceContract;
-use App\Services\Filters\FilterService;
-use App\Services\Filters\GroupFilterProvider;
-use App\Services\Filters\PersonFilterProvider;
 use App\Services\Navigation\BreadcrumbService;
 use App\Services\Navigation\NavbarService;
 use App\Services\Navigation\NavigationItemRepository;
@@ -19,6 +15,7 @@ use App\Services\Sorters\MembershipSorter;
 use App\Services\Sorters\PersonSorter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        Passport::ignoreMigrations();
         
         $this->app->singleton(PersonSorter::class);
         $this->app->singleton(GroupSorter::class);
@@ -51,9 +50,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CertificateCategorySorter::class);
         $this->app->singleton(KoornbeursCardSorter::class);
         $this->app->singleton(MembershipSorter::class);
-
-        $this->app->singleton(FilterService::class);
-        $this->app->bind(FilterServiceContract::class, FilterService::class);
 
         $this->app->singleton(NavigationItemRepository::class);
 

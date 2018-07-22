@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
@@ -20,6 +21,7 @@ use App\GroupEmailAddress;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class GroupEmailAddressType extends GraphQLType
 {
@@ -49,7 +51,8 @@ class GroupEmailAddressType extends GraphQLType
             ],
             'group' => [
                 'type' => GraphQL::type('Group'),
-                'description' => 'The Group where this GroupEmailAddress belongs to.'
+                'description' => 'The Group where this GroupEmailAddress belongs to.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
             'email_address' => [
@@ -65,6 +68,8 @@ class GroupEmailAddressType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class,
         ];
     }
 

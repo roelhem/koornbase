@@ -21,7 +21,8 @@ class DateTimeType extends ScalarType
     protected $format = 'Y-m-d H:i:s';
 
     protected $attributes = [
-        'name' => 'DateTime'
+        'name' => 'DateTime',
+        'description' => 'The `DateTime` scalar type represents a specific moment (date and time). It\'s JSON-value is a `string` formatted like "`yyyy-mm-dd hh:ii:ss`".'
     ];
 
     /** @inheritdoc */

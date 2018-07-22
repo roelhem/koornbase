@@ -9,20 +9,27 @@
 namespace App\GraphQL\Queries;
 
 use App\GroupEmailAddress;
+use GraphQL\Type\Definition\Type;
 
 class GroupEmailAddressesQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'group_email_addresses'
-    ];
+    protected $modelClass = GroupEmailAddress::class;
 
-    protected $typeName = 'GroupEmailAddress';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return GroupEmailAddress::query();
+        return array_merge(parent::filterArgs(), [
+
+            'groupId' => [
+                'type' => Type::id(),
+                'description' => 'Filters all the emailAddresses that belong to the group with the provided id.'
+            ],
+
+
+
+        ]);
     }
+
 
 }

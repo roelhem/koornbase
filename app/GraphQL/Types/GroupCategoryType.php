@@ -9,11 +9,13 @@
 namespace App\GraphQL\Types;
 
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\DescriptionField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\IsRequiredField;
 use App\GraphQL\Fields\NameField;
 use App\GraphQL\Fields\NameShortField;
+use App\GraphQL\Fields\SlugField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -27,6 +29,7 @@ use App\GroupCategory;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class GroupCategoryType extends GraphQLType
 {
@@ -49,7 +52,7 @@ class GroupCategoryType extends GraphQLType
     {
         return [
             'id' => IdField::class,
-            GraphQL::type('Sluggable')->getField('slug'),
+            'slug' => SlugField::class,
 
             'name'        => NameField::class,
             'name_short'  => NameShortField::class,
@@ -62,7 +65,8 @@ class GroupCategoryType extends GraphQLType
 
             'groups' => [
                 'type' => Type::listOf(GraphQL::type('Group')),
-                'description' => 'A list of all the groups that have this category.'
+                'description' => 'A list of all the groups that have this category.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
             'is_required' => IsRequiredField::class,
@@ -75,7 +79,10 @@ class GroupCategoryType extends GraphQLType
             'editor'     => EditorField::class,
             'deleted_at' => DeletedAtField::class,
             'deleted_by' => DeletedByField::class,
-            'destroyer'  => DestroyerField::class
+            'destroyer'  => DestroyerField::class,
+
+
+            'viewable' => ViewableField::class,
         ];
     }
 

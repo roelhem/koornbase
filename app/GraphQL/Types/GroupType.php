@@ -8,11 +8,13 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\DescriptionField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\IsRequiredField;
 use App\GraphQL\Fields\NameField;
 use App\GraphQL\Fields\NameShortField;
+use App\GraphQL\Fields\SlugField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
 use App\GraphQL\Fields\Stamps\CreatorField;
@@ -23,9 +25,11 @@ use App\GraphQL\Fields\Stamps\EditorField;
 use App\GraphQL\Fields\Stamps\UpdatedAtField;
 use App\GraphQL\Fields\Stamps\UpdatedByField;
 use App\Group;
+use App\Person;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class GroupType extends GraphQLType
 {
@@ -48,7 +52,7 @@ class GroupType extends GraphQLType
     {
         return [
             'id' => IdField::class,
-            GraphQL::type('Sluggable')->getField('slug'),
+            'slug' => SlugField::class,
 
             'category_id' => [
                 'type' => Type::nonNull(Type::int()),
@@ -57,6 +61,7 @@ class GroupType extends GraphQLType
             'category' => [
                 'type' => GraphQL::type('GroupCategory'),
                 'description' => 'The GroupCategory where this Group belongs to.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
             'name'        => NameField::class,
@@ -70,7 +75,8 @@ class GroupType extends GraphQLType
 
             'persons' => [
                 'type' => Type::listOf(GraphQL::type('Person')),
-                'description' => 'All the persons that are in this group.'
+                'description' => 'All the persons that are in this group.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
             'is_required' => IsRequiredField::class,
@@ -83,7 +89,10 @@ class GroupType extends GraphQLType
             'editor'     => EditorField::class,
             'deleted_at' => DeletedAtField::class,
             'deleted_by' => DeletedByField::class,
-            'destroyer'  => DestroyerField::class
+            'destroyer'  => DestroyerField::class,
+
+
+            'viewable' => ViewableField::class
 
         ];
     }

@@ -17,17 +17,20 @@ use GraphQL\Type\Definition\Type;
 class UsersQuery extends ModelListQuery
 {
 
+    protected $modelClass = User::class;
 
-    protected $attributes = [
-        'name' => 'Users query'
-    ];
 
-    protected $typeName = 'User';
-
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return User::query();
+        return array_merge(parent::filterArgs(), [
+
+            'personId' => [
+                'type' => Type::id(),
+                'description' => 'Filter the users that belong to the person that has the provided `ID`.'
+            ]
+
+
+        ]);
     }
 
 }

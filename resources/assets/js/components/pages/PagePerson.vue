@@ -8,9 +8,11 @@
         <b-container style="margin-top: -40px">
             <div class="d-flex">
                 <div class="px-2">
+                    <tabler-dimmer :active="$apollo.queries.person.loading">
                     <base-avatar v-bind="person.avatar"
                                  size="xxl"
                                  default-style="person-default" />
+                    </tabler-dimmer>
                 </div>
 
                 <div class="p-1 pt-3">
@@ -59,7 +61,7 @@
         </b-container>
 
         <b-container>
-            <router-view :person="person" />
+            <router-view :person-id="id" />
         </b-container>
 
 
@@ -74,9 +76,12 @@
     import DataDisplay from "../displays/data-display";
     import KbGroupTag from "../KbGroupTag";
     import BaseIcon from "../BaseIcon";
+    import gql from 'graphql-tag';
+    import TablerDimmer from "../TablerDimmer";
 
     export default {
         components: {
+            TablerDimmer,
             BaseIcon,
             DataDisplay,
             BaseAvatar,
@@ -86,44 +91,37 @@
         name: "page-person",
 
         props: {
-            id: String
+            id: [String, Number]
+        },
+
+        apollo: {
+            person: {
+                query: gql`query getPersonInfo($id: ID!) {
+
+                    person(id: $id) {
+                        id name_first name_nickname name_prefix name_last
+                        avatar { image letters icon placeholder color }
+                        groups {
+                            id name name_short member_name description slug
+                            category { id name style }
+                        }
+                    }
+
+                }`,
+                variables() {
+                    return {
+                        id:this.id
+                    }
+                }
+
+            },
         },
 
         data: function() {
             return {
-                isLoading: true,
                 person: {}
             }
         },
-
-        watch: {
-            '$route':'loadData'
-        },
-
-        created() {
-            this.loadData();
-        },
-
-        methods: {
-            loadData() {
-                axios.get('/api/persons/'+this.id, {
-                    params: {
-                        with: [
-                            'groups',
-                            'address',
-                            'emailAddress',
-                            'emailAddresses',
-                            'phoneNumber',
-                            'activeCards'
-                        ],
-                        fields: ['avatar','style','membership_status']
-                    }
-                }).then(result => {
-                    this.person = result.data.data;
-                    this.isLoading = false;
-                }).catch(e => { console.log(e) });
-            }
-        }
     }
 </script>
 

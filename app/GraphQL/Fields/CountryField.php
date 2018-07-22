@@ -18,7 +18,8 @@ class CountryField extends Field
     protected $attributes = [
         'name' => 'country',
         'description' => 'The full name of the country where his object belongs to.',
-        'selectable' => false
+        'selectable' => false,
+        'always' => ['country_code']
     ];
 
     public function type()

@@ -2,7 +2,6 @@
 
     <div>
 
-
         <kb-person-detail-card :person="person"
                                :collapsed.sync="cards.personal.collapsed"
         />
@@ -26,7 +25,7 @@
                 <template slot="preview" slot-scope="{ item }">
                     <data-display title="Label"> {{ item.label }} </data-display>:
                     <data-display title="Primair telefoonnummer" class="text-muted-dark">
-                        {{ item.nl_mobile }}
+                        {{ item.phone_number }}
                     </data-display>
                 </template>
 
@@ -36,7 +35,7 @@
                         <data-display title="Label">{{ item.label }}</data-display>
                     </th>
                     <td class=" p-2" style="font-size: 1.18rem; letter-spacing: 1.8px; word-spacing: 4px;">
-                        <data-display title="Telefoonnummer">{{ item.nl_mobile }}</data-display>
+                        <data-display title="Telefoonnummer">{{ item.phone_number }}</data-display>
                     </td>
                     <td class="text-muted font-weight-bold small">
                         <data-display title="Type Telefoonnummer">{{ item.type_name }}</data-display>
@@ -78,7 +77,7 @@
                     <th>
                         <data-display title="Label">{{ item.label }}</data-display>
                     </th>
-                    <td v-html="item.html_formatted"></td>
+                    <td v-html="item.format"></td>
                 </template>
             </tabler-table-card>
 
@@ -108,10 +107,10 @@
     import ShowEmailAddressesOfPersonCard from "../ShowEmailAddressesOfPersonCard";
     import TablerTableCard from "../TablerTableCard";
     import KbPersonDetailCard from "../KbPersonDetailCard";
-    import axios from 'axios';
     import { mapState } from "vuex";
     import TablerCard from "../TablerCard";
     import DisplayPersonAddress from "../DisplayPersonAddress";
+    import gql from 'graphql-tag';
 
     export default {
 
@@ -124,6 +123,40 @@
             BaseTag,
             BaseAvatar,
             DataDisplay
+        },
+
+        apollo: {
+            person: {
+                query: gql` query GetPersonDetails($id:ID!) {
+                    person(id:$id) {
+                        name
+                        name_first
+                        name_initials
+                        name_short
+                        name_nickname
+                        name_middle
+                        name_last
+                        birth_date
+
+                        emailAddresses {
+                            id index label email_address
+                        }
+
+                        phoneNumbers {
+                            id index label phone_number location country
+                        }
+
+                        addresses {
+                            id index label address_line_1 locality country_code format(html:true)
+                        }
+                    }
+                }`,
+                variables() {
+                    return {
+                        id: this.user.person_id
+                    };
+                }
+            }
         },
 
 
@@ -139,25 +172,6 @@
                     koornbeursCards:{collapsed:true}
                 },
             };
-        },
-
-        created() {
-            this.loadData();
-        },
-
-        methods: {
-            loadData() {
-                axios.get('/api/persons/'+ this.user.person_id, {
-                    params: {
-                        'with':['phoneNumbers','addresses','emailAddresses'],
-                        'fields':['location','type_name','html_formatted']
-                    }
-                }).then(result => {
-                    this.person = result.data.data;
-                }).catch(error => {
-                    console.log(error);
-                });
-            }
         },
 
         computed: {

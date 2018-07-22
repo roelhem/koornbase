@@ -14,16 +14,6 @@ use App\Person;
 class PersonQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'person'
-    ];
-
-    protected $typeName = 'Person';
-
-    /** @inheritdoc */
-    protected function query($args, $selectFields)
-    {
-        return Person::query();
-    }
+    protected $modelClass = Person::class;
 
 }

@@ -67,7 +67,7 @@
             },
 
             defaultStyle:function() {
-                return this.group.style;
+                return this.group.category.style;
             }
         },
 

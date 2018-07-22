@@ -16,7 +16,7 @@ class GroupEmailAddressFilter extends ModelFilter
     public $relations = [];
 
 
-    public function group($id)
+    public function groupId($id)
     {
         $this->where('group_id','=',$id);
     }

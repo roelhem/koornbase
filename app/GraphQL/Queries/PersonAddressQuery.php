@@ -14,15 +14,6 @@ use App\PersonAddress;
 class PersonAddressQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'personAddress'
-    ];
-
-    protected $typeName = 'PersonAddress';
-
-    public function query($args, $selectFields)
-    {
-        return PersonAddress::query();
-    }
+    protected $modelClass = PersonAddress::class;
 
 }

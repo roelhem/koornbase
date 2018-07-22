@@ -8,6 +8,7 @@ use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -135,6 +136,98 @@ class Membership extends Model implements OwnedByPerson
     public function getStatusSince($at = null) {
         $status = $this->getStatus($at);
         return $status->getTimestamp($this);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOPES --------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @param Builder $query
+     * @param MembershipStatus|int $status
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeStatus($query, $status, $at = null) {
+        if(MembershipStatus::OUTSIDER()->is($status)) {
+            return $this->scopeOutsider($query, $at);
+        } elseif(MembershipStatus::NOVICE()->is($status)) {
+            return $this->scopeNovice($query, $at);
+        } elseif(MembershipStatus::MEMBER()->is($status)) {
+            return $this->scopeMember($query, $at);
+        } elseif(MembershipStatus::FORMER_MEMBER()->is($status)) {
+            return $this->scopeFormerMember($query, $at);
+        }
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeOutsider($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('application')->orWhere('application','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('start')->orWhere('start','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeNovice($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('application')->where('application', '<=', $at)->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('start')->orWhere('start','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeMember($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('start')->where('start', '<=', $at)->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeFormerMember($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('end')->where('end', '<=', $at);
     }
 
 

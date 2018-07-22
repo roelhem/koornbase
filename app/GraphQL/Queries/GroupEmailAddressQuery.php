@@ -14,15 +14,6 @@ use App\GroupEmailAddress;
 class GroupEmailAddressQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'groupEmailAddress'
-    ];
-
-    protected $typeName = 'GroupEmailAddress';
-
-    public function query($args, $selectFields)
-    {
-        return GroupEmailAddress::query();
-    }
+    protected $modelClass = GroupEmailAddress::class;
 
 }

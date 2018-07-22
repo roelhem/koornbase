@@ -5,50 +5,52 @@
         <b-col lg="4">
 
             <b-card no-body>
-                <detail-view in-card sm class="table-hover">
+                <tabler-dimmer :active="$apollo.queries.person.loading">
+                    <detail-view in-card sm class="table-hover">
 
-                    <detail-entry icon="user" title="Naam">
-                        <display-person-name v-bind="person" />
-                    </detail-entry>
+                        <detail-entry icon="user" title="Naam">
+                            <display-person-name v-bind="person" />
+                        </detail-entry>
 
-                    <detail-entry icon="birthday-cake" title="Geboortedatum">
-                        <display-person-birth-date v-bind="person" />
-                    </detail-entry>
+                        <detail-entry icon="birthday-cake" title="Geboortedatum">
+                            <display-person-birth-date v-bind="person" />
+                        </detail-entry>
 
-                    <detail-entry icon="book" title="Lid-status">
-                        <display-membership-status v-bind="person.membership_status" />
-                    </detail-entry>
+                        <detail-entry icon="book" title="Lid-status">
+                            <display-membership-status :status="person.membership_status" :since="person.membership_status_since" />
+                        </detail-entry>
 
-                    <detail-entry icon="credit-card"
-                                  title="Koornbeurs-kaart"
-                                  v-for="activeCard in person.activeCards"
-                                  :key="'active-card-'+activeCard.id">
-                        <data-display title="Koornbeurs-kaart referentie">{{ activeCard.ref }}</data-display>
-                        <span class="text-muted">
-                            (
-                            <data-display title="Koornbeurs-kaart versie"
-                                          class="font-italic"
-                            >{{ activeCard.version }}</data-display>
-                            )
-                        </span>
-                    </detail-entry>
+                        <detail-entry icon="credit-card"
+                                      title="Koornbeurs-kaart"
+                                      v-for="activeCard in person.activeCards"
+                                      :key="'active-card-'+activeCard.id">
+                            <data-display title="Koornbeurs-kaart referentie">{{ activeCard.ref }}</data-display>
+                            <span class="text-muted">
+                                (
+                                <data-display title="Koornbeurs-kaart versie"
+                                              class="font-italic"
+                                >{{ activeCard.version }}</data-display>
+                                )
+                            </span>
+                        </detail-entry>
 
-                    <detail-entry v-if="person.emailAddress" icon="at" title="E-mailadres">
-                        <data-display title="E-mailadres">
-                            {{ person.emailAddress.email_address }}
-                        </data-display>
-                    </detail-entry>
+                        <detail-entry v-if="person.emailAddress" icon="at" title="E-mailadres">
+                            <data-display title="E-mailadres">
+                                {{ person.emailAddress.email_address }}
+                            </data-display>
+                        </detail-entry>
 
-                    <detail-entry v-if="person.phoneNumber" icon="phone" title="Telefoonnummer">
-                        <data-display title="Telefoonnummer">
-                            {{ person.phoneNumber.nl_mobile }}
-                        </data-display>
-                    </detail-entry>
+                        <detail-entry v-if="person.phoneNumber" icon="phone" title="Telefoonnummer">
+                            <data-display title="Telefoonnummer">
+                                {{ person.phoneNumber.phone_number }}
+                            </data-display>
+                        </detail-entry>
 
-                    <detail-entry v-if="person.address" icon="map-marker" title="Adres">
-                        <display-person-address v-bind="person.address" />
-                    </detail-entry>
-                </detail-view>
+                        <detail-entry v-if="person.address" icon="map-marker" title="Adres">
+                            <display-person-address v-bind="person.address" />
+                        </detail-entry>
+                    </detail-view>
+                </tabler-dimmer>
             </b-card>
 
         </b-col>
@@ -73,8 +75,12 @@
     import DisplayMembershipStatus from "../DisplayMembershipStatus";
     import DisplayPersonAddress from "../DisplayPersonAddress";
 
+    import gql from 'graphql-tag';
+    import TablerDimmer from "../TablerDimmer";
+
     export default {
         components: {
+            TablerDimmer,
             DisplayPersonAddress,
             DisplayMembershipStatus,
             DataDisplay,
@@ -84,14 +90,41 @@
             DetailEntry,
             DetailView
         },
-        name: "page-person-overview",
+
+        apollo: {
+            person: {
+                query: gql`query getPersonDetails($id:ID!) {
+                    person(id: $id) {
+                        id name_initials name_first name_prefix name_middle name_last birth_date
+                        membership_status membership_status_since
+                        activeCards: cards(active:true) { id ref version }
+                        emailAddress { email_address }
+                        phoneNumber { phone_number }
+                        address { label country_code country locality address_line_1 }
+                    }
+                }`,
+                variables: function() {
+                    return { id: this.personId }
+                }
+            }
+        },
+
+
+        data:function() {
+            return {
+                person:{
+                    activeCards:[],
+                    avatar:{}
+                }
+            }
+        },
+
+
+
 
         props: {
-            person:{
-                type:Object,
-                default:function() {
-                    return {};
-                }
+            personId:{
+                type:[String, Number]
             }
         }
     }

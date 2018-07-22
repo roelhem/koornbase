@@ -17,7 +17,7 @@ class GroupFilter extends ModelFilter
      *
      * @param $id
      */
-    public function category($id)
+    public function categoryId($id)
     {
         $this->where('id','=',$id);
     }

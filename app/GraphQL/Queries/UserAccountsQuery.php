@@ -9,20 +9,30 @@
 namespace App\GraphQL\Queries;
 
 use App\UserAccount;
+use GraphQL\Type\Definition\Type;
 
 class UserAccountsQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'user_accounts'
-    ];
+    protected $modelClass = UserAccount::class;
 
-    protected $typeName = 'UserAccount';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return UserAccount::query();
+        return array_merge(parent::filterArgs(), [
+
+            'provider' => [
+                'type' => \GraphQL::type('OAuthProvider'),
+                'description' => 'Filters the user-accounts from a specific provider.'
+            ],
+
+            'userId' => [
+                'type' => Type::id(),
+                'description' => 'Filters the user-accounts that belong to the user that has the provided id.'
+            ]
+
+
+        ]);
     }
 
 }

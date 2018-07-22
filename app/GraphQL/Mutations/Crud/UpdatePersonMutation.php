@@ -35,8 +35,8 @@ class UpdatePersonMutation extends Mutation
             ],
             'name_first' => [
                 'name' => 'name_first',
-                'type' => Type::nonNull(Type::string()),
-                'rules' => ['required','string','max:255']
+                'type' => Type::string(),
+                'rules' => ['sometimes','required','string','max:255']
             ],
             'name_middle' => [
                 'name' => 'name_middle',
@@ -50,8 +50,8 @@ class UpdatePersonMutation extends Mutation
             ],
             'name_last' => [
                 'name' => 'name_last',
-                'type' => Type::nonNull(Type::string()),
-                'rules' => ['required','string','max:255']
+                'type' => Type::string(),
+                'rules' => ['sometimes','required','string','max:255']
             ],
             'name_initials' => [
                 'name' => 'name_initials',

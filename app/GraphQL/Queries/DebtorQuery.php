@@ -14,15 +14,6 @@ use App\Debtor;
 class DebtorQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'certificate'
-    ];
-
-    protected $typeName = 'Certificate';
-
-    public function query($args, $selectFields)
-    {
-        return Debtor::query();
-    }
+    protected $modelClass = Debtor::class;
 
 }

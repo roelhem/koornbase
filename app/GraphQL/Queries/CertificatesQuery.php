@@ -10,20 +10,41 @@ namespace App\GraphQL\Queries;
 
 
 use App\Certificate;
+use GraphQL\Type\Definition\Type;
 
 class CertificatesQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'certificates'
-    ];
+    protected $modelClass = Certificate::class;
 
-    protected $typeName = 'Certificate';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+
+
+    protected function filterArgs()
     {
-        return Certificate::query();
+        return array_merge(parent::filterArgs(), [
+
+            'isValid' => [
+                'type' => Type::boolean(),
+                'description' => 'Filters all the certificates that are valid if the value is true. If the value is false, only the invalid certificates are shown.'
+            ],
+
+            'validAt' => [
+                'type' => \GraphQL::type('Date'),
+                'description' => 'Filters all the certificates that are valid at the given date.',
+            ],
+
+            'invalidAt' => [
+                'type' => \GraphQL::type('Date'),
+                'description' => 'Filters all the certificates that are invalid at the given date.',
+            ],
+
+            'categoryId' => [
+                'type' => Type::id(),
+                'description' => 'Filters all the certificates that belong to the CertificateCategory with the given id.'
+            ]
+
+        ]);
     }
 
 }

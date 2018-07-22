@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Relations\PersonField;
 use App\GraphQL\Fields\Relations\PersonIdField;
@@ -62,6 +63,8 @@ class DebtorType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class,
         ];
     }
 

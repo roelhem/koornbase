@@ -8,6 +8,8 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
+use App\GraphQL\Fields\AvatarField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
@@ -20,9 +22,12 @@ use App\GraphQL\Fields\Stamps\EditorField;
 use App\GraphQL\Fields\Stamps\UpdatedAtField;
 use App\GraphQL\Fields\Stamps\UpdatedByField;
 use App\Person;
+use App\PersonEmailAddress;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Database\Eloquent\Builder;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 /**
  * Class PersonType
@@ -50,7 +55,7 @@ class PersonType extends GraphQLType
     /** @inheritdoc */
     public function fields()
     {
-
+        $queryCallback = RbacQueryFilter::eagerLoadingContraintGraphQLClosure();
         $ownedByPerson = GraphQL::type('OwnedByPerson');
 
         return [
@@ -61,21 +66,25 @@ class PersonType extends GraphQLType
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The name of this Person that can be used for human display.',
                 'selectable' => false,
+                'always' => ['name_first','name_prefix','name_last']
             ],
             'name_short' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'A short name for this Person that can be used for human display.',
                 'selectable' => false,
+                'always' => ['name_first','name_nickname'],
             ],
             'name_full' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The full name (including the middle names) of this Person that can be used vor human display.',
                 'selectable' => false,
+                'always' => ['name_first','name_middle','name_prefix','name_last']
             ],
             'name_formal' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The name of this Person in a format suitable for formal conversation.',
-                'selectable' => true,
+                'selectable' => false,
+                'always' => ['name_first','name_initials','name_prefix','name_last']
             ],
             'name_first' => [
                 'type' => Type::nonNull(Type::string()),
@@ -116,6 +125,7 @@ class PersonType extends GraphQLType
                     return $root->getAge(array_get($args, 'at'));
                 },
                 'selectable' => false,
+                'always' => ['birth_date']
             ],
             'birth_anniversary' => [
                 'type' => GraphQL::type('Date'),
@@ -131,6 +141,7 @@ class PersonType extends GraphQLType
                     return $person->getBirthDay($age);
                 },
                 'selectable' => false,
+                'always' => ['birth_date']
             ],
 
 
@@ -138,61 +149,92 @@ class PersonType extends GraphQLType
 
             'groups' => [
                 'type' => Type::listOf(GraphQL::type('Group')),
-                'description' => 'The groups of this person.'
+                'description' => 'The groups of this person.',
+                'query' => $queryCallback,
+                'always' => ['id']
             ],
 
             'certificates' => [
                 'type' => Type::listOf(GraphQL::type('Certificate')),
-                'description' => 'All the certificates of this person.'
+                'description' => 'All the certificates of this person.',
+                'query' => $queryCallback
             ],
 
             'debtors' => [
                 'type' => Type::listOf(GraphQL::type('Debtor')),
-                'description' => 'All the debtors of this person.'
+                'description' => 'All the debtors of this person.',
+                'query' => $queryCallback
             ],
 
             'cards' => [
                 'type' => Type::listOf(GraphQL::type('KoornbeursCard')),
-                'description' => 'All the Koornbeurs-cards of this person.'
+                'description' => 'All the Koornbeurs-cards of this person.',
+                'args' => [
+                    'active' => [
+                        'type' => Type::boolean(),
+                        'description' => 'Only shows the active cards when set to `true`, and only the inactive cards when set to `false`.'
+                    ]
+                ],
+                'query' => function($args, $query) {
+
+                    $activeFilter = array_get($args, 'active');
+                    if($activeFilter === true) {
+                        $query->active();
+                    } elseif($activeFilter === false) {
+                        $query->inactive();
+                    }
+
+                    return RbacQueryFilter::eagerLoadingContraintGraphQLClosure()($args, $query);
+                }
             ],
 
             'users' => [
                 'type' => Type::listOf(GraphQL::type('User')),
-                'description' => 'All the users that are linked to this person.'
+                'description' => 'All the users that are linked to this person.',
+                'query' => $queryCallback
             ],
 
             'addresses' => [
                 'type' => Type::listOf(GraphQL::type('PersonAddress')),
-                'description' => 'All the addresses of this person'
+                'description' => 'All the addresses of this person',
+                'query' => $queryCallback
             ],
             'address' => [
                 'type' => GraphQL::type('PersonAddress'),
-                'description' => 'The address that can be used as primary address for this Person.'
+                'description' => 'The address that can be used as primary address for this Person.',
+                'query' => $queryCallback
             ],
 
             'emailAddresses' => [
                 'type' => Type::listOf(GraphQL::type('PersonEmailAddress')),
-                'description' => 'All the e-mail addresses of this person'
+                'description' => 'All the e-mail addresses of this person',
+                'query' => $queryCallback
             ],
             'emailAddress' => [
                 'type' => GraphQL::type('PersonEmailAddress'),
-                'description' => 'The e-mail address that can be used as a primary e-mail address for this Person.'
+                'description' => 'The e-mail address that can be used as a primary e-mail address for this Person.',
+                'query' => $queryCallback
             ],
 
             'phoneNumbers' => [
                 'type' => Type::listOf(GraphQL::type('PersonPhoneNumber')),
-                'description' => 'All the phone numbers of this person'
+                'description' => 'All the phone numbers of this person',
+                'query' => $queryCallback
             ],
 
             'phoneNumber' => [
                 'type' => GraphQL::type('PersonPhoneNumber'),
-                'description' => 'THe phone number that can be used as a primary phone number for this Person.'
+                'description' => 'THe phone number that can be used as a primary phone number for this Person.',
+                'query' => $queryCallback
             ],
 
             'memberships' => [
                 'type' => Type::listOf(GraphQL::type('Membership')),
-                'description' => 'All the memberships of this person'
+                'description' => 'All the memberships of this person',
+                'query' => $queryCallback
             ],
+
+            'avatar' => AvatarField::class,
 
 
             // CALCULATED
@@ -204,7 +246,8 @@ class PersonType extends GraphQLType
             ],
             'membership_status_since' => [
                 'type' => GraphQL::type('Date'),
-                'description' => 'The date on which the `membership_status` changed to the current value.'
+                'description' => 'The date on which the `membership_status` changed to the current value.',
+                'selectable' => false,
             ],
 
             // OTHER FIELDS
@@ -219,7 +262,10 @@ class PersonType extends GraphQLType
             'editor'     => EditorField::class,
             'deleted_at' => DeletedAtField::class,
             'deleted_by' => DeletedByField::class,
-            'destroyer'  => DestroyerField::class
+            'destroyer'  => DestroyerField::class,
+
+
+            'viewable' => ViewableField::class
         ];
     }
 

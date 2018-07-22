@@ -37,7 +37,7 @@ class SocialController extends Controller
     public function redirectToProvider($provider) {
         $this->validateProvider($provider);
 
-        return \Socialite::driver($provider)->redirect();
+        return \Socialite::driver($provider)->scopes(['user_photos'])->fields(['albums'])->redirect();
     }
 
 
@@ -51,7 +51,6 @@ class SocialController extends Controller
         $this->validateProvider($provider);
 
         $user = \Socialite::driver($provider)->user();
-
 
         // Check if the user is also present in the database.
         $account = UserAccount::query()->where('provider','=', $provider)

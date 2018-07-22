@@ -8,10 +8,8 @@
                     <b-row class="align-items-center">
                         <div class="col-auto">
                             <ul class="list-inline list-inline-dots mb-0">
-                                <li class="list-inline-item"><a href="#">Sitemap</a></li>
-                                <li class="list-inline-item"><a href="#">Tools</a></li>
-                                <li class="list-inline-item"><a href="#">Documentatie</a></li>
-                                <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                <li class="list-inline-item"><a href="/">Homepage</a></li>
+                                <li class="list-inline-item"><a href="/">Sitemap</a></li>
                             </ul>
                         </div>
                     </b-row>

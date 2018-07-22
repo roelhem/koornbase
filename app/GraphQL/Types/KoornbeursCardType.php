@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\RemarksField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
@@ -81,6 +82,7 @@ class KoornbeursCardType extends GraphQLType
                     return $card->isActive($at);
                 },
                 'selectable' => false,
+                'always' => ['activated_at','deactivated_at']
             ],
 
             'remarks' => RemarksField::class,
@@ -91,6 +93,8 @@ class KoornbeursCardType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class
         ];
     }
 

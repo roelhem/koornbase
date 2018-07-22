@@ -13,7 +13,7 @@ class UserAccountFilter extends ModelFilter
     public $relations = [];
 
 
-    public function user($id)
+    public function userId($id)
     {
         return $this->where('user_id',$id);
     }

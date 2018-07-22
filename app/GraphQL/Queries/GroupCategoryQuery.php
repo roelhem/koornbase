@@ -14,16 +14,7 @@ use App\GroupCategory;
 class GroupCategoryQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'groupCategory'
-    ];
-
-    protected $typeName = 'GroupCategory';
+    protected $modelClass = GroupCategory::class;
     protected $slug = true;
-
-    public function query($args, $selectFields)
-    {
-        return GroupCategory::query();
-    }
 
 }

@@ -24,8 +24,13 @@ mix.webpackConfig({
     }
 });
 
+// The application
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
+
+// The home page
+mix.js('resources/assets/js/home.js', 'public/js')
+    .sass('resources/assets/sass/home.scss','public/css');
 
 mix.copyDirectory('resources/assets/images/koornbase', 'public/images/koornbase');
 

@@ -21,7 +21,7 @@ class MembershipFilter extends ModelFilter
     /**
      * @param $id
      */
-    public function person($id)
+    public function personId($id)
     {
         $this->where('person_id','=',$id);
     }
@@ -105,6 +105,32 @@ class MembershipFilter extends ModelFilter
     {
         $date = Carbon::parse($date);
         $this->where('end','>=',$date);
+    }
+
+
+    public function status($membershipStatus)
+    {
+        $this->query->status($membershipStatus);
+    }
+
+    public function outsiderAt($date)
+    {
+        $this->query->outsider($date);
+    }
+
+    public function noviceAt($date)
+    {
+        $this->query->novice($date);
+    }
+
+    public function memberAt($date)
+    {
+        $this->query->member($date);
+    }
+
+    public function formerMemberAt($date)
+    {
+        $this->query->formerMember($date);
     }
 
 

@@ -10,14 +10,16 @@
             <b-col lg="4">
 
                 <b-card>
+                    <tabler-dimmer :active="$apollo.queries.me.loading">
                     <b-media>
-                        <base-avatar slot="aside" size="xxl" class="mr-5" color="blue" v-bind="user.avatar" />
-                        <h4 class="m-0">{{ user.name_display }}</h4>
+                        <base-avatar slot="aside" size="xxl" class="mr-5" color="blue" v-bind="me.avatar" />
+                        <h4 class="m-0">{{ me.name_display }}</h4>
                         <p class="text-muted mb-0">
-                            {{user.email}}
-                            <small class="text-muted-dark">(<em>{{ user.name }}</em>)</small>
+                            {{me.email}}
+                            <small class="text-muted-dark">(<em>{{ me.name }}</em>)</small>
                         </p>
                     </b-media>
+                    </tabler-dimmer>
                 </b-card>
 
                 <b-list-group>
@@ -44,20 +46,31 @@
     import DataDisplay from "../displays/data-display";
     import BaseAvatar from "../BaseAvatar";
     import PageMePersonalData from "./PageMePersonalData";
-    import { mapState } from "vuex";
+    import gql from 'graphql-tag';
+    import TablerDimmer from "../TablerDimmer";
 
     export default {
 
         components: {
+            TablerDimmer,
             PageMePersonalData,
             BaseAvatar,
             DataDisplay
         },
 
-        computed: {
-            ...mapState({
-                user: state => state.currentUser
-            })
+        data: function() {
+            return {
+                me: {
+                    avatar: {},
+                    name_display:null,
+                    email:null,
+                    name:null
+                }
+            }
+        },
+
+        apollo: {
+            me: gql`query GetCurrentUserInfo { me { name_display email name  avatar { image letters color icon placeholder } } }`
         },
 
         name: "page-me",

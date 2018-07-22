@@ -9,20 +9,35 @@
 namespace App\GraphQL\Queries;
 
 use App\PersonEmailAddress;
+use GraphQL\Type\Definition\Type;
 
 class PersonEmailAddressesQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'person_email_addresses'
-    ];
+    protected $modelClass = PersonEmailAddress::class;
 
-    protected $typeName = 'PersonEmailAddress';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return PersonEmailAddress::query();
+        return array_merge(parent::filterArgs(), [
+
+            'personId' => [
+                'type' => Type::id(),
+                'description' => 'Filters the contact entries that belong to the Person with the provided `ID`.'
+            ],
+
+            'index' => [
+                'type' => Type::int(),
+                'description' => 'Filters the contact entries with the provided index value.',
+            ],
+
+            'label' => [
+                'type' => Type::string(),
+                'description' => 'Filters the contact entries with a label that is like the provided string.'
+            ],
+
+
+        ]);
     }
 
 }

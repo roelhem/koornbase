@@ -27,5 +27,6 @@ Rbac::group('models:', function() {
     require __DIR__.'/models/persons.php';
     require __DIR__.'/models/certificates.php';
     require __DIR__.'/models/memberships.php';
+    require __DIR__.'/models/oauth.php';
 
 });

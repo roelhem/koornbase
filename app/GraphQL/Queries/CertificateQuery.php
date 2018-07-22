@@ -14,15 +14,9 @@ use App\Certificate;
 class CertificateQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'certificate'
-    ];
+    protected $modelClass = Certificate::class;
 
-    protected $typeName = 'Certificate';
 
-    public function query($args, $selectFields)
-    {
-        return Certificate::query();
-    }
+
 
 }

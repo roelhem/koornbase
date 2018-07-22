@@ -38,7 +38,7 @@ return [
     'controllers' => \Rebing\GraphQL\GraphQLController::class . '@query',
 
     // Any middleware for the graphql route group
-    'middleware' => [],
+    'middleware' => ['auth:api'],
 
     // The name of the default schema used when no argument is provided
     // to GraphQL::schema() or when the route is used without the graphql_schema
@@ -86,6 +86,7 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
+
                 // MODEL QUERIES
                 'certificateCategories' => \App\GraphQL\Queries\CertificateCategoriesQuery::class,
                 'certificateCategory' => \App\GraphQL\Queries\CertificateCategoryQuery::class,
@@ -129,12 +130,18 @@ return [
                 'userAccounts' => \App\GraphQL\Queries\UserAccountsQuery::class,
                 'userAccount' => \App\GraphQL\Queries\UserAccountQuery::class,
 
+                'apps' => \App\GraphQL\Queries\AppsQuery::class,
+                'app' => \App\GraphQL\Queries\AppQuery::class,
+
+                'hello' => \App\GraphQL\Queries\HelloQuery::class,
                 // QUERIES ABOUT THE CURRENT SESSION
                 'me' => \App\GraphQL\Queries\MeQuery::class
             ],
             'mutation' => [
                 'createPerson' => \App\GraphQL\Mutations\Crud\CreatePersonMutation::class,
                 'updatePerson' => \App\GraphQL\Mutations\Crud\UpdatePersonMutation::class,
+                'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
+                'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
             ],
             'middleware' => []
         ],
@@ -157,7 +164,6 @@ return [
     //
     'types' => [
         'Model' => \App\GraphQL\Interfaces\ModelInterface::class,
-        'Sluggable' => \App\GraphQL\Interfaces\SluggableInterface::class,
         'OwnedByPerson' => \App\GraphQL\Interfaces\OwnedByPersonInterface::class,
         'PersonContactEntry' => \App\GraphQL\Interfaces\PersonContactEntryInterface::class,
 
@@ -182,11 +188,16 @@ return [
         'User' => \App\GraphQL\Types\UserType::class,
         'UserAccount' => \App\GraphQL\Types\UserAccountType::class,
 
+        'App' => \App\GraphQL\Types\AppType::class,
+
+        'Avatar' => \App\GraphQL\Types\AvatarType::class,
+
         'HtmlAttributes' => \App\GraphQL\Types\Inputs\HtmlAttributesType::class,
         'SortOrder' => \App\GraphQL\Types\Inputs\SortOrderType::class,
 
         'Date' => \App\GraphQL\Types\Scalars\DateType::class,
         'DateTime' => \App\GraphQL\Types\Scalars\DateTimeType::class,
+        'CountryCode' => \App\GraphQL\Types\Scalars\CountryCodeType::class
 
         //'RbacNode' => \Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType::class
     ],
@@ -201,7 +212,7 @@ return [
     'error_formatter' => ['\Rebing\GraphQL\GraphQL', 'formatError'],
 
     // You can set the key, which will be used to retrieve the dynamic variables
-    'params_key'    => 'params',
+    'params_key'    => 'variables',
 
     /*
      * Options to limit the query complexity and depth. See the doc

@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Relations\PersonField;
 use App\GraphQL\Fields\Relations\PersonIdField;
@@ -70,6 +71,7 @@ class MembershipType extends GraphQLType
                 'description' => 'If there was an application for this membership.',
                 'args' => $atArgs,
                 'selectable' => false,
+                'always' => ['application'],
                 'resolve' => function(Membership $membership, $args) {
                     return $membership->getApplied(array_get($args, 'at'));
                 }
@@ -84,6 +86,7 @@ class MembershipType extends GraphQLType
                 'description' => 'If the membership has started.',
                 'args' => $atArgs,
                 'selectable' => false,
+                'always' => ['start'],
                 'resolve' => function(Membership $membership, $args) {
                     return $membership->getStarted(array_get($args, 'at'));
                 }
@@ -98,6 +101,7 @@ class MembershipType extends GraphQLType
                 'description' => 'If the membership has ended',
                 'args' => $atArgs,
                 'selectable' => false,
+                'always' => ['end'],
                 'resolve' => function(Membership $membership, $args) {
                     return $membership->getEnded(array_get($args, 'at'));
                 }
@@ -108,6 +112,7 @@ class MembershipType extends GraphQLType
                 'description' => 'The current status of this membership.',
                 'args' => $atArgs,
                 'selectable' => false,
+                'always' => ['application','start','end'],
                 'resolve' => function(Membership $membership, $args) {
                     return $membership->getStatus(array_get($args, 'at'));
                 }
@@ -117,6 +122,7 @@ class MembershipType extends GraphQLType
                 'description' => 'The date on which the membership status was changed to the status at the provided date.',
                 'args' => $atArgs,
                 'selectable' => false,
+                'always' => ['application','start','end'],
                 'resolve' => function(Membership $membership, $args) {
                     return $membership->getStatusSince(array_get($args, 'at'));
                 }
@@ -131,6 +137,8 @@ class MembershipType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class
         ];
     }
 

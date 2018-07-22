@@ -14,15 +14,6 @@ use App\PersonPhoneNumber;
 class PersonPhoneNumberQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'personPhoneNumber'
-    ];
-
-    protected $typeName = 'PersonPhoneNumber';
-
-    public function query($args, $selectFields)
-    {
-        return PersonPhoneNumber::query();
-    }
+    protected $modelClass = PersonPhoneNumber::class;
 
 }

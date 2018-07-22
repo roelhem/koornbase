@@ -9,13 +9,13 @@
 namespace App\GraphQL\Fields\Stamps;
 
 
-use App\GraphQL\Fields\Stamps\Traits\TimestampTrait;
+use App\GraphQL\Fields\Stamps\Traits\UserstampIdTrait;
 use Rebing\GraphQL\Support\Field;
 
 class DeletedByField extends Field
 {
 
-    use TimestampTrait;
+    use UserstampIdTrait;
 
 
     protected $attributes = [

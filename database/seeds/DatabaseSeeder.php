@@ -41,6 +41,12 @@ class DatabaseSeeder extends Seeder
             PersonSeeder::class,
         ]);
 
+
+        // Closing seeders
+        $this->call([
+            OAuthSeeder::class,
+        ]);
+
         Auth::logout();
 
 

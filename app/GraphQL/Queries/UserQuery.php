@@ -14,15 +14,6 @@ use App\User;
 class UserQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'groupCategory'
-    ];
-
-    protected $typeName = 'GroupCategory';
-
-    public function query($args, $selectFields)
-    {
-        return User::query();
-    }
+    protected $modelClass = User::class;
 
 }

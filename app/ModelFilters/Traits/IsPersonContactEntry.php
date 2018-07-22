@@ -19,7 +19,7 @@ trait IsPersonContactEntry
      *
      * @param $id
      */
-    public function person($id)
+    public function personId($id)
     {
         $this->where('person_id',$id);
     }

@@ -15,7 +15,7 @@ class UserFilter extends ModelFilter
     ];
 
 
-    public function person($id)
+    public function personId($id)
     {
         $this->where('person_id',$id);
     }

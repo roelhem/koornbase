@@ -14,15 +14,6 @@ use App\PersonEmailAddress;
 class PersonEmailAddressQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'personEmailAddress'
-    ];
-
-    protected $typeName = 'PersonEmailAddress';
-
-    public function query($args, $selectFields)
-    {
-        return PersonEmailAddress::query();
-    }
+    protected $modelClass = PersonEmailAddress::class;
 
 }

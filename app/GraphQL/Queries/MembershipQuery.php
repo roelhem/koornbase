@@ -14,15 +14,6 @@ use App\Membership;
 class MembershipQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'membership'
-    ];
-
-    protected $typeName = 'Membership';
-
-    public function query($args, $selectFields)
-    {
-        return Membership::query();
-    }
+    protected $modelClass = Membership::class;
 
 }

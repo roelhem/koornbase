@@ -12,9 +12,12 @@
 
 <script>
     import ShowEmailAddressesOfPersonCard from "../ShowEmailAddressesOfPersonCard";
+    import TablerDimmer from "../TablerDimmer";
 
     export default {
-        components: {ShowEmailAddressesOfPersonCard},
+        components: {
+            TablerDimmer,
+            ShowEmailAddressesOfPersonCard},
         name: "page-person-contact",
 
         props: {

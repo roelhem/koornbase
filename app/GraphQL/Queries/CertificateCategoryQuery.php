@@ -14,17 +14,7 @@ use App\CertificateCategory;
 class CertificateCategoryQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'certificateCategory'
-    ];
-
-    protected $typeName = 'CertificateCategory';
+    protected $modelClass = CertificateCategory::class;
     protected $slug = true;
-
-
-    public function query($args, $selectFields)
-    {
-        return CertificateCategory::query();
-    }
 
 }

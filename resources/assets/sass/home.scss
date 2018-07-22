@@ -1,0 +1,96 @@
+
+
+// Import the bootstrap scss file
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+// Import the 'unlock'-theme
+
+@import "unlock_theme";
+@import "icons/iconmoon";
+
+
+// Some custom styles
+
+.navbar-brand:hover {
+  opacity: .9;
+}
+
+.navbar-brand-image {
+  height: 2.4rem;
+  line-height: 2rem;
+  vertical-align: bottom;
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.koornbase-inline-logo {
+  height: 2.4rem;
+  line-height: 2rem;
+  vertical-align: bottom;
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.footer-spacer {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin: 0.6rem 0rem;
+}
+
+
+.sub-list {
+  font-size: 0.9rem;
+  li {
+    list-style-type: disc;
+    a {
+      color: rgba(255,255,255,0.6);
+    }
+  }
+}
+
+// Simple avatar styles
+
+.simple-avatar {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+
+  position: relative;
+  vertical-align: middle;
+
+
+  border-radius: 50%;
+
+  text-align: center;
+  background: $info no-repeat center/cover;
+  overflow: hidden;
+  box-shadow: 0px 0px 8px $dark;
+
+  .simple-avatar-letters {
+    display: block;
+    position: absolute;
+    font-size: .875rem;
+    color: $white;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    line-height: 2rem;
+    white-space: nowrap;
+  }
+}
+
+.dropdown-menu {
+  background-color: rgba(0,0,0,0.6);
+  font-size: 0.875rem;
+}
+
+.dropdown-divider {
+  border-color: rgba(255,255,255,0.1);
+}
+
+.dropdown-item:hover {
+  background: transparent;
+  color: $primary !important;
+}

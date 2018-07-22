@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
 use App\GraphQL\Fields\Stamps\CreatedByField;
@@ -19,6 +20,7 @@ use App\UserAccount;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class UserAccountType extends GraphQLType
 {
@@ -48,7 +50,8 @@ class UserAccountType extends GraphQLType
             ],
             'user' => [
                 'type' => Type::nonNull(GraphQL::type('User')),
-                'description' => 'The User where this UserAccount belongs to.'
+                'description' => 'The User where this UserAccount belongs to.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
             'provider' => [
                 'type' => GraphQL::type('OAuthProvider'),
@@ -89,6 +92,8 @@ class UserAccountType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class
         ];
     }
 

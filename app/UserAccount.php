@@ -57,6 +57,9 @@ class UserAccount extends Model
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
+    /**
+     * @return OAuthUser
+     */
     public function getOAuthUserAttribute() {
         $result = new OAuthUser();
 

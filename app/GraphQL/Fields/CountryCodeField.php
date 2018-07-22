@@ -22,7 +22,7 @@ class CountryCodeField extends Field
 
     public function type()
     {
-        return Type::nonNull(Type::string());
+        return Type::nonNull(\GraphQL::type('CountryCode'));
     }
 
 }

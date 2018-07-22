@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Relations\PersonField;
 use App\GraphQL\Fields\Relations\PersonIdField;
@@ -22,6 +23,7 @@ use App\Certificate;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 
 class CertificateType extends GraphQLType
@@ -44,7 +46,7 @@ class CertificateType extends GraphQLType
     /** @inheritdoc */
     public function fields()
     {
-
+        $queryCallback = RbacQueryFilter::eagerLoadingContraintGraphQLClosure();
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
 
         return [
@@ -62,7 +64,8 @@ class CertificateType extends GraphQLType
             ],
             'category' => [
                 'type' => GraphQL::type('CertificateCategory'),
-                'description' => 'The CertificateCategory where this Certificate belongs to.'
+                'description' => 'The CertificateCategory where this Certificate belongs to.',
+                'query' => $queryCallback
             ],
 
 
@@ -97,7 +100,8 @@ class CertificateType extends GraphQLType
                     $at = array_get($args, 'at', null);
                     return $certificate->isValid($at);
                 },
-                'selectable' => false
+                'selectable' => false,
+                'always' => ['examination_at','valid_at','expired_at','passed'],
             ],
 
             'remarks' => RemarksField::class,
@@ -108,6 +112,9 @@ class CertificateType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+
+            'viewable' => ViewableField::class,
         ];
     }
 

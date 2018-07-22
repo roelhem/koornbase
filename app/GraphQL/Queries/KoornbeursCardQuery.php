@@ -14,15 +14,6 @@ use App\KoornbeursCard;
 class KoornbeursCardQuery extends ModelViewQuery
 {
 
-    protected $attributes = [
-        'name' => 'groupCategory'
-    ];
-
-    protected $typeName = 'GroupCategory';
-
-    public function query($args, $selectFields)
-    {
-        return KoornbeursCard::query();
-    }
+    protected $modelClass = KoornbeursCard::class;
 
 }

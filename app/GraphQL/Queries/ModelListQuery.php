@@ -9,20 +9,18 @@
 namespace App\GraphQL\Queries;
 
 use App\GraphQL\Enums\SortOrderDirectionEnum;
+use App\GraphQL\Queries\Traits\HasModelClassName;
+use EloquentFilter\Filterable;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Builder;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
-abstract class ModelListQuery extends Query
+class ModelListQuery extends Query
 {
 
-    /**
-     * The name of the type that should represent the list.
-     *
-     * @var string $typeName
-     */
-    protected $typeName;
+    use HasModelClassName;
 
     /**
      * The default limit of the amount of items per page.
@@ -43,7 +41,9 @@ abstract class ModelListQuery extends Query
      * @param SelectFields $selectFields
      * @return Builder
      */
-    abstract protected function query($args, $selectFields);
+    protected function query($args, $selectFields) {
+        return $this->getQuery();
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- QUERY CONFIGURATION -------------------------------------------------------------------------------- //
@@ -52,11 +52,7 @@ abstract class ModelListQuery extends Query
     /** @inheritdoc */
     public function type()
     {
-        if($this->typeName === null) {
-            throw new \LogicException("Can't find a \$typeName for this ModelListQuery. ");
-        }
-
-        return \GraphQL::paginate($this->typeName);
+        return \GraphQL::paginate($this->getTypeName());
     }
 
     /** @inheritdoc */
@@ -64,7 +60,8 @@ abstract class ModelListQuery extends Query
     {
         return array_merge(
             $this->paginationArgs(),
-            $this->sortingArgs()
+            $this->sortingArgs(),
+            $this->filterArgs()
         );
     }
 
@@ -78,11 +75,101 @@ abstract class ModelListQuery extends Query
      */
     public function resolve($root, $args, SelectFields $selectFields)
     {
+        // Get the query
         $query = $this->query($args, $selectFields);
+        // Filter the authorized objects.
+        $query = $this->applyAuthFilter($query);
+        // Load the relations and fields
+        $query->select($selectFields->getSelect());
+        $query->with($selectFields->getRelations());
 
+        // User filters
+        $query = $this->applyFilters($query, $args);
+
+        // Ordering
         $query = $this->setOrdering($query, $args);
 
         return $this->createPagination($query, $args);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- AUTHORIZATION FILTER ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * A function that creates a new instance of an RbacQueryFilter that belongs to this ModelListQuery.
+     *
+     * @return RbacQueryFilter
+     */
+    protected function getAuthFilter()
+    {
+        return new RbacQueryFilter($this->modelClass);
+    }
+
+    /**
+     * Applies the filters from the RbacQueryFilter of this ModelListQuery to the provided query builder.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    protected function applyAuthFilter($query)
+    {
+        return $this->getAuthFilter()->filter($query);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- USER FILTERS --------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * The args for the user-filters.
+     *
+     * @return array
+     */
+    protected function filterArgs()
+    {
+        if(in_array(Filterable::class, class_uses_recursive($this->modelClass))) {
+            return [
+                'createdBefore' => [
+                    'type' => \GraphQL::type('DateTime'),
+                    'description' => 'Filters the models that were created before the provided moment.'
+                ],
+                'createdAfter' => [
+                    'type' => \GraphQL::type('DateTime'),
+                    'description' => 'Filters the models that were created after the provided moment.'
+                ],
+                'updatedBefore' => [
+                    'type' => \GraphQL::type('DateTime'),
+                    'description' => 'Filters the models that were last edited before the provided moment.'
+                ],
+                'updatedAfter' => [
+                    'type' => \GraphQL::type('DateTime'),
+                    'description' => 'Filters the models that were last edited after the provided moment.'
+                ]
+            ];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $args
+     * @return Builder
+     */
+    protected function applyFilters($query, $args)
+    {
+        if(!in_array(Filterable::class, class_uses_recursive($this->modelClass))) {
+            return $query;
+        }
+
+        $filterKeys = array_keys($this->filterArgs());
+
+        $filterArgs = collect($args)->filter(function($value, $key) use ($filterKeys) {
+            return in_array($key, $filterKeys);
+        })->all();
+
+        return $query->filter($filterArgs);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

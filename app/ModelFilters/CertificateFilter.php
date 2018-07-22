@@ -58,7 +58,7 @@ class CertificateFilter extends ModelFilter
      *
      * @param $id
      */
-    public function category($id)
+    public function categoryId($id)
     {
         $this->where('category_id',$id);
     }

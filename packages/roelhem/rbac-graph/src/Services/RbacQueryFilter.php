@@ -149,7 +149,6 @@ class RbacQueryFilter
      */
     public static function eagerLoadingConstraintClosure() {
 
-
         return function ($query) {
             if ($query instanceof Relation) {
                 try {
@@ -159,7 +158,18 @@ class RbacQueryFilter
             return $query;
         };
 
+    }
 
+    /** @return \Closure */
+    public static function eagerLoadingContraintGraphQLClosure() {
+        return function ($args, $query) {
+            if($query instanceof Relation) {
+                try {
+                    return (new static($query->getRelated()))->filter($query);
+                } catch (NodeNotFoundException $exception) {}
+            }
+            return $query;
+        };
     }
 
 }

@@ -9,6 +9,7 @@
 namespace App\GraphQL\Queries;
 
 
+use App\GraphQL\Queries\Traits\HasModelClassName;
 use GraphQL\Error\Error;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,12 +19,7 @@ use Rebing\GraphQL\Support\SelectFields;
 abstract class ModelViewQuery extends Query
 {
 
-    /**
-     * The name of the type of this ModelViewQuery.
-     *
-     * @var string $typeName
-     */
-    protected $typeName;
+    use HasModelClassName;
 
 
     /**
@@ -45,7 +41,9 @@ abstract class ModelViewQuery extends Query
      * @param SelectFields $selectFields
      * @return Builder
      */
-    protected abstract function query($args, $selectFields);
+    protected function query($args, $selectFields) {
+        return $this->getQuery();
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CONFIGURATION METHODS ------------------------------------------------------------------------------ //
@@ -75,7 +73,7 @@ abstract class ModelViewQuery extends Query
 
 
 
-        throw new Error("Can't find the {$this->typeName} based on the provided arguments.");
+        throw new Error("Can't find the {$this->getTypeName()} based on the provided arguments.");
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -83,13 +81,20 @@ abstract class ModelViewQuery extends Query
     // ---------------------------------------------------------------------------------------------------------- //
 
     /** @inheritdoc */
+    public function authorize(array $args)
+    {
+        if(\Gate::allows('view', $this->modelClass)) {
+            return true;
+        };
+
+        $model = $this->filterQuery($this->getQuery(), $args)->firstOrFail();
+        return \Gate::allows('view',$model);
+    }
+
+    /** @inheritdoc */
     public function type()
     {
-        if($this->typeName === null) {
-            throw new \LogicException("Can't find a \$typeName for this ModelViewQuery. ");
-        }
-
-        return \GraphQL::type($this->typeName);
+        return \GraphQL::type($this->getTypeName());
     }
 
     /** @inheritdoc */
@@ -112,6 +117,8 @@ abstract class ModelViewQuery extends Query
     public function resolve($root, $args, $selectFields)
     {
         $query = $this->query($args, $selectFields);
+        $query->with($selectFields->getRelations());
+        $query->select($selectFields->getSelect());
         $query = $this->filterQuery($query, $args);
         return $query->first();
     }
@@ -182,7 +189,7 @@ abstract class ModelViewQuery extends Query
     protected function selectWithSlug($query, $slug)
     {
         if(!$this->useSlug()) {
-            throw new Error("You can't select a {$this->typeName} using a slug.");
+            throw new Error("You can't select a {$this->getTypeName()} using a slug.");
         }
 
         if(!is_string($slug)) {

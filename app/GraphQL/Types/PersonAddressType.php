@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\CountryCodeField;
 use App\GraphQL\Fields\CountryField;
 use App\GraphQL\Fields\Relations\PersonField;
@@ -48,6 +49,11 @@ class PersonAddressType extends GraphQLType
 
         $ownedByPersonInterface = GraphQL::type('OwnedByPerson');
         $personContactEntryInterface = GraphQL::type('PersonContactEntry');
+
+        $importantAddressFields = [
+            'country_code', 'administrative_area','locality','dependent_locality','postal_code','sorting_code',
+            'address_line_1', 'address_line_2','organisation','locale','person_id'
+        ];
 
         return [
             GraphQL::type('Model')->getField('id'),
@@ -128,6 +134,7 @@ class PersonAddressType extends GraphQLType
                     return $root->format($args);
                 },
                 'selectable' => false,
+                'always' => $importantAddressFields,
             ],
 
             'postal_label' => [
@@ -161,6 +168,7 @@ class PersonAddressType extends GraphQLType
                     return $root->postalLabel($args);
                 },
                 'selectable' => false,
+                'always' => $importantAddressFields
             ],
 
             'remarks' => RemarksField::class,
@@ -171,6 +179,8 @@ class PersonAddressType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+            'viewable' => ViewableField::class,
         ];
     }
 

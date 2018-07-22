@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 
 import PageHome from './components/pages/PageHome';
 import PageMe from './components/pages/PageMe';
+import PageApps from './components/pages/PageApps';
+import PageUsers from './components/pages/PageUsers';
 import PageMeKoornbeursData from './components/pages/PageMeKoornbeursData';
 import PageMePersonalData from './components/pages/PageMePersonalData';
 import PagePerson from './components/pages/PagePerson';
@@ -76,6 +78,31 @@ export const routes = [
     },
 
     {
+        name:'apps',
+        path:'/apps',
+        component: PageApps,
+        meta: {
+            label: 'Apps',
+            icon: {
+                'fe':'globe',
+                'fa':'globe'
+            },
+            headerNavbar: true
+        }
+    },
+
+    {
+        name:'users',
+        path:'/users',
+        component: PageUsers,
+        meta: {
+            label: 'Gebruikers',
+            headerNavbar:true
+        }
+
+    },
+
+    {
         name:'me',
         path:'/me',
         component: PageMe,
@@ -103,8 +130,7 @@ export const routes = [
 ];
 
 export const router = new VueRouter({
-    routes,
-    mode:'history'
+    routes
 });
 
 export default router;

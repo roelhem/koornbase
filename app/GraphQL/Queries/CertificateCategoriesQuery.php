@@ -14,16 +14,18 @@ use App\CertificateCategory;
 class CertificateCategoriesQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'certificate_categories'
-    ];
+    protected $modelClass = CertificateCategory::class;
 
-    protected $typeName = 'CertificateCategory';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+
+    protected function filterArgs()
     {
-        return CertificateCategory::query();
+        return array_merge(parent::filterArgs(), [
+
+
+
+
+        ]);
     }
 
 }

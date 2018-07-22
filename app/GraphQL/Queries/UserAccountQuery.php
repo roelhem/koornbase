@@ -14,16 +14,6 @@ use App\UserAccount;
 class UserAccountQuery extends ModelViewQuery
 {
 
-
-    protected $attributes = [
-        'name' => 'userAccount'
-    ];
-
-    protected $typeName = 'UserAccount';
-
-    public function query($args, $selectFields)
-    {
-        return UserAccount::query();
-    }
+    protected $modelClass = UserAccount::class;
 
 }

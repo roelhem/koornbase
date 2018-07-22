@@ -14,16 +14,17 @@ use App\Debtor;
 class DebtorsQuery extends ModelListQuery
 {
 
-    protected $attributes = [
-        'name' => 'debtors'
-    ];
+    protected $modelClass = Debtor::class;
 
-    protected $typeName = 'Debtor';
 
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return Debtor::query();
+        return array_merge(parent::filterArgs(), [
+
+
+
+
+        ]);
     }
 
 }

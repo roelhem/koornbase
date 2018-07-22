@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Types;
 
+use App\GraphQL\Fields\Authorization\ViewableField;
 use App\GraphQL\Fields\CountryCodeField;
 use App\GraphQL\Fields\CountryField;
 use App\GraphQL\Fields\IdField;
@@ -105,7 +106,8 @@ class PersonPhoneNumberType extends GraphQLType
                         }
                     }
                     return null;
-                }
+                },
+                'always' => ['country_code']
             ],
 
             'country_code' => CountryCodeField::class,
@@ -117,13 +119,15 @@ class PersonPhoneNumberType extends GraphQLType
                 'resolve' => function(PersonPhoneNumber $root) {
                     return $this->geocoder->getDescriptionForNumber($root->phone_number, 'nl_NL');
                 },
-                'selectable' => false
+                'selectable' => false,
+                'always' => ['country_code','phone_number']
             ],
 
             'number_type' => [
                 'type' => GraphQL::type('PhoneNumberType'),
                 'description' => 'The kind of phone number (based on the patterns in the phone number.)',
-                'selectable' => false
+                'selectable' => false,
+                'always' => ['country_code','phone_number']
             ],
 
             'remarks' => RemarksField::class,
@@ -134,6 +138,9 @@ class PersonPhoneNumberType extends GraphQLType
             'updated_at' => UpdatedAtField::class,
             'updated_by' => UpdatedByField::class,
             'editor'     => EditorField::class,
+
+
+            'viewable' => ViewableField::class,
         ];
     }
 

@@ -9,20 +9,24 @@
 namespace App\GraphQL\Queries;
 
 use App\Group;
+use GraphQL\Type\Definition\Type;
 
 class GroupsQuery extends ModelListQuery
 {
+    protected  $modelClass = Group::class;
 
-    protected $attributes = [
-        'name' => 'groups'
-    ];
 
-    protected $typeName = 'Group';
-
-    /** @inheritdoc */
-    public function query($args, $selectFields)
+    protected function filterArgs()
     {
-        return Group::query();
+        return array_merge(parent::filterArgs(), [
+
+
+            'categoryId' => [
+                'type' => Type::id(),
+                'description' => 'Filters all the Groups that belong to the GroupCategory with the provided id.'
+            ]
+
+        ]);
     }
 
 }

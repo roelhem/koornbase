@@ -21,39 +21,31 @@
         components: {DataDisplay},
         name: "display-membership-status",
         props: {
-            status:[String,Number],
+            status:String,
             title:String,
             since:String
         },
 
         computed: {
-            intValue: function () {
-                let value = this.status;
-                if(typeof value === 'string') {
-                    value = parseInt(status);
-                }
-                return value;
-            },
-
             label: function() {
                 if(this.title) {
                     return this.title;
                 }
-                switch (this.intValue) {
-                    case 1: return 'Kennismaker';
-                    case 2: return 'Lid';
-                    case 3: return 'Voormalig Lid';
-                    case 0: return 'Buitenstaander';
+                switch (this.status) {
+                    case "NOVICE": return 'Kennismaker';
+                    case "MEMBER": return 'Lid';
+                    case "FORMER_MEMBER": return 'Voormalig Lid';
+                    case "OUTSIDER": return 'Buitenstaander';
                     default: return 'Onbekend';
                 }
             },
 
             statusBackgroundClass: function() {
-                switch(this.intValue) {
-                    case 1: return 'bg-yellow';
-                    case 2: return 'bg-green';
-                    case 3: return 'bg-red';
-                    case 0: return 'bg-gray';
+                switch(this.status) {
+                    case "NOVICE": return 'bg-yellow';
+                    case "MEMBER": return 'bg-green';
+                    case "FORMER_MEMBER": return 'bg-red';
+                    case "OUTSIDER": return 'bg-gray';
                     default: return 'bg-gray-dark';
                 }
             }

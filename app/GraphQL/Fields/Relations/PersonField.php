@@ -10,14 +10,20 @@ namespace App\GraphQL\Fields\Relations;
 
 
 use Rebing\GraphQL\Support\Field;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 class PersonField extends Field
 {
 
-    protected $attributes = [
-        'name' => 'person',
-        'description' => 'The Person where this object belongs to.'
-    ];
+
+    public function attributes()
+    {
+        return [
+            'name' => 'person',
+            'description' => 'The Person where this object belongs to.',
+            'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure(),
+        ];
+    }
 
     public function type()
     {

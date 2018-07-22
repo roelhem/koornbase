@@ -84,6 +84,9 @@ trait AddressingAttributeMapping
      */
     public function getGivenName()
     {
+        if($this->person === null) {
+            return null;
+        }
         return $this->person->name_first;
     }
 
@@ -92,6 +95,9 @@ trait AddressingAttributeMapping
      */
     public function getAdditionalName()
     {
+        if($this->person === null) {
+            return null;
+        }
         return $this->person->name_prefix;
     }
 
@@ -100,6 +106,9 @@ trait AddressingAttributeMapping
      */
     public function getFamilyName()
     {
+        if($this->person === null) {
+            return null;
+        }
         return $this->person->name_last;
     }
 
