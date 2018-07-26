@@ -23,6 +23,8 @@ class CreateOauthClientsTable extends Migration
             $table->boolean('password_client');
             $table->boolean('revoked');
             $table->timestamps();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
         });
     }
 

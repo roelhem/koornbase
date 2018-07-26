@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\OwnedByPerson;
 use App\Enums\MembershipStatus;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class Membership extends Model implements OwnedByPerson
 {
 
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 

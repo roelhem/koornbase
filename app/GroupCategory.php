@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
@@ -33,7 +34,7 @@ class GroupCategory extends Model implements RbacDatabaseAssignable, Authorizabl
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasShortName, HasDescription;
     use HasOptions;

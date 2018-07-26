@@ -13,6 +13,7 @@ use App\Services\Sorters\GroupSorter;
 use App\Services\Sorters\KoornbeursCardSorter;
 use App\Services\Sorters\MembershipSorter;
 use App\Services\Sorters\PersonSorter;
+use App\Services\Sorters\SorterRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
@@ -42,7 +43,9 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Passport::ignoreMigrations();
-        
+
+        $this->app->singleton(SorterRepository::class);
+
         $this->app->singleton(PersonSorter::class);
         $this->app->singleton(GroupSorter::class);
         $this->app->singleton(GroupCategorySorter::class);

@@ -22,8 +22,5 @@ class CreatorField extends Field
         'description' => 'Relation to the user that created this object.'
     ];
 
-    protected function resolve($root) {
-        return $root->creator;
-    }
 
 }

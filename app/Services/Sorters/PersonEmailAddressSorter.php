@@ -2,18 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 04-06-18
- * Time: 06:01
+ * Date: 26-07-18
+ * Time: 22:04
  */
 
 namespace App\Services\Sorters;
 
 
-class GroupEmailAddressSorter extends Sorter
+class PersonEmailAddressSorter extends Sorter
 {
 
     protected $columns = [
         'id',
+        'index',
+        'label',
         'email_address',
+        'created_at',
+        'updated_at'
     ];
+
 }

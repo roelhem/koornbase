@@ -12,6 +12,7 @@ use App\Enums\OAuthClientType;
 use App\User;
 use Carbon\Carbon;
 use Laravel\Passport\Client as PassportClient;
+use Wildside\Userstamps\Userstamps;
 
 /**
  * Class Client
@@ -26,8 +27,11 @@ use Laravel\Passport\Client as PassportClient;
  * @property boolean $password_client
  * @property boolean $revoked
  *
- * @property Carbon|null $created_at
- * @property Carbon|null $created_by
+ * @property-read Carbon|null $created_at
+ * @property-read Carbon|null $updated_at
+ *
+ * @property-read integer $created_by
+ * @property-read integer $updated_by
  *
  * @property-read OAuthClientType $type
  *
@@ -35,6 +39,8 @@ use Laravel\Passport\Client as PassportClient;
  */
 class Client extends PassportClient
 {
+
+    use Userstamps;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //

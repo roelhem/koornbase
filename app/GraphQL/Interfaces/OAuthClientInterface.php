@@ -12,7 +12,11 @@ namespace App\GraphQL\Interfaces;
 use App\Enums\OAuthClientType;
 use App\GraphQL\Fields\IdField;
 use App\GraphQL\Fields\Stamps\CreatedAtField;
+use App\GraphQL\Fields\Stamps\CreatedByField;
+use App\GraphQL\Fields\Stamps\CreatorField;
+use App\GraphQL\Fields\Stamps\EditorField;
 use App\GraphQL\Fields\Stamps\UpdatedAtField;
+use App\GraphQL\Fields\Stamps\UpdatedByField;
 use App\OAuth\Client;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\InterfaceType;
@@ -64,7 +68,9 @@ class OAuthClientInterface extends InterfaceType
                 'description' => 'The server will deny all request from clients where this value is `true`.'
              ],
             'created_at' => CreatedAtField::class,
-            'updated_at' => UpdatedAtField::class
+            'created_by' => CreatedByField::class,
+            'updated_at' => UpdatedAtField::class,
+            'updated_by' => UpdatedByField::class
         ];
     }
 

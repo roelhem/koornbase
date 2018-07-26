@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\Finders\FinderCollection;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
@@ -40,7 +41,7 @@ class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
     use Filterable;
     use SoftDeletes;
     use Userstamps;
-    use Sluggable;
+    use Sluggable, Sortable;
 
     use HasShortName, HasDescription, HasMorphedRbacAssignments;
 

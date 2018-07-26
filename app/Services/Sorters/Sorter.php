@@ -9,7 +9,8 @@
 namespace App\Services\Sorters;
 
 
-use App\Exceptions\SortNameNotFoundException;
+use App\Enums\SortOrderDirection;
+use Illuminate\Database\Eloquent\Builder;
 
 class Sorter
 {
@@ -26,7 +27,7 @@ class Sorter
      *
      * @return array
      */
-    public function list():array {
+    public function list() {
         try {
             $class = new \ReflectionClass($this);
 
@@ -43,14 +44,17 @@ class Sorter
             return $list;
 
         } catch (\ReflectionException $exception) {
-            return [];
+            return $this->columns;
         }
     }
 
     /**
-     * @inheritdoc
+     * Returns if the sort with the given name exists in this sort object.
+     *
+     * @param string $sortName
+     * @return bool
      */
-    public function has(string $sortName): bool
+    public function has(string $sortName)
     {
         if(method_exists($this, $this->getMethodName($sortName))) {
             return true;
@@ -61,12 +65,17 @@ class Sorter
     }
 
     /**
-     * @inheritdoc
+     * Adds an orderBy statement to an query.
+     *
+     * @param Builder $query
+     * @param string $sortName
+     * @param string|SortOrderDirection $direction
+     * @return Builder
      */
-    public function add($query, string $sortName, string $order = 'asc')
+    public function add($query, string $sortName, $direction = SortOrderDirection::ASC)
     {
         $callable = $this->getCallable($sortName);
-        return $callable($query, $order);
+        return $callable($query, SortOrderDirection::get($direction));
     }
 
     /**
@@ -77,17 +86,19 @@ class Sorter
         foreach($sortNameList as $key => $value) {
             if(is_integer($key)) {
                 if(str_is('*:asc', $value)) {
-                    $query = $this->add($query, str_before($value, ':asc'), 'asc');
+                    $query = $this->add($query, str_before($value, ':asc'), SortOrderDirection::ASC);
                 } elseif(str_is('*:desc', $value)) {
-                    $query = $this->add($query, str_before($value, ':desc'), 'desc');
+                    $query = $this->add($query, str_before($value, ':desc'), SortOrderDirection::DESC);
                 } else {
                     $query = $this->add($query, $value);
                 }
             } else {
-                if(mb_strtolower($value) === 'desc') {
-                    $query = $this->add($query, $key, 'desc');
+                if($value instanceof SortOrderDirection) {
+                    $query = $this->add($query, $key, $value);
+                } elseif(mb_strtolower($value) === 'desc') {
+                    $query = $this->add($query, $key, SortOrderDirection::DESC);
                 } else {
-                    $query = $this->add($query, $key);
+                    $query = $this->add($query, $key, SortOrderDirection::ASC);
                 }
             }
         }
@@ -100,7 +111,6 @@ class Sorter
      *
      * @param string $sortName
      * @return callable
-     * @throws SortNameNotFoundException
      */
     protected function getCallable(string $sortName): callable
     {
@@ -110,11 +120,16 @@ class Sorter
             return $result;
         } else {
             if(in_array($sortName, $this->columns)) {
-                return function($query, $order) use ($sortName) {
-                    return $query->orderBy($sortName, $order);
+                /**
+                 * @param Builder $query
+                 * @param SortOrderDirection $direction
+                 * @return Builder
+                 */
+                return function($query, $direction) use ($sortName) {
+                    return $query->orderBy($sortName, $direction->getValue());
                 };
             }
-            throw new SortNameNotFoundException("The sort with name '$sortName' was not found in ".self::class.". (Failed to create the callable).");
+            throw new \OutOfBoundsException("Don't know how to order by the field '$sortName'.");
         }
     }
 

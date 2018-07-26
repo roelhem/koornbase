@@ -8,8 +8,10 @@
 
 namespace App\GraphQL\Queries;
 
+use App\Enums\SortOrderDirection;
 use App\GraphQL\Enums\SortOrderDirectionEnum;
 use App\GraphQL\Queries\Traits\HasModelClassName;
+use App\Services\Sorters\Traits\Sortable;
 use EloquentFilter\Filterable;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +30,16 @@ class ModelListQuery extends Query
      * @var int $defaultLimit
      */
     protected $defaultLimit = 15;
+
+    public function attributes()
+    {
+        $typeName = $this->getTypeName();
+
+        return [
+            'name' => camel_case(str_plural($typeName)),
+            'description' => 'Gives a paginated list of `'.$typeName.'` models.'
+        ];
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- ABSTRACT METHODS ----------------------------------------------------------------------------------- //
@@ -183,13 +195,17 @@ class ModelListQuery extends Query
      */
     protected function sortingArgs()
     {
-        return [
-            'orderBy' => [
-                'type' => Type::listOf(\GraphQL::type('SortOrder')),
-                'description' => 'A list of SortOrder config-objects to set the order of the list.',
-                'defaultValue' => [],
-            ]
-        ];
+        try {
+            return [
+                'orderBy' => [
+                    'type' => Type::listOf(\GraphQL::type($this->getTypeName() . '_sortRule')),
+                    'description' => 'A list of sort rules to set the order of the list.',
+                    'defaultValue' => [],
+                ]
+            ];
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 
     /**
@@ -201,13 +217,17 @@ class ModelListQuery extends Query
      */
     protected function setOrdering($query, $args)
     {
+        if(!in_array(Sortable::class, class_uses_recursive($this->modelClass))) {
+            return $query;
+        }
+
         $orderBy = array_get($args, 'orderBy',[]);
 
         foreach($orderBy as $orderRule) {
             $field = array_get($orderRule, 'field');
             if($field !== null) {
-                $direction = array_get($orderRule, 'direction', SortOrderDirectionEnum::ASC);
-                $query = $query->orderBy($field, $direction);
+                $direction = array_get($orderRule, 'direction', SortOrderDirection::ASC());
+                $query = $query->sortBy($field, $direction);
             }
         }
 

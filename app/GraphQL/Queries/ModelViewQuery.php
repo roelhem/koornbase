@@ -16,19 +16,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 
-abstract class ModelViewQuery extends Query
+class ModelViewQuery extends Query
 {
 
     use HasModelClassName;
 
+    public function __construct($modelClass = null, $attributes = [])
+    {
+        if($modelClass !== null) {
+            $this->modelClass = $modelClass;
+        }
+        parent::__construct($attributes);
+    }
 
-    /**
-     * Specifies if this query should also allow the selecting of models by there slug. If it has a string-value,
-     * this string will be used as the column name of the slug column.
-     *
-     * @var bool|string $slug
-     */
-    protected $slug = false;
+    public function attributes()
+    {
+
+        $typeName = $this->getTypeName();
+
+        return [
+            'name' => camel_case($typeName),
+            'description' => "Shows the `$typeName` that matches `ID` in the args."
+        ];
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- ABSTRACT FUNCTIONS --------------------------------------------------------------------------------- //
@@ -66,14 +76,8 @@ abstract class ModelViewQuery extends Query
             return $this->selectWithId($query, $args['id']);
         }
 
-        // Try with Slug
-        if(array_has($args, 'slug')) {
-            return $this->selectWithSlug($query, $args['slug']);
-        }
 
-
-
-        throw new Error("Can't find the {$this->getTypeName()} based on the provided arguments.");
+        throw new Error("Can't find the {$this->getTypeName()}.");
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -137,16 +141,9 @@ abstract class ModelViewQuery extends Query
         $res = [];
 
         $res['id'] = [
-            'type' => Type::id(),
+            'type' => Type::nonNull(Type::id()),
             'description' => 'The unique `ID`-identifier of the model to view.'
         ];
-
-        if($this->useSlug()) {
-            $res['slug'] = [
-                'type' => Type::string(),
-                'description' => 'Selects the model based on it\'s slug. An slug is an URL-safe string that uniquely identifies a model of a certain type.'
-            ];
-        }
 
         return $res;
     }
@@ -176,55 +173,6 @@ abstract class ModelViewQuery extends Query
         }
 
         return $query->where('id','=', $id);
-    }
-
-    /**
-     * A method that adds a `where`-statement to the provided query to find the right model using it's slug.
-     *
-     * @param Builder $query
-     * @param string $slug
-     * @return Builder
-     * @throws Error
-     */
-    protected function selectWithSlug($query, $slug)
-    {
-        if(!$this->useSlug()) {
-            throw new Error("You can't select a {$this->getTypeName()} using a slug.");
-        }
-
-        if(!is_string($slug)) {
-            throw new Error('A slug has to be a valid string.');
-        }
-
-        return $query->where($this->getSlugColumn(), '=', $slug);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- HELPER METHODS ------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Returns if this ModelViewQuery should allow to select models with slugs.
-     *
-     * @return bool
-     */
-    protected function useSlug()
-    {
-        return is_string($this->slug) || $this->slug === true;
-    }
-
-    /**
-     * Returns the name of the column that contains the slug value.
-     *
-     * @return string
-     */
-    protected function getSlugColumn()
-    {
-        if(is_string($this->slug)) {
-            return $this->slug;
-        } else {
-            return 'slug';
-        }
     }
 
 }

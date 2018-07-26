@@ -5,6 +5,7 @@ namespace App;
 
 use App\Contracts\OwnedByPerson;
 use App\Notifications\ResetPasswordNotification;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
 use EloquentFilter\Filterable;
@@ -42,7 +43,7 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     use HasApiTokens;
     use HasMorphedRbacAssignments;
     use BelongsToPerson;
-    use Filterable;
+    use Filterable, Sortable;
     use Userstamps;
 
     // ---------------------------------------------------------------------------------------------------------- //

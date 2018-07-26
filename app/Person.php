@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
@@ -51,7 +52,7 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
 
     use SoftDeletes;
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasRemarks;
 

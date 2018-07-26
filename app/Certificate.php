@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\Finders\FinderCollection;
 use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Traits\HasRemarks;
 use App\Traits\HasStartEnd;
@@ -31,7 +32,7 @@ use Wildside\Userstamps\Userstamps;
 class Certificate extends Model implements OwnedByPerson
 {
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Enums\OAuthProvider;
+use App\Services\Sorters\Traits\Sortable;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,7 +42,7 @@ use Laravel\Socialite\Two\User as OAuthUser;
 class UserAccount extends Model
 {
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //

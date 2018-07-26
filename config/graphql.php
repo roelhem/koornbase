@@ -178,10 +178,6 @@ return [
 
         'PhoneNumberFormat' => \App\GraphQL\Enums\PhoneNumberFormatEnum::class,
         'PhoneNumberType' => \App\GraphQL\Enums\PhoneNumberTypeEnum::class,
-        'MembershipStatus' => \App\GraphQL\Enums\MembershipStatusEnum::class,
-        'OAuthProvider' => \App\GraphQL\Enums\OAuthProviderEnum::class,
-        'SortOrderDirection' => \App\GraphQL\Enums\SortOrderDirectionEnum::class,
-        'OAuthClientType' => \App\GraphQL\Enums\OAuthClientTypeEnum::class,
 
         'Certificate' => \App\GraphQL\Types\CertificateType::class,
         'CertificateCategory' => \App\GraphQL\Types\CertificateCategoryType::class,
@@ -213,7 +209,6 @@ return [
         'Avatar' => \App\GraphQL\Types\AvatarType::class,
 
         'HtmlAttributes' => \App\GraphQL\Types\Inputs\HtmlAttributesType::class,
-        'SortOrder' => \App\GraphQL\Types\Inputs\SortOrderType::class,
 
         'Date' => \App\GraphQL\Types\Scalars\DateType::class,
         'DateTime' => \App\GraphQL\Types\Scalars\DateTimeType::class,

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
@@ -28,7 +29,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
 {
 
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasRemarks;
 

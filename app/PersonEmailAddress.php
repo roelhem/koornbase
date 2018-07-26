@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\HasContactOptions;
@@ -30,7 +31,7 @@ use Carbon\Carbon;
 class PersonEmailAddress extends Model implements OwnedByPerson
 {
     use Userstamps;
-    use Filterable;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 

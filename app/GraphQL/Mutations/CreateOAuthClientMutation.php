@@ -78,7 +78,7 @@ class CreateOAuthClientMutation extends Mutation
     public function resolve($root, $args)
     {
         /** @var OAuthClientType $type */
-        $type = array_get($args, 'type', OAuthClientType::AUTH_CODE);
+        $type = array_get($args, 'type', OAuthClientType::AUTH_CODE());
         return $type->create($args);
     }
 

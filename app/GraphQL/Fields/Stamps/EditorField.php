@@ -22,8 +22,5 @@ class EditorField extends Field
         'description' => 'Relation to the user that edited this field.'
     ];
 
-    public function resolve($root) {
-        return $root->editor;
-    }
 
 }
