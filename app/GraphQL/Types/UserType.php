@@ -67,12 +67,16 @@ class UserType extends GraphQLType
 
             'name_display' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'Returns a string that can be used to refer to this user.'
+                'description' => 'Returns a string that can be used to refer to this user.',
+                'selectable' => false,
+                'always' => ['name']
             ],
 
             'name_short' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'A shorter version of the name_display field.'
+                'description' => 'A shorter version of the name_display field.',
+                'selectable' => false,
+                'always' => ['name']
             ],
 
             'email' => [

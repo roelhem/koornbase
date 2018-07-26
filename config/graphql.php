@@ -133,6 +133,8 @@ return [
                 'apps' => \App\GraphQL\Queries\AppsQuery::class,
                 'app' => \App\GraphQL\Queries\AppQuery::class,
 
+                'oauthClients' => \App\GraphQL\Queries\OAuthClientQuery::class,
+
                 'hello' => \App\GraphQL\Queries\HelloQuery::class,
                 // QUERIES ABOUT THE CURRENT SESSION
                 'me' => \App\GraphQL\Queries\MeQuery::class
@@ -143,7 +145,11 @@ return [
                 'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
-                'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class
+                'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class,
+
+                'createOAuthClient' => \App\GraphQL\Mutations\CreateOAuthClientMutation::class,
+                'revokeOAuthClient' => \App\GraphQL\Mutations\RevokeOAuthClientMutation::class,
+                'updateOAuthClient' => \App\GraphQL\Mutations\UpdateOAuthClientMutation::class,
             ],
             'middleware' => []
         ],
@@ -168,12 +174,14 @@ return [
         'Model' => \App\GraphQL\Interfaces\ModelInterface::class,
         'OwnedByPerson' => \App\GraphQL\Interfaces\OwnedByPersonInterface::class,
         'PersonContactEntry' => \App\GraphQL\Interfaces\PersonContactEntryInterface::class,
+        'OAuthClient' => \App\GraphQL\Interfaces\OAuthClientInterface::class,
 
         'PhoneNumberFormat' => \App\GraphQL\Enums\PhoneNumberFormatEnum::class,
         'PhoneNumberType' => \App\GraphQL\Enums\PhoneNumberTypeEnum::class,
         'MembershipStatus' => \App\GraphQL\Enums\MembershipStatusEnum::class,
         'OAuthProvider' => \App\GraphQL\Enums\OAuthProviderEnum::class,
         'SortOrderDirection' => \App\GraphQL\Enums\SortOrderDirectionEnum::class,
+        'OAuthClientType' => \App\GraphQL\Enums\OAuthClientTypeEnum::class,
 
         'Certificate' => \App\GraphQL\Types\CertificateType::class,
         'CertificateCategory' => \App\GraphQL\Types\CertificateCategoryType::class,
@@ -191,6 +199,16 @@ return [
         'UserAccount' => \App\GraphQL\Types\UserAccountType::class,
 
         'App' => \App\GraphQL\Types\AppType::class,
+
+        'OAuthPersonalClient' => \App\GraphQL\Types\OAuthPersonalClientType::class,
+        'OAuthPasswordClient' => \App\GraphQL\Types\OAuthPasswordClientType::class,
+        'OAuthCredentialsClient' => \App\GraphQL\Types\OAuthCredentialsClientType::class,
+        'OAuthAuthCodeClient' => \App\GraphQL\Types\OAuthAuthCodeClientType::class,
+
+        'OAuthPersonalAccessClient' => \App\GraphQL\Types\OAuthPersonalAccessClientType::class,
+
+        'OAuthAuthCode' => \App\GraphQL\Types\OAuthAuthCodeType::class,
+        'OAuthToken' => \App\GraphQL\Types\OAuthTokenType::class,
 
         'Avatar' => \App\GraphQL\Types\AvatarType::class,
 
