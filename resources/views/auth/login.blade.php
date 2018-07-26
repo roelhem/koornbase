@@ -2,14 +2,19 @@
 
 @section('content')
 
-    <b-form class="card" action="{{ route('login') }}" method="post">
+
+    <form class="card" action="{{ route('login') }}" method="post">
 
         @csrf
 
-        <b-card-body class="p-6">
-            <div class="card-title">Inloggen op de KoornBase</div>
+        <div class="card-body p-6">
+            <div class="card-title">Inloggen op de <a href="{{ route('index') }}">KoornBase</a>.</div>
 
-
+            @if( session('status') !== null )
+                <div class="alert alert-primary">
+                    {{ session('status') }}
+                </div>
+            @endif
 
             <div class="form-group">
                 <label class="form-label">E-Mailadres</label>
@@ -59,12 +64,12 @@
                 </a>
 
             </div>
-        </b-card-body>
+        </div>
 
-    </b-form>
+    </form>
 
     <div class="text-center text-muted">
-        Klik <a href="{{ route('index') }}">hier</a> om naar de welkomspagina te gaan.
+        Ga naar de <a href="{{ route('index') }}">homepage</a> van de KoornBase.
     </div>
 
 @endsection

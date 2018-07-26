@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Contracts\OwnedByPerson;
+use App\Notifications\ResetPasswordNotification;
 use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
 use EloquentFilter\Filterable;
@@ -198,6 +199,14 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
         } else {
             return collect([$this->person]);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
 

@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'KoornBase'),
+    'notification_name' => 'Het '.env('APP_NAME', 'KoornBase').' systeem',
 
     /*
     |--------------------------------------------------------------------------

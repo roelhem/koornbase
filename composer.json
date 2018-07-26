@@ -12,6 +12,7 @@
         "cviebrock/eloquent-sluggable": "^4.5",
         "fideloper/proxy": "^4.0",
         "giggsey/libphonenumber-for-php": "^8.9",
+        "guzzlehttp/guzzle": "^6.3",
         "jenssegers/date": "^3.3",
         "jwz104/eloquent-view": "^1.0",
         "laravel/framework": "5.6.*",

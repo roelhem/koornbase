@@ -19,6 +19,7 @@
       #graphiql {
         height: 100vh;
       }
+
     </style>
     <link rel="stylesheet" href="{{config('graphiql.paths.assets_public')}}/graphiql.css" />
     <!-- <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script> -->
@@ -118,17 +119,68 @@
         });
       }
 
+      var defaultQuery = `# Welkom bij GraphiQL voor de KoornBase.
+#
+# Op deze pagina kun je gemakkelijk GraphQL queries schrijven en testen voor je apps.
+# De resultaten komen direct uit de database.
+#
+# LET OP! Je gebruikt de huidige gegevens in de database, dus pas op met mutations!
+#
+# Alle queries worden uitgevoerd namens de 'huidige' gebruiker. Alleen de gegevens
+# die deze gebruiker mag zien, worden getoond. Evenzo kunnen alleen de mutations
+# waarvoor de gebruiker rechten heeft worden uitgevoerd.
+#
+#
+#
+#
+# Toetscombinaties:
+#
+#  Prettify Query:  Shift-Ctrl-P (of druk op de 'Prettify' knop hierboven.)
+#
+#       Run Query:  Ctrl-Enter (of druk op de Play knop hierboven.)
+#
+#   Auto Complete:  Ctrl-Space (of begin gewoon met typen.)
+#
+`;
+
       // Render <GraphiQL /> into the body.
       ReactDOM.render(
         React.createElement(GraphiQL, {
           fetcher: graphQLFetcher,
-          query: parameters.query,
+          query: parameters.query || defaultQuery,
           variables: parameters.variables,
           operationName: parameters.operationName,
           onEditQuery: onEditQuery,
           onEditVariables: onEditVariables,
           onEditOperationName: onEditOperationName,
-        }),
+        }, [
+            React.createElement(GraphiQL.Logo, {}, [
+                React.createElement('a', {
+                    href:'/',
+                    style: {
+                        'color':'#868e96',
+                        'text-decoration':'none'
+                    }
+                }, [
+                    React.createElement('img', {
+                        src:'/images/koornbase/cloud-eye.svg',
+                        style: {
+                            height:'30px',
+                            'vertical-align':'bottom',
+                            'margin-right':'6px',
+                            'margin-top':'-3px',
+                            'margin-bottom':'-3px'
+                        }
+                    }),
+                    'KoornBase'
+                ]),
+                React.createElement('span', {}, [
+                    ' Graph',
+                    React.createElement('em', {}, 'i'),
+                    'QL'
+                ])
+            ]),
+        ]),
         document.getElementById('graphiql')
       );
     </script>
