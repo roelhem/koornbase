@@ -58,15 +58,22 @@ class OAuthClientInterface extends InterfaceType
                 'selectable' => false,
                 'always' => ['redirect','personal_access_client','password_client']
             ],
-            'tokens' => [
-                'type' => Type::listOf(\GraphQL::type('OAuthToken')),
-                'description' => 'The access tokens that belong to this client.',
-                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure(),
+            'redirect' => [
+                'type' => Type::string(),
+                'description' => 'The URL to which the User is redirected after authorizing the client.',
+                'resolve' => function(Client $root) {
+                    return empty($root->redirect) ? null : $root->redirect;
+                }
             ],
             'revoked' => [
                 'type' => Type::nonNull(Type::boolean()),
                 'description' => 'The server will deny all request from clients where this value is `true`.'
              ],
+            'tokens' => [
+                'type' => Type::listOf(\GraphQL::type('OAuthToken')),
+                'description' => 'The access tokens that belong to this client.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure(),
+            ],
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,
             'updated_at' => UpdatedAtField::class,

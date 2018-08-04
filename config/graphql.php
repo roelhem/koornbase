@@ -133,7 +133,10 @@ return [
                 'apps' => \App\GraphQL\Queries\AppsQuery::class,
                 'app' => \App\GraphQL\Queries\AppQuery::class,
 
-                'oauthClients' => \App\GraphQL\Queries\OAuthClientQuery::class,
+                'oauthClients' => \App\GraphQL\Queries\OAuthClientsQuery::class,
+                'oauthClient' => \App\GraphQL\Queries\OAuthClientQuery::class,
+
+                'rbacGraph' => \Roelhem\RbacGraph\Http\GraphQL\Queries\RbacGraphQuery::class,
 
                 'hello' => \App\GraphQL\Queries\HelloQuery::class,
                 // QUERIES ABOUT THE CURRENT SESSION

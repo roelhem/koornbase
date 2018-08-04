@@ -29,7 +29,7 @@ class RbacEdgeType extends GraphQLType
     {
         return [
             'parent_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The `ID` of the node on the parent side of this edge.'
             ],
 
@@ -39,7 +39,7 @@ class RbacEdgeType extends GraphQLType
             ],
 
             'child_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The `ID` of the node on the child side of this edge.'
             ],
 

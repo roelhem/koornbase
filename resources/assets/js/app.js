@@ -43,7 +43,7 @@ Vue.use(VCalendar, {
 });
 
 // Including and configuring the vue-google-maps plugin
-
+/*
 import * as VueGoogleMaps from 'vue2-google-maps';
 
 
@@ -51,7 +51,7 @@ Vue.use(VueGoogleMaps, {
     load: {
         key:'AIzaSyCqKKtjBf4nrCMcyh2Pnnia7iyvHlK2JLo',
     }
-});
+});*/
 
 
 /**

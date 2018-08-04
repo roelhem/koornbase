@@ -1,13 +1,14 @@
 <template>
 
     <span>
-        <span class="status-icon" :class="statusBackgroundClass"></span>
-        <data-display title="Lid-status">{{ label }}</data-display>
+        <span class="status-icon" :class="status | membershipStatusColor"></span>
+        <data-display v-if="title" title="Lid-status titel">{{ title }}</data-display>
+        <data-display v-else title="Lid-status">{{ status | membershipStatusName }}</data-display>
         <span v-if="since" class="small text-muted">
             (sinds
             <data-display title="Lid-status"
                           class="text-muted-dark"
-            >{{ since | moment('dd D MMMM YYYY') }}</data-display>
+            >{{ since | date(dateSize) }}</data-display>
             )
         </span>
     </span>
@@ -16,6 +17,7 @@
 
 <script>
     import DataDisplay from "./displays/data-display";
+    import displayFilters from '../filters/display';
 
     export default {
         components: {DataDisplay},
@@ -23,33 +25,15 @@
         props: {
             status:String,
             title:String,
-            since:String
+            since:String,
+
+            dateSize:{
+                type:String,
+                default:'lg',
+            }
         },
 
-        computed: {
-            label: function() {
-                if(this.title) {
-                    return this.title;
-                }
-                switch (this.status) {
-                    case "NOVICE": return 'Kennismaker';
-                    case "MEMBER": return 'Lid';
-                    case "FORMER_MEMBER": return 'Voormalig Lid';
-                    case "OUTSIDER": return 'Buitenstaander';
-                    default: return 'Onbekend';
-                }
-            },
-
-            statusBackgroundClass: function() {
-                switch(this.status) {
-                    case "NOVICE": return 'bg-yellow';
-                    case "MEMBER": return 'bg-green';
-                    case "FORMER_MEMBER": return 'bg-red';
-                    case "OUTSIDER": return 'bg-gray';
-                    default: return 'bg-gray-dark';
-                }
-            }
-        }
+        filters: displayFilters,
     }
 </script>
 

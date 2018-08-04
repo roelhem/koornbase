@@ -1,5 +1,5 @@
-query getPersonsForTableQuery($page:Int = 1, $limit:Int = 10, $orderByField:String = "id", $orderByDirection:SortOrderDirection = ASC) {
-    persons(page:$page, limit:$limit, orderBy:[{field:$orderByField, direction:$orderByDirection}]) {
+query getPersonsForTableQuery($page: Int = 1, $limit: Int = 10, $search: String, $anyMembershipStatus: [MembershipStatus], $orderBy: Person_sortField = id, $orderDir: SortOrderDirection = ASC) {
+    persons(page: $page, limit: $limit, search: $search, anyMembershipStatus: $anyMembershipStatus, orderBy: [{by: $orderBy, dir: $orderDir}]) {
         per_page
         current_page
         from
@@ -19,9 +19,13 @@ query getPersonsForTableQuery($page:Int = 1, $limit:Int = 10, $orderByField:Stri
                 image
                 letters
             }
+            created_at
+            updated_at
         }
     }
 }
+
+
 
 
 

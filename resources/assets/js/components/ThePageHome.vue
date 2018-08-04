@@ -59,9 +59,11 @@
     import SearchPerPageInput from "./SearchPerPageInput";
     import SearchSimplePager from "./SearchSimplePager";
     import SearchSortInput from "./SearchSortInput";
+    import TablerModal from "./TablerModal";
 
     export default {
         components: {
+            TablerModal,
             SearchSortInput,
             SearchSimplePager,
             SearchPerPageInput,

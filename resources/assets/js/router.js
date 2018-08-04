@@ -13,6 +13,8 @@ import PagePersonDebug from './components/pages/PagePersonDebug';
 import PagePersonList from './components/pages/PagePersonList';
 import PagePersonOverview from './components/pages/PagePersonOverview';
 import PagePersonMembership from './components/pages/PagePersonMembership';
+import PageOAuthClients from './components/pages/PageOAuthClients';
+import PageOAuthClient from './components/pages/PageOAuthClient';
 
 Vue.use(VueRouter);
 
@@ -88,13 +90,34 @@ export const routes = [
         path:'/apps',
         component: PageApps,
         meta: {
-            label: 'Apps',
+            label: 'OAuth',
             icon: {
                 'fe':'globe',
                 'fa':'globe'
             },
             headerNavbar: true
         }
+    },
+
+    {
+        name:'oauth.clients',
+        path:'/oauth',
+        component: PageOAuthClients,
+        meta: {
+            label: 'OAuth Clients',
+            icon: {
+                'fe':'globe',
+                'fa':'globe'
+            },
+            headerNavbar: true
+        }
+    },
+
+    {
+        name:'oauth.clients.view',
+        path:'/oauth/:id',
+        component: PageOAuthClient,
+        props:true
     },
 
     {

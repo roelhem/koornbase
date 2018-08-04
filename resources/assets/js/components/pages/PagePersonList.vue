@@ -3,14 +3,7 @@
     <div>
 
         <!-- START: Search Header -->
-        <search-header-container v-model="page"
-                                 :from="persons.from"
-                                 :to="persons.to"
-                                 :total="persons.total"
-                                 :per-page="persons.per_page"
-                                 :is-loading="isLoading"
-                                 records-name="personen"
-        >
+        <search-header-container v-bind="searchHeaderProps" v-on="searchHeaderListeners">
             <b-button variant="success" href="#">
                 <base-icon :icon="{fa:'plus',fe:'plus'}"
                            :from="['fe','fa']"
@@ -34,28 +27,12 @@
 
                         <b-col lg="6">
                             <tabler-input-icon append="search">
-                                <b-form-input type="search" placeholder="Zoeken..." />
+                                <b-form-input type="search" placeholder="Zoeken..." v-model="search" />
                             </tabler-input-icon>
                         </b-col>
 
                         <b-col lg="4">
-                            <search-sort-input>
-                                <option value="null" disabled>-- Sorteren op --</option>
-                                <optgroup label="Naam">
-                                    <option value="name_first">Voornaam</option>
-                                    <option value="name_last">Achternaam</option>
-                                    <option value="name_nickname">Bijnaam</option>
-                                </optgroup>
-                                <optgroup label="Persoonlijk">
-                                    <option value="birth_date">Geboortedatum</option>
-                                </optgroup>
-                                <optgroup label="O.J.V. de Koornbeurs">
-                                    <option value="membership_status">Lidstatus</option>
-                                </optgroup>
-                                <optgroup label="KoornBase Systeem">
-                                    <option value="id">Primary Key (ID)</option>
-                                </optgroup>
-                            </search-sort-input>
+                            <search-sort-input v-bind="sortInputProps" v-on="sortInputListeners" />
                         </b-col>
 
                         <b-col>
@@ -67,15 +44,13 @@
 
                     <!-- START: The Search Table -->
                     <b-card no-body>
-                        <b-table id="people_search_table" ref="searchTable" class="card-table"
-                                 :items="persons.data"
-                                 :fields="fields"
-                                 :busy="isLoading"
-                                 no-local-sorting>
-
+                        <b-table v-bind="bTableProps" v-on="bTableListeners">
 
                             <template slot="avatar" slot-scope="{ item }">
-                                <base-avatar v-bind="item.avatar" size="md" default-style="person-default" />
+                                <base-avatar v-bind="item.avatar"
+                                             size="md"
+                                             default-style="person-default"
+                                />
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
@@ -100,6 +75,14 @@
                                 </div>
                             </template>
 
+                            <template slot="created_at" slot-scope="{ value }">
+                                <display-timestamp :timestamp="value" />
+                            </template>
+
+                            <template slot="updated_at" slot-scope="{ value }">
+                                <display-timestamp :timestamp="value" />
+                            </template>
+
                             <template slot="links" slot-scope="{ item }">
                                 <router-link class="icon" :to="{name:'persons.view', params: {id: item.id} }">
                                     <base-icon icon="more-vertical" from="fe" />
@@ -114,10 +97,7 @@
 
 
                     <!-- START: The Bottom Paginator -->
-                    <b-pagination :total-rows="persons.total"
-                                  :per-page="persons.per_page"
-                                  :limit="11"
-                                  v-model="page">
+                    <b-pagination v-bind="paginationProps" v-on="paginationListeners">
                     </b-pagination>
                     <!-- END: The Bottom Paginator -->
 
@@ -130,7 +110,7 @@
 
                 <!-- START: The Sidebar Column -->
                 <b-col lg="3">
-                    <search-column-select-card v-model="columns" :collapsed.sync="sidebarCards.columns.collaped" />
+                    <search-column-select-card v-model="columns" :collapsed.sync="sidebarCards.columns.collapsed" />
 
                     <search-filter-membership-status-card
                             :active.sync="filters.membershipStatus.active"
@@ -141,6 +121,15 @@
                             :active.sync="filters.groups.active"
                             v-model="filters.groups.value"
                     />
+
+                    <search-filter-timestamp-card
+                            :active.sync="filters.timestamps.active"
+                            v-model="filters.timestamps.value"
+                    />
+
+                    <pre>
+                        {{ filters }}
+                    </pre>
 
                 </b-col>
                 <!-- END: The Sidebar Column -->
@@ -163,11 +152,14 @@
     import TablerInputIcon from "../TablerInputIcon";
     import BaseAvatar from "../BaseAvatar";
     import BaseIcon from "../BaseIcon";
+    import searchTableMixin from "../../mixins/searchTableMixin";
 
     import { getPersonsForTableQuery } from "../../queries/persons.graphql";
 
     import displayFilters from '../../filters/display';
     import SearchHeaderContainer from "../SearchHeaderContainer";
+    import SearchFilterTimestampCard from "../SearchFilterTimestampCard";
+    import DisplayTimestamp from "../displays/DisplayTimestamp";
 
 
 
@@ -183,13 +175,14 @@
         {
             key:'id',
             label:'ID',
-            name:'ID',
-            visible:false
+            visible:false,
+            sortable:true,
         },
         {
             key:'name',
             label:'Hele Naam',
             name:'Volledige Naam',
+            sortable:true,
             visible:true,
             formatter:function(value, key, item) {
                 return item.name;
@@ -206,18 +199,32 @@
             label:'Bijnaam',
             name:'Bijnaam',
             visible:false,
+            sortable:true,
         },
         {
             key:'birth_date',
             label:'Geboortedatum',
             name:'Geboortedatum',
             visible:true,
+            sortable:true,
         },
         {
             key:'membership_status',
             label:'Status Lidmaatschap',
             name:'Lidstatus',
-            visible:true
+            visible:true,
+            sortable:true,
+        },
+        {
+            key:'created_at',
+            label:'Aangemaakt op',
+            sortable:true,
+        },
+        {
+            key:'updated_at',
+            label:'Bewerkt op',
+            name:'Laatst bewerkt op',
+            sortable:true,
         },
         {
             key:'links',
@@ -225,11 +232,13 @@
             name:'Actieknoppen',
             thStyle:{'width':'1px'},
             visible:true,
-        }
+        },
     ];
 
     export default {
         components: {
+            DisplayTimestamp,
+            SearchFilterTimestampCard,
             SearchHeaderContainer,
             SearchColumnSelectCard,
             SearchFilterMembershipStatusCard,
@@ -245,25 +254,32 @@
 
         name: "page-person-list",
 
-        apollo: {
-            persons: {
+        mixins: [searchTableMixin],
+
+        searchTable: {
+            queryKey:'persons',
+            query: {
                 query: getPersonsForTableQuery,
                 variables() {
                     return {
                         page:this.page,
                         limit:this.perPage,
-                        orderByField:this.sort
+                        orderBy:this.sortBy,
+                        orderDir:this.sortDir,
+                        search:this.search,
+                        anyMembershipStatus:this.anyMembershipStatus
                     }
                 }
             },
+
+            columns: peopleSearchColumns,
+
+            recordsName: 'personen',
         },
 
         data: function() {
             return {
-                persons: {},
-                columns: peopleSearchColumns,
-                page: 1,
-                perPage: 10,
+                search:null,
                 sidebarCards: {
                     columns: {
                         collapsed:true,
@@ -277,6 +293,15 @@
                     groups: {
                         active: false,
                         value: []
+                    },
+                    timestamps: {
+                        active: false,
+                        value: {
+                            createdBefore:null,
+                            createdAfter:null,
+                            updatedBefore:null,
+                            updatedAfter:null
+                        }
                     }
                 }
             }
@@ -284,14 +309,15 @@
 
         computed: {
 
-            fields: function() {
-                return this.columns.filter(col => col.visible);
-            },
+            anyMembershipStatus() {
+                if(this.filters.membershipStatus.active) {
+                    return this.filters.membershipStatus.value;
+                } else {
+                    return null;
+                }
+            }
 
-            isLoading: function() {
-                return this.$apollo.queries.persons.loading;
-            },
-        },
+        }
     }
 </script>
 

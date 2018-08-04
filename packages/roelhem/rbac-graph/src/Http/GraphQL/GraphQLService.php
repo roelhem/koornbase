@@ -5,15 +5,18 @@ namespace Roelhem\RbacGraph\Http\GraphQL;
 
 
 use GraphQL;
+use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Http\GraphQL\Enums\RbacNodeTypeEnum;
+use Roelhem\RbacGraph\Http\GraphQL\Interfaces\RbacAssignableNodeInterface;
+use Roelhem\RbacGraph\Http\GraphQL\Interfaces\RbacGraphInterface;
 use Roelhem\RbacGraph\Http\GraphQL\Interfaces\RbacNodeInterface;
 use Roelhem\RbacGraph\Http\GraphQL\Queries\RbacEdgesQuery;
 use Roelhem\RbacGraph\Http\GraphQL\Queries\RbacNodesQuery;
 use Roelhem\RbacGraph\Http\GraphQL\Queries\RbacPathsQuery;
+use Roelhem\RbacGraph\Http\GraphQL\Types\PostgresRbacGraphType;
+use Roelhem\RbacGraph\Http\GraphQL\Types\RbacAssignmentType;
 use Roelhem\RbacGraph\Http\GraphQL\Types\RbacEdgeType;
 use Roelhem\RbacGraph\Http\GraphQL\Types\RbacPathType;
-use Roelhem\RbacGraph\Http\GraphQL\Types\RbacRoleType;
-use Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType;
 
 class GraphQLService
 {
@@ -27,18 +30,26 @@ class GraphQLService
      */
     protected function getTypes()
     {
-        return [
-            'RbacNode' => RbacNodeInterface::class,
+        $types = [
+            'RbacGraph' => RbacGraphInterface::class,
+            'PostgresRbacGraph' => PostgresRbacGraphType::class,
 
-            'RbacRole' => RbacRoleType::class,
-            'RbacDefaultNode' => RbacNodeType::class,
+            'RbacNode' => RbacNodeInterface::class,
+            'RbacAssignableNode' => RbacAssignableNodeInterface::class,
 
             'RbacNodeType' => RbacNodeTypeEnum::class,
 
             'RbacEdge' => RbacEdgeType::class,
+            'RbacAssignment' => RbacAssignmentType::class,
 
             'RbacPath' => RbacPathType::class
         ];
+
+        foreach (NodeType::getEnumerators() as $enumerator) {
+            $types[$enumerator->getGraphQLTypeName()] = $enumerator->getGraphQLType();
+        }
+
+        return $types;
     }
 
 

@@ -1,6 +1,6 @@
 <template>
     <b-input-group>
-        <b-form-select :options="options" v-model="sortValue">
+        <b-form-select :options="sortOptions" v-model="sortValue">
             <slot></slot>
         </b-form-select>
         <b-input-group-append>
@@ -11,6 +11,9 @@
 
 <script>
     import SearchSortOrderInput from "./SearchSortOrderInput";
+
+    const ASC = 'ASC';
+    const DESC = 'DESC';
 
     export default {
         components: {SearchSortOrderInput},
@@ -26,9 +29,9 @@
 
             sortOrder:{
                 type:String,
-                default:'asc',
+                default: ASC,
                 validate:function (val) {
-                    return ['asc','desc'].indexOf(val) !== -1;
+                    return [ASC,DESC].indexOf(val) !== -1;
                 }
             },
 
@@ -37,17 +40,34 @@
                 default:function() {
                     return [];
                 }
+            },
+
+            withoutNullOption:{
+                type:Boolean,
+                default:false
+            },
+
+            nullOptionText: {
+                type:String,
+                default:'-- Sorteren op --',
             }
         },
 
         computed: {
 
+            sortOptions() {
+                if(this.withoutNullOption) {
+                    return this.options;
+                } else {
+                    return [{
+                        value:null, text:this.nullOptionText, disabled:true
+                    }].concat(this.options);
+                }
+            },
+
             sortValue:{
                 get() { return this.sort; },
                 set(newValue) {
-                    if(newValue !== this.sort) {
-                        this.sortOrderValue = 'asc';
-                    }
                     this.$emit('input', newValue);
                 }
             },

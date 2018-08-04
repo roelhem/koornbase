@@ -17,6 +17,7 @@ use App\GroupCategory;
 use App\GroupEmailAddress;
 use App\KoornbeursCard;
 use App\Membership;
+use App\OAuth\Client;
 use App\Person;
 use App\PersonAddress;
 use App\PersonEmailAddress;
@@ -53,12 +54,20 @@ class GraphQLServiceProvider extends ServiceProvider
             PersonEmailAddress::class,
             PersonPhoneNumber::class,
             User::class,
-            UserAccount::class
+            UserAccount::class,
+            Client::class => 'OAuthClient',
         ];
 
-        foreach ($models as $modelClass) {
-            \GraphQL::addType(new SortFieldEnum($modelClass, $sorterRepository));
-            \GraphQL::addType(new SortRuleType($modelClass));
+        foreach ($models as $key => $value) {
+            if(is_string($key)) {
+                $modelClass = $key;
+                $typeName = $value;
+            } else {
+                $modelClass = $value;
+                $typeName = null;
+            }
+            \GraphQL::addType(new SortFieldEnum($modelClass, $sorterRepository, $typeName));
+            \GraphQL::addType(new SortRuleType($modelClass, $typeName));
         }
 
         $enums = [

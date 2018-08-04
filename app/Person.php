@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
@@ -52,7 +53,7 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
 
     use SoftDeletes;
     use Userstamps;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasRemarks;
 
@@ -248,6 +249,23 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
     public function scopeOwnedBy($query, $person_id)
     {
         return $query->where('id','=',$person_id);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOUT SEARCHABLE CONFIGURATION --------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'name_first',
+            'name_middle',
+            'name_prefix',
+            'name_last',
+            'name_initials',
+            'name_nickname'
+        ]);
     }
 
 

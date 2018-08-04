@@ -21,33 +21,47 @@ class SortFieldEnum extends GraphQLType
 
     protected $model;
 
+    protected $typeName;
+
     protected $sorter;
 
     /**
      * SortFieldEnum constructor.
      * @param Model|string $model
      * @param SorterRepository $sorterRepository
+     * @param string|null $typeName
      * @param array $attributes
      */
-    public function __construct($model, SorterRepository $sorterRepository, $attributes = [])
+    public function __construct($model, SorterRepository $sorterRepository, $typeName = null, $attributes = [])
     {
         $this->model = $model;
         $this->sorter = $sorterRepository->getSorter($model);
+
+        $this->typeName = $typeName;
+        if($this->typeName === null) {
+            $this->typeNameFromModel();
+        }
+
         parent::__construct($attributes);
+    }
+
+    /**
+     * Sets the value of `$this->typeName` based on the model.
+     */
+    protected function typeNameFromModel() {
+        try {
+            $this->typeName = (new \ReflectionClass($this->model))->getShortName();
+        } catch (\ReflectionException $exception) {
+            $this->typeName = strval($this->model);
+        }
     }
 
     /** @inheritdoc */
     public function attributes()
     {
-        try {
-            $shortName = (new \ReflectionClass($this->model))->getShortName();
-        } catch (\ReflectionException $exception) {
-            $shortName = strval($this->model);
-        }
-
         return [
-            'name' => $shortName.'_sortField',
-            'description' => 'An enum with the fields that are able to sort an '.$shortName.'.',
+            'name' => $this->typeName.'_sortField',
+            'description' => 'An enum with the fields that are able to sort an '.$this->typeName.'.',
             'values' => $this->values()
         ];
     }

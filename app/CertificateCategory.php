@@ -9,6 +9,7 @@ use App\Traits\Sluggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -24,7 +25,7 @@ class CertificateCategory extends Model
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasShortName, HasDescription;
 
@@ -49,5 +50,20 @@ class CertificateCategory extends Model
      */
     public function certificates() {
         return $this->hasMany(Certificate::class, 'category_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIGURATION --------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'slug',
+            'name',
+            'name_short',
+            'description'
+        ]);
     }
 }

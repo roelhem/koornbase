@@ -9,6 +9,7 @@ use MabeEnum\EnumSet;
 use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use MabeEnum\Enum;
 use Roelhem\RbacGraph\Enums\Traits\HasConsoleFormatStyle;
+use Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\Component\Yaml\Yaml;
 
@@ -265,13 +266,66 @@ final class NodeType extends Enum implements Arrayable
     }
 
     /**
-     * Returns the GraphQL type of this element.
+     * Returns the GraphQL type name of this element.
      *
      * @return string
      */
-    public function getGraphQLType() {
+    public function getGraphQLTypeName() {
         $name = $this->conf('graphQLType', str_replace(' ','',$this->getLabel()));
         return 'Rbac'.$name;
+    }
+
+    /**
+     * Returns a new instance of the GraphQL type of this element.
+     *
+     * @return RbacNodeType
+     */
+    public function getGraphQLType() {
+        return new RbacNodeType($this);
+    }
+
+    public function getGraphQLFields() {
+        $options = $this->conf('options', []);
+        $res = [];
+        foreach ($options as $key => $varType) {
+
+            if($varType instanceof TaggedValue) {
+                $value = $varType->getValue();
+                $type = $this->optionValueToType($value);
+
+
+                $tag = $varType->getTag();
+                $type = $this->optionTagToType($tag, $type);
+            } else {
+                $type = $this->optionValueToType($varType);
+            }
+
+            $res[] = [
+                'name' => $key,
+                'type' => $type
+            ];
+        }
+        return $res;
+    }
+
+    protected function optionValueToType($string)
+    {
+        switch ($string) {
+            case 'string': return Type::string();
+            case 'int': return Type::int();
+            case 'bool': return Type::boolean();
+            default:
+                return Type::string();
+        }
+    }
+
+    protected function optionTagToType($tag, $type)
+    {
+        switch ($tag) {
+            case 'required': return Type::nonNull($type);
+            case 'list': return Type::listOf($type);
+            default: return $type;
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

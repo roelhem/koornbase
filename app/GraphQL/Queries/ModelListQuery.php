@@ -15,6 +15,7 @@ use App\Services\Sorters\Traits\Sortable;
 use EloquentFilter\Filterable;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Scout\Searchable;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 use Roelhem\RbacGraph\Services\RbacQueryFilter;
@@ -23,6 +24,11 @@ class ModelListQuery extends Query
 {
 
     use HasModelClassName;
+
+    const ARG_TEXT_SEARCH = 'search';
+    const ARG_ORDER_BY = 'orderBy';
+    const ARG_ORDER_BY_FIELD = 'by';
+    const ARG_ORDER_BY_DIRECTION = 'dir';
 
     /**
      * The default limit of the amount of items per page.
@@ -33,12 +39,18 @@ class ModelListQuery extends Query
 
     public function attributes()
     {
-        $typeName = $this->getTypeName();
-
         return [
-            'name' => camel_case(str_plural($typeName)),
-            'description' => 'Gives a paginated list of `'.$typeName.'` models.'
+            'name' => $this->name(),
+            'description' => $this->description()
         ];
+    }
+
+    public function name() {
+        return camel_case(str_plural($this->getTypeName()));
+    }
+
+    public function description() {
+        return 'Gives a paginated list of `'.$this->getTypeName().'` models.';
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -72,8 +84,9 @@ class ModelListQuery extends Query
     {
         return array_merge(
             $this->paginationArgs(),
-            $this->sortingArgs(),
-            $this->filterArgs()
+            $this->searchArgs(),
+            $this->filterArgs(),
+            $this->sortingArgs()
         );
     }
 
@@ -100,6 +113,9 @@ class ModelListQuery extends Query
 
         // Ordering
         $query = $this->setOrdering($query, $args);
+
+        // Text-search filter
+        $query = $this->applySearch($query, $args);
 
         return $this->createPagination($query, $args);
     }
@@ -185,6 +201,61 @@ class ModelListQuery extends Query
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- FULL TEXT SEARCH ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns if the subject model uses the Searchable trait, and thus supports full query search.
+     *
+     * @return bool
+     */
+    public function searchable() {
+        return in_array(Searchable::class, class_uses_recursive($this->modelClass));
+    }
+
+    /**
+     * Returns the argument definitions for the queries that have full-text search support.
+     */
+    public function searchArgs() {
+        if($this->searchable()) {
+            return [
+                self::ARG_TEXT_SEARCH => [
+                    'type' => Type::string(),
+                    'description' => 'The input `string` for full-text searching trough all the items.'
+                ]
+            ];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Returns if the subject model uses the Searchable trait, and thus supports full query search.
+     *
+     * @param Builder $query
+     * @param array $args
+     * @return \Laravel\Scout\Builder|Builder
+     */
+    public function applySearch($query, $args) {
+        $search = array_get($args, self::ARG_TEXT_SEARCH);
+
+        if(empty($search)) {
+            return $query;
+        }
+
+        if(!$this->searchable()) {
+            return $query;
+        }
+
+        $callable = [$this->modelClass, 'search'];
+        if(!is_callable($callable)) {
+            throw new \LogicException("The model $this->modelClass is searchable, but the search method is missing.");
+        }
+
+        return call_user_func($callable, $search)->constrain($query);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- SORTING -------------------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
@@ -197,7 +268,7 @@ class ModelListQuery extends Query
     {
         try {
             return [
-                'orderBy' => [
+                self::ARG_ORDER_BY => [
                     'type' => Type::listOf(\GraphQL::type($this->getTypeName() . '_sortRule')),
                     'description' => 'A list of sort rules to set the order of the list.',
                     'defaultValue' => [],
@@ -221,12 +292,12 @@ class ModelListQuery extends Query
             return $query;
         }
 
-        $orderBy = array_get($args, 'orderBy',[]);
+        $orderBy = array_get($args, self::ARG_ORDER_BY,[]);
 
         foreach($orderBy as $orderRule) {
-            $field = array_get($orderRule, 'field');
+            $field = array_get($orderRule, self::ARG_ORDER_BY_FIELD);
             if($field !== null) {
-                $direction = array_get($orderRule, 'direction', SortOrderDirection::ASC());
+                $direction = array_get($orderRule, self::ARG_ORDER_BY_DIRECTION, SortOrderDirection::ASC());
                 $query = $query->sortBy($field, $direction);
             }
         }
@@ -262,7 +333,7 @@ class ModelListQuery extends Query
     /**
      * Creates a new pagination object form the query based on the pagination arguments.
      *
-     * @param Builder $query
+     * @param Builder|\Laravel\Scout\Builder $query
      * @param array $args
      * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -273,7 +344,11 @@ class ModelListQuery extends Query
         $per_page = array_get($args,'limit', $this->defaultLimit);
         $page = array_get($args, 'page', 1);
         // Create the pagination
-        return $query->paginate($per_page, $columns,'page',$page);
+        if($query instanceof Builder) {
+            return $query->paginate($per_page, $columns,'page',$page);
+        } else {
+            return $query->paginate($per_page, 'page', $page);
+        }
     }
 
 }

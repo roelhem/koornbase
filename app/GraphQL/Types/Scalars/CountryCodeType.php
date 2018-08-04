@@ -42,7 +42,7 @@ class CountryCodeType extends ScalarType
             return mb_strtoupper($valueNode->value);
         }
 
-        throw new Error("A CountryCode has to be a string with just two characters", [$valueNode]);
+        throw new \InvalidArgumentException("A CountryCode has to be a string with just two characters", [$valueNode]);
     }
 
 }

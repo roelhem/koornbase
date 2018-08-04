@@ -27,14 +27,14 @@ class RbacPathType extends GraphQLType
     {
         return [
             'id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The unique `ID` of this path.'
             ],
 
             // NODES
             // First Node
             'first_node_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The `ID` of the first node in this path.'
             ],
             'firstNode' => [
@@ -43,7 +43,7 @@ class RbacPathType extends GraphQLType
             ],
             // Last Node
             'last_node_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'Type `ID` of the last node in this path.'
             ],
             'lastNode' => [
@@ -68,7 +68,7 @@ class RbacPathType extends GraphQLType
 
             // PATHS
             'first_path_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The `ID` of the first sub-path of this path.'
             ],
             'firstPath' => [
@@ -76,7 +76,7 @@ class RbacPathType extends GraphQLType
                 'description' => 'The first sub-path of this path.'
             ],
             'last_path_id' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The `ID` of the second sub-path of this path.'
             ],
             'lastPath' => [
@@ -92,11 +92,11 @@ class RbacPathType extends GraphQLType
             ],
 
             'size' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The total amount of nodes in this path.'
             ],
             'rules_count' => [
-                'type' => Type::int(),
+                'type' => Type::id(),
                 'description' => 'The total amount of rules needed for this path.'
             ]
         ];

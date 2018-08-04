@@ -14,6 +14,11 @@ class PersonsQuery extends ModelListQuery
 
     protected $modelClass = Person::class;
 
+    public function name()
+    {
+        return 'persons';
+    }
+
 
     protected function filterArgs()
     {
@@ -24,6 +29,11 @@ class PersonsQuery extends ModelListQuery
             'membershipStatus' => [
                 'type' => GraphQL::type('MembershipStatus'),
                 'description' => 'Filters the Persons that currently have the provided membership status.'
+            ],
+
+            'anyMembershipStatus' => [
+                'type' => Type::listOf(GraphQL::type('MembershipStatus')),
+                'description' => 'Filters the Persons that have one of the provided membership statuses.'
             ],
 
             'birthDateBefore' => [

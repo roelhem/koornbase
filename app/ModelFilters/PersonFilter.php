@@ -2,6 +2,7 @@
 
 namespace App\ModelFilters;
 
+use App\Enums\MembershipStatus;
 use App\ModelFilters\Traits\IsOwnedByPerson;
 use Carbon\Carbon;
 
@@ -42,11 +43,21 @@ class PersonFilter extends ModelFilter
     /**
      * Filter that only returns the persons which have a specific membership_status
      *
-     * @param string|array $status
+     * @param string|MembershipStatus $status
      */
     public function membershipStatus($status)
     {
         $this->query->membershipStatus($status);
+    }
+
+    /**
+     * Filter that only returns the persons which have one of the status in the provides list.
+     *
+     * @param array $statusList
+     */
+    public function anyMembershipStatus($statusList)
+    {
+        $this->query->membershipStatus($statusList);
     }
 
 

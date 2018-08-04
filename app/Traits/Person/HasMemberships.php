@@ -113,6 +113,20 @@ trait HasMemberships
             $at = $at->toDateString();
         }
 
+        if($status instanceof MembershipStatus) {
+            $status = $status->getValue();
+        }
+
+        if(is_array($status)) {
+            $status = collect($status)->map(function($status) {
+                if($status instanceof MembershipStatus) {
+                    return $status->getValue();
+                } else {
+                    return $status;
+                }
+            })->values()->all();
+        }
+
         // Join the membership status with
         $query->leftJoinSub("
             SELECT DISTINCT ON(person_id) person_id, status as membership_status

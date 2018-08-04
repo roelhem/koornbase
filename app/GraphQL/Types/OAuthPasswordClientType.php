@@ -31,11 +31,6 @@ class OAuthPasswordClientType extends GraphQLType
         /** @var OAuthClientInterface $clientInterface */
         $clientInterface = \GraphQL::type('OAuthClient');
 
-        return array_merge([
-            'redirect' => [
-                'type' => Type::nonNull(Type::string()),
-                'description' => 'The URL to which the User is redirected after authorizing the client.',
-            ],
-        ], $clientInterface->getFields());
+        return array_merge([], $clientInterface->getFields());
     }
 }

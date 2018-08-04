@@ -1,0 +1,17 @@
+mutation createOAuthClient($type:OAuthClientType=AUTH_CODE, $name:String!, $redirect:String) {
+    createOAuthClient(type:$type, name:$name, redirect:$redirect) {
+        id
+        name
+        type
+        redirect
+    }
+}
+
+mutation updateOAuthClient($id:ID!, $name:String!, $redirect:String) {
+    updateOAuthClient(id:$id, name:$name, redirect:$redirect) {
+        id
+        name
+        type
+        redirect
+    }
+}

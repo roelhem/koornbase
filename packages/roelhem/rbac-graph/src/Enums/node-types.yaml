@@ -258,5 +258,5 @@ MODEL_GATE:
       fg-color: white
   edges: !like GATE
   options:
-    for: array
+    for: !list string
     rule: \Roelhem\RbacGraph\Contracts\Rules\ModelRule

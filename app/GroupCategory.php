@@ -12,6 +12,7 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
@@ -34,7 +35,7 @@ class GroupCategory extends Model implements RbacDatabaseAssignable, Authorizabl
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasShortName, HasDescription;
     use HasOptions;
@@ -89,6 +90,21 @@ class GroupCategory extends Model implements RbacDatabaseAssignable, Authorizabl
     public function getDynamicRoles()
     {
         return collect([]);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIGURATION --------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'slug',
+            'name',
+            'name_short',
+            'description'
+        ]);
     }
 
 }

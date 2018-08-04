@@ -9,8 +9,10 @@
 namespace App\OAuth;
 
 use App\Enums\OAuthClientType;
+use App\Services\Sorters\Traits\Sortable;
 use App\User;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Laravel\Passport\Client as PassportClient;
 use Wildside\Userstamps\Userstamps;
 
@@ -40,7 +42,7 @@ use Wildside\Userstamps\Userstamps;
 class Client extends PassportClient
 {
 
-    use Userstamps;
+    use Userstamps, Filterable, Sortable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //

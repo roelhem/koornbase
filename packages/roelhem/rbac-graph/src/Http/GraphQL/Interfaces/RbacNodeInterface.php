@@ -31,45 +31,56 @@ class RbacNodeInterface extends InterfaceType
         return [
             // Normal fields
             'id' => [
-                'type' => Type::nonNull(Type::int())
+                'type' => Type::nonNull(Type::id()),
+                'description' => 'The primary key, which uniquely identifies a Node in the Graph.'
             ],
             'name' => [
-                'type' => Type::nonNull(Type::string())
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The name of the node, which uniquely identifies the Node in the Graph.'
             ],
             'type' => [
-                'type' => \GraphQL::type('RbacNodeType')
+                'type' => \GraphQL::type('RbacNodeType'),
+                'description' => 'The type of node.',
             ],
             'title' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The title is a human-readable string that describes the node.'
             ],
             'description' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'description' => 'The description of the Node, which gives some extra information about the function of the node.'
             ],
             // Timestamps
             'created_at' => [
-                'type' => \GraphQL::type('DateTime')
+                'type' => \GraphQL::type('DateTime'),
+                'description' => 'The moment on which this Node was created.'
             ],
             'updated_at' => [
-                'type' => \GraphQL::type('DateTime')
+                'type' => \GraphQL::type('DateTime'),
+                'description' => 'The moment on which this Node was last edited.'
             ],
 
             // RELATIONS
 
             // Nodes
             'parents' => [
-                'type' => Type::listOf(\GraphQL::type('RbacNode'))
+                'type' => Type::listOf(\GraphQL::type('RbacNode')),
+                'description' => 'All the (direct) parent Nodes of this Node. Every Node in this list is connected to this Node with just one Edge, where this Node is on the child-side of the edge.'
             ],
 
             'children' => [
-                'type' => Type::listOf(\GraphQL::type('RbacNode'))
+                'type' => Type::listOf(\GraphQL::type('RbacNode')),
+                'description' => 'All the (direct) child Nodes of this Node. Every Node in this list is connected to this Node with just one Edge, were this Node is on the parent-side of the edge.'
             ],
 
             'ancestors' => [
-                'type' => Type::listOf(\GraphQL::type('RbacNode'))
+                'type' => Type::listOf(\GraphQL::type('RbacNode')),
+                'description' => 'A list of all the parent Nodes, and the parent Nodes of the parent Nodes etc.'
             ],
 
             'offspring' => [
-                'type' => Type::listOf(\GraphQL::type('RbacNode'))
+                'type' => Type::listOf(\GraphQL::type('RbacNode')),
+                'description' => 'A list of all the child Nodes, and the child Nodes of the Child nodes etc.'
             ],
 
             // Edges

@@ -12,36 +12,62 @@ use App\Enums\SortOrderDirection;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use function GuzzleHttp\Psr7\str;
+use Illuminate\Database\Eloquent\Model;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class SortRuleType extends GraphQLType
 {
 
+    /**
+     * Sets this value to indicate that this should be a input object type.
+     *
+     * @var bool
+     */
     protected $inputObject = true;
 
-    protected $modelShortName;
+    /**
+     * @var Model|string $model
+     */
+    protected $model;
+
+    /**
+     * @var null|string $typeName
+     */
+    protected $typeName;
 
     /**
      * SortOrderType constructor.
      * @param Model|string $model
+     * @param string|null $typeName
      * @param array $attributes
      */
-    public function __construct($model, $attributes = [])
+    public function __construct($model, $typeName = null, $attributes = [])
     {
-        try {
-            $shortName = (new \ReflectionClass($model))->getShortName();
-        } catch (\ReflectionException $exception) {
-            $shortName = strval($model);
+        $this->model = $model;
+        $this->typeName = $typeName;
+
+        if($this->typeName === null) {
+            $this->typeNameFromModel();
         }
 
-        $this->modelShortName = $shortName;
         parent::__construct($attributes);
+    }
+
+    /**
+     * Sets the value of `$this->typeName` based on the model.
+     */
+    protected function typeNameFromModel() {
+        try {
+            $this->typeName = (new \ReflectionClass($this->model))->getShortName();
+        } catch (\ReflectionException $exception) {
+            $this->typeName = strval($this->model);
+        }
     }
 
     public function attributes() {
         return [
-            'name' => $this->modelShortName.'_sortRule',
-            'description' => 'An input object that specifies the sortable field of '.$this->modelShortName.', and the direction in which the sort will be done.'
+            'name' => $this->typeName.'_sortRule',
+            'description' => 'An input object that specifies the sortable field of '.$this->typeName.', and the direction in which the sort will be done.'
         ];
     }
 
@@ -49,7 +75,7 @@ class SortRuleType extends GraphQLType
     {
         return [
             'by' => [
-                'type' => Type::nonNull(GraphQL::type($this->modelShortName.'_sortField')),
+                'type' => Type::nonNull(GraphQL::type($this->typeName.'_sortField')),
                 'description' => 'The field to order by.'
             ],
             'dir' => [
