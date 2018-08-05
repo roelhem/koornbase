@@ -26,6 +26,11 @@
     export default {
         name: "tabler-modal",
 
+        model: {
+            prop: 'visible',
+            event: 'change'
+        },
+
         props: {
             id:String,
 

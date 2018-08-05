@@ -16,8 +16,8 @@
 
         <template slot="footer">
             <div class="text-right">
-                <b-button :variant="submitVariant" @click="$emit('submit')">{{ submitText }}</b-button>
                 <b-button :variant="resetVariant" @click="$emit('reset')">{{ resetText }}</b-button>
+                <b-button :variant="submitVariant" @click="$emit('submit')">{{ submitText }}</b-button>
             </div>
         </template>
 

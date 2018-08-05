@@ -144,6 +144,7 @@
                     }).then(data => {
                         console.log(data);
                         this.hide();
+                        this.$router.push({ name: 'oauth.clients.view', params:{id: data.data.createOAuthClient.id} });
                     }).catch(error => {
                         this.addMessage(error.message);
                     });

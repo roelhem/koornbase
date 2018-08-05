@@ -10,11 +10,18 @@ require('./bootstrap');
 import Vue from 'vue';
 
 
+Vue.prototype.$modal = {
+    open: function(name, args) {
+        console.log('open', name, args);
+    }
+};
+
+
+
 // Including and configuring BootstrapVue
 import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(BootstrapVue);
-
 
 
 // Including and configuring the vue-moment and moment.
@@ -62,7 +69,7 @@ Vue.use(VueGoogleMaps, {
 
 
 import router from './router';
-import store from  './store';
+import store from './store/index';
 
 
 
@@ -81,7 +88,6 @@ import VueApollo from 'vue-apollo';
 
 let csrf = '';
 let metas = document.getElementsByTagName('meta');
-console.log(metas);
 for(var i=0; i<metas.length; i++) {
     if(metas[i].getAttribute("name") === 'csrf-token') {
         csrf = metas[i].getAttribute('content');

@@ -1,30 +1,134 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import PageHome from './components/pages/PageHome';
-import PageMe from './components/pages/PageMe';
-import PageApps from './components/pages/PageApps';
-import PageUsers from './components/pages/PageUsers';
-import PageMeKoornbeursData from './components/pages/PageMeKoornbeursData';
-import PageMePersonalData from './components/pages/PageMePersonalData';
-import PagePerson from './components/pages/PagePerson';
-import PagePersonContact from './components/pages/PagePersonContact';
-import PagePersonDebug from './components/pages/PagePersonDebug';
-import PagePersonList from './components/pages/PagePersonList';
-import PagePersonOverview from './components/pages/PagePersonOverview';
-import PagePersonMembership from './components/pages/PagePersonMembership';
-import PageOAuthClients from './components/pages/PageOAuthClients';
-import PageOAuthClient from './components/pages/PageOAuthClient';
+import PageMe from './components/pages/me/overview';
+import PageApps from './components/pages/oauth/apps/index';
+import PageUsers from './components/pages/users/index';
+import PageMeKoornbeursData from './components/pages/me/overview.koornbeurs';
+import PageMePersonalData from './components/pages/me/overview.personal';
+import PagePerson from './components/pages/persons/view';
+import PagePersonContact from './components/pages/persons/view.contact';
+import PagePersonDebug from './components/pages/persons/view.debug';
+import PagePersonList from './components/pages/persons/index';
+import PagePersonOverview from './components/pages/persons/view.overview';
+import PagePersonMembership from './components/pages/persons/view.membership';
+import PageOAuthClients from './components/pages/oauth/clients/index';
+import PageOAuthClient from './components/pages/oauth/clients/view';
 
 Vue.use(VueRouter);
 
 export const routes = [
 
     {
+        path:'/home',
+        alias:'/',
+        name:'home',
+        component: require('./components/pages/home/index'),
+    },
+
+
+    {
+        path:'/me',
+        name:'me.overview',
+        component: require('./components/pages/me/overview'),
+        children: [
+            {
+                path:'personal',
+                name:'me.overview.personal',
+                component: require('./components/pages/me/overview.personal'),
+            },
+            {
+                path:'koornbeurs',
+                name:'me.overview.koornbeurs',
+                component: require('./components/pages/me/overview.koornbeurs'),
+            }
+        ],
+    },
+
+
+    {
+        path:'/oauth/apps',
+        name:'oauth.apps.index',
+        component: require('./components/pages/oauth/apps/index'),
+    },
+    {
+        path:'/oauth/clients',
+        name:'oauth.clients.index',
+        component: require('./components/pages/oauth/clients/index'),
+    },
+    {
+        path:'/oauth/clients/create',
+        name:'oauth.clients.create',
+        component: require('./components/pages/oauth/clients/create'),
+    },
+    {
+        path:'/oauth/clients/:id/update',
+        name:'oauth.clients.update',
+        component: require('./components/pages/oauth/clients/update'),
+    },
+    {
+        path:'/oauth/clients/:id',
+        name:'oauth.clients.view',
+        component: require('./components/pages/oauth/clients/view'),
+        props:true,
+    },
+
+
+    {
+        path:'/db/persons',
+        name:'db.persons.index',
+        component: require('./components/pages/persons/index'),
+    },
+    {
+        path:'/db/persons/:id',
+        name:'db.persons.view',
+        component: require('./components/pages/persons/view'),
+        props:true,
+        children: [
+            {
+                path:'contact',
+                name:'db.persons.view.contact',
+                component: require('./components/pages/persons/view.contact'),
+            },
+            {
+                path:'debug',
+                name:'db.persons.view.debug',
+                component: require('./components/pages/persons/view.debug'),
+            },
+            {
+                path:'membership',
+                name:'db.persons.view.membership',
+                component: require('./components/pages/persons/view.membership'),
+            },
+            {
+                path:'overview',
+                name:'db.persons.view.overview',
+                component: require('./components/pages/persons/view.overview'),
+            },
+        ]
+    },
+
+
+    {
+        path:'/users',
+        name:'users.index',
+        component: require('./components/pages/users/index'),
+    },
+    {
+        path:'/users/create',
+        name:'users.create',
+        component: require('./components/pages/users/create'),
+    }
+];
+
+/*
+export const routes = [
+
+    {
         name:'home',
         path:'/home',
         alias:'/',
-        component: PageHome,
+        component: require('./components/pages/home/index'),
         meta:{
             label:'Home',
             icon:{
@@ -156,7 +260,7 @@ export const routes = [
         ]
     }
 
-];
+];*/
 
 export const router = new VueRouter({
     routes

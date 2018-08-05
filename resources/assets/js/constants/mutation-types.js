@@ -1,2 +1,4 @@
 export const CURRENT_USER_SET = 'CURRENT_USER_SET';
 export const CURRENT_USER_RESET = 'CURRENT_USER_RESET';
+
+export const PAGE_TITLE_SET = 'PAGE_TITLE_SET';

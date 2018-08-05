@@ -9,7 +9,11 @@
             <the-nav-header />
 
 
+
+
             <div class="my-3 my-md-5">
+                <!--<the-page-header />-->
+
                 <router-view />
             </div>
 
@@ -25,6 +29,7 @@
     import TheTopHeader from "./TheTopHeader";
     import TheNavHeader from "./TheNavHeader";
     import { mapState } from 'vuex';
+    import ThePageHeader from "./ThePageHeader";
 
     export default {
 
@@ -33,6 +38,7 @@
         },
 
         components: {
+            ThePageHeader,
             TheNavHeader,
             TheTopHeader
         },

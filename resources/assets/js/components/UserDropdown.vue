@@ -12,7 +12,7 @@
 
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-            <b-dropdown-item :to="{ name:'me' }">
+            <b-dropdown-item :to="{ name:'me.overview' }">
                 <base-icon class="dropdown-icon" icon="user" from="fe" />
                 Mijn Account
             </b-dropdown-item>
