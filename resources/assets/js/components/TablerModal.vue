@@ -77,7 +77,17 @@
             noFade:Boolean,
             noCloseOnBackdrop:Boolean,
             noCloseOnEsc:Boolean,
-            noEnforceFocus:Boolean
+            noEnforceFocus:Boolean,
+
+            headerBgVariant:String,
+            headerTextVariant:String,
+            bodyBgVariant:String,
+            bodyTextVariant:String,
+            footerBgVariant:String,
+            footerTextVariant:String,
+
+            okVariant:String,
+            cancelVariant:String,
         },
 
         computed: {
@@ -110,7 +120,17 @@
                     noFade:this.noFade,
                     noCloseOnBackdrop:this.noCloseOnBackdrop,
                     noCloseOnEsc:this.noCloseOnEsc,
-                    noEnforceFocus:this.noEnforceFocus
+                    noEnforceFocus:this.noEnforceFocus,
+
+                    headerBgVariant:this.headerBgVariant,
+                    headerTextVariant:this.headerTextVariant,
+                    bodyBgVariant:this.bodyBgVariant,
+                    bodyTextVariant:this.bodyTextVariant,
+                    footerBgVariant:this.footerBgVariant,
+                    footerTextVariant:this.footerTextVariant,
+
+                    okVariant:this.okVariant,
+                    cancelVariant:this.cancelVariant,
                 }
             },
 

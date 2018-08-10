@@ -1,0 +1,32 @@
+
+ACCESS_PERSONAL_DATA:
+  description: Geeft toegang tot de privé-gegevens van de huidige gebruiker.
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  GRAPHQL_QUERIES
+# ------------------------------------------------------------------------------------------------------------------
+
+GRAPHQL_QUERIES:
+  description: Geeft toestemming om GraphQL queries uit te voeren.
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  GRAPHQL_MUTATIONS
+# ------------------------------------------------------------------------------------------------------------------
+
+GRAPHQL_MUTATIONS:
+  description: Geeft toestemming om GraphQL mutations uit te voeren, en zou dus de mogelijkheid kunnen hebben om
+    gegevens in de database aan te passen.
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  MANAGE_OAUTH_CLIENTS
+# ------------------------------------------------------------------------------------------------------------------
+
+MANAGE_OAUTH_CLIENTS:
+  description: Geeft toestemming om de OAuth-clients te beheren.

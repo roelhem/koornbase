@@ -47,7 +47,14 @@ class PhpEnumWrapper extends GraphQLType
 
         $values = [];
         foreach ($enumerators as $enumerator) {
-            $values[$enumerator->getName()] = $enumerator;
+            if(isset($enumerator->description)) {
+                $values[$enumerator->getName()] = [
+                    'value' => $enumerator,
+                    'description' => $enumerator->description
+                ];
+            } else {
+                $values[$enumerator->getName()] = $enumerator;
+            }
         }
 
         return [

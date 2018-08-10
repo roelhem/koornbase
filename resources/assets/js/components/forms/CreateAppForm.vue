@@ -35,7 +35,7 @@
 
 <script>
     import FormInputName from "../FormInputName";
-    import { createNewApp } from "../../mutations/apps.graphql";
+    import { createNewApp } from "../../graphql/mutations/apps.graphql";
 
     export default {
         components: {

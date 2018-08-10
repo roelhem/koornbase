@@ -49,7 +49,7 @@
 <script>
     import TablerTableCard from "./TablerTableCard";
     import DataDisplay from "./displays/data-display";
-    import { getPersonPhoneNumbersQuery } from "../queries/persons.graphql";
+    import { getPersonPhoneNumbersQuery } from "../graphql/queries/persons.graphql";
 
     export default {
         components: {

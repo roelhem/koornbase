@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\OAuthScope;
 use App\OAuth\AuthCode;
 use App\OAuth\Client;
 use App\OAuth\PersonalAccessClient;
@@ -34,6 +35,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
+        Passport::tokensCan(OAuthScope::getScopeArray());
 
 
         //

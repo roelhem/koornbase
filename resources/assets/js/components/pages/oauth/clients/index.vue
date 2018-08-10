@@ -118,7 +118,7 @@
 <script>
 
     import SearchHeaderContainer from "../../../SearchHeaderContainer";
-    import { getOAuthClientsTable } from '../../../../queries/oauth.graphql';
+    import { getOAuthClientsTable } from '../../../../graphql/queries/oauth.graphql';
     import SearchColumnSelectCard from "../../../SearchColumnSelectCard";
     import CreateOAuthClientForm from "../../../forms/CreateOAuthClientForm";
     import BaseIcon from "../../../BaseIcon";
@@ -194,7 +194,6 @@
                 {
                     key:'created_at',
                     label:'Aangemaakt op',
-                    visible: true,
                     sortable: true,
                 },
                 {

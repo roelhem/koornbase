@@ -78,6 +78,11 @@ class UpdateOAuthClientMutation extends Mutation
         /** @var Client $client */
         $client = $this->clients->find($id);
 
+        if($client->revoked) {
+            abort(400, 'You can\'t update a revoked client!');
+        }
+
+
         $name     = array_get($args, 'name') ?? $client->name;
         $redirect = array_get($args, 'redirect') ?? $client->redirect;
 

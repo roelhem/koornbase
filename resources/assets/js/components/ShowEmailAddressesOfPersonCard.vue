@@ -36,7 +36,7 @@
 <script>
     import DataDisplay from "./displays/data-display";
     import TablerTableCard from "./TablerTableCard";
-    import { getPersonEmailAddressesData } from "../queries/persons.graphql";
+    import { getPersonEmailAddressesData } from "../graphql/queries/persons.graphql";
 
     export default {
 

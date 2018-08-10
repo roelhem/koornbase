@@ -38,6 +38,12 @@
                         </div>
 
                         <div class="px-1 flex-grow-1">
+                            <tabler-input-icon append="search">
+                                <b-form-input type="search" placeholder="Zoeken..." v-model="search" />
+                            </tabler-input-icon>
+                        </div>
+
+                        <div class="px-1 flex-grow-1">
                             <search-sort-input v-bind="sortInputProps" v-on="sortInputListeners" />
                         </div>
 
@@ -124,7 +130,7 @@
 </template>
 
 <script>
-    import getUsersForTableQuery from '../../../queries/users.graphql';
+    import getUsersForTableQuery from '../../../graphql/queries/users.graphql';
     import SearchPerPageInput from "../../SearchPerPageInput";
     import SearchHeaderContainer from "../../SearchHeaderContainer";
     import SearchColumnSelectCard from "../../SearchColumnSelectCard";
@@ -136,6 +142,7 @@
     import TablerPageHeader from "../../TablerPageHeader";
     import SearchStatusDisplay from "../../SearchStatusDisplay";
     import SearchSimplePager from "../../SearchSimplePager";
+    import TablerInputIcon from "../../TablerInputIcon";
 
     export default {
         name: 'page-users',
@@ -149,7 +156,8 @@
                         page: this.page,
                         limit: this.perPage,
                         orderBy: this.sortBy,
-                        orderDir: this.sortDir
+                        orderDir: this.sortDir,
+                        search: this.search,
                     };
                 }
             },
@@ -158,7 +166,7 @@
                 { key:"id", label:"ID", visible:false, sortable:true },
                 { key:"name", label:"Gebruiker", sortName: 'Gebruikersnaam', visible:true, sortable:true },
                 { key:"email", label:"E-mail", visible:false, sortable:true },
-                { key:"person", label:"Persoon", visible: true },
+                { key:"person", label:"Persoon", visible: true, sortable:true },
                 { key:'created_at', label:'Aangemaakt op', sortable:true },
                 { key:'updated_at', label:'Bewerkt op', name:'Laatst bewerkt op', sortable:true },
             ]
@@ -168,6 +176,7 @@
 
         data: function() {
             return {
+                search: null,
                 sidebarCards: {
                     columns: {
                         collapsed: true
@@ -177,6 +186,7 @@
         },
 
         components: {
+            TablerInputIcon,
             SearchSimplePager,
             SearchStatusDisplay,
             TablerPageHeader,

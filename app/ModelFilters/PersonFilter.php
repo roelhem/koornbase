@@ -5,6 +5,7 @@ namespace App\ModelFilters;
 use App\Enums\MembershipStatus;
 use App\ModelFilters\Traits\IsOwnedByPerson;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class PersonFilter extends ModelFilter
 {
@@ -58,6 +59,18 @@ class PersonFilter extends ModelFilter
     public function anyMembershipStatus($statusList)
     {
         $this->query->membershipStatus($statusList);
+    }
+
+    /**
+     * Filter that only returns the persons that are in at least one of the provided groups.
+     *
+     * @param array $groups
+     */
+    public function inAnyGroup($groups) {
+        $this->query->whereHas('groups', function($query) use ($groups) {
+            /** @var Builder $query */
+            $query->whereIn('id',$groups);
+        });
     }
 
 

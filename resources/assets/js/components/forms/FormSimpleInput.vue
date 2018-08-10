@@ -1,27 +1,14 @@
 <template>
 
-    <tabler-form-group :id="formGroupId"
-                       :label="label"
-                       :label-for="id"
-                       :required="required"
-    >
+    <tabler-form-group v-bind="tablerFormGroupProps">
         <b-form-input :id="id"
                       :class="inputClass"
-                      :type="inputType"
+                      :type="type"
                       :placeholder="placeholder"
                       :required="required"
                       :disabled="disabled"
                       v-model="modelValue"
         ></b-form-input>
-
-        <template slot="invalid-feedback">
-            <div>
-                <template v-for="(rule, key) in violatedRules">
-                    <div v-if="$slots[key]"><slot :name="key" v-bind="rule">{{ key }}</slot></div>
-                    <validation-feedback v-else :ruleKey="key" :rule="rule" />
-                </template>
-            </div>
-        </template>
 
     </tabler-form-group>
 
@@ -30,12 +17,17 @@
 <script>
     import TablerFormGroup from "../TablerFormGroup";
     import ValidationFeedback from "./ValidationFeedback";
+    import formGroupMixin from "../../mixins/formGroupMixin";
+    import withValidationMixin from "../../mixins/withValidationMixin";
 
     export default {
         components: {
             ValidationFeedback,
-            TablerFormGroup},
+            TablerFormGroup
+        },
         name: "form-simple-input",
+
+        mixins:[formGroupMixin, withValidationMixin],
 
         model: {
             prop:'value',
@@ -44,73 +36,27 @@
 
         props: {
             value:String,
-            label:String,
-            id:String,
-            required:Boolean,
             disabled:Boolean,
             placeholder:String,
-            validation:Object
+            type:{
+                type:String,
+                default:'text'
+            }
         },
 
         computed: {
-
-            formGroupId() {
-                if(this.id) {
-                    return this.id + '_fieldset';
-                }
-                return undefined;
-            },
 
             modelValue: {
                 get() { return this.value; },
                 set( newValue ) { this.$emit('input', newValue); }
             },
 
-            inputType() {
-                return 'text';
-            },
-
             inputClass() {
                 let res = [];
-
-                if(this.validation) {
-                    if(this.validation.$dirty) {
-                        if(this.validation.$invalid) {
-                            res.push('state-invalid');
-                        } else {
-                            res.push('state-valid');
-                        }
-                    }
-                }
-
+                if(this.isValid) { res.push('state-valid'); }
+                if(this.isInvalid) { res.push('state-invalid'); }
                 return res;
             },
-
-            validationRules() {
-                if(this.validation) {
-                    if(this.validation.$params) {
-                        return this.validation.$params;
-                    }
-                }
-                return {};
-            },
-
-            violatedRules() {
-                let res = {};
-
-                if(!this.validation || !this.validation.$dirty) {
-                    return res;
-                }
-
-
-                for(let key in this.validationRules) {
-                    if(this.validationRules.hasOwnProperty(key) && this.validation.hasOwnProperty(key) && !this.validation[key]) {
-                        res[key] = this.validationRules[key];
-                    }
-                }
-
-                return res;
-            }
 
         }
     }

@@ -7,14 +7,26 @@
             <span v-b-tooltip.hover.right.d750 v-if="required" class="form-required" :title="requiredText">*</span>
         </template>
         <slot />
-        <template slot="invalid-feedback"><slot name="invalid-feedback" /></template>
+        <template slot="invalid-feedback">
+            <slot name="invalid-feedback">
+                <template v-for="(rule, key) in violatedRules">
+                    <slot :name="key" v-bind="rule">{{ rule | ruleFeedback(key) }}</slot>
+                </template>
+            </slot>
+        </template>
     </b-form-group>
 
 </template>
 
 <script>
+    import { FORM_GROUP_ID_SUFFIX } from "../mixins/formGroupMixin";
+    import withValidationMixin from "../mixins/withValidationMixin";
+    import validationFilters from "../filters/validation";
+
     export default {
         name: "tabler-form-group",
+
+        filters: validationFilters,
 
         props: {
             id:String,
@@ -29,10 +41,14 @@
             labelSrOnly:Boolean,
             labelClass:[String,Array],
             description:String,
+
             invalidFeedback:String,
             feedback:String,
             validFeedback:String,
             validated:Boolean,
+
+
+
             required:{
                 type:Boolean,
                 default:false
@@ -43,10 +59,17 @@
             }
         },
 
+        mixins: [withValidationMixin],
+
         computed: {
 
+
+
+
+
+
             defaultId: function() {
-                return this.labelFor + '_fieldset';
+                return this.labelFor + FORM_GROUP_ID_SUFFIX;
             },
 
             fullLabelClass: function() {
@@ -62,7 +85,7 @@
             bFormGroupProps: function() {
                 return {
                     id: this.id || this.defaultId,
-                    state: this.state,
+                    state: (this.state === undefined || this.state === null) ? this.validationState : this.state,
                     horizontal: this.horizontal,
                     labelCols: this.labelCols,
                     breakpoint: this.breakpoint,
@@ -72,7 +95,7 @@
                     labelSrOnly: this.labelSrOnly,
                     labelClass: this.fullLabelClass,
                     description: this.description,
-                    invalidFeedback: this.invalidFeedback,
+                    invalidFeedback: this.invalidFeedback || this.invalidFeedbackString,
                     feedback: this.feedback,
                     validFeedback: this.validFeedback,
                     validated: this.validated

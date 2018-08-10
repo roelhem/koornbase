@@ -35,7 +35,7 @@
     import TablerTableCard from "./TablerTableCard";
     import DataDisplay from "./displays/data-display";
     import DisplayPersonAddress from "./DisplayPersonAddress";
-    import { getPersonAddressesQuery } from "../queries/persons.graphql";
+    import { getPersonAddressesQuery } from "../graphql/queries/persons.graphql";
 
     export default {
 

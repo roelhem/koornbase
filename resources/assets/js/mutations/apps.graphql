@@ -1,9 +1,0 @@
-mutation createNewApp($name:String!, $name_short:String, $description:String) {
-    createApp(name: $name, name_short: $name_short, description: $description) {
-        id
-        name
-        name_short
-        description
-    }
-}
-

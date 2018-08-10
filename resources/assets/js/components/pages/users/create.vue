@@ -21,6 +21,7 @@
 
                 <form-simple-input id="create_user--email"
                                    label="E-mailadres"
+                                   type="email"
                                    required
                                    placeholder="Het e-mailadres van de gebruiker."
                 />
@@ -54,9 +55,13 @@
                                 <template v-if="form.passwordInitType === 'set'">
                                     <form-simple-input id="create_user--password"
                                                        label="Wachtwoord"
+                                                       type="password"
+                                                       placeholder="Vul hier het wachtwoord voor de nieuwe gebruiker in."
                                     />
                                     <form-simple-input id="create_user--password-repeat"
                                                        label="Wachtwoord Herhalen"
+                                                       type="password"
+                                                       placeholder="Herhaal hier het wachtwoord."
                                     />
                                 </template>
                                 <template v-else-if="form.passwordInitType === 'generate'">
@@ -69,35 +74,11 @@
                                         </b-form-checkbox-group>
                                     </tabler-form-group>
 
-
-                                    <tabler-form-group label="Lengte Wachtwoord"
-                                                       label-for="create_user--password-size"
-                                    >
-                                        <b-row>
-                                            <b-col>
-                                                <input type="range"
-                                                       class="form-control custom-range"
-                                                       max="100"
-                                                       min="10"
-                                                       step="1"
-                                                       id="create_user--password-size"
-                                                       v-model="form.passwordGenerateLength"
-                                                />
-                                            </b-col>
-                                            <div class="col-auto">
-                                                <input type="number"
-                                                       class="form-control w-8"
-                                                       max="100"
-                                                       min="10"
-                                                       step="1"
-                                                       id="create_user--password-size_number"
-                                                       v-model="form.passwordGenerateLength"
-                                                />
-                                            </div>
-                                        </b-row>
-
-
-                                    </tabler-form-group>
+                                    <form-range-input label="Lengte Wachtwoord"
+                                                      id="create_user--password-size"
+                                                      :max="100" :min="10" :step="1"
+                                                      v-model="form.passwordGenerateLength"
+                                    />
 
                                     <tabler-form-group label="Wachtwoord Feedback">
                                         <b-form-radio-group stacked id="create_user--password-generated-feedback" v-model="form.passwordGenerateFeedback">
@@ -129,6 +110,10 @@
                         </b-form-row>
                     </fieldset>
                 </tabler-form-group>
+
+                <tabler-form-group id="create_user--person" label="Persoon aan account koppelen.">
+                    <person-select v-model="person" />
+                </tabler-form-group>
             </form>
 
 
@@ -150,9 +135,15 @@
     import FormSimpleInput from "../../forms/FormSimpleInput";
     import FormSwitch from "../../FormSwitch";
     import TablerFormGroup from "../../TablerFormGroup";
+    import FormRangeInput from "../../forms/FormRangeInput";
+    import FormColorInput from "../../forms/FormColorInput";
+    import PersonSelect from "../../forms/select/PersonSelect";
 
     export default {
         components: {
+            PersonSelect,
+            FormColorInput,
+            FormRangeInput,
             TablerFormGroup,
             FormSwitch,
             FormSimpleInput,
@@ -167,6 +158,7 @@
                     passwordGenerateLength:20,
                     passwordGenerateOptions:['a','c'],
                     passwordGenerateFeedback:'show',
+                    person:null
                 }
             };
         }

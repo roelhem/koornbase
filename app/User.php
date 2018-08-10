@@ -12,6 +12,7 @@ use EloquentFilter\Filterable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
@@ -43,7 +44,7 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     use HasApiTokens;
     use HasMorphedRbacAssignments;
     use BelongsToPerson;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
     use Userstamps;
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -208,6 +209,20 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOUT SEARCHABLE CONFIGURATION --------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'name',
+            'email',
+            'name_display'
+        ]);
     }
 
 

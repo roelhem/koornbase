@@ -67,6 +67,12 @@ export const routes = [
         component: require('./components/pages/oauth/clients/update'),
     },
     {
+        path:'/oauth/clients/:id/request-personal-token',
+        name:'oauth.clients.request-personal-token',
+        component: require('./components/pages/oauth/clients/request-personal-token'),
+        props:true,
+    },
+    {
         path:'/oauth/clients/:id',
         name:'oauth.clients.view',
         component: require('./components/pages/oauth/clients/view'),

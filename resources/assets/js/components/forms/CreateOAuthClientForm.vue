@@ -12,6 +12,10 @@
                            :validation="$v.values.name"
         />
 
+        <tabler-form-group label="Eigenaar/Beheerder" :label-for="getFieldId('user')" :validation="$v.values.user">
+            <user-select :id="getFieldId('user')" v-model="$v.values.user.$model" />
+        </tabler-form-group>
+
         <tabler-form-group id="create-o-auth-client-form_type_fieldset"
                       label="Type">
             <b-form-radio-group id="create-o-auth-client-form_type" v-model="values.type" stacked>
@@ -54,12 +58,13 @@
 
 <script>
     import TablerFormGroup from "../TablerFormGroup";
-    import { createOAuthClient } from "../../mutations/oauth.graphql";
+    import { createOAuthClient } from "../../graphql/mutations/oauth.graphql";
     import controlForm from "../../mixins/controlForm";
-    import { required, url, maxLength } from 'vuelidate/lib/validators';
+    import { required, url, maxLength, integer } from 'vuelidate/lib/validators';
     import { validationMixin } from 'vuelidate';
     import FormLayout from "./FormLayout";
     import FormSimpleInput from "./FormSimpleInput";
+    import UserSelect from "./select/UserSelect";
 
 
     const CREDENTIALS = "CREDENTIALS";
@@ -70,6 +75,7 @@
 
     export default {
         components: {
+            UserSelect,
             FormSimpleInput,
             FormLayout,
             TablerFormGroup
@@ -85,6 +91,7 @@
                     name:null,
                     type:AUTH_CODE,
                     redirect:null,
+                    user:null,
                 }
             }
         },
@@ -96,7 +103,8 @@
                         required,
                         maxLength:maxLength(255)
                     },
-                    redirect: this.values.type === AUTH_CODE ? { url, required} : { url }
+                    redirect: this.values.type === AUTH_CODE ? { url, required} : { url },
+                    user: { integer },
                 }
             };
         },

@@ -38,10 +38,10 @@
         <!-- NAVIGATION -->
         <b-container class="my-4">
             <b-nav tabs>
-                <b-nav-item :to="{name: 'persons.view.overview', params:{id: id}}">Overzicht</b-nav-item>
-                <b-nav-item :to="{name: 'persons.view.contact', params:{id: id}}">Contactgegevens</b-nav-item>
-                <b-nav-item :to="{name: 'persons.view.membership', params:{id: id}}">Lidmaatschap</b-nav-item>
-                <b-nav-item :to="{name: 'persons.view.debug', params:{id: id}}">Debug</b-nav-item>
+                <b-nav-item :to="{name: 'db.persons.view.overview', params:{id: id}}">Overzicht</b-nav-item>
+                <b-nav-item :to="{name: 'db.persons.view.contact', params:{id: id}}">Contactgegevens</b-nav-item>
+                <b-nav-item :to="{name: 'db.persons.view.membership', params:{id: id}}">Lidmaatschap</b-nav-item>
+                <b-nav-item :to="{name: 'db.persons.view.debug', params:{id: id}}">Debug</b-nav-item>
 
 
 
@@ -78,7 +78,7 @@
     import BaseIcon from "../../BaseIcon";
     import TablerDimmer from "../../TablerDimmer";
 
-    import { getPersonPageHeaderData } from "../../../queries/persons.graphql";
+    import { getPersonPageHeaderData } from "../../../graphql/queries/persons.graphql";
 
     export default {
         components: {

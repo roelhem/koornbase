@@ -44,6 +44,11 @@ class PersonsQuery extends ModelListQuery
             'birthDateAfter' => [
                 'type' => GraphQL::type('Date'),
                 'description' => 'Filters the persons who were born after the provided date.',
+            ],
+
+            'inAnyGroup' => [
+                'type' => Type::listOf(Type::id()),
+                'description' => 'Filters the persons that are in at least one of the provided groups.'
             ]
 
         ]);

@@ -1,0 +1,28 @@
+query getUsersForTableQuery($page: Int = 1, $limit: Int = 10, $search:String, $orderBy: User_sortField = id, $orderDir: SortOrderDirection = ASC) {
+    users(page: $page, limit: $limit, search:$search, orderBy: [{by: $orderBy, dir: $orderDir}]) {
+        current_page
+        per_page
+        total
+        from
+        to
+        data {
+            id
+            avatar {
+                image
+                letters
+            }
+            person {
+                id
+                name
+                membership_status
+                membership_status_since
+            }
+            name
+            email
+            created_at
+            updated_at
+        }
+    }
+}
+
+

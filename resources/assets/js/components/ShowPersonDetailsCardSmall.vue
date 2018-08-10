@@ -61,7 +61,7 @@
     import DisplayMembershipStatus from "./DisplayMembershipStatus";
     import DisplayPersonAddress from "./DisplayPersonAddress";
 
-    import { getPersonDetailsData } from "../queries/persons.graphql";
+    import { getPersonDetailsData } from "../graphql/queries/persons.graphql";
     import TablerDimmer from "./TablerDimmer";
 
 

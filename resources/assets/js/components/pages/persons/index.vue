@@ -91,7 +91,7 @@
                             </template>
 
                             <template slot="links" slot-scope="{ item }">
-                                <router-link class="icon" :to="{name:'persons.view', params: {id: item.id} }">
+                                <router-link class="icon" :to="{name:'db.persons.view', params: {id: item.id} }">
                                     <base-icon icon="more-vertical" from="fe" />
                                 </router-link>
                             </template>
@@ -161,7 +161,7 @@
     import BaseIcon from "../../BaseIcon";
     import searchTableMixin from "../../../mixins/searchTableMixin";
 
-    import { getPersonsForTableQuery } from "../../../queries/persons.graphql";
+    import { getPersonsForTableQuery } from "../../../graphql/queries/persons.graphql";
 
     import displayFilters from '../../../filters/display';
     import SearchHeaderContainer from "../../SearchHeaderContainer";
@@ -275,8 +275,9 @@
                         limit:this.perPage,
                         orderBy:this.sortBy,
                         orderDir:this.sortDir,
+                        inAnyGroup:this.inAnyGroup,
                         search:this.search,
-                        anyMembershipStatus:this.anyMembershipStatus
+                        anyMembershipStatus:this.anyMembershipStatus,
                     }
                 }
             },
@@ -321,6 +322,14 @@
             anyMembershipStatus() {
                 if(this.filters.membershipStatus.active) {
                     return this.filters.membershipStatus.value;
+                } else {
+                    return null;
+                }
+            },
+
+            inAnyGroup() {
+                if(this.filters.groups.active) {
+                    return this.filters.groups.value;
                 } else {
                     return null;
                 }

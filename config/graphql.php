@@ -153,6 +153,7 @@ return [
                 'createOAuthClient' => \App\GraphQL\Mutations\CreateOAuthClientMutation::class,
                 'revokeOAuthClient' => \App\GraphQL\Mutations\RevokeOAuthClientMutation::class,
                 'updateOAuthClient' => \App\GraphQL\Mutations\UpdateOAuthClientMutation::class,
+                'requestPersonalAccessToken' => \App\GraphQL\Mutations\RequestPersonalAccessTokenMutation::class,
             ],
             'middleware' => []
         ],
@@ -205,6 +206,7 @@ return [
         'OAuthAuthCodeClient' => \App\GraphQL\Types\OAuthAuthCodeClientType::class,
 
         'OAuthPersonalAccessClient' => \App\GraphQL\Types\OAuthPersonalAccessClientType::class,
+        'OAuthPersonalAccessTokenResult' => \App\GraphQL\Types\OAuthPersonalAccessTokenResultType::class,
 
         'OAuthAuthCode' => \App\GraphQL\Types\OAuthAuthCodeType::class,
         'OAuthToken' => \App\GraphQL\Types\OAuthTokenType::class,

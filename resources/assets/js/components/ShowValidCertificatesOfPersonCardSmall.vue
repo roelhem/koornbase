@@ -55,7 +55,7 @@
 
 <script>
 
-    import { getActiveCertificatesOfPerson } from "../queries/certificates.graphql";
+    import { getActiveCertificatesOfPerson } from "../graphql/queries/certificates.graphql";
     import BaseIcon from "./BaseIcon";
     import DisplayFilters from "../filters/display";
     import TablerDimmer from "./TablerDimmer";

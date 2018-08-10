@@ -44,7 +44,7 @@
 
 <script>
     import SearchHeaderContainer from "../../../SearchHeaderContainer";
-    import { getAppsForTable } from "../../../../queries/apps.graphql";
+    import { getAppsForTable } from "../../../../graphql/queries/apps.graphql";
     import CreateAppForm from "../../../forms/CreateAppForm";
     import TablerPageHeader from "../../../TablerPageHeader";
 

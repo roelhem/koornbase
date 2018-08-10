@@ -33,7 +33,7 @@
     import { mapState } from "vuex";
     import TablerCard from "../../TablerCard";
     import DisplayPersonAddress from "../../DisplayPersonAddress";
-    import { getPersonDetailsShowCardData } from "../../../queries/persons.graphql";
+    import { getPersonDetailsShowCardData } from "../../../graphql/queries/persons.graphql";
     import ShowPhoneNumbersOfPersonCard from "../../ShowPhoneNumbersOfPersonCard";
     import ShowAddressesOfPersonCard from "../../ShowAddressesOfPersonCard";
 

@@ -20,4 +20,14 @@ class UserFilter extends ModelFilter
         $this->where('person_id',$id);
     }
 
+    public function name($query)
+    {
+        $this->where('name','ILIKE','%'.$query.'%');
+    }
+
+    public function withAnyId($ids)
+    {
+        $this->whereIn('id', $ids);
+    }
+
 }

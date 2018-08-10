@@ -8,6 +8,7 @@ use App\Debtor;
 use App\Enums\MembershipStatus;
 use App\Enums\OAuthClientType;
 use App\Enums\OAuthProvider;
+use App\Enums\OAuthScope;
 use App\Enums\SortOrderDirection;
 use App\GraphQL\Enums\PhpEnumWrapper;
 use App\GraphQL\Enums\SortFieldEnum;
@@ -71,14 +72,25 @@ class GraphQLServiceProvider extends ServiceProvider
         }
 
         $enums = [
-            MembershipStatus::class,
-            OAuthClientType::class,
-            OAuthProvider::class,
-            SortOrderDirection::class
+            MembershipStatus::class => [
+                "description" => 'This `Enum`-type contains the different states in which the membership of a Person at the Koornbeurs can be.'
+            ],
+            OAuthClientType::class => [
+                "description" => 'This `Enum`-type contains the different types of OAuthClients that exist for the OAuth server of the KoornBase.'
+            ],
+            OAuthProvider::class => [
+                "description" => "This `Enum`-type represent the different (OAuth protected) online services that the KoornBase uses as a client."
+            ],
+            SortOrderDirection::class => [
+                "description" => "This `Enum`-type represent the two different ways to order a sorted list."
+            ],
+            OAuthScope::class => [
+                "description" => "This `Enum`-type represent the Token Scopes in the system. These Scopes give an OAuth-Token more permissions."
+            ],
         ];
 
-        foreach ($enums as $enumClass) {
-            \GraphQL::addType(new PhpEnumWrapper($enumClass));
+        foreach ($enums as $enumClass => $attributes) {
+            \GraphQL::addType(new PhpEnumWrapper($enumClass, $attributes));
         }
 
     }

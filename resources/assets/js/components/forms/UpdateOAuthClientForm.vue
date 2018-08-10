@@ -24,8 +24,8 @@
 
 <script>
     import controlForm from "../../mixins/controlForm";
-    import { getOAuthClientForUpdateForm } from "../../queries/oauth.graphql";
-    import { updateOAuthClient } from "../../mutations/oauth.graphql";
+    import { getOAuthClientForUpdateForm } from "../../graphql/queries/oauth.graphql";
+    import { updateOAuthClient } from "../../graphql/mutations/oauth.graphql";
     import { required, url, maxLength } from 'vuelidate/lib/validators';
     import { validationMixin } from 'vuelidate';
     import FormLayout from "./FormLayout";
