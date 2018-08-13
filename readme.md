@@ -16,9 +16,7 @@ Elke stap kan behoorlijk lang duren. Voer `vagrant ssh` uit om de server te init
 1. voer `cd code` uit om naar de map waarin de broncode staat te gaan.
 2. voer `php artisan migrate:fresh --seed` uit om de database te initialiseren en te vullen met willekeurig gegegenereerde data.
 
-Nadat alles klaar is, kun je de website openen via `https://127.0.0.1:43300`. 
-
-Je kunt inloggen met het account `super@koornbeurs.nl` en wachtwoord `secret`. Dit account heeft altijd alle rechten in de database.
+Nadat alles klaar is, kun je de website openen via `https://127.0.0.1:43300`. Elk account heeft als wachtwoord `secret`. Je kunt inloggen met het account `super@koornbeurs.nl`. Dit account heeft altijd alle rechten.
 
 ## Over het project
 
