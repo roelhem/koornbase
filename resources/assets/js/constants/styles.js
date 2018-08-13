@@ -156,4 +156,12 @@ export const PERSON_STYLE = {
     },
 };
 
-export default [ PERSON_STYLE ].concat(GROUP_STYLES);
+export const USER_STYLE = {
+    name: 'user-default',
+    label: 'Gebruiker',
+    avatar: {
+        color:'azure'
+    },
+};
+
+export default [ PERSON_STYLE, USER_STYLE ].concat(GROUP_STYLES);

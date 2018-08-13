@@ -1,0 +1,32 @@
+{
+    "name": "roelhem/rbac-graph",
+    "description": "Role based authorization control with a very prominent graph structure.",
+    "type": "laravel-plugin",
+    "authors": [
+        {
+            "name": "roelhem",
+            "email": "ik@roelweb.com"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+            "Roelhem\\RbacGraph\\" : "src",
+            "Roelhem\\RbacGraph\\Tests\\" : "tests"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "marc-mabe/php-enum":"^3",
+        "raphhh/trex-reflection":"^1"
+    },
+    "extra": {
+        "laravel": {
+            "providers":[
+                "Roelhem\\RbacGraph\\RbacServiceProvider"
+            ],
+            "aliases":{
+                "Rbac": "Roelhem\\RbacGraph\\Facades\\Rbac"
+            }
+        }
+    }
+}

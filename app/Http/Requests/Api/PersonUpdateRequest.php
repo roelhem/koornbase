@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Http\Requests\Api\Traits\FindsModels;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PersonUpdateRequest extends FormRequest
 {
+
+    use FindsModels;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +17,9 @@ class PersonUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $person = $this->findFromUrl('person');
+
+        return $this->user()->can('update', $person);
     }
 
     /**

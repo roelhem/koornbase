@@ -1,0 +1,77 @@
+
+# ------------------------------------------------------------------------------------------------------------------
+#  OUTSIDER
+# ------------------------------------------------------------------------------------------------------------------
+
+OUTSIDER:
+  title: Buitenstaander
+  description: Iemand die zichzelf nooit heeft ingeschreven bij O.J.V. de Koornbeurs (en dus ook nooit lid geweest.)
+
+  dynamicRole:
+    name: MembershipStatus.Outsider
+    title: 'Lid-status: Buitenstaander'
+    description:
+      Wordt automatisch toegekend gebruikers van personen die als buitenstaander geregistreerd staan. Als de
+      lidstatus veranderd, verdwijnt deze rol automatisch voor deze gebruiker. (Een gebruiker heeft dus maximaal
+      één MembershipStatus-rol.)
+
+  style:
+    bootstrap: secondary
+
+# ------------------------------------------------------------------------------------------------------------------
+#  NOVICE
+# ------------------------------------------------------------------------------------------------------------------
+
+NOVICE:
+  title: Kennismaker
+  description: Iemand die zichzelf heeft ingeschreven bij O.J.V. de Koornbeurs.
+
+  dynamicRole:
+      name: MembershipStatus.Novice
+      title: 'Lid-status: Kennismaker'
+      description:
+        Wordt automatisch toegekend gebruikers van personen die als Kennismaker geregistreerd staan. Als de
+        lidstatus veranderd, verdwijnt deze rol automatisch voor deze gebruiker. (Een gebruiker heeft dus maximaal
+        één MembershipStatus-rol.)
+
+  style:
+    bootstrap: warning
+
+# ------------------------------------------------------------------------------------------------------------------
+#  MEMBER
+# ------------------------------------------------------------------------------------------------------------------
+
+MEMBER:
+  title: Lid
+  description: Iemand die volledig lid is van O.J.V. de Koornbeurs.
+
+  dynamicRole:
+      name: MembershipStatus.Member
+      title: 'Lid-status: Lid'
+      description:
+        Wordt automatisch toegekend gebruikers van personen die als Lid geregistreerd staan. Als de
+        lidstatus veranderd, verdwijnt deze rol automatisch voor deze gebruiker. (Een gebruiker heeft dus maximaal
+        één MembershipStatus-rol.)
+
+  style:
+    bootstrap: success
+
+# ------------------------------------------------------------------------------------------------------------------
+#  FORMER_MEMBER
+# ------------------------------------------------------------------------------------------------------------------
+
+FORMER_MEMBER:
+  title: Oud-lid
+  label: FormerMember
+  description: Iemand die ooit lid- of kennismaker is geweest bij O.J.V. de Koornbeurs, maar nu niet meer lid is.
+
+  dynamicRole:
+      name: MembershipStatus.FormerMember
+      title: 'Lid-status: Oud-lid'
+      description:
+        Wordt automatisch toegekend gebruikers van personen die als oud-lid geregistreerd staan. Als de
+        lidstatus veranderd, verdwijnt deze rol automatisch voor deze gebruiker. (Een gebruiker heeft dus maximaal
+        één MembershipStatus-rol.)
+
+  style:
+    bootstrap: danger

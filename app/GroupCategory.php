@@ -2,16 +2,20 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
+
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasDescription;
 use App\Traits\HasOptions;
 use App\Traits\HasShortName;
-use App\Traits\Rbac\HasChildRoles;
 use App\Traits\Sluggable;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
+use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -22,17 +26,21 @@ use Wildside\Userstamps\Userstamps;
  * @property integer $id
  * @property boolean $is_required
  * @property string $style
+ *
+ * @property-read Collection|Group[] $groups
  */
-class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizable
+class GroupCategory extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {
 
     use SoftDeletes;
     use Userstamps;
     use Sluggable;
+    use Filterable, Sortable, Searchable;
 
     use HasShortName, HasDescription;
+    use HasOptions;
 
-    use HasOptions, HasChildRoles, DefaultRbacAuthorizable;
+    use HasMorphedRbacAssignments;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -42,7 +50,7 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    protected $fillable = ['name','name_short', 'slug','style','description','is_required','groups'];
+    protected $fillable = ['name','name_short', 'slug','style','description','is_required', 'options'];
 
     protected function defaultOptions(): array
     {
@@ -56,10 +64,6 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
     // ---------------------------------------------------------------------------------------------------------- //
 
 
-    public function childRoles() {
-        return $this->assignedRoles();
-    }
-
     /**
      * Gives all the Groups that belong to this GroupCategory.
      *
@@ -69,5 +73,38 @@ class GroupCategory extends Model implements RbacRoleAssignable, RbacAuthorizabl
         return $this->hasMany(Group::class, 'category_id');
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getAuthorizables()
+    {
+        return $this->groups;
+    }
+
+    public function getAuthorizableGroups()
+    {
+        return collect([]);
+    }
+
+    public function getDynamicRoles()
+    {
+        return collect([]);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIGURATION --------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'slug',
+            'name',
+            'name_short',
+            'description'
+        ]);
+    }
 
 }

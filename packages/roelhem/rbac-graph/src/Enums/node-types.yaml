@@ -1,0 +1,262 @@
+
+# ------------------------------------------------------------------------------------------------------------------
+#  NODES
+# ------------------------------------------------------------------------------------------------------------------
+
+DEFAULT_NODE:
+  description:
+    The default node-type. This is only defined for completeness and shouldn't be used in a normal graph.
+  style:
+    console:
+      fg-color: black
+    bootstrap:
+      bg-color: gray-dark
+      fg-color: white
+  edges: false
+  assignable: false
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  ROLES
+# ------------------------------------------------------------------------------------------------------------------
+
+ROLE:
+  description:
+    A node that models a standard rbac-role.
+  style:
+    console:
+      fg-color: blue
+    bootstrap:
+      bg-color: blue
+      fg-color: white
+  edges:
+    parents: ROLE
+  assignable: true
+
+
+
+SUPER_ROLE:
+  label: Super-user Role
+  graphQLType: SuperRole
+  description: >
+    A role that is authorized for everything. Can be used to give an user access to everything.
+
+    When an authorizer discovers a node of this type during an authorization, it will immediately accept the
+    authorization. This way, it bypasses any further authorization checks. Using a role of this type can easily lead
+    to security issues.
+  style:
+    console:
+      fg-color: blue
+      options: [ bold ]
+    bootstrap:
+      bg-color: gray-dark
+      fg-color: red
+  edges: false
+  assignable: true
+  default-values:
+    name: 'Super'
+
+
+
+
+ABSTRACT_ROLE:
+  description:
+    A role that can't be assigned to an authorizable model (like a user). It can only be acquired trough the
+    parent-nodes of this role.
+  style:
+    console:
+      fg-color: blue
+    bootstrap:
+      bg-color: blue
+      fg-color: white
+  edges: !like ROLE
+  assignable: false
+
+
+
+
+
+DYNAMIC_ROLE:
+  description:
+    A role that is dynamically assigned to an model based on the attributes of the model.
+  style:
+    console:
+      fg-color: blue
+      options: [ bold ]
+    bootstrap:
+      bg-color: cyan
+      fg-color: white
+  edges:
+    children: !like ROLE
+  assignable: false
+  options:
+    rule: \Roelhem\RbacGraph\Contracts\Rules\DynamicRole
+
+
+
+
+
+TASK:
+  description:
+    An role that can't have other roles as it child. Provides some extra structure in the graph.
+  style:
+    console:
+      fg-color: cyan
+    bootstrap:
+      bg-color: teal
+      fg-color: white
+  edges:
+    parents: [ TASK, ROLE ]
+  assignable: false
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  PERMISSIONS
+# ------------------------------------------------------------------------------------------------------------------
+
+
+PERMISSION:
+  description:
+    A node that models a standard rbac-permission
+  style:
+    console:
+      fg-color: green
+    bootstrap:
+      bg-color: green
+      fg-color: white
+  edges:
+    parents: [ ROLE, TASK ]
+    children:
+
+
+
+
+ROUTE_PERMISSION:
+  description:
+    A permission that is needed to access a certain route.
+  style:
+    console:
+      fg-color: green
+    bootstrap:
+      bg-color: green
+      fg-color: white
+  edges: !like PERMISSION
+  options:
+    route: !required string
+  default-values:
+    name-prefix: 'ROUTE:'
+
+
+
+
+ABILITY:
+  description:
+    A special kind of permission which is compatible with the default Laravel-authorization.
+  style:
+    console:
+      fg-color: green
+    bootstrap:
+      bg-color: yellow
+      fg-color: white
+  edges: !like PERMISSION
+  options:
+    ability: !required string
+
+
+
+
+MODEL_ABILITY:
+  description:
+    An ability that requires a model instance or classname to be passed if it is called with the default
+    Laravel-authorization.
+  style:
+    console:
+      fg-color: green
+    bootstrap:
+      bg-color: yellow
+      fg-color: white
+  edges: !like ABILITY
+  options:
+    ability: !required string
+    modelClass: !required string
+
+
+
+
+PERMISSION_SET:
+  description:
+    A smaller subset of permissions.
+  style:
+    console:
+      fg-color: green
+      options: [ underscore ]
+    bootstrap:
+      bg-color: light
+      fg-color: green
+  edges:
+    parents: !like PERMISSION
+    children: PERMISSION
+
+
+
+CRUD_ABILITY_SET:
+  description:
+    A set of CRUD (Create Read Update Write) abilities on a model. All model-ability nodes that are children of
+    this node, should have the same model class as this ability-set.
+  style:
+    console:
+      fg-color: green
+      options: [ underscore ]
+    bootstrap:
+      bg-color: light
+      fg-color: yellow
+  edges:
+    parents: !like ABILITY
+    children: MODEL_ABILITY
+  options:
+    modelClass: string
+  default-values:
+    name: crud
+    delimiter: "."
+    crud-abilities:
+      - create
+      - view
+      - update
+      - delete
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+#  GATES
+# ------------------------------------------------------------------------------------------------------------------
+
+
+GATE:
+  description:
+    A node that can only be traversed by an authorizer if it is allowed by a specific rule.
+  style:
+    console:
+      fg-color: red
+    bootstrap:
+      bg-color: red
+      fg-color: white
+  edges:
+    parents: [ ROLE, TASK, GATE ]
+    children: [ TASK, PERMISSION ]
+  options:
+    rule: \Roelhem\RbacGraph\Contracts\Rules\GateRule
+
+MODEL_GATE:
+  description:
+    When authorizing an ability of a model, this node can only be traversed by an authorizer if it is allowed
+    by a specific rule.
+  style:
+    console:
+      fg-color: red
+    bootstrap:
+      bg-color: red
+      fg-color: white
+  edges: !like GATE
+  options:
+    for: !list string
+    rule: \Roelhem\RbacGraph\Contracts\Rules\ModelRule

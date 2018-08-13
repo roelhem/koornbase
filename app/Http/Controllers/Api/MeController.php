@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Api\UserResource;
+use App\User;
 use Illuminate\Http\Request;
 
 class MeController extends Controller
@@ -13,12 +14,15 @@ class MeController extends Controller
      *
      * @param Request $request
      * @return UserResource
+     * @throws
      */
     public function me(Request $request) {
 
-        $user = \Auth::user();
-        $user->load('person');
-        $user->load($this->getAskedRelations($request));
+        $this->authorize('view-me');
+
+        $user = User::findOrFail(\Auth::id());
+
+        $user->load($this->getEagerLoadingRelations($request));
 
         return new UserResource($user);
     }

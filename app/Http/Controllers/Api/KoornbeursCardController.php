@@ -22,11 +22,12 @@ class KoornbeursCardController extends Controller
      * @param Request $request
      * @param FinderCollection $finders
      * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     * @throws \Throwable
+     * @throws
      */
     public function store(Request $request, FinderCollection $finders) {
+
+        $this->authorize('create', KoornbeursCard::class);
+
         $validatedData = $request->validate([
             'owner' => 'nullable|finds:person',
             'ref' => 'required|string|unique:koornbeurs_cards|max:63',
@@ -57,9 +58,12 @@ class KoornbeursCardController extends Controller
      * @param Request $request
      * @param KoornbeursCard $card
      * @return Resource
+     * @throws
      */
     public function show(Request $request, KoornbeursCard $card)
     {
+        $this->authorize('view', $card);
+
         return $this->prepare($card, $request);
     }
 
@@ -70,11 +74,12 @@ class KoornbeursCardController extends Controller
      * @param KoornbeursCard $koornbeursCard
      * @param FinderCollection $finders
      * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     * @throws \Throwable
+     * @throws
      */
     public function update(Request $request, KoornbeursCard $koornbeursCard, FinderCollection $finders) {
+
+        $this->authorize('update',$koornbeursCard);
+
         $validatedData = $request->validate([
             'owner' => 'nullable|finds:person',
             'ref' => ['sometimes','required','string','max:63',
@@ -111,6 +116,8 @@ class KoornbeursCardController extends Controller
      */
     public function destroy(KoornbeursCard $koornbeursCard)
     {
+        $this->authorize('delete', $koornbeursCard);
+
         $koornbeursCard->delete();
     }
 

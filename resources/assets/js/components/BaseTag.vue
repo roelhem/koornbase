@@ -45,6 +45,11 @@
                 }
             },
 
+            noShadow:{
+                type:Boolean,
+                default:false
+            },
+
             removeButton:{
                 type:Boolean,
                 default:false,
@@ -70,6 +75,10 @@
 
                 if(this.currentColor) {
                     res.push('tag-'+this.currentColor);
+                }
+
+                if(!this.noShadow) {
+                    res.push('shadow');
                 }
 
                 return res;

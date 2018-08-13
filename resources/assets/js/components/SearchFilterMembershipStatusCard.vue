@@ -39,7 +39,7 @@
 
         data: function() {
             return {
-                options: [0,1,2,3]
+                options: ["OUTSIDER","NOVICE","MEMBER","FORMER_MEMBER"]
             };
         },
 

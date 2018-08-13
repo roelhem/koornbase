@@ -2,31 +2,23 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
+use App\Traits\BelongsToPerson;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
-class Debtor extends Model
+class Debtor extends Model implements OwnedByPerson
 {
 
     use Userstamps;
+    use BelongsToPerson;
+    use Sortable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     protected $table = 'debtors';
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person this Debtor belongs to. (Note that some Debtors don't belong to any Person.)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person() {
-        return $this->belongsTo(Person::class,'person_id');
-    }
 
 }

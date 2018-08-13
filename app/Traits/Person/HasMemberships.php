@@ -20,7 +20,7 @@ use Carbon\Carbon;
  * Trait PersonHasMemberships
  * @package App\Traits
  *
- * @property-read integer $membership_status
+ * @property-read MembershipStatus $membership_status
  * @property-read Carbon|null $membership_status_since
  *
  * @property-read Collection $memberships
@@ -64,24 +64,20 @@ trait HasMemberships
     /**
      * Returns the membership status of this Person.
      *
-     * The value is an enum element of \App|Enums\MembershipStatus .
-     *
-     * @return integer
+     * @return MembershipStatus
      */
     public function getMembershipStatusAttribute()
     {
         $res = $this->getLastMembershipStatusChange();
         if($res === null) {
-            return MembershipStatus::Outsider;
+            return MembershipStatus::OUTSIDER();
         } else {
-            return $res->status;
+            return MembershipStatus::get($res->status);
         }
     }
 
     /**
-     * Returns the membership status of this Person.
-     *
-     * The value is an enum element of \App|Enums\MembershipStatus .
+     * Returns the last date on which the membership status changed.
      *
      * @return Carbon|null
      */
@@ -115,6 +111,20 @@ trait HasMemberships
             $at = Carbon::today()->toDateString();
         } elseif($at instanceof Carbon) {
             $at = $at->toDateString();
+        }
+
+        if($status instanceof MembershipStatus) {
+            $status = $status->getValue();
+        }
+
+        if(is_array($status)) {
+            $status = collect($status)->map(function($status) {
+                if($status instanceof MembershipStatus) {
+                    return $status->getValue();
+                } else {
+                    return $status;
+                }
+            })->values()->all();
         }
 
         // Join the membership status with
@@ -152,7 +162,7 @@ trait HasMemberships
      * @return mixed
      */
     public function scopeOutsider($query, $at = null) {
-        return $this->scopeMembershipStatus($query, MembershipStatus::Outsider, $at);
+        return $this->scopeMembershipStatus($query, MembershipStatus::OUTSIDER, $at);
     }
 
     /**
@@ -165,7 +175,7 @@ trait HasMemberships
      * @return mixed
      */
     public function scopeNovice($query, $at = null) {
-        return $this->scopeMembershipStatus($query, MembershipStatus::Novice, $at);
+        return $this->scopeMembershipStatus($query, MembershipStatus::NOVICE, $at);
     }
 
     /**
@@ -178,7 +188,7 @@ trait HasMemberships
      * @return mixed
      */
     public function scopeMember($query, $at = null) {
-        return $this->scopeMembershipStatus($query, MembershipStatus::Member, $at);
+        return $this->scopeMembershipStatus($query, MembershipStatus::MEMBER, $at);
     }
 
     /**
@@ -191,7 +201,7 @@ trait HasMemberships
      * @return mixed
      */
     public function scopeFormerMember($query, $at = null) {
-        return $this->scopeMembershipStatus($query, MembershipStatus::Novice, $at);
+        return $this->scopeMembershipStatus($query, MembershipStatus::FORMER_MEMBER, $at);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

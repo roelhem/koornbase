@@ -22,8 +22,6 @@
  |
  */
 
-import axios from 'axios';
-
 export default {
 
     data: function() {
@@ -32,24 +30,13 @@ export default {
             perPage:10,
             sort:null,
             sortOrder:'asc',
-
-            isLoading:false,
             hasError:false,
-            meta:{},
 
             columns:[],
         }
     },
 
     computed: {
-
-        params: function() {
-            return this.getDefaultParams()
-        },
-
-        endpoint:function() {
-            return '';
-        },
 
         sortByColumn: {
             get() {
@@ -78,65 +65,8 @@ export default {
         },
 
         tableFields: function() {
-            return this.columns.map(col => this.columnToField(col));
+            return this.columns.filter(col => col.visible);
         }
     },
-
-    methods: {
-
-        itemsProvider(ctx) {
-            let promise = axios.get(this.endpoint, {
-                params: this.params,
-            });
-
-            return promise.then(response => {
-                const items = response.data.data;
-                this.meta = response.data.meta;
-
-                this.hasError = false;
-
-                return( items );
-            }).catch(error => {
-
-                console.log(error);
-
-                this.hasError = true;
-            });
-        },
-
-        getDefaultParams() {
-            let res = {};
-
-            res.per_page = this.perPage;
-            res.page = this.page;
-
-            if(this.sort) {
-                res.sort = this.sort + ':' + this.sortOrder;
-            }
-
-            return res;
-        },
-
-        columnToField(column) {
-            let cls = Array.isArray(column.class) ? column.class : [column.class];
-            if(!column.visible) {
-                cls.push('d-none');
-            }
-
-            return {
-                key:column.key,
-                label:column.label,
-                class: cls,
-                sortable: !!column.sortable,
-                formatter: column.formatter,
-                isRowHeader: column.isRowHeader,
-                tdClass: column.tdClass,
-                thClass: column.thClass,
-                thStyle: column.thStyle,
-                variant: column.variant,
-                tdAttr: column.tdAttr,
-            };
-        }
-    }
 
 }

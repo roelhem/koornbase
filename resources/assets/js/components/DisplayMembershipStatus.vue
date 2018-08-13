@@ -1,51 +1,39 @@
 <template>
 
     <span>
-        <span class="status-icon" :class="statusBackgroundClass"></span>
-        {{ label }}
+        <span class="status-icon" :class="status | membershipStatusColor"></span>
+        <data-display v-if="title" title="Lid-status titel">{{ title }}</data-display>
+        <data-display v-else title="Lid-status">{{ status | membershipStatusName }}</data-display>
+        <span v-if="since" class="small text-muted">
+            (sinds
+            <data-display title="Lid-status"
+                          class="text-muted-dark"
+            >{{ since | date(dateSize) }}</data-display>
+            )
+        </span>
     </span>
 
 </template>
 
 <script>
+    import DataDisplay from "./displays/data-display";
+    import displayFilters from '../filters/display';
+
     export default {
+        components: {DataDisplay},
         name: "display-membership-status",
         props: {
-            value:{
-                type:[String,Number],
-                default:0,
-            },
+            status:String,
+            title:String,
+            since:String,
+
+            dateSize:{
+                type:String,
+                default:'lg',
+            }
         },
 
-        computed: {
-            intValue: function () {
-                let value = this.value;
-                if(typeof value === 'string') {
-                    value = parseInt(value);
-                }
-                return value;
-            },
-
-            label: function() {
-                switch (this.intValue) {
-                    case 1: return 'Kennismaker';
-                    case 2: return 'Lid';
-                    case 3: return 'Voormalig Lid';
-                    case 0: return 'Buitenstaander';
-                    default: return 'Onbekend';
-                }
-            },
-
-            statusBackgroundClass: function() {
-                switch(this.intValue) {
-                    case 1: return 'bg-yellow';
-                    case 2: return 'bg-green';
-                    case 3: return 'bg-red';
-                    case 0: return 'bg-gray';
-                    default: return 'bg-gray-dark';
-                }
-            }
-        }
+        filters: displayFilters,
     }
 </script>
 

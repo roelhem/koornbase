@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Enums\OAuthProvider;
+use App\Services\Sorters\Traits\Sortable;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -16,7 +19,7 @@ use Laravel\Socialite\Two\User as OAuthUser;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $provider
+ * @property OAuthProvider $provider
  * @property string $token
  * @property string|null $refresh_token
  * @property integer|null $expires_in
@@ -39,6 +42,7 @@ use Laravel\Socialite\Two\User as OAuthUser;
 class UserAccount extends Model
 {
     use Userstamps;
+    use Filterable, Sortable;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -54,6 +58,9 @@ class UserAccount extends Model
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
+    /**
+     * @return OAuthUser
+     */
     public function getOAuthUserAttribute() {
         $result = new OAuthUser();
 
@@ -70,6 +77,16 @@ class UserAccount extends Model
         $result->refreshToken = $this->refresh_token;
 
         return $result;
+    }
+
+    /**
+     * Converts the string-value of the provider to an instance of OAuthProvider.
+     *
+     * @param string $value
+     * @return OAuthProvider
+     */
+    public function getProviderAttribute($value) {
+        return OAuthProvider::get($value);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -96,6 +113,18 @@ class UserAccount extends Model
                 $this->expires_in = $user->expiresIn;
             }
         }
+    }
+
+
+    /**
+     * Ensures that the provider can be set by an OAuthProvider instance and that it will always be an element
+     * of OAuthProvider.
+     *
+     * @param OAuthProvider|string $newValue
+     */
+    public function setProviderAttribute($newValue)
+    {
+        $this->attributes['provider'] = OAuthProvider::get($newValue)->value;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

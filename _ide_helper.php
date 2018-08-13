@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.24 on 2018-06-08 17:44:16.
+ * Generated for Laravel 5.6.26 on 2018-07-11 06:00:26.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1932,6 +1932,17 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Determine if the guard has a user instance.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasUser()
+        {
+            return \Illuminate\Auth\SessionGuard::hasUser();
+        }
+        
+        /**
          * Determine if the current user is authenticated.
          *
          * @return bool 
@@ -3338,7 +3349,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param mixed $payload
          * @param bool $unserialize
-         * @return string 
+         * @return mixed 
          * @throws \Illuminate\Contracts\Encryption\DecryptException
          * @static 
          */ 
@@ -9810,6 +9821,17 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Drop all views from the database.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function dropAllViews()
+        {
+            \Illuminate\Database\Schema\PostgresBuilder::dropAllViews();
+        }
+        
+        /**
          * Get the column listing for a given table.
          *
          * @param string $table
@@ -10674,12 +10696,12 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $name
          * @param mixed $disk
-         * @return void 
+         * @return $this 
          * @static 
          */ 
         public static function set($name, $disk)
         {
-            \Illuminate\Filesystem\FilesystemManager::set($name, $disk);
+            return \Illuminate\Filesystem\FilesystemManager::set($name, $disk);
         }
         
         /**
@@ -12510,240 +12532,6 @@ namespace Jwz104\EloquentView\Facades {
  
 }
 
-namespace App\Facades { 
-
-    class Rbac {
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function authorizer()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::authorizer();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function builder()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::builder();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function provider()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::provider();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function handler()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::handler();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function permission($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::permission($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function role($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::role($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function constraint($id, $name = null, $description = null)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::constraint($id, $name, $description);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function group($prefix, $definitions)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::group($prefix, $definitions);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function hasPermission($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::hasPermission($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function hasRole($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::hasRole($role);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function userRoles()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::userRoles();
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function userPermissions()
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::userPermissions();
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermission($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermission($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionId($permission)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionId($permission);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionById($id)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionById($id);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getPermissionByRoute($route)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getPermissionByRoute($route);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRole($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRole($role);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRoleId($role)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRoleId($role);
-        }
-        
-        /**
-         * 
-         *
-         * @inheritdoc 
-         * @static 
-         */ 
-        public static function getRoleById($id)
-        {
-            //Method inherited from \App\Services\Rbac\AbstractService            
-            return \App\Services\Rbac\DatabaseService::getRoleById($id);
-        }
-         
-    }
- 
-}
-
 namespace Jenssegers\Date { 
 
     class Date {
@@ -12842,6 +12630,413 @@ namespace Laravel\Socialite\Facades {
         {
             //Method inherited from \Illuminate\Support\Manager            
             return \Laravel\Socialite\SocialiteManager::getDrivers();
+        }
+         
+    }
+ 
+}
+
+namespace Rebing\GraphQL\Support\Facades { 
+
+    class GraphQL {
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function schema($schema = null)
+        {
+            return \Rebing\GraphQL\GraphQL::schema($schema);
+        }
+        
+        /**
+         * 
+         *
+         * @param array $opts - additional options, like 'schema', 'context' or 'operationName'
+         * @static 
+         */ 
+        public static function query($query, $params = array(), $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::query($query, $params, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function queryAndReturnResult($query, $params = array(), $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::queryAndReturnResult($query, $params, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addTypes($types)
+        {
+            return \Rebing\GraphQL\GraphQL::addTypes($types);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addType($class, $name = null)
+        {
+            return \Rebing\GraphQL\GraphQL::addType($class, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function type($name, $fresh = false)
+        {
+            return \Rebing\GraphQL\GraphQL::type($name, $fresh);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function objectType($type, $opts = array())
+        {
+            return \Rebing\GraphQL\GraphQL::objectType($type, $opts);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addSchema($name, $schema)
+        {
+            return \Rebing\GraphQL\GraphQL::addSchema($name, $schema);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearType($name)
+        {
+            return \Rebing\GraphQL\GraphQL::clearType($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearSchema($name)
+        {
+            return \Rebing\GraphQL\GraphQL::clearSchema($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearTypes()
+        {
+            return \Rebing\GraphQL\GraphQL::clearTypes();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearSchemas()
+        {
+            return \Rebing\GraphQL\GraphQL::clearSchemas();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getTypes()
+        {
+            return \Rebing\GraphQL\GraphQL::getTypes();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getSchemas()
+        {
+            return \Rebing\GraphQL\GraphQL::getSchemas();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function paginate($typeName, $customName = null)
+        {
+            return \Rebing\GraphQL\GraphQL::paginate($typeName, $customName);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function formatError($e)
+        {
+            return \Rebing\GraphQL\GraphQL::formatError($e);
+        }
+        
+        /**
+         * Check if the schema expects a nest URI name and return the formatted version
+         * Eg. 'user/me'
+         * will open the query path /graphql/user/me
+         *
+         * @param $name
+         * @param $schemaParameterPattern
+         * @param $queryRoute
+         * @return mixed 
+         * @static 
+         */ 
+        public static function routeNameTransformer($name, $schemaParameterPattern, $queryRoute)
+        {
+            return \Rebing\GraphQL\GraphQL::routeNameTransformer($name, $schemaParameterPattern, $queryRoute);
+        }
+         
+    }
+ 
+}
+
+namespace Roelhem\RbacGraph\Facades { 
+
+    class Rbac {
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function graph()
+        {
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::graph();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function builder()
+        {
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::builder();
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function get($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::get($name);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function create($type, $name, $options = array())
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::create($type, $name, $options);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function node($type, $name, $options = array())
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::node($type, $name, $options);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function group($prefix, $definitions)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::group($prefix, $definitions);
+        }
+        
+        /**
+         * 
+         *
+         * @inheritdoc 
+         * @static 
+         */ 
+        public static function edge($parent, $child)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::edge($parent, $child);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function role($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::role($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function superRole($name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::superRole($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function abstractRole($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::abstractRole($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function dynamicRole($rule, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::dynamicRole($rule, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function task($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::task($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function permission($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::permission($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function permissionSet($name)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::permissionSet($name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function routePermission($route, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::routePermission($route, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function ability($ability, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::ability($ability, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function modelAbility($ability, $modelClass, $name = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::modelAbility($ability, $modelClass, $name);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function crudAbilities($modelClass, $name = null, $crudAbilities = null)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::crudAbilities($modelClass, $name, $crudAbilities);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function gate($name, $rule)
+        {
+            //Method inherited from \Roelhem\RbacGraph\Services\AbstractService            
+            return \Roelhem\RbacGraph\Services\DefaultRbacService::gate($name, $rule);
         }
          
     }
@@ -14694,7 +14889,7 @@ namespace  {
              * Constrain the query to the next "page" of results after a given ID.
              *
              * @param int $perPage
-             * @param int $lastId
+             * @param int|null $lastId
              * @param string $column
              * @return \Illuminate\Database\Query\Builder|static 
              * @static 
@@ -15194,11 +15389,13 @@ namespace  {
 
     class EloquentView extends \Jwz104\EloquentView\Facades\EloquentView {}
 
-    class Rbac extends \App\Facades\Rbac {}
-
     class Date extends \Jenssegers\Date\Date {}
 
     class Socialite extends \Laravel\Socialite\Facades\Socialite {}
+
+    class GraphQL extends \Rebing\GraphQL\Support\Facades\GraphQL {}
+
+    class Rbac extends \Roelhem\RbacGraph\Facades\Rbac {}
  
 }
 

@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -19,12 +22,14 @@ use Wildside\Userstamps\Userstamps;
  * @property Carbon|null $activated_at
  * @property Carbon|null $deactivated_at
  *
+ * @property-read boolean $is_active
  * @property-read Person|null $owner
  */
-class KoornbeursCard extends Model
+class KoornbeursCard extends Model implements OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks;
 
@@ -53,7 +58,7 @@ class KoornbeursCard extends Model
             $at = Carbon::parse($at);
         }
 
-        if($this->activated_at === null || $this->activated_at > $at) {
+        if($this->activated_at === null || $this->activated_at >= $at) {
             return false;
         }
 
@@ -90,10 +95,6 @@ class KoornbeursCard extends Model
      * @return Builder
      */
     public function scopeActive($query, $at = null) {
-        if($at === null) {
-            $at = Carbon::now();
-        }
-
         if(!($at instanceof Carbon)) {
             $at = Carbon::parse($at);
         }
@@ -101,8 +102,27 @@ class KoornbeursCard extends Model
         $query->whereNotNull('activated_at')
             ->where('activated_at','<=',$at)
             ->where(function($subQuery) use ($at) {
-                return $subQuery->where('deactivated_at','>=',$at)->orWhereNull('deactivated_at');
+                return $subQuery->where('deactivated_at','>',$at)->orWhereNull('deactivated_at');
             });
+
+        return $query;
+    }
+
+    /**
+     * Scope that gives only the inactive KoornbeursCard instances.
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeInactive($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        $query->whereNull('activated_at')
+            ->orWhere('activated_at','>', $at)
+            ->orWhere('deactivated_at','<=', $at);
 
         return $query;
     }
@@ -118,6 +138,28 @@ class KoornbeursCard extends Model
      */
     public function owner() {
         return $this->belongsTo(Person::class, 'owner_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- /
+
+    /** @inheritdoc */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /** @inheritdoc */
+    public function getOwnerId()
+    {
+        return $this->owner_id;
+    }
+
+    /** @inheritdoc */
+    public function scopeOwnedBy($query, $person_id)
+    {
+        return $query->where('owner_id','=',$person_id);
     }
 
 }

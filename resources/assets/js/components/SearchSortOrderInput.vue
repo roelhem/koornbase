@@ -1,9 +1,9 @@
 <template>
     <b-form-radio-group v-model="sortOrder" buttons>
-        <b-form-radio value="asc" class="btn-icon">
+        <b-form-radio value="ASC" class="btn-icon">
             <base-icon :icon="{fe:'arrow-down', fa:'sort-amount-asc'}" :from="iconsFrom" />
         </b-form-radio>
-        <b-form-radio value="desc" class="btn-icon">
+        <b-form-radio value="DESC" class="btn-icon">
             <base-icon :icon="{fe:'arrow-up', fa:'sort-amount-desc'}" :from="iconsFrom" />
         </b-form-radio>
     </b-form-radio-group>
@@ -12,6 +12,9 @@
 <script>
     import baseIcon from './BaseIcon';
 
+    const ASC = 'ASC';
+    const DESC = 'DESC';
+
     export default {
         name: "search-sort-order-input",
 
@@ -19,7 +22,7 @@
 
             value: {
                 type:String,
-                default:'asc',
+                default:ASC,
             },
 
             iconsFrom: {

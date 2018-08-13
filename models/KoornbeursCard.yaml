@@ -1,0 +1,105 @@
+
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    CONNECTION WITH APP                                                                                          #
+# --------------------------------------------------------------------------------------------------------------- #
+class: App\KoornbeursCard
+
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    DISPLAY INFORMATION                                                                                          #
+# --------------------------------------------------------------------------------------------------------------- #
+
+title: Koornbeurs-kaart
+description: Een kaart waarmee je in de Koornbeurs aan de bar kunt betalen.
+lang:
+  en:
+    single: card
+    plural: cards
+  nl:
+    single: kaart
+    plural: kaarten
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    FIELDS and ATTRIBUTES                                                                                        #
+# --------------------------------------------------------------------------------------------------------------- #
+
+fields:
+
+  id:
+    title: ID
+    column: true
+    sortable: true
+
+  owner_id:
+    title: Eigenaar ID
+    description: De ID van de persoon die eigenaar is van deze kaart.
+    column: true
+    nullable: true
+
+  ref:
+    title: Referentie
+    description: Een uniek nummer/referentie van de kaart.
+    column: true
+    sortable: true
+    required: true
+
+  version:
+    title: Versie
+    description: De versie/serie van de kaart.
+    column: true
+    sortable: true
+    required: true
+
+  activated_at:
+    title: Geactiveerd op
+    description: Het moment waarop de kaart is geactiveerd (of wordt geactiveerd).
+    column: true
+    sortable: true
+    nullable: true
+
+  deactivated_at:
+    title: Gedeactiveerd op
+    description: Het moment waarop de kaart is gedeactiveerd (of wordt gedeactiveerd).
+    column: true
+    sortable: true
+    nullable: true
+
+  is_active:
+    title: Actief
+    description: Geeft aan of de kaart op dit moment actief is.
+
+  remarks:
+    title: Opmerkingen
+    column: true
+    nullable: true
+
+  created_at:
+    title: Aanmaakdatum
+    column: true
+    sortable: true
+
+  created_by:
+    title: Aangemaakt door
+    column: true
+
+  updated_at:
+    title: Bewerkdatum
+    column: true
+    sortable: true
+
+  updated_by:
+    title: Bewerkt door
+    column: true
+
+# --------------------------------------------------------------------------------------------------------------- #
+#    RELATIONS                                                                                                    #
+# --------------------------------------------------------------------------------------------------------------- #
+
+relations:
+
+  owner:
+    title: Eigenaar
+    description: De eigenaar van deze kaart. Een kaart hoeft niet per sé een eigenaar te hebben.
+    type: BelongsTo
+    related: !model Person

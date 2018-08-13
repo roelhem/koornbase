@@ -1,0 +1,18 @@
+query getActiveCertificatesOfPerson($id: ID!) {
+    certificates(isValid: true, personId: $id) {
+        total
+        data {
+            id
+            person_id
+            valid_since
+            valid_till
+            category {
+                id
+                name
+                name_short
+                description
+            }
+        }
+    }
+}
+

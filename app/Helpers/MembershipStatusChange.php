@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * Class MembershipStatusChange
  * @package App\Helpers
  *
- * @property integer $status
- * @property Carbon $date
- * @property integer $person_id
- * @property integer $membership_id
+ * @property-read MembershipStatus $status
+ * @property-read Carbon $date
+ * @property-read integer $person_id
+ * @property-read integer $membership_id
  */
 class MembershipStatusChange extends Model
 {
@@ -32,13 +32,21 @@ class MembershipStatusChange extends Model
     protected $dates = ['date'];
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getStatusAttribute($value) {
+        return MembershipStatus::get($value);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- FORMATTING ----------------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
     public function asTimelineEvent() {
         return [
-            'badge' => MembershipStatus::getBackgroundClass($this->status),
-            'label' => MembershipStatus::getLabel($this->status),
+            'badge' => $this->status->getBackgroundClass(),
+            'label' => $this->status->label,
             'date' => $this->date->format('d-m-Y')
         ];
     }

@@ -12,4 +12,8 @@ namespace App\Services\Sorters;
 class GroupEmailAddressSorter extends Sorter
 {
 
+    protected $columns = [
+        'id',
+        'email_address',
+    ];
 }

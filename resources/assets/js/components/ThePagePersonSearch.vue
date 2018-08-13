@@ -309,6 +309,8 @@
             params: function() {
                 let res = this.getDefaultParams();
 
+                res.fields = ['membership_status','avatar'];
+
                 if(this.filters.membershipStatus.active) {
                     res.membership_status = this.filters.membershipStatus.value;
                 }

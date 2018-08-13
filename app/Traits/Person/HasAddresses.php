@@ -18,35 +18,23 @@ use App\PersonAddress;
  * @package App\Traits
  *
  * @property-read PersonAddress|null $address
- *
  * @property-read PersonAddress[] $addresses
  */
 trait HasAddresses
 {
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Returns the first primary address of this Person.
-     *
-     * @return PersonAddress|null
-     */
-    public function getAddressAttribute() {
-        $res = $this->addresses()->orderByDesc('is_primary')
-                                 ->where('for_emergency','=', false)
-                                 ->orderBy('label')->first();
-
-        if($res instanceof PersonAddress) {
-            return $res;
-        } else {
-            return null;
-        }
-    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns the primary address of this Person.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function address() {
+        return $this->hasOne(PersonAddress::class, 'person_id')->orderBy('index');
+    }
 
     /**
      * Gives all the PersonAddresses that belong to this Person.

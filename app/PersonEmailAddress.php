@@ -2,14 +2,16 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
-use Illuminate\Database\Schema\Builder;
 
 
 /**
@@ -26,9 +28,10 @@ use Illuminate\Database\Schema\Builder;
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
  */
-class PersonEmailAddress extends Model
+class PersonEmailAddress extends Model implements OwnedByPerson
 {
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 

@@ -1,0 +1,202 @@
+
+- name: KoornBase-systeem gerelateerd
+  name_short: Systeem
+  description:
+    Groepen die alleen functies hebben binnen het KoornBase-systeem of zeer belangrijk zijn om de KoornBase goed
+    te laten werken.
+  style: group-system
+  options:
+    showOnPersonsPage: false
+  is_required: true
+  groups:
+    - name: Moderators
+      member_name: Moderator
+      is_required: true
+      email_addresses:
+        - moderators@koornbase.com
+      assign:
+        - Moderator
+
+- name: KoornBase-systeem beheer
+  name_short: Beheer
+  description:
+    Groepen die te maken hebben met het beheren van het KoornBase-systeem.
+  style: group-master
+  options:
+    showOnPersonsPage: false
+  groups:
+    - name: Webmasters
+      member_name: Webmaster
+      email_addresses:
+        - webmasters@koornbase.com
+        - koornbase-webmaster@koornbeurs.nl
+      assign:
+        - Webmaster
+    - name: Databasebeheerders
+      name_short: DB
+      member_name: DB Admin
+      email_addresses:
+        - db-admin@koornbase.com
+        - database-admin@koonrbeurs.nl
+      assign:
+        - AdminDB
+    - name: Serverbeheerders
+      name_short: Server
+      member_name: Server Admin
+      email_addresses:
+        - server-admin@koornbeurs.nl
+      assign:
+        - AdminServer
+    - name: Applicatiebeheerders
+      name_short: Apps
+      member_name: Apps Admin
+      email_addresses:
+        - apps@koornbase.com
+        - apps@koornbeurs.nl
+        - app-admins@koornbase.com
+      assign:
+        - AdminApps
+
+- name: Groepen voor testdoeleinden
+  name_short: Testgroepen
+  description: Groepen die nodig zijn om de KoornBase goed te testen.
+  style: group-debug
+  options:
+    showOnPersonsPage: false
+  is_required: true
+  groups:
+    - name: Bij Initialisatie Gegenereerd
+      name_short: Init
+      description: De personen die bij de initialisatie van de KoornBase een belangrijke rol spelen.
+      is_required: true
+      email_addresses:
+        - init.dev@koonbase.com
+        - kb-init@roelweb.com
+
+    - name: Random Gegenereerd
+      name_short: Random
+      description: De personen in deze groep zijn gegenereerd op basis van willekeurige data.
+      is_required: true
+      email_addresses:
+        - random.dev@koornbase.com
+        - kb-random@roelweb.com
+
+- name: Koornbeurs-bestuur
+  name_short: Bestuur
+  style: group-structure
+  description:
+    Groepen die voor het bestuur zijn bedoeld.
+
+- name: Primaire Commissies
+  style: group-primary
+  description:
+    Comissies met een primaire taak waar de Koornbeurs zeer vanaf hangt. Commissies in deze categorie hebben meestal
+    een naam die eindigd op '-kie' (een extra -e op het eind).
+  groups:
+    - name: Tapkie
+      description: De commissie die verantwoordelijk is voor het onderhouden van de kelderbar.
+      email_addresses:
+        - tapkie@koornbeurs.nl
+        - tapki@koornbeurs.nl
+    - name: TechKie
+      description: De commissie die verantwoordelijk is voor het onderhouden van de licht- en geluidsapparatuur.
+      email_addresses:
+        - techkie@koornbeurs.nl
+        - techki@koornbeurs.nl
+    - name: HamerEnSponsKie
+      email_addresses:
+        - hamer-en-sponskie@koornbeurs.nl
+        - hamerensponskie@koornbeurs.nl
+        - hamer-en-sponski@koornbeurs.nl
+        - hamerensponski@koornbeurs.nl
+    - name: NewKie
+      email_addresses:
+        - newkie@koornbeurs.nl
+        - newki@koornbeurs.nl
+    - name: IntroducKie
+      email_addresses:
+        - introduckie@koornbeurs.nl
+        - introducki@koornbeurs.nl
+      assign:
+        - NoviceTutors
+  assign:
+    - Commissielid
+
+- name: Secundaire commissie
+  style: group-secondary
+  description:
+    Comissies met een secundaire taak in de Koornbeurs. Commissies in deze categorie hebben meestal een naam die
+    eindigd op '-ki' (zonder een extra -e op het eind)
+  groups:
+    - name: Progki
+      description: De commissie die verantwoordelijk is voor de programmering van externe artiesten in de Koornbeurs.
+      email_addresses:
+        - progki@koornbeurs.nl
+        - programmering@koornbeurs.nl
+    - name: Promoki
+      email_addresses:
+        - promoki@koornbeurs.nl
+        - promotie@koornbeurs.nl
+    - name: Geeki
+      email_addresses:
+        - geeki@koornbeurs.nl
+      assign:
+        - DevReviewer
+  assign:
+    - Commissielid
+
+- name: Disputen
+  name_short: Dispuut
+  style: group-friend
+  groups:
+    - name: Dispuut Redux
+      name_short: Redux
+      member_name: Redux-lid
+      description: Het oudste dispuut van de Koornbeurs.
+      email_addresses:
+        - redux@koornbeurs.nl
+        - info@dispuut-redux.nl
+
+- name: Personeelsgroepen
+  name_short: Personeel
+  style: group-skill
+  groups:
+    - name: Tappers
+      member_name: Tapper
+      description: De leden die achter de kelderbar kunnen/mogen staan.
+    - name: Schenkers
+      member_name: Schenker
+      description: De leden die achter de zolderbar kunnen/mogen staan.
+    - name: Schoonmakers
+      member_name: Schoonmaker
+      description: De leden die de Koornbeurs kunnen/mogen schoonmaken.
+      email_addresses:
+        - schoonmakers@koornbeurs.nl
+    - name: Geluidstechnici
+      name_short: Geluid
+      member_name: Geluidstechnicus
+      description: De leden die verstand hebben van geluid in de Koornbeurs.
+      email_addresses:
+        - geluidstechnici@koornbeurs.nl
+    - name: Lichttechnici
+      name_short: Licht
+      member_name: Lichttechnicus
+      description: De leden die verstand hebben van de feestverlichting in de Koornbeurs.
+      email_addresses:
+        - lichttechnici@koornbeurs.nl
+
+- name: Studies
+  name_short: Studies
+  style: group-study
+  groups:
+    - name: Technische Wiskunde
+      short_name: Wiskunde
+      member_name: Wiskundestudent
+    - name: Technische Natuurkunde
+      short_name: Natuurkunde
+      member_name: Natuurkundestudent
+    - name: Technische Informatica
+      short_name: Informatica
+      member_name: Informaticastudent
+
+

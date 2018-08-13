@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -10,6 +12,7 @@ class GroupEmailAddress extends Model
 {
 
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks;
 

@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Contracts\Finders\FinderCollection;
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Traits\HasRemarks;
 use App\Traits\HasStartEnd;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
@@ -25,9 +29,10 @@ use Wildside\Userstamps\Userstamps;
  * @property-read CertificateCategory $category
  * @property-read boolean $is_valid
  */
-class Certificate extends Model
+class Certificate extends Model implements OwnedByPerson
 {
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -98,9 +103,52 @@ class Certificate extends Model
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
-    
-    public function getIsValidAttribute() {
+
+    /**
+     * Attribute that stores if this certificate is valid at the current time.
+     *
+     * @return bool
+     */
+    public function getIsValidAttribute()
+    {
         return $this->isValid();
+    }
+
+    /**
+     * Attribute that gives the first date on which this certificate is valid. It will return null if it can't
+     * find such a date.
+     *
+     * If a null value is returned, it can either mean that the certificate was never valid, or it means that
+     * the certificate is valid, but there is no information on when the certificate started to be valid.
+     *
+     * @return Carbon|null
+     */
+    public function getValidSinceAttribute()
+    {
+        if($this->passed === false) {
+            return null;
+        }
+
+        if($this->valid_at !== null) {
+            return $this->valid_at;
+        }
+
+        if($this->examination_at !== null) {
+            return $this->examination_at;
+        }
+
+        return null;
+    }
+
+    /**
+     * Attribute that gives the last date on which this certificate is valid. This is an alias of the expired_at
+     * attribute.
+     *
+     * @return Carbon|null
+     */
+    public function getValidTillAttribute()
+    {
+        return $this->expired_at;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -121,12 +169,49 @@ class Certificate extends Model
 
         return $query->where('passed', true)
             ->where(function($subQuery) use ($at) {
-                return $subQuery->whereNull('examination_at')->orWhereDate('examination_at', '<', $at);
+                return $subQuery->whereNull('examination_at')->orWhereDate('examination_at', '<=', $at);
             })->where(function($subQuery) use ($at) {
-                return $subQuery->whereNull('valid_at')->orWhereDate('valid_at', '<', $at);
+                return $subQuery->whereNull('valid_at')->orWhereDate('valid_at', '<=', $at);
             })->where(function($subQuery) use ($at) {
                 return $subQuery->whereNull('expired_at')->orWhereDate('expired_at', '>', $at);
             });
+    }
+
+    /**
+     * A scope that only gives the certificates that are invalid at the given time.
+     *
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeInvalid($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->where('passed', false)
+            ->orWhere('examination_at','>',$at)
+            ->orWhere('valid_at', '>', $at)
+            ->orWhere('expired_at','<=', $at);
+    }
+
+    /**
+     * A scope that only gives the certificates that have one of the specified categories
+     *
+     * @param Builder $query
+     * @param mixed $categories
+     * @return Builder
+     */
+    public function scopeCategory($query, $categories) {
+        $categories = collect($categories);
+        $category_ids = $categories->map(function($category) {
+            if(is_integer($category)) {
+                return $category;
+            } else {
+                return resolve(FinderCollection::class)->find($category, 'certificate_category')->id;
+            }
+        });
+        return $query->whereIn('category_id',$category_ids);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

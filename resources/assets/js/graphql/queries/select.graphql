@@ -1,0 +1,48 @@
+query selectUserQuery($limit:Int,$search:String) {
+    users(limit:$limit,search:$search) {
+        data {
+            id
+            name
+            name_display
+            person {
+                id
+                name
+            }
+            email
+            avatar {
+                letters
+                image
+            }
+        }
+    }
+}
+
+
+query selectPersonQuery($limit:Int, $search:String) {
+    persons(limit:$limit, search:$search) {
+        data {
+            id
+            name
+            name_formal
+            avatar {
+                letters
+                image
+            }
+        }
+    }
+}
+
+query selectGroupQuery($limit:Int, $search:String) {
+    groups(limit:$limit, search:$search) {
+        data {
+            category {
+                id
+                style
+            },
+            id
+            name
+            name_short
+            description
+        }
+    }
+}

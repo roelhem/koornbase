@@ -2,18 +2,20 @@
 
     <div class="card" :class="cardClass">
 
-        <tabler-card-status v-if="status" :color="status" :left="statusLeft" />
-
-        <div class="card-header" @click="headerClickHandler">
+        <div v-if="!noHeader" class="card-header" @click="headerClickHandler">
             <slot name="header">
                 <h3 class="card-title">
-                    <base-icon :icon="icon" :from="iconFrom" class="text-muted-dark mr-1" />
+                    <span v-if="isLoading && collapsed"
+                          class="loader mr-1"
+                          style="height: 1rem; display: inline-block; vertical-align: middle">
+                    </span>
+                    <base-icon v-else :icon="icon" :from="iconFrom" class="text-muted-dark mr-1" />
                     <slot name="title">{{ title }}</slot>
                 </h3>
 
                 <div v-if="showCardOptions" class="card-options">
 
-                    <slot name="options"></slot>
+                    <slot name="options" />
 
                     <a v-if="collapsible"
                        href="#"
@@ -41,16 +43,18 @@
 
         <tabler-dimmer :active="isLoading">
             <div v-if="!noBody" class="card-body">
-                <slot></slot>
+                <slot />
             </div>
             <template v-else>
-                <slot></slot>
+                <slot />
             </template>
 
             <div v-if="$slots.footer" class="card-footer">
-                <slot name="footer"></slot>
+                <slot name="footer" />
             </div>
         </tabler-dimmer>
+
+        <tabler-card-status v-if="status" :color="status" :left="statusLeft" />
     </div>
 
 </template>
@@ -83,6 +87,11 @@
             },
 
             noBody:{
+                type:Boolean,
+                default:false
+            },
+
+            noHeader: {
                 type:Boolean,
                 default:false
             },

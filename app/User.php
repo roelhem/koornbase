@@ -2,15 +2,20 @@
 
 namespace App;
 
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
-use App\Traits\Rbac\HasChildRoles;
+
+use App\Contracts\OwnedByPerson;
+use App\Notifications\ResetPasswordNotification;
+use App\Services\Sorters\Traits\Sortable;
+use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
-use App\Enums\OAuthProviders;
+use EloquentFilter\Filterable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
+use Wildside\Userstamps\Userstamps;
 
 /**
  * Class User
@@ -22,22 +27,25 @@ use Laravel\Passport\HasApiTokens;
  * @property string|null $email
  * @property string|null $password
  * @property string|null $remember_token
- * @property integer|null $person_id
  *
- * @property Person|null $person
  *
  * @property-read string|null $name_display
  * @property-read string|null $name_short
  * @property-read string|null $avatar_letters
  * @property-read AvatarType $avatar
  *
+ * @method static User|null find(integer $id)
+ *
  * @inheritdoc
  */
-class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignable
+class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPerson
 {
     use Notifiable;
     use HasApiTokens;
-    use HasChildRoles, DefaultRbacAuthorizable;
+    use HasMorphedRbacAssignments;
+    use BelongsToPerson;
+    use Filterable, Sortable, Searchable;
+    use Userstamps;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -60,6 +68,8 @@ class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignab
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $eagerLoad = ['person'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
@@ -115,58 +125,20 @@ class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignab
         $res = new AvatarType;
         $res->letters = $this->avatar_letters;
 
-        $query = $this->accounts()->whereNotNull('avatar');
+        $account = $this->accounts()->whereNotNull('avatar')->get()
+            ->sortByDesc(function(UserAccount $userAccount) {
+                return $userAccount->provider->conf('ranking.avatar', 0);
+            })->first();
 
-        foreach (OAuthProviders::ordeningAvatar() as $provider) {
-            $query->orderByRaw('"provider" = ? DESC', [$provider]);
-        }
-        $account = $query->first();
         if($account) {
             $res->image = $account->avatar;
         }
-
         return $res;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- INTERFACE IMPLEMENTATION: RbacAuthorizable --------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-
-    public function childRoles() {
-        $select = [
-            'roles.id',
-            'roles.name',
-            'roles.description',
-            'roles.is_required',
-            'roles.is_visible',
-            'roles.created_at',
-            'roles.updated_at',
-            'roles.created_by',
-            'roles.updated_by'
-        ];
-
-        $query = Role::query()->where('id','=', 'user')->select($select);
-        $query->union($this->assignedRoles()->select($select));
-        if($this->person) {
-            $query->union($this->person->childRoles()->select($select));
-        }
-        return $query;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Gives the Person where this User belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function person()
-    {
-        return $this->belongsTo(Person::class, 'person_id');
-    }
 
     /**
      * Gives the UserAccounts that belong to this User.
@@ -216,6 +188,41 @@ class User extends Authenticatable implements RbacAuthorizable, RbacRoleAssignab
     public function twitterAccount() {
         return $this->hasOne(UserAccount::class, 'user_id')
                     ->where('provider','=','twitter');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: Authorizable ----------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getAuthorizableGroups()
+    {
+        if($this->person === null) {
+            return collect([]);
+        } else {
+            return collect([$this->person]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOUT SEARCHABLE CONFIGURATION --------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'name',
+            'email',
+            'name_display'
+        ]);
     }
 
 

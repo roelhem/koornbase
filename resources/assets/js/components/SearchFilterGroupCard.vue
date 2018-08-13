@@ -5,7 +5,7 @@
             <form-switch v-model="activeValue" />
         </template>
 
-        <form-model-select-multi multiple no-border model="group" v-model="valueModelled"></form-model-select-multi>
+        <group-select multiple no-border size="sm" v-model="valueModelled" />
 
     </tabler-card>
 
@@ -16,12 +16,12 @@
     import FormModelSelectMulti from "./FormModelSelectMulti";
     import FormModelSelectTree from "./FormModelSelectTree";
     import FormSwitch from "./FormSwitch";
+    import GroupSelect from "./forms/select/GroupSelect";
 
     export default {
         components: {
+            GroupSelect,
             FormSwitch,
-            FormModelSelectMulti,
-            FormModelSelectTree,
             TablerCard},
         name: "search-filter-group-card",
 

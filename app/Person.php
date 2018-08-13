@@ -2,10 +2,8 @@
 
 namespace App;
 
-use App\Enums\MembershipStatus;
-use App\Interfaces\Rbac\RbacAuthorizable;
-use App\Interfaces\Rbac\RbacRoleAssignable;
-use App\Services\Rbac\Traits\DefaultRbacAuthorizable;
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\Person\HasAddresses;
 use App\Traits\Person\HasEmailAddresses;
@@ -13,13 +11,17 @@ use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
-use App\Traits\Rbac\HasChildRoles;
 use App\Types\AvatarType;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
+use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
+use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
+use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -28,7 +30,6 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer $id
- * @property string|null $nickname
  * @property Carbon|null $birth_date
  *
  * @property Carbon|null $created_at
@@ -44,17 +45,20 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property-read Collection $users
  * @property-read Collection $debtors
+ * @property-read Collection $cards
+ * @property-read Collection $certificates
  */
-class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
+class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup, OwnedByPerson
 {
 
     use SoftDeletes;
     use Userstamps;
+    use Filterable, Sortable, Searchable;
 
     use HasRemarks;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
-    use HasChildRoles, DefaultRbacAuthorizable;
+    use HasMorphedRbacAssignments;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
@@ -94,20 +98,19 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
         return $result;
     }
 
-    public function childRoles() {
-
-        return Role::query()->whereHas('groups', function(Builder $query) {
-            return $query->whereHas('persons', function(Builder $query) {
-                return $query->where('id','=',$this->id);
-            });
-        })->orWhereHas('groupCategories', function (Builder $query) {
-            return $query->whereHas('groups', function(Builder $query) {
-                return $query->whereHas('persons', function(Builder $query) {
-                    return $query->where('id','=',$this->id);
-                });
-            });
-        })->orWhere('id','=','person')
-        ->orWhere('id', '=', MembershipStatus::getRoleId($this->membership_status));
+    /**
+     * Returns the age of this person at the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return integer|null
+     */
+    public function getAge($at = null) {
+        $birth_date = $this->birth_date;
+        if($birth_date === null) {
+            return null;
+        } else {
+            return $birth_date->diffInYears($at, false);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -132,11 +135,11 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
      * @return AvatarType
      */
     public function getAvatarAttribute() {
-        /*foreach ($this->users as $user) {
+        foreach ($this->users()->get() as $user) {
             if($user->avatar !== null) {
                 return $user->avatar;
             }
-        }*/
+        }
         $res = new AvatarType;
         $res->letters = $this->avatar_letters;
         return $res;
@@ -148,61 +151,7 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
      * @return integer|null
      */
     public function getAgeAttribute() {
-        $bd = $this->birth_date;
-
-        if($bd === null) {
-            return null;
-        } else {
-            return $bd->age;
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- RBAC DEFINITIONS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @inheritdoc
-     */
-    public function getComputedRoles()
-    {
-        $res = [];
-        $personRole = Role::find('person');
-        if($personRole instanceof Role) {
-            $res[] = $personRole;
-        }
-
-        switch ($this->membership_status) {
-            case MembershipStatus::Outsider:
-                $membershipRole = Role::find('membership_status.outsider');
-                break;
-            case MembershipStatus::Novice:
-                $membershipRole = Role::find('membership_status.novice');
-                break;
-            case MembershipStatus::Member:
-                $membershipRole = Role::find('membership_status.member');
-                break;
-            case MembershipStatus::FormerMember:
-                $membershipRole = Role::find('membership_status.former_member');
-                break;
-            default:
-                $membershipRole = null;
-                break;
-        }
-
-        if($membershipRole instanceof Role) {
-            $res[] = $membershipRole;
-        }
-
-        return collect($res);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function inheritsRolesFrom()
-    {
-        return $this->groups;
+        return $this->getAge();
     }
 
     // ---------------------------------------------------------------------------------------------------------- //
@@ -228,6 +177,13 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
     }
 
     /**
+     * Gives the primary KoornbeursCard that belong to this Person.
+     */
+    public function activeCards() {
+        return $this->cards()->active();
+    }
+
+    /**
      * Gives all the KoornbeursCards that belong to this Person.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -246,6 +202,70 @@ class Person extends Model implements RbacRoleAssignable, RbacAuthorizable
      */
     public function certificates() {
         return $this->hasMany(Certificate::class, 'person_id');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTATION: AuthorizableGroup ------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    public function getAuthorizables()
+    {
+        return $this->users;
+    }
+
+    /** @inheritdoc */
+    public function getAuthorizableGroups()
+    {
+        return $this->groups;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- IMPLEMENTS: OwnedByPerson -------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    public function owner()
+    {
+        return $this->belongsTo(Person::class, 'id','id');
+    }
+
+    /** @inheritdoc */
+    public function getOwner()
+    {
+        return $this;
+    }
+
+    /** @inheritdoc */
+    public function getOwnerId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     * @param Builder $query
+     */
+    public function scopeOwnedBy($query, $person_id)
+    {
+        return $query->where('id','=',$person_id);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOUT SEARCHABLE CONFIGURATION --------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return $this->only([
+            'id',
+            'name_first',
+            'name_middle',
+            'name_prefix',
+            'name_last',
+            'name_initials',
+            'name_nickname'
+        ]);
     }
 
 

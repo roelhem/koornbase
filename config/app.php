@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'KoornBase'),
+    'notification_name' => 'Het '.env('APP_NAME', 'KoornBase').' systeem',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +66,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Amsterdam',
 
     /*
     |--------------------------------------------------------------------------
@@ -166,7 +167,7 @@ return [
         App\Providers\AttributeServiceProvider::class,
         App\Providers\AddressingProvider::class,
         App\Providers\ModelFinderServiceProvider::class,
-        App\Providers\RbacServiceProvider::class
+        App\Providers\GraphQLServiceProvider::class
 
     ],
 
@@ -218,8 +219,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'EloquentView' => Jwz104\EloquentView\Facades\EloquentView::class,
-
-        'Rbac' => App\Facades\Rbac::class,
     ],
 
 ];

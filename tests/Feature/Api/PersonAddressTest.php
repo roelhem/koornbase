@@ -135,6 +135,8 @@ class PersonAddressTest extends TestCase
      */
     public function testLabelUniqueStore() {
 
+        $this->asAdmin();
+
         $nlFaker = FakerFactory::create('nl_NL');
 
         $person = factory(Person::class)->create();

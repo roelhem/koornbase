@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Interfaces\Rbac\RbacPermission;
-use App\Interfaces\Rbac\RbacPermissionAuthorizable;
-use App\Permission;
+use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
 
 class UserResource extends Resource
 {
@@ -26,9 +24,11 @@ class UserResource extends Resource
                 'githubAccount' => new UserAccountResource($this->whenLoaded('githubAccount')),
                 'googleAccount' => new UserAccountResource($this->whenLoaded('googleAccount')),
                 'twitterAccount' => new UserAccountResource($this->whenLoaded('twitterAccount')),
-
-                'assignedRoles' => RoleResource::collection($this->whenLoaded('assignedRoles')),
             ] + $this->tailArray($request);
+    }
+
+    public function fieldPersonId() {
+        return $this->person_id;
     }
 
     public function fieldNameDisplay($request) {
@@ -43,11 +43,11 @@ class UserResource extends Resource
         return $this->avatar;
     }
 
-    public function fieldRoles($request) {
-        return RoleResource::collection(collect($this->resource->getRoles())->values());
-    }
-
-    public function fieldPermissions($request) {
-        return PermissionResource::collection(collect($this->resource->getPermissions())->flatten());
+    public function fieldEntryNodes() {
+        $graph = resolve(AuthorizableGraph::class);
+        if(!($graph instanceof AuthorizableGraph)) {
+            return [];
+        }
+        return $graph->getEntryNodes($this->resource);
     }
 }

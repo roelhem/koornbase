@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
 use App\Enums\MembershipStatus;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -28,13 +32,14 @@ use Wildside\Userstamps\Userstamps;
  * @property-read boolean $started
  * @property-read boolean $ended
  *
- * @property-read integer $status
+ * @property-read MembershipStatus $status
  * @property-read Carbon|null $status_at
  */
-class Membership extends Model
+class Membership extends Model implements OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -48,6 +53,186 @@ class Membership extends Model
     protected $fillable = ['application','start','end','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
+    // ----- GETTER METHODS ------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Returns if the application date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getApplied($at = null) {
+        if($this->application === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->application <= $at;
+    }
+
+    /**
+     * Returns if the start date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getStarted($at = null) {
+        if($this->start === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->start < $at;
+    }
+
+    /**
+     * Returns if the end date is set and before the provided time.
+     *
+     * @param Carbon|string|null $at
+     * @return bool
+     */
+    public function getEnded($at = null) {
+        if($this->end === null) {
+            return false;
+        }
+
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $this->end < $at;
+    }
+
+    /**
+     * Returns the status of this membership at the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return MembershipStatus
+     */
+    public function getStatus($at = null) {
+        if($this->getEnded($at)) {
+            return MembershipStatus::FORMER_MEMBER();
+        } elseif ($this->getStarted($at)) {
+            return MembershipStatus::MEMBER();
+        } elseif ($this->getApplied($at)) {
+            return MembershipStatus::NOVICE();
+        } else {
+            return MembershipStatus::OUTSIDER();
+        }
+    }
+
+    /**
+     * Returns the date on which the membership status changed to the status on the given moment.
+     *
+     * @param Carbon|string|null $at
+     * @return Carbon|null
+     */
+    public function getStatusSince($at = null) {
+        $status = $this->getStatus($at);
+        return $status->getTimestamp($this);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SCOPES --------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * @param Builder $query
+     * @param MembershipStatus|int $status
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeStatus($query, $status, $at = null) {
+        if(MembershipStatus::OUTSIDER()->is($status)) {
+            return $this->scopeOutsider($query, $at);
+        } elseif(MembershipStatus::NOVICE()->is($status)) {
+            return $this->scopeNovice($query, $at);
+        } elseif(MembershipStatus::MEMBER()->is($status)) {
+            return $this->scopeMember($query, $at);
+        } elseif(MembershipStatus::FORMER_MEMBER()->is($status)) {
+            return $this->scopeFormerMember($query, $at);
+        }
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeOutsider($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('application')->orWhere('application','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('start')->orWhere('start','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeNovice($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('application')->where('application', '<=', $at)->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('start')->orWhere('start','>', $at);
+        })->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeMember($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('start')->where('start', '<=', $at)->where(function($query) use ($at) {
+            /** @var Builder $query */
+            return $query->whereNull('end')->orWhere('end','>', $at);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param Carbon|string|null $at
+     * @return Builder
+     */
+    public function scopeFormerMember($query, $at = null) {
+        if(!($at instanceof Carbon)) {
+            $at = Carbon::parse($at);
+        }
+
+        return $query->whereNotNull('end')->where('end', '<=', $at);
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------- //
     // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
 
@@ -57,7 +242,7 @@ class Membership extends Model
      * @return bool
      */
     public function getAppliedAttribute() {
-        return $this->application !== null && $this->application->isPast();
+        return $this->getApplied();
     }
 
     /**
@@ -66,7 +251,7 @@ class Membership extends Model
      * @return bool
      */
     public function getStartedAttribute() {
-        return $this->start !== null && $this->start->isPast();
+        return $this->getStarted();
     }
 
     /**
@@ -75,7 +260,7 @@ class Membership extends Model
      * @return bool
      */
     public function getEndedAttribute() {
-        return $this->end !== null && $this->end->isPast();
+        return $this->getEnded();
     }
 
     /**
@@ -83,18 +268,10 @@ class Membership extends Model
      *
      * The value is an enum element of \App|Enums\MembershipStatus .
      *
-     * @return int
+     * @return MembershipStatus
      */
     public function getStatusAttribute() {
-        if ($this->ended) {
-            return MembershipStatus::FormerMember;
-        } elseif ($this->started) {
-            return MembershipStatus::Member;
-        } elseif ($this->applied) {
-            return MembershipStatus::Novice;
-        } else {
-            return MembershipStatus::Outsider;
-        }
+        return $this->getStatus();
     }
 
     /**
@@ -103,13 +280,7 @@ class Membership extends Model
      * @return Carbon|null
      */
     public function getStatusAtAttribute() {
-        switch ($this->status) {
-            case MembershipStatus::FormerMember: return $this->end;
-            case MembershipStatus::Member: return $this->start;
-            case MembershipStatus::Novice: return $this->application;
-            case MembershipStatus::Outsider:
-            default: return null;
-        }
+        return $this->getStatusSince();
     }
 
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Finders\FinderCollection;
+use App\Exceptions\Finders\InputNotAcceptedException;
+use App\Exceptions\Finders\ModelNotFoundException;
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
 use App\Services\Sorters\GroupSorter;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Symfony\Component\Finder\Finder;
 
@@ -27,6 +30,8 @@ class GroupController extends Controller
      */
     public function store(Request $request, FinderCollection $finders)
     {
+        $this->authorize('create', Group::class);
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'category' => 'required|finds:group_category',
@@ -47,9 +52,12 @@ class GroupController extends Controller
      * @param  \App\Group  $group
      * @param  Request     $request
      * @return Resource
+     * @throws
      */
     public function show(Group $group, Request $request)
     {
+        $this->authorize('view', $group);
+
         return $this->prepare($group, $request);
     }
 
@@ -64,6 +72,8 @@ class GroupController extends Controller
      */
     public function update(Request $request, Group $group, FinderCollection $finders)
     {
+        $this->authorize('update', $group);
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'category' => 'sometimes|required|finds:group_category',
@@ -92,6 +102,8 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
+        $this->authorize('delete', $group);
+
         if($group->is_required) {
             abort(403, 'Deze groep kan niet worden verwijderd omdat de groep nodig is voor het goed functioneren van dit systeem.');
         } else {

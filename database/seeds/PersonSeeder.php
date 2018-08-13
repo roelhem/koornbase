@@ -44,22 +44,31 @@ class PersonSeeder extends Seeder
             $person->addGroups(...$groups);
 
 
+            // ADD AN USER
+            if($faker->boolean(80)) {
+                factory(\App\User::class)->create(['person_id' => $person->id]);
+            }
+            if($faker->boolean(5)) {
+                factory(\App\User::class)->create(['person_id' => $person->id]);
+            }
+
+
 
             // ADD A MEMBERSHIP
             // Determine the current membership status
-            $membershipStatus = MembershipStatus::getRandomValue();
+            $membershipStatus = MembershipStatus::get( $faker->numberBetween(0, 3));
             $factory = factory(Membership::class);
             switch ($membershipStatus) {
-                case MembershipStatus::Outsider:
+                case MembershipStatus::OUTSIDER():
                     $factory = null;
                     break;
-                case MembershipStatus::Novice:
+                case MembershipStatus::NOVICE():
                     $factory->states('novice');
                     break;
-                case MembershipStatus::Member:
+                case MembershipStatus::MEMBER():
                     $factory->states('member');
                     break;
-                case MembershipStatus::FormerMember:
+                case MembershipStatus::FORMER_MEMBER():
                 default:
                     break;
             }

@@ -24,4 +24,8 @@ class GroupResource extends Resource
 
             ] + $this->tailArray($request);
     }
+
+    public function fieldStyle() {
+        return $this->resource->style;
+    }
 }

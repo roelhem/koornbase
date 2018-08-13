@@ -63,8 +63,6 @@
         },
 
 
-
-
         props: {
             id: [String, Number],
             value: [Object, Array, String, Number],

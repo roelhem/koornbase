@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Contracts\OwnedByPerson;
+use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\AddressingAttributeMapping;
@@ -14,6 +16,7 @@ use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
 use CommerceGuys\Addressing\AddressInterface;
 use CommerceGuys\Addressing\Formatter\FormatterInterface;
 use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
@@ -41,10 +44,11 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property-read AddressFormat $addressFormat
  */
-class PersonAddress extends Model implements AddressInterface
+class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 {
 
     use Userstamps;
+    use Filterable, Sortable;
 
     use HasRemarks, BelongsToPerson;
 

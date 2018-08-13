@@ -1,28 +1,40 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 21-07-18
+ * Time: 19:28
+ */
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
-     * Show the application dashboard.
+     * The action that handles a call to the root of the website.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    function index()
     {
-        return view('home');
+        return view('index');
     }
+
+    function about()
+    {
+        return view('about');
+    }
+
+    function apps()
+    {
+        return view('apps');
+    }
+
+    function developers()
+    {
+        return view('developers');
+    }
+
 }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Person;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PersonStoreRequest extends FormRequest
 {
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +16,7 @@ class PersonStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create',Person::class);
     }
 
     /**

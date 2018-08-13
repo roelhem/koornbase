@@ -7,6 +7,7 @@ use App\Http\Requests\Api\Traits\CommonMethodsForPersonContactObjects;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Person;
+use App\PersonAddress;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -24,7 +25,7 @@ class PersonAddressStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', PersonAddress::class);
     }
 
     /**
