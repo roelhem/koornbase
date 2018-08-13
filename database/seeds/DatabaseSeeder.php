@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         // First (system) account.
         $system = factory(\App\User::class)->create([
             'name' => 'system',
-            'email' => 'system@roelweb.com'
+            'email' => 'system@koornbeurs.nl'
         ]);
 
         $system->created_by = $system->id;
@@ -29,11 +29,6 @@ class DatabaseSeeder extends Seeder
             GroupSeeder::class,
             CertificateCategorySeeder::class,
             UserSeeder::class
-        ]);
-
-        // Data of Roel Hemerik
-        $this->call([
-            RoelHemerikSeeder::class
         ]);
 
         // Random data seeders.
