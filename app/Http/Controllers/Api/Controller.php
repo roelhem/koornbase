@@ -11,7 +11,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Enums\SortOrderDirection;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller as BaseController;
 use App\Services\Sorters\Traits\Sortable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
-abstract class Controller extends Controller
+abstract class Controller extends BaseController
 {
 
     const PARAM_PAGE_LIMIT = 'limit';
