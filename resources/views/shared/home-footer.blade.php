@@ -77,14 +77,10 @@
                                 Ontwikkelaars
                             </h2>
                             <ul class="list-unstyled">
-                                <li><a href="{{ route('developers') }}" class="py-2 d-block">Lessen</a></li>
                                 <li>
                                     <a href="{{ route('developers') }}" class="py-2 d-block">Documentatie</a>
                                     <ul class="sub-list">
-                                        <li><a href="#" class="d-block">Algemene structuur</a></li>
-                                        <li><a href="#" class="d-block">OAuth2</a></li>
-                                        <li><a href="#" class="d-block">GraphQL</a></li>
-                                        <li><a href="#" class="d-block">REST API</a></li>
+                                        <li><a href="http://koorndocs.wikidot.com/" target="_blank" class="d-block">Koorndocs Wiki</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="{{ route('developers') }}" class="py-2 d-block">FAQ</a></li>
