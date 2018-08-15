@@ -24,6 +24,7 @@ use Wildside\Userstamps\Userstamps;
  * @package App
  *
  * @property integer $id
+ * @property-read string $slug
  * @property boolean $is_required
  * @property string $style
  *

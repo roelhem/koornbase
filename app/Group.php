@@ -7,6 +7,7 @@ use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
 use App\Traits\Sluggable;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read GroupCategory $category
  * @property-read Collection|Person[] $persons
+ *
+ * @property-read Carbon $created_at
+ * @property-read integer|null $created_by
+ * @property-read Carbon $updated_at
+ * @property-read integer|null $updated_by
+ * @property-read Carbon|null $deleted_at
+ * @property-read integer|null $deleted_by
  *
  * @property-read string $style
  */
