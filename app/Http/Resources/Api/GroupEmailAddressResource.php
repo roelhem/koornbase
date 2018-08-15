@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
-class GroupEmailAddressResource extends Resource
+use App\GroupEmailAddress;
+use App\Http\Resources\Api\Traits\HasStamps;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class GroupEmailAddressResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -12,10 +19,18 @@ class GroupEmailAddressResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'email_address' => $this->email_address,
 
-                'group' => new GroupResource($this->whenLoaded('group'))
-            ] + $this->tailArray($request);
+        /** @var GroupEmailAddress $adres */
+        $adres = $this->resource;
+
+        return [
+            'id' => $adres->id,
+            'email_address' => $adres->email_address,
+            'group_id' => $adres->group_id,
+            'group' => new GroupResource($this->whenLoaded('group')),
+            'remarks' => $adres->remarks,
+
+            $this->getStampFields($request),
+        ];
     }
 }

@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
-class CertificateResource extends Resource
+use App\Certificate;
+use App\Http\Resources\Api\Traits\HasStamps;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class CertificateResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -12,16 +19,25 @@ class CertificateResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'passed' => $this->passed,
-                'examination_at' => $this->formatdate($this->examination_at, $request),
-                'valid_at' => $this->formatdate($this->valid_at, $request),
-                'expired_at' => $this->formatdate($this->expired_at, $request),
+        /** @var Certificate $certificate */
+        $certificate = $this->resource;
 
-                'is_valid' => $this->is_valid,
+        return [
+            'id' => $certificate->id,
+            'person_id' => $certificate->person_id,
+            'person' => new PersonResource($this->whenLoaded('person')),
+            'category_id' => $certificate->category_id,
+            'category' => new CertificateCategoryResource($this->whenLoaded('category')),
 
-                'person' => new PersonResource($this->whenLoaded('person')),
-                'category' => new CertificateCategoryResource($this->whenLoaded('category'))
-            ] + $this->tailArray($request);
+            'examination_at' => $certificate->examination_at,
+            'passed' => $certificate->passed,
+            'valid_at' => $certificate->valid_at,
+            'expired_at' => $certificate->expired_at,
+            'is_valid' => $certificate->is_valid,
+
+            'remarks' => $certificate->remarks,
+
+            $this->getStampFields($request),
+        ];
     }
 }

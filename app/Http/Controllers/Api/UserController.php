@@ -2,108 +2,70 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Contracts\Finders\FinderCollection;
-use App\Http\Resources\Api\UserResource;
+use App\Http\Requests\Api\UserStoreRequest;
+use App\Http\Requests\Api\UserUpdateRequest;
+use App\Person;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
 
-    protected $modelClass = User::class;
-    protected $resourceClass = UserResource::class;
+    public $eagerLoadForIndex = ['person'];
+    public $eagerLoadForShow = [
+        'person','person.groups','person.certificates','person.emailAddresses',
+        'person.phoneNumbers','accounts'
+    ];
 
     /**
-     * Store a new User in the database.
-     *
-     * @param Request $request
+     * @param UserStoreRequest $request
      * @param FinderCollection $finders
-     * @return UserResource
-     * @throws \Throwable
+     * @return JsonResource
+     * @throws
      */
-    public function store(Request $request, FinderCollection $finders)
+    public function store(UserStoreRequest $request, FinderCollection $finders)
     {
-        $this->authorize('store', User::class);
-
-        $validatedData = $request->validate([
-            'name' => 'required|unique:users|string|max:255',
-            'email' => 'required|unique:users|email|max:255',
-            'password' => 'required|string|min:8',
-            'person' => 'nullable|finds:person',
-        ]);
+        $data = $request->validated();
 
         $user = new User();
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
+        $user->name = array_get($data, 'name');
+        $user->email = array_get($data, 'email');
+        $user->password = array_get($data, 'password');
 
-        $personInput = array_get($validatedData, 'person');
+        $personInput = array_get($data, 'person');
         if($personInput !== null) {
+            /** @var Person $person */
             $person = $finders->find($personInput, 'person');
             $user->person()->associate($person);
         }
 
         $user->saveOrFail();
 
-        $user->load($this->getAskedRelations($request));
-        return new UserResource($user);
+        $user->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($user);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  Request    $request
-     * @param  \App\User  $user
-     * @return UserResource
-     * @throws
+     * @param UserUpdateRequest $request
+     * @param FinderCollection $finders
+     * @param User $user
+     * @return JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws \Throwable
      */
-    public function show(Request $request, User $user)
+    public function update(UserUpdateRequest $request, FinderCollection $finders, User $user)
     {
-        $this->authorize('view', $user);
+        $data = $request->validated();
 
-        $user->load($this->getAskedRelations($request));
-        return new UserResource($user);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @param  FinderCollection $finders
-     * @return UserResource
-     * @throws
-     */
-    public function update(Request $request, User $user, FinderCollection $finders)
-    {
-        $this->authorize('update', $user);
-
-        $validatedData = $request->validate([
-            'name' => ['sometimes','required','string','max:255', Rule::unique('users')->ignore($user->id)],
-            'email' => ['sometimes','required','email','max:255', Rule::unique('users')->ignore($user->id)],
-            'password' => 'sometimes|required|string|min:8',
-            'person' => 'nullable|finds:person'
-        ]);
-
-        if(array_has($validatedData, 'name')) {
-            $user->name = $validatedData['name'];
-        }
-
-        if(array_has($validatedData, 'email')) {
-            $user->email = $validatedData['email'];
-        }
-
-        if(array_has($validatedData, 'password')) {
-            $user->password = bcrypt($validatedData['password']);
-        }
-
-        if(array_has($validatedData, 'person')) {
-            $personInput = array_get($validatedData, 'person');
+        $personInput = array_get($data,'person',false);
+        if($personInput !== false) {
             if($personInput === null) {
-                $user->person_id = null;
+                $user->person()->dissociate();
             } else {
+                /** @var Person $person */
                 $person = $finders->find($personInput, 'person');
                 $user->person()->associate($person);
             }
@@ -111,18 +73,7 @@ class UserController extends Controller
 
         $user->saveOrFail();
 
-        $user->load($this->getAskedRelations($request));
-        return new UserResource($user);
-    }
-
-    /**
-     * @param User $user
-     * @throws
-     */
-    public function destroy(User $user)
-    {
-        $this->authorize('delete', $user);
-
-        $user->delete();
+        $user->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($user);
     }
 }

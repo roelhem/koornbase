@@ -2,9 +2,17 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\Http\Resources\Api\Types\AvatarResource;
+use App\Types\AvatarType;
+use App\UserAccount;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserAccountResource extends Resource
+class UserAccountResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -13,17 +21,23 @@ class UserAccountResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'provider' => $this->provider,
-                'ref_id' => $this->ref_id,
-                'nickname' => $this->nickname,
-                'name' => $this->name,
-                'email' => $this->email,
-                'avatar' => $this->avatar
-            ] + $this->tailArray($request);
-    }
+        /** @var UserAccount $userAccount */
+        $userAccount = $this->resource;
 
-    public function fieldUserJson($request) {
-        return $this->user_json;
+        $avatar = new AvatarType();
+        $avatar->image = $userAccount->avatar;
+
+        return [
+            'id' => $userAccount->id,
+            'user_id' => $userAccount->user_id,
+            'user' => new UserResource($this->whenLoaded('user')),
+            'provider' => $userAccount->provider->getName(),
+            'ref_id' => $userAccount->ref_id,
+            'nickname' => $userAccount->nickname,
+            'email' => $userAccount->email,
+            'avatar' => new AvatarResource($avatar),
+
+            $this->getStampFields($request)
+        ];
     }
 }

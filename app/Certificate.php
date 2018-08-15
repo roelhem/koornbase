@@ -69,17 +69,7 @@ class Certificate extends Model implements OwnedByPerson
     // ---------------------------------------------------------------------------------------------------------- //
 
     public function isValid($at = null) {
-        if($at === null) {
-            $at = Carbon::now();
-        }
-
-        if($at instanceof \DateTime) {
-            $at = Carbon::instance($at);
-        }
-
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         if($this->passed === false) {
             return false;
@@ -163,9 +153,7 @@ class Certificate extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeValid($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->where('passed', true)
             ->where(function($subQuery) use ($at) {
@@ -185,9 +173,7 @@ class Certificate extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeInvalid($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->where('passed', false)
             ->orWhere('examination_at','>',$at)

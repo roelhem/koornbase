@@ -20,29 +20,21 @@ class CountryCodeType extends ScalarType
 
     public function serialize($value)
     {
-        if(!is_string($value) || strlen($value) !== 2) {
-            return null;
-        }
-
-        return mb_strtoupper($value);
+        return \Parse::countryCode($value);
     }
 
     public function parseValue($value)
     {
-        if(is_string($value) && strlen($value) === 2) {
-            return mb_strtoupper($value);
-        } else {
-            return null;
-        }
+        return \Parse::countryCode($value, true);
     }
 
     public function parseLiteral($valueNode)
     {
-        if(($valueNode instanceof StringValueNode) && strlen($valueNode->value) === 2) {
-            return mb_strtoupper($valueNode->value);
+        if(($valueNode instanceof StringValueNode)) {
+            return \Parse::countryCode($valueNode->value, true);
         }
 
-        throw new \InvalidArgumentException("A CountryCode has to be a string with just two characters", [$valueNode]);
+        throw new \InvalidArgumentException("A CountryCode has to be a string", [$valueNode]);
     }
 
 }

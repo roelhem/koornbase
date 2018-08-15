@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
-class GroupResource extends Resource
+use App\Group;
+use App\Http\Resources\Api\Traits\HasStamps;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class GroupResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -12,20 +19,24 @@ class GroupResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'name' => $this->name,
-                'name_short' => $this->name_short,
-                'description' => $this->description,
-                'member_name' => $this->member_name,
+        /** @var Group $group */
+        $group = $this->resource;
 
-                'category' => new GroupCategoryResource($this->whenLoaded('category')),
-                'persons' => PersonResource::collection($this->whenLoaded('persons')),
-                'emailAddresses' => GroupEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+        return [
+            'id' => $group->id,
+            'slug' => $group->slug,
+            'category_id' => $group->category_id,
+            'category' => new GroupCategoryResource($this->whenLoaded('category')),
 
-            ] + $this->tailArray($request);
-    }
+            'name' => $group->name,
+            'name_short' => $group->name_short,
+            'description' => $group->description,
+            'member_name' => $group->member_name,
+            'emailAddresses' => GroupEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+            'persons' => PersonResource::collection($this->whenLoaded('persons')),
+            'is_required' => $group->is_required,
 
-    public function fieldStyle() {
-        return $this->resource->style;
+            $this->getStampFields($request),
+        ];
     }
 }

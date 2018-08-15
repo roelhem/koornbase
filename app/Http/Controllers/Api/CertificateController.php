@@ -1,105 +1,63 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 15-08-18
+ * Time: 13:10
+ */
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Certificate;
+use App\CertificateCategory;
 use App\Contracts\Finders\FinderCollection;
-use App\Http\Resources\Api\CertificateResource;
-use App\Services\Sorters\CertificateSorter;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\CertificateStoreRequest;
+use App\Http\Requests\Api\CertificateUpdateRequest;
 
 class CertificateController extends Controller
 {
+    protected $eagerLoadForShow = ['person','category'];
 
-    protected $modelClass = Certificate::class;
-    protected $resourceClass = CertificateResource::class;
-    protected $sorterClass = CertificateSorter::class;
 
     /**
-     * Store a newly created resource in storage.
+     * Actie die een nieuw certificaat aan de database toevoegd.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws
+     * @param CertificateStoreRequest $request
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Throwable
      */
-    public function store(Request $request, FinderCollection $finders)
+    public function store(CertificateStoreRequest $request, FinderCollection $finders)
     {
-        $this->authorize('create',Certificate::class);
+        $data = $request->validated();
 
-        $validatedData = $request->validate([
-            'person' => 'required|finds:person',
-            'category' => 'required|finds:certificate_category',
-            'passed' => 'boolean',
-            'examination_at' => 'nullable|date',
-            'valid_at' => 'nullable|date',
-            'expired_at' => 'nullable|date',
-            'remarks' => 'nullable|string'
-        ]);
+        $values = array_except($data, ['person','category']);
+        $values['person_id'] = $finders->find(array_get($data, 'person'), 'person')->id;
 
-        $person = $finders->find($validatedData['person'], 'person');
-        $category = $finders->find($validatedData['category'], 'certificate_category');
+        /** @var CertificateCategory $certificate */
+        $category = $finders->find(array_get($data,'category'), 'certificate_category');
+        $certificate = $category->certificates()->create($values);
 
-        $inputData = array_except($validatedData, ['person','category']);
-        $inputData['person_id'] = $person->id;
-        $inputData['category_id'] = $category->id;
+        $certificate->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-        $certificate = Certificate::create($inputData);
-
-        return $this->prepare($certificate, $request);
+        return $this->createResource($certificate);
     }
 
     /**
-     * Display the specified resource.
+     * Actie die de gegevens van een Certificaat bijwerkt.
      *
-     * @param  Request $request
-     * @param  \App\Certificate  $certificate
-     * @return Resource
-     * @throws
+     * @param CertificateUpdateRequest $request
+     * @param Certificate $certificate
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Throwable
      */
-    public function show(Request $request, Certificate $certificate)
+    public function update(CertificateUpdateRequest $request, Certificate $certificate)
     {
-        $this->authorize('view', $certificate);
-
-        return $this->prepare($certificate, $request);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Certificate  $certificate
-     * @return Resource
-     * @throws
-     */
-    public function update(Request $request, Certificate $certificate)
-    {
-        $this->authorize('update',$certificate);
-
-        $validatedData = $request->validate([
-            'passed' => 'boolean',
-            'examination_at' => 'nullable|date',
-            'valid_at' => 'nullable|date',
-            'expired_at' => 'nullable|date',
-            'remarks' => 'nullable|string'
-        ]);
-
-        $certificate->fill($validatedData);
+        $certificate->fill($request->validated());
         $certificate->saveOrFail();
 
-        return $this->prepare($certificate, $request);
-    }
+        $certificate->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Certificate  $certificate
-     * @throws
-     */
-    public function destroy(Certificate $certificate)
-    {
-        $this->authorize('delete', $certificate);
-
-        $certificate->delete();
+        return $this->createResource($certificate);
     }
 }

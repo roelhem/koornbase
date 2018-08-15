@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
-class GroupCategoryResource extends Resource
+use App\GroupCategory;
+use App\Http\Resources\Api\Traits\HasStamps;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class GroupCategoryResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -12,15 +19,20 @@ class GroupCategoryResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'name' => $this->name,
-                'name_short' => $this->name_short,
-                'description' => $this->description,
-                'style' => $this->style,
-                'options' => $this->getOptions($request),
+        /** @var GroupCategory $category */
+        $category = $this->resource;
 
-                'groups' => GroupResource::collection($this->whenLoaded('groups')),
+        return [
+            'id' => $category->id,
+            'slug' => $category->slug,
+            'name' => $category->name,
+            'name_short' => $category->name_short,
+            'description' => $category->description,
+            'style' => $category->style,
+            'groups' => GroupResource::collection($this->whenLoaded('groups')),
+            'is_required' => $category->is_required,
 
-            ] + $this->tailArray($request);
+            $this->getStampFields($request),
+        ];
     }
 }

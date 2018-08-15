@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Contracts\Finders\FinderCollection;
-use App\Exceptions\Finders\InputNotAcceptedException;
-use App\Exceptions\Finders\ModelNotFoundException;
 use App\Group;
-use App\Http\Resources\Api\GroupResource;
-use App\Services\Sorters\GroupSorter;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\GroupCategory;
 use Illuminate\Http\Request;
-use Symfony\Component\Finder\Finder;
+
 
 class GroupController extends Controller
 {
 
-    protected $modelClass = Group::class;
-    protected $resourceClass = GroupResource::class;
-    protected $sorterClass = GroupSorter::class;
+    protected $eagerLoadForShow = [
+        'category','emailAddresses', 'persons'
+    ];
 
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param FinderCollection   $finders
-     * @return Resource
-     * @throws
+     * @param Request $request
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Request $request, FinderCollection $finders)
     {
@@ -40,35 +37,26 @@ class GroupController extends Controller
             'member_name' => 'nullable|string|max:255',
         ]);
 
+        /** @var GroupCategory $groupCategory */
         $groupCategory = $finders->find($validatedData['category'], 'group_category');
+
+        /** @var Group $group */
         $group = $groupCategory->groups()->create($validatedData);
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($group);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Group  $group
-     * @param  Request     $request
-     * @return Resource
-     * @throws
-     */
-    public function show(Group $group, Request $request)
-    {
-        $this->authorize('view', $group);
-
-        return $this->prepare($group, $request);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $group
-     * @param  FinderCollection $finders
-     * @return Resource
-     * @throws
+     * @param Request $request
+     * @param Group $group
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
      */
     public function update(Request $request, Group $group, FinderCollection $finders)
     {
@@ -91,35 +79,12 @@ class GroupController extends Controller
 
         $group->saveOrFail();
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($group);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Group  $group
-     * @throws
-     */
-    public function destroy(Group $group)
-    {
-        $this->authorize('delete', $group);
-
-        if($group->is_required) {
-            abort(403, 'Deze groep kan niet worden verwijderd omdat de groep nodig is voor het goed functioneren van dit systeem.');
-        } else {
-            $group->delete();
-        }
-    }
-
-    /**
-     * Endpoint to attach some persons.
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws
-     */
+    /*
     public function attach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -149,16 +114,7 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Endpoint to detach attached persons from this group.
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     */
+
     public function detach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -188,16 +144,7 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Endpoint to sync attached persons with the input
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     */
+
     public function sync(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'array',
@@ -218,5 +165,5 @@ class GroupController extends Controller
         }
 
         return $this->prepare($group, $request);
-    }
+    }*/
 }

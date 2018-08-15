@@ -2,9 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\Membership;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class MembershipResource extends Resource
+class MembershipResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -13,14 +19,24 @@ class MembershipResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'application' => $this->formatDate($this->application, $request),
-                'start' => $this->formatDate($this->start, $request),
-                'end' => $this->formatDate($this->end, $request),
-                'status' =>  $this->status,
+        /** @var Membership $membership */
+        $membership = $this->resource;
 
-                'person' => new PersonResource($this->whenLoaded('person')),
+        return [
+            'id' => $membership->id,
+            'person_id' => $membership->person_id,
+            'person' => new PersonResource($this->whenLoaded('person')),
 
-            ] + $this->tailArray($request);
+            'application' => $membership->application,
+            'start' => $membership->start,
+            'end' => $membership->end,
+
+            'status' => $membership->status->getName(),
+            'status_since' => $membership->status_at,
+
+            'remarks' => $membership->remarks,
+
+            $this->getStampFields($request),
+        ];
     }
 }

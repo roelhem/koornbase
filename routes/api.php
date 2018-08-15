@@ -23,7 +23,7 @@ Route::name('api.')->middleware(['auth:api'])->group(function() {
         'person-phone-numbers'   => 'Api\PersonPhoneNumberController',
         'groups'                 => 'Api\GroupController',
         'group-categories'       => 'Api\GroupCategoryController',
-        'group-email-address'    => 'Api\GroupEmailAddressController',
+        'group-email-addresses'  => 'Api\GroupEmailAddressController',
         'certificates'           => 'Api\CertificateController',
         'certificate-categories' => 'Api\CertificateCategoryController',
         'koornbeurs-cards'       => 'Api\KoornbeursCardController',

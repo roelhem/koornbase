@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
  * This trait should be added to all the Models that have a start and end that determine when the model is active.
  *
  * @package App\Traits
+ *
  */
 trait HasStartEnd
 {
@@ -33,7 +34,7 @@ trait HasStartEnd
      * @return bool
      */
     public function isFuture($at = null) {
-        $at = $this->parseAt($at);
+        $at = \Parse::date($at, true);
         if($this->start !== null && $this->start > $at) {
             return true;
         }
@@ -48,7 +49,7 @@ trait HasStartEnd
      * @return bool
      */
     public function isPast($at = null) {
-        $at = $this->parseAt($at);
+        $at = \Parse::date($at, true);
         if($this->end !== null && $this->end < $at) {
             return true;
         }
@@ -97,7 +98,7 @@ trait HasStartEnd
      * @return Builder
      */
     public function scopeFuture($query, $at = null) {
-        $at = $this->parseAt($at);
+        $at = \Parse::date($at, true);
         return $query->whereNotNull('start')->where('start', '>', $at->toDateTimeString());
     }
 
@@ -109,7 +110,7 @@ trait HasStartEnd
      * @return Builder
      */
     public function scopePast($query, $at = null) {
-        $at = $this->parseAt($at);
+        $at = \Parse::date($at, true);
         return $query->whereNotNull('end')->where('end', '<', $at->toDateTimeString());
     }
 
@@ -121,10 +122,12 @@ trait HasStartEnd
      * @return Builder
      */
     public function scopeNow($query, $at = null) {
-        $at = $this->parseAt($at);
+        $at = \Parse::date($at, true);
         return $query->where(function ($query) use ($at) {
+            /** @var Builder $query */
             $query->orWhereNull('start')->orWhere('start', '<=', $at->toDateTimeString());
         })->where(function($query) use ($at) {
+            /** @var Builder $query */
             $query->orWhereNull('end')->orWhere('end', '>=', $at->toDateTimeString());
         });
     }
@@ -143,27 +146,6 @@ trait HasStartEnd
                 return $this->scopeNow($query, $at);
             case Chronology::FUTURE:
                 return $this->scopeFuture($query, $at);
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- HELPER FUNCTIONS ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * Returns the right Carbon value for the given $at attribute.
-     *
-     * @param $at
-     * @return Carbon
-     */
-    private function parseAt($at)
-    {
-        if($at === null) {
-            return Carbon::now();
-        } elseif($at instanceof Carbon) {
-            return $at;
-        } else {
-            return Carbon::parse($at);
         }
     }
 

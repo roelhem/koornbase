@@ -11,6 +11,13 @@ namespace App\Traits;
 use Cviebrock\EloquentSluggable\Sluggable as SluggableParent;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
+/**
+ * Trait Sluggable
+ *
+ * @property-read string|null $slug
+ *
+ * @package App\Traits
+ */
 trait Sluggable
 {
     use SluggableParent;

@@ -6,52 +6,46 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonAddressStoreRequest;
 use App\Http\Requests\Api\PersonAddressUpdateRequest;
-use App\Http\Resources\Api\PersonAddressResource;
+use App\Person;
 use App\PersonAddress;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class PersonAddressController extends Controller
 {
 
-    protected $modelClass = PersonAddress::class;
-    protected $resourceClass = PersonAddressResource::class;
-
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  PersonAddressStoreRequest $request
      * @param  FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @return JsonResource
+     * @throws
      */
     public function store(PersonAddressStoreRequest $request, FinderCollection $finders)
     {
-        $person = $finders->find($request->validated()['person'], 'person');
-        $personAddress = $person->addresses()->create($request->validated());
 
-        $index = array_get($request->validated(), 'index');
+        // Collecting the input
+        $data = $request->validated();
+        $values = array_except($data, ['index','person']);
+
+        // Get the Person and the PersonAddress
+        $personInput = array_get($data,'person');
+        /** @var Person $person */
+        $person = $finders->find($personInput, 'person');
+        /** @var PersonAddress $address */
+        $address = $person->addresses()->create($values);
+
+        // Handle the selected index if it is set.
+        $index = array_get($data, 'index');
         if($index !== null) {
-            $personAddress->moveToIndex($index);
+            $address->moveToIndex($index);
         }
 
-        return $this->prepare($personAddress, $request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request $request
-     * @param  \App\PersonAddress  $personAddress
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, PersonAddress $personAddress)
-    {
-        $this->authorize('view', $personAddress);
-
-        return $this->prepare($personAddress, $request);
+        // Prepare and return the response.
+        $address->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($address);
     }
 
     /**
@@ -59,32 +53,26 @@ class PersonAddressController extends Controller
      *
      * @param  PersonAddressUpdateRequest  $request
      * @param  PersonAddress  $personAddress
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
     public function update(PersonAddressUpdateRequest $request, PersonAddress $personAddress)
     {
-        $personAddress->fill($request->validated());
+        // Collecting the input
+        $data = $request->validated();
+        $values = array_except($data, ['index']);
+
+        // Update the address and save the changes
+        $personAddress->fill($values);
         $personAddress->saveOrFail();
 
-        $index = array_get($request->validated(), 'index');
+        $index = array_get($data, 'index');
         if($index !== null) {
             $personAddress->moveToIndex($index);
         }
 
-        return $this->prepare($personAddress, $request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PersonAddress  $personAddress
-     * @throws
-     */
-    public function destroy(PersonAddress $personAddress)
-    {
-        $this->authorize('delete', $personAddress);
-
-        $personAddress->delete();
+        // Prepare and return the response.
+        $personAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($personAddress);
     }
 }

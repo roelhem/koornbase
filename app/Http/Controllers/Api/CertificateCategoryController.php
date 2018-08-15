@@ -1,99 +1,71 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 15-08-18
+ * Time: 13:10
+ */
 
 namespace App\Http\Controllers\Api;
 
+
 use App\CertificateCategory;
-use App\Http\Resources\Api\CertificateCategoryResource;
-use App\Services\Finders\CertificateCategoryFinder;
-use App\Services\Sorters\CertificateCategorySorter;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CertificateCategoryController extends Controller
 {
 
-    protected $modelClass = CertificateCategory::class;
-    protected $sorterClass = CertificateCategorySorter::class;
-    protected $resourceClass = CertificateCategoryResource::class;
+    protected $eagerLoadForShow = ['certificates'];
+
 
     /**
-     * Store a newly created resource in storage.
+     * Action that creates a new Certificate Category in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Resource
-     * @throws
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
      */
     public function store(Request $request)
     {
-        $this->authorize('create', CertificateCategory::class);
+        $this->authorize('create',CertificateCategory::class);
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'name_short' => 'nullable|string|max:63',
             'description' => 'nullable|string',
-            'default_expire_years' => 'nullable|integer|min:0'
+            'default_expire_years' => 'nullable|integer'
         ]);
 
-        $category = CertificateCategory::create($validatedData);
+        $certificateCategory = new CertificateCategory($validatedData);
+        $certificateCategory->saveOrFail();
 
-        return $this->prepare($category, $request);
+        return $this->createResource($certificateCategory);
     }
 
     /**
-     * Display the specified resource.
+     * Action that updates the values of a CertificateCategory in the database.
      *
-     * @param  Request $request
-     * @param  \App\CertificateCategory  $category
-     * @return Resource
-     * @throws
+     * @param Request $request
+     * @param CertificateCategory $certificateCategory
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
      */
-    public function show(Request $request, CertificateCategory $category)
+    public function update(Request $request, CertificateCategory $certificateCategory)
     {
-        $this->authorize('view', $category);
-
-        return $this->prepare($category, $request);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CertificateCategory  $category
-     * @return Resource
-     * @throws
-     */
-    public function update(Request $request, CertificateCategory $category)
-    {
-        $this->authorize('update', $category);
+        $this->authorize('update', $certificateCategory);
 
         $validatedData = $request->validate([
-            'name' => 'sometimes|required|max:255',
+            'name' => 'sometimes|required|string|max:255',
             'name_short' => 'nullable|string|max:63',
             'description' => 'nullable|string',
-            'default_expire_years' => 'nullable|integer|min:0'
+            'default_expire_years' => 'nullable|integer'
         ]);
 
-        $category->fill($validatedData);
-        $category->saveOrFail();
+        $certificateCategory->fill($validatedData);
+        $certificateCategory->saveOrFail();
 
-        return $this->prepare($category, $request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request $request
-     * @param  \App\CertificateCategory  $category
-     * @throws
-     */
-    public function destroy(Request $request, CertificateCategory $category)
-    {
-        $this->authorize('delete', $category);
-
-        if($category->is_required) {
-            abort(403, 'Dit certificaat is belangrijk voor het werken van het systeem.');
-        } else {
-            $category->delete();
-        }
+        return $this->createResource($certificateCategory);
     }
 }

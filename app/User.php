@@ -8,6 +8,7 @@ use App\Notifications\ResetPasswordNotification;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Types\AvatarType;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,6 +34,11 @@ use Wildside\Userstamps\Userstamps;
  * @property-read string|null $name_short
  * @property-read string|null $avatar_letters
  * @property-read AvatarType $avatar
+ *
+ * @property-read Carbon $created_at
+ * @property-read integer|null $created_by
+ * @property-read Carbon $updated_at
+ * @property-read integer|null $updated_by
  *
  * @method static User|null find(integer $id)
  *
@@ -134,6 +140,19 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
             $res->image = $account->avatar;
         }
         return $res;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM MUTATORS ------------------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Sets the password of the user to a new value. It will be encrypted right away.
+     *
+     * @param string $newValue
+     */
+    public function setPasswordAttribute($newValue) {
+        $this->attributes['password'] = bcrypt($newValue);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

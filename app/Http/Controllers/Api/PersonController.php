@@ -3,93 +3,54 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Contracts\Finders\FinderCollection;
+
+
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Requests\Api\PersonUpdateRequest;
-use App\Http\Resources\Api\PersonResource;
 use App\Person;
-use App\Services\Finders\GroupFinder;
-use App\Services\Sorters\PersonSorter;
-use Illuminate\Http\Request;
+
 class PersonController extends Controller
 {
 
-    protected $modelClass = Person::class;
-    protected $resourceClass = PersonResource::class;
-    protected $sorterClass = PersonSorter::class;
+
+    protected $eagerLoadForShow = [
+        'memberships','groups','certificates','users','cards','addresses','emailAddresses','phoneNumbers'
+    ];
+
 
     /**
-     * Store a newly created resource in storage.
+     * An action that stores a new Person in the database.
      *
-     * @param  PersonStoreRequest  $request
-     * @return Resource
-     * @throws
+     * @param PersonStoreRequest $request
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(PersonStoreRequest $request)
     {
-        $validated = $request->validated();
+        $person = Person::create($request->validated());
 
-        $person = new Person($validated);
-        $person->saveOrFail();
-
-        return $this->prepare($person, $request);
+        return $this->createResource($person);
     }
 
     /**
-     * Display the specified resource.
+     * An action that updates the values of an existing Person.
      *
-     * @param  \App\Person  $person
-     * @param  Request      $request
-     * @return Resource
-     * @throws
-     */
-    public function show(Person $person, Request $request)
-    {
-        $this->authorize('view', $person);
-
-        return $this->prepare($person, $request);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  PersonUpdateRequest  $request
-     * @param  \App\Person  $person
-     * @return Resource
-     * @throws
+     * @param PersonUpdateRequest $request
+     * @param Person $person
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Throwable
      */
     public function update(PersonUpdateRequest $request, Person $person)
     {
         $person->fill($request->validated());
         $person->saveOrFail();
 
-        return $this->prepare($person, $request);
+        $person->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($person);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Person  $person
-     * @throws
-     */
-    public function destroy(Person $person)
-    {
-        $this->authorize('delete', $person);
 
-        $person->delete();
-    }
 
-    /**
-     * Attaches some other models to this person via many-to-many relations.
-     *
-     * @param Request $request
-     * @param Person $person
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     */
-    public function attach(Request $request, Person $person, FinderCollection $finders)
+    /*public function attach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
@@ -129,7 +90,7 @@ class PersonController extends Controller
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function detach(Request $request, Person $person, FinderCollection $finders)
+    /*public function detach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
@@ -169,7 +130,7 @@ class PersonController extends Controller
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function sync(Request $request, Person $person, FinderCollection $finders)
+    /*public function sync(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'array',
@@ -190,5 +151,5 @@ class PersonController extends Controller
         }
 
         return $this->prepare($person, $request);
-    }
+    }*/
 }

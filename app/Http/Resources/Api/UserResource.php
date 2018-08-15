@@ -2,10 +2,16 @@
 
 namespace App\Http\Resources\Api;
 
-use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\Http\Resources\Api\Types\AvatarResource;
+use App\User;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends Resource
+class UserResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -14,40 +20,27 @@ class UserResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'name' => $this->name,
-                'email' => $this->email,
+        /** @var User $user */
+        $user = $this->resource;
 
-                'person' => new PersonResource($this->whenLoaded('person')),
-                'accounts' => UserAccountResource::collection($this->whenLoaded('accounts')),
-                'facebookAccount' => new UserAccountResource($this->whenLoaded('facebookAccount')),
-                'githubAccount' => new UserAccountResource($this->whenLoaded('githubAccount')),
-                'googleAccount' => new UserAccountResource($this->whenLoaded('googleAccount')),
-                'twitterAccount' => new UserAccountResource($this->whenLoaded('twitterAccount')),
-            ] + $this->tailArray($request);
-    }
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'name_display' => $user->name_display,
+            'name_short' => $user->name_short,
+            'avatar' => new AvatarResource($user->avatar),
+            'email' => $user->email,
 
-    public function fieldPersonId() {
-        return $this->person_id;
-    }
+            'person_id' => $user->person_id,
+            'person' => new PersonResource($this->whenLoaded('person')),
 
-    public function fieldNameDisplay($request) {
-        return $this->name_display;
-    }
+            'accounts' => UserAccountResource::collection($this->whenLoaded('accounts')),
+            'facebookAccount' => new UserAccountResource($this->whenLoaded('facebookAccount')),
+            'githubAccount' => new UserAccountResource($this->whenLoaded('githubAccount')),
+            'googleAccount' => new UserAccountResource($this->whenLoaded('googleAccount')),
+            'twitterAccount' => new UserAccountResource($this->whenLoaded('twitterAccount')),
 
-    public function fieldNameShort($request) {
-        return $this->name_short;
-    }
-
-    public function fieldAvatar($request) {
-        return $this->avatar;
-    }
-
-    public function fieldEntryNodes() {
-        $graph = resolve(AuthorizableGraph::class);
-        if(!($graph instanceof AuthorizableGraph)) {
-            return [];
-        }
-        return $graph->getEntryNodes($this->resource);
+            $this->getStampFields($request),
+        ];
     }
 }

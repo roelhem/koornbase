@@ -2,11 +2,14 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\PersonAddress;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-use App\Http\Resources\Api\Support\AddressFormatResource;
-
-class PersonAddressResource extends PersonContactEntryResource
+class PersonAddressResource extends JsonResource
 {
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -15,34 +18,30 @@ class PersonAddressResource extends PersonContactEntryResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'country_code' => $this->country_code,
-                'country' => $this->country,
-                'administrative_area' => $this->administrative_area,
-                'locality' => $this->locality,
-                'dependent_locality' => $this->dependent_locality,
-                'postal_code' => $this->postal_code,
-                'sorting_code' => $this->sorting_code,
-                'address_line_1' => $this->address_line_1,
-                'address_line_2' => $this->address_line_2,
-                'organisation' => $this->organisation,
-                'locale' => $this->locale
-        ] + $this->tailArray($request);
-    }
+        /** @var PersonAddress $address */
+        $address = $this->resource;
 
-    public function fieldFormatted() {
-        return $this->resource->format();
-    }
+        return [
+            'id' => $address->id,
+            'label' => $address->label,
+            'index' => $address->index,
+            'person_id' => $address->person_id,
+            'person' => new PersonResource($this->whenLoaded('person')),
 
-    public function fieldHtmlFormatted() {
-        return $this->resource->format(['html' => true, 'html_attributes' => ['translate' => 'no', 'class' => 'generated_address_html']]);
-    }
+            'country_code' => $address->country_code,
+            'administrative_area' => $address->administrative_area,
+            'locality' => $address->locality,
+            'dependent_locality' => $address->dependent_locality,
+            'postal_code' => $address->postal_code,
+            'sorting_code' => $address->sorting_code,
+            'address_line_1' => $address->address_line_1,
+            'address_line_2' => $address->address_line_2,
+            'organisation' => $address->organisation,
+            'locale' => $address->locale,
 
-    public function fieldPostalLabel() {
-        return $this->resource->postalLabel();
-    }
+            'remarks' => $address->remarks,
 
-    public function fieldAddressFormat() {
-        return new AddressFormatResource($this->addressFormat);
+            $this->getStampFields($request),
+        ];
     }
 }

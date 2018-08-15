@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Membership;
-use App\Person;
-use Carbon\Carbon;
+use App\Services\Validators\AfterValidation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -49,17 +47,18 @@ class MembershipUpdateRequest extends FormRequest
      */
     public function afterValidation($validator)
     {
+
         $membership = $this->findFromUrl('membership');
         if(!($membership instanceof Membership)) { abort(404); }
 
-        // Data parsen
-        $data        = $validator->getData();
-        $application = $this->parseDate(array_get($data, 'application', $membership->application));
-        $start       = $this->parseDate(array_get($data, 'start',       $membership->start));
-        $end         = $this->parseDate(array_get($data, 'end',         $membership->end));
+        $after = new AfterValidation($validator);
+        $after->setDefaults($membership->only(['application','start','end']));
+        $after->ensureChronology(['application','start','end']);
 
-        // Chronologie controleren
-        $this->validateChronology($application, $start, $end, $validator);
+        // Data parsen
+        $application = \Parse::try()->date($after->getValue('application'));
+        $start       = \Parse::try()->date($after->getValue('start'));
+        $end         = \Parse::try()->date($after->getValue('end'));
 
         // Grootte van membership bepalen
         $lowerBound = $this->findLowerBound($application, $start, $end);

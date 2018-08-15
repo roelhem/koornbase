@@ -19,6 +19,7 @@ use Wildside\Userstamps\Userstamps;
  *
  * @property integer $id
  * @property integer|null $default_expire_years
+ * @property boolean $is_required
  */
 class CertificateCategory extends Model
 {

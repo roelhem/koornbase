@@ -4,25 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\Finders\FinderCollection;
 use App\GroupEmailAddress;
-use App\Http\Resources\Api\GroupEmailAddressResource;
-use App\Services\Sorters\GroupEmailAddressSorter;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Rule;
 
 class GroupEmailAddressController extends Controller
 {
 
-    protected $modelClass = GroupEmailAddress::class;
-    protected $resourceClass = GroupEmailAddressResource::class;
-    protected $sorterClass = GroupEmailAddressSorter::class;
-
+    protected $eagerLoadForShow = ['group'];
 
     /**
      * Creates a new GroupEmailAddress.
      *
      * @param Request $request
      * @param FinderCollection $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
     public function store(Request $request, FinderCollection $finders) {
@@ -37,24 +33,12 @@ class GroupEmailAddressController extends Controller
 
         $group = $finders->find($validatedData['group'],'group');
 
+        /** @var GroupEmailAddress $emailAddress */
         $emailAddress = $group->emailAddresses()->create($validatedData);
 
-        return $this->prepare($emailAddress, $request);
-    }
+        $emailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-    /**
-     * Shows one particular GroupEmailAddress.
-     *
-     * @param Request $request
-     * @param GroupEmailAddress $emailAddress
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, GroupEmailAddress $emailAddress) {
-
-        $this->authorize('view', $emailAddress);
-
-        return $this->prepare($emailAddress, $request);
+        return $this->createResource($emailAddress);
     }
 
     /**
@@ -62,7 +46,7 @@ class GroupEmailAddressController extends Controller
      *
      * @param Request $request
      * @param GroupEmailAddress $emailAddress
-     * @return Resource
+     * @return JsonResource
      * @throws \Throwable
      */
     public function update(Request $request, GroupEmailAddress $emailAddress) {
@@ -83,19 +67,9 @@ class GroupEmailAddressController extends Controller
         $emailAddress->fill($validatedData);
         $emailAddress->saveOrFail();
 
-        return $this->prepare($emailAddress, $request);
+        $emailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($emailAddress);
     }
 
-    /**
-     * Deletes a PersonEmailAddress
-     *
-     * @param GroupEmailAddress $emailAddress
-     * @throws \Exception
-     */
-    public function destroy(GroupEmailAddress $emailAddress) {
-
-        $this->authorize('delete', $emailAddress);
-
-        $emailAddress->delete();
-    }
 }

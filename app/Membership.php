@@ -67,11 +67,7 @@ class Membership extends Model implements OwnedByPerson
             return false;
         }
 
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
-
-        return $this->application <= $at;
+        return $this->application <= \Parse::date($at, true);
     }
 
     /**
@@ -85,11 +81,7 @@ class Membership extends Model implements OwnedByPerson
             return false;
         }
 
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
-
-        return $this->start < $at;
+        return $this->start < \Parse::date($at, true);
     }
 
     /**
@@ -103,11 +95,7 @@ class Membership extends Model implements OwnedByPerson
             return false;
         }
 
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
-
-        return $this->end < $at;
+        return $this->end < \Parse::date($at, true);
     }
 
     /**
@@ -167,9 +155,7 @@ class Membership extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeOutsider($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->where(function($query) use ($at) {
             /** @var Builder $query */
@@ -189,9 +175,7 @@ class Membership extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeNovice($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->whereNotNull('application')->where('application', '<=', $at)->where(function($query) use ($at) {
             /** @var Builder $query */
@@ -208,9 +192,7 @@ class Membership extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeMember($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->whereNotNull('start')->where('start', '<=', $at)->where(function($query) use ($at) {
             /** @var Builder $query */
@@ -224,9 +206,7 @@ class Membership extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeFormerMember($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         return $query->whereNotNull('end')->where('end', '<=', $at);
     }

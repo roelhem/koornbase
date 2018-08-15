@@ -5,82 +5,56 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\MembershipStoreRequest;
 use App\Http\Requests\Api\MembershipUpdateRequest;
-use App\Http\Resources\Api\MembershipResource;
-use App\Http\Resources\Api\Resource;
 use App\Membership;
-use App\Services\Sorters\MembershipSorter;
-use Illuminate\Http\Request;
-use Symfony\Component\Finder\Finder;
+use App\Person;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+
 
 class MembershipController extends Controller
 {
 
-    protected $modelClass = Membership::class;
-    protected $resourceClass = MembershipResource::class;
-    protected $sorterClass = MembershipSorter::class;
-
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Endpoint that is used to store new
      *
      * @param MembershipStoreRequest $request
      * @param FinderCollection $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
     public function store(MembershipStoreRequest $request, FinderCollection $finders)
     {
         $personInput = array_get($request->validated(),'person');
+        /** @var Person $person */
         $person = $finders->find($personInput, 'person');
+        /** @var Membership $membership */
         $membership = $person->memberships()->create(
             array_only($request->validated(), ['application','start','end','remarks'])
         );
-        return $this->prepare($membership, $request);
+
+        $membership->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($membership);
     }
 
-
-    /**
-     * Endpoint that shows a specific membership
-     *
-     * @param Request $request
-     * @param Membership $membership
-     * @return Resource
-     * @throws 
-     */
-    public function show(Request $request, Membership $membership)
-    {
-        $this->authorize('view', $membership);
-
-        return $this->prepare($membership, $request);
-    }
 
 
     /**
      * @param MembershipUpdateRequest $request
      * @param Membership $membership
      * @throws
-     * @return Resource
+     * @return JsonResource
      */
     public function update(MembershipUpdateRequest $request, Membership $membership)
     {
         $membership->fill($request->validated());
         $membership->saveOrFail();
 
-        return $this->prepare($membership, $request);
-    }
+        $membership->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-
-    /**
-     * Endpoint that deletes a membership
-     *
-     * @param Membership $membership
-     * @throws
-     */
-    public function destroy(Membership $membership)
-    {
-        $this->authorize('delete', $membership);
-
-        $membership->delete();
+        return $this->createResource($membership);
     }
 
 }

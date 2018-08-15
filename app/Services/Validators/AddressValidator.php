@@ -9,12 +9,12 @@
 namespace App\Services\Validators;
 
 
+use App\Services\Parsers\NotParsableException;
 use CommerceGuys\Addressing\AddressFormat\AddressField;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface;
 use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepositoryInterface;
 use Illuminate\Validation\Validator;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 
 /**
  * Class AddressValidation
@@ -77,7 +77,12 @@ class AddressValidator
      * @return bool
      */
     protected function isCountryCode($value) {
-        return is_string($value) && array_key_exists($value, $this->countryRepository->getList());
+        try {
+            \Parse::countryCode($value, true);
+            return true;
+        } catch (NotParsableException $notParsableException) {
+            return false;
+        }
     }
 
     /**
@@ -121,14 +126,15 @@ class AddressValidator
         // Try to get if from a sibling attribute
         $countryCodeAttributeName = $this->siblingAttributeName($attribute, 'country_code');
         $countryCode = array_get($validator->getData(), $countryCodeAttributeName);
-        if($this->isCountryCode($countryCode)) {
-            return $countryCode;
-        }
+        try {
+            return \Parse::countryCode($countryCode, true);
+        } catch (NotParsableException $notParsableException) {}
+
         // If given, use the default codes in the parameter
         foreach ($parameters as $parameter) {
-            if($this->isCountryCode($parameter)) {
-                return $parameter;
-            }
+            try {
+                return \Parse::countryCode($parameter, true);
+            } catch (NotParsableException $notParsableException) {}
         }
         // Return the global default country code.
         return 'NL';

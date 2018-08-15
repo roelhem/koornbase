@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources\Api;
 
-class KoornbeursCardResource extends Resource
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\KoornbeursCard;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class KoornbeursCardResource extends JsonResource
 {
+
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -12,14 +19,23 @@ class KoornbeursCardResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'ref' => $this->ref,
-                'version' => $this->version,
-                'activated_at' => $this->activated_at,
-                'deactivated_at' => $this->deactivated_at,
-                'is_active' => $this->is_active,
+        /** @var KoornbeursCard $card */
+        $card = $this->resource;
 
-                'owner' => new PersonResource($this->whenLoaded('owner')),
-            ] + $this->tailArray($request);
+        return [
+            'id' => $card->id,
+            'ref' => $card->ref,
+            'version' => $card->version,
+
+            'person_id' => $card->owner_id,
+            'person' => new PersonResource($this->whenLoaded('owner')),
+
+            'activated_at' => $card->activated_at,
+            'deactivated_at' => $card->deactivated_at,
+            'is_active' => $card->is_active,
+            'remarks' => $card->remarks,
+
+            $this->getStampFields($request)
+        ];
     }
 }

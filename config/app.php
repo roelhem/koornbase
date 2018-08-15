@@ -219,6 +219,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'EloquentView' => Jwz104\EloquentView\Facades\EloquentView::class,
+
+        'Parse' => \App\Services\Parsers\Parse::class,
     ],
 
 ];

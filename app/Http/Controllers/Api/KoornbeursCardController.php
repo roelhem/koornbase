@@ -3,122 +3,79 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\Finders\FinderCollection;
-use App\Http\Resources\Api\KoornbeursCardResource;
+use App\Http\Requests\Api\KoornbeursCardStoreRequest;
+use App\Http\Requests\Api\KoornbeursCardUpdateRequest;
 use App\KoornbeursCard;
-use App\Services\Sorters\KoornbeursCardSorter;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Person;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class KoornbeursCardController extends Controller
 {
 
-    protected $modelClass = KoornbeursCard::class;
-    protected $resourceClass = KoornbeursCardResource::class;
-    protected $sorterClass = KoornbeursCardSorter::class;
+    protected $eagerLoadForShow = ['owner'];
 
     /**
      * Action to store a new KoornbeursCard
      *
-     * @param Request $request
+     * @param KoornbeursCardStoreRequest $request
      * @param FinderCollection $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
-    public function store(Request $request, FinderCollection $finders) {
+    public function store(KoornbeursCardStoreRequest $request, FinderCollection $finders) {
 
-        $this->authorize('create', KoornbeursCard::class);
+        $data = $request->validated();
+        $values = array_except($data, ['person']);
 
-        $validatedData = $request->validate([
-            'owner' => 'nullable|finds:person',
-            'ref' => 'required|string|unique:koornbeurs_cards|max:63',
-            'version' => 'required|string|max:63',
-            'remarks' => 'nullable|string',
-            'activated_at' => 'nullable|date',
-            'deactivated_at' => 'nullable|date'
-        ]);
+        $personInput = array_get($data, 'person');
 
-        $inputData = array_except($validatedData, ['owner']);
-
-        if(array_get($validatedData, 'owner') !== null) {
-            $owner = $finders->find($validatedData['owner'],'person');
-            $inputData['owner_id'] = $owner->id;
+        if($personInput === null) {
+            $card = new KoornbeursCard($values);
         } else {
-            $inputData['owner_id'] = null;
+            /** @var Person $person */
+            $person = $finders->find($personInput, 'person');
+            $card = $person->cards()->make($values);
         }
 
-        $card = new KoornbeursCard($inputData);
         $card->saveOrFail();
 
-        return $this->prepare($card, $request);
-    }
+        $card->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-    /**
-     * Action to show one specific KoornbeursCard
-     *
-     * @param Request $request
-     * @param KoornbeursCard $card
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, KoornbeursCard $card)
-    {
-        $this->authorize('view', $card);
-
-        return $this->prepare($card, $request);
+        return $this->createResource($card);
     }
 
     /**
      * Action to update the values one specific KoornbeursCard
      *
-     * @param Request $request
-     * @param KoornbeursCard $koornbeursCard
+     * @param KoornbeursCardUpdateRequest $request
+     * @param KoornbeursCard $card
      * @param FinderCollection $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
-    public function update(Request $request, KoornbeursCard $koornbeursCard, FinderCollection $finders) {
+    public function update(KoornbeursCardUpdateRequest $request, KoornbeursCard $card, FinderCollection $finders) {
 
-        $this->authorize('update',$koornbeursCard);
+        $data = $request->validated();
+        $values = array_except($data, ['person']);
 
-        $validatedData = $request->validate([
-            'owner' => 'nullable|finds:person',
-            'ref' => ['sometimes','required','string','max:63',
-                Rule::unique('koornbeurs_cards')->ignore($koornbeursCard->id)
-            ],
-            'version' => 'sometimes|required|string|max:63',
-            'remarks' => 'nullable|string',
-            'activated_at' => 'nullable|date',
-            'deactivated_at' => 'nullable|date'
-        ]);
+        $card->fill($values);
 
-        $inputData = array_except($validatedData, ['owner']);
-
-        if(array_has($validatedData, 'owner')) {
-            if (array_get($validatedData, 'owner') !== null) {
-                $owner = $finders->find($validatedData['owner'],'person');
-                $inputData['owner_id'] = $owner->id;
+        $personInput = array_get($data, 'person', false);
+        if($personInput !== false) {
+            if($personInput === null) {
+                $card->owner()->dissociate();
             } else {
-                $inputData['owner_id'] = null;
+                /** @var Person $person */
+                $person = $finders->find($personInput, 'person');
+                $card->owner()->associate($person);
             }
         }
 
-        $koornbeursCard->fill($inputData);
-        $koornbeursCard->saveOrFail();
+        $card->saveOrFail();
 
-        return $this->prepare($koornbeursCard, $request);
-    }
+        $card->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
 
-    /**
-     * Deletes a KoornbeursCard
-     *
-     * @param KoornbeursCard $koornbeursCard
-     * @throws \Exception
-     */
-    public function destroy(KoornbeursCard $koornbeursCard)
-    {
-        $this->authorize('delete', $koornbeursCard);
-
-        $koornbeursCard->delete();
+        return $this->createResource($card);
     }
 
 

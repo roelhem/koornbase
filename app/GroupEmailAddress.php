@@ -8,6 +8,14 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
+/**
+ * Class GroupEmailAddress
+ * @package App
+ *
+ * @property-read integer $id
+ * @property integer $group_id
+ * @property string $email_address
+ */
 class GroupEmailAddress extends Model
 {
 
