@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\Finders\FinderCollection;
 use App\GroupEmailAddress;
-use App\Http\Resources\Api\GroupEmailAddressResource;
-use App\Services\Sorters\GroupEmailAddressSorter;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Rule;
 
 class GroupEmailAddressController extends Controller
@@ -19,10 +18,10 @@ class GroupEmailAddressController extends Controller
      *
      * @param Request $request
      * @param FinderCollection $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
-    /*public function store(Request $request, FinderCollection $finders) {
+    public function store(Request $request, FinderCollection $finders) {
 
         $this->authorize('create', GroupEmailAddress::class);
 
@@ -34,20 +33,23 @@ class GroupEmailAddressController extends Controller
 
         $group = $finders->find($validatedData['group'],'group');
 
+        /** @var GroupEmailAddress $emailAddress */
         $emailAddress = $group->emailAddresses()->create($validatedData);
 
-        return $this->prepare($emailAddress, $request);
-    }*/
+        $emailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($emailAddress);
+    }
 
     /**
      * Updates a GroupEmailAddress.
      *
      * @param Request $request
      * @param GroupEmailAddress $emailAddress
-     * @return Resource
+     * @return JsonResource
      * @throws \Throwable
      */
-    /*public function update(Request $request, GroupEmailAddress $emailAddress) {
+    public function update(Request $request, GroupEmailAddress $emailAddress) {
 
         $this->authorize('update', $emailAddress);
 
@@ -65,7 +67,9 @@ class GroupEmailAddressController extends Controller
         $emailAddress->fill($validatedData);
         $emailAddress->saveOrFail();
 
-        return $this->prepare($emailAddress, $request);
-    }*/
+        $emailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($emailAddress);
+    }
 
 }

@@ -3,21 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Contracts\Finders\FinderCollection;
 use App\Group;
-use App\Http\Resources\Api\GroupResource;
+use App\GroupCategory;
 use Illuminate\Http\Request;
-use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
 
 class GroupController extends Controller
 {
 
     protected $eagerLoadForShow = [
-        'emailAddresses', 'persons'
+        'category','emailAddresses', 'persons'
     ];
 
 
-    /*
+    /**
+     * @param Request $request
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function store(Request $request, FinderCollection $finders)
     {
         $this->authorize('create', Group::class);
@@ -30,12 +37,27 @@ class GroupController extends Controller
             'member_name' => 'nullable|string|max:255',
         ]);
 
+        /** @var GroupCategory $groupCategory */
         $groupCategory = $finders->find($validatedData['category'], 'group_category');
+
+        /** @var Group $group */
         $group = $groupCategory->groups()->create($validatedData);
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($group);
     }
 
+    /**
+     * @param Request $request
+     * @param Group $group
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
+     */
     public function update(Request $request, Group $group, FinderCollection $finders)
     {
         $this->authorize('update', $group);
@@ -57,22 +79,12 @@ class GroupController extends Controller
 
         $group->saveOrFail();
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+
+        return $this->createResource($group);
     }
 
-
-    public function destroy(Group $group)
-    {
-        $this->authorize('delete', $group);
-
-        if($group->is_required) {
-            abort(403, 'Deze groep kan niet worden verwijderd omdat de groep nodig is voor het goed functioneren van dit systeem.');
-        } else {
-            $group->delete();
-        }
-    }
-
-
+    /*
     public function attach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',

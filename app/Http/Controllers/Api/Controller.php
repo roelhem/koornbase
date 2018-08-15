@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\SortOrderDirection;
 use App\Http\Controllers\Controller as BaseController;
+use App\Services\Parsers\NotParsableException;
 use App\Services\Sorters\Traits\Sortable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -266,32 +267,26 @@ abstract class Controller extends BaseController
      */
     protected function getPageLimit(Request $request)
     {
-        $limit = $request->query(self::PARAM_PAGE_LIMIT, $this->defaultPageLimit);
+        $input = $request->query(self::PARAM_PAGE_LIMIT, $this->defaultPageLimit);
 
-        if($limit === null) {
+        try {
+            $limit = \Parse::int($input);
+
+            if($limit <= 0) {
+                abort(400, 'The limit has to be bigger than 0.');
+            }
+
+            if($limit > $this->maxPageLimit) {
+                abort(400, 'The limit is not allowed to be higher than '.$this->maxPageLimit.'.');
+            }
+
+            return $limit;
+
+        } catch (NotParsableException $notParsableException) {
             abort(400, 'The limit has to be an integer or not set at all.');
         }
 
-        if(is_string($limit)) {
-            if(!ctype_digit($limit)) {
-                abort(400, 'The limit has to be an integer.');
-            }
-            $limit = intval($limit);
-        }
-
-        if(!is_integer($limit)) {
-            throw new \InvalidArgumentException("Can't convert the provided limit to an integer");
-        }
-
-        if($limit <= 0) {
-            abort(400, 'The limit has to be bigger than 0.');
-        }
-
-        if($limit > $this->maxPageLimit) {
-            abort(400, 'The limit is not allowed to be higher than '.$this->maxPageLimit.'.');
-        }
-
-        return $limit;
+        return $this->defaultPageLimit;
     }
 
     /**

@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonEmailAddressStoreRequest;
 use App\Http\Requests\Api\PersonEmailAddressUpdateRequest;
-use App\Http\Resources\Api\PersonEmailAddressResource;
-use App\Http\Resources\Api\Resource;
+use App\Person;
 use App\PersonEmailAddress;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class PersonEmailAddressController extends Controller
 {
@@ -20,40 +19,58 @@ class PersonEmailAddressController extends Controller
      *
      * @param  PersonEmailAddressStoreRequest  $request
      * @param  FinderCollection                $finders
-     * @return Resource
+     * @return JsonResource
      * @throws
      */
-    /*public function store(PersonEmailAddressStoreRequest $request, FinderCollection $finders)
+    public function store(PersonEmailAddressStoreRequest $request, FinderCollection $finders)
     {
-        $person = $finders->find($request->validated()['person'], 'person');
-        $personEmailAddress = $person->emailAddresses()->create($request->validated());
+        // Collecting the input
+        $data = $request->validated();
+        $values = array_except($data, ['index','person']);
 
-        $index = array_get($request->validated(), 'index');
+        // Get the Person and the PersonAddress
+        $personInput = array_get($data,'person');
+        /** @var Person $person */
+        $person = $finders->find($personInput, 'person');
+        /** @var PersonEmailAddress $emailAddress */
+        $emailAddress = $person->emailAddress()->create($values);
+
+        // Handle the selected index if it is set.
+        $index = array_get($data, 'index');
         if($index !== null) {
-            $personEmailAddress->moveToIndex($index);
+            $emailAddress->moveToIndex($index);
         }
 
-        return $this->prepare($personEmailAddress, $request);
-    }*/
+        // Prepare and return the response.
+        $emailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($emailAddress);
+    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  PersonEmailAddressUpdateRequest  $request
-     * @param  \App\PersonEmailAddress  $personEmailAddress
-     * @return Resource
+     * @param  PersonEmailAddress  $personEmailAddress
+     * @return JsonResource
      * @throws
      */
-    /*public function update(PersonEmailAddressUpdateRequest $request, PersonEmailAddress $personEmailAddress)
+    public function update(PersonEmailAddressUpdateRequest $request, PersonEmailAddress $personEmailAddress)
     {
-        $personEmailAddress->fill($request->validated());
+        // Collecting the input
+        $data = $request->validated();
+        $values = array_except($data, ['index']);
+
+        // Update the emailAddress and save the changes
+        $personEmailAddress->fill($values);
         $personEmailAddress->saveOrFail();
 
-        $index = array_get($request->validated(), 'index');
+        $index = array_get($data, 'index');
         if($index !== null) {
             $personEmailAddress->moveToIndex($index);
         }
 
-        return $this->prepare($personEmailAddress, $request);
-    }*/
+        // Prepare and return the response.
+        $personEmailAddress->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($personEmailAddress);
+    }
 }

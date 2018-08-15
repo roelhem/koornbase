@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api;
 
 
 
+use App\Http\Requests\Api\PersonStoreRequest;
+use App\Http\Requests\Api\PersonUpdateRequest;
+use App\Person;
+
 class PersonController extends Controller
 {
 
@@ -14,33 +18,37 @@ class PersonController extends Controller
     ];
 
 
-    /*public function store(PersonStoreRequest $request)
+    /**
+     * An action that stores a new Person in the database.
+     *
+     * @param PersonStoreRequest $request
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function store(PersonStoreRequest $request)
     {
-        $validated = $request->validated();
+        $person = Person::create($request->validated());
 
-        $person = new Person($validated);
-        $person->saveOrFail();
+        return $this->createResource($person);
+    }
 
-        return $this->prepare($person, $request);
-    }*/
-
-
-
-    /*public function update(PersonUpdateRequest $request, Person $person)
+    /**
+     * An action that updates the values of an existing Person.
+     *
+     * @param PersonUpdateRequest $request
+     * @param Person $person
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Throwable
+     */
+    public function update(PersonUpdateRequest $request, Person $person)
     {
         $person->fill($request->validated());
         $person->saveOrFail();
 
-        return $this->prepare($person, $request);
-    }*/
+        $person->load($this->createEagerLoadDefinition($this->eagerLoadForShow));
+        return $this->createResource($person);
+    }
 
 
-    /*public function destroy(Person $person)
-    {
-        $this->authorize('delete', $person);
-
-        $person->delete();
-    }*/
 
     /*public function attach(Request $request, Person $person, FinderCollection $finders)
     {
