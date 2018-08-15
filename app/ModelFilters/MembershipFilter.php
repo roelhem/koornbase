@@ -31,8 +31,7 @@ class MembershipFilter extends ModelFilter
      */
     public function application($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('application','=', $date);
+        $this->where('application','=', \Parse::date($date, true));
     }
 
     /**
@@ -40,8 +39,7 @@ class MembershipFilter extends ModelFilter
      */
     public function applicationBefore($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('application','<', $date);
+        $this->where('application','<', \Parse::date($date, true));
     }
 
     /**
@@ -49,8 +47,7 @@ class MembershipFilter extends ModelFilter
      */
     public function applicationAfter($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('application','>=', $date);
+        $this->where('application','>=', \Parse::date($date, true));
     }
 
     /**
@@ -58,8 +55,7 @@ class MembershipFilter extends ModelFilter
      */
     public function start($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('start','=',$date);
+        $this->where('start','=',\Parse::date($date, true));
     }
 
     /**
@@ -67,8 +63,7 @@ class MembershipFilter extends ModelFilter
      */
     public function startBefore($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('start','<',$date);
+        $this->where('start','<',\Parse::date($date, true));
     }
 
     /**
@@ -76,8 +71,7 @@ class MembershipFilter extends ModelFilter
      */
     public function startAfter($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('start','>=',$date);
+        $this->where('start','>=',\Parse::date($date, true));
     }
 
     /**
@@ -85,8 +79,7 @@ class MembershipFilter extends ModelFilter
      */
     public function end($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('end','=',$date);
+        $this->where('end','=',\Parse::date($date, true));
     }
 
     /**
@@ -94,8 +87,7 @@ class MembershipFilter extends ModelFilter
      */
     public function endBefore($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('end','<',$date);
+        $this->where('end','<',\Parse::date($date, true));
     }
 
     /**
@@ -103,8 +95,7 @@ class MembershipFilter extends ModelFilter
      */
     public function endAfter($date)
     {
-        $date = Carbon::parse($date);
-        $this->where('end','>=',$date);
+        $this->where('end','>=',\Parse::date($date, true));
     }
 
 

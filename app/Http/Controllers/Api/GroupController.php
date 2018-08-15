@@ -36,13 +36,6 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    public function show(Group $group, Request $request)
-    {
-        $this->authorize('view', $group);
-
-        return $this->prepare($group, $request);
-    }
-
     public function update(Request $request, Group $group, FinderCollection $finders)
     {
         $this->authorize('update', $group);

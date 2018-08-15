@@ -28,12 +28,9 @@ trait HasCountryCode
      * @param $value
      * @return string
      */
-    public function getCountryCodeAttribute($value) {
-        if($value === null) {
-            return 'NL';
-        } else {
-            return $value;
-        }
+    public function getCountryCodeAttribute($value)
+    {
+        return \Parse::try('NL')->countryCode($value);
     }
 
     /**

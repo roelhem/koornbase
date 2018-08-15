@@ -43,11 +43,9 @@ trait HasMemberships
      */
     public function getLastMembershipStatusChange($at = null)
     {
-        if($at === null) {
-            $at = Carbon::today()->toDateString();
-        }
+        $at = \Parse::date($at, true);
 
-        $result = $this->membershipStatusChanges()->whereDate('date', '<=', $at)
+        $result = $this->membershipStatusChanges()->where('date', '<=', $at)
             ->orderByDesc('date')->first();
 
         if($result instanceof MembershipStatusChange) {
@@ -107,11 +105,7 @@ trait HasMemberships
      */
     public function scopeMembershipStatus($query, $status, $at = null) {
         // Parsing the $at attribute
-        if($at === null) {
-            $at = Carbon::today()->toDateString();
-        } elseif($at instanceof Carbon) {
-            $at = $at->toDateString();
-        }
+        $at = \Parse::date($at, true)->toDateString();
 
         $status = MembershipStatus::by($status)->getValue();
 

@@ -34,9 +34,7 @@ class Token extends PassportToken
 
 
     public function expired($at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         if($this->expires_at < $at) {
             return true;

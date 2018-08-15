@@ -28,32 +28,13 @@ class DateTimeType extends ScalarType
     /** @inheritdoc */
     public function serialize($value)
     {
-
-        if(is_string($value)) {
-            $value = Carbon::parse($value);
-        } elseif (is_integer($value)) {
-            $value = Carbon::createFromTimestamp($value);
-        } elseif(is_float($value)) {
-            $value = Carbon::createFromTimestampMs(round($value * 100));
-        }
-
-        if($value instanceof \DateTimeInterface) {
-            return $value->format($this->format);
-        } else {
-            return null;
-        }
+        return \Parse::date($value)->format($this->format);
     }
 
     /** @inheritdoc */
     public function parseValue($value)
     {
-        if(is_string($value)) {
-            return Carbon::parse($value);
-        } elseif (is_integer($value)) {
-            return Carbon::createFromTimestamp($value);
-        } else {
-            return null;
-        }
+        return \Parse::date($value);
     }
 
     /** @inheritdoc */

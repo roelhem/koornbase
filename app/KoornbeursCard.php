@@ -54,9 +54,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
      * @return boolean
      */
     public function isActive($at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         if($this->activated_at === null || $this->activated_at >= $at) {
             return false;
@@ -95,9 +93,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeActive($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         $query->whereNotNull('activated_at')
             ->where('activated_at','<=',$at)
@@ -116,9 +112,7 @@ class KoornbeursCard extends Model implements OwnedByPerson
      * @return Builder
      */
     public function scopeInactive($query, $at = null) {
-        if(!($at instanceof Carbon)) {
-            $at = Carbon::parse($at);
-        }
+        $at = \Parse::date($at, true);
 
         $query->whereNull('activated_at')
             ->orWhere('activated_at','>', $at)

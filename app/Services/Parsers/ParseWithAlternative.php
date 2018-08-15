@@ -8,7 +8,16 @@
 
 namespace App\Services\Parsers;
 
+use Carbon\Carbon;
 
+/**
+ * Class ParseWithAlternative
+ * @package App\Services\Parsers
+ *
+ *
+ * @method Carbon|mixed date($input, bool $nowOnNull = false, $default = null)
+ * @method string|mixed countryCode($input, $default = null)
+ */
 class ParseWithAlternative
 {
 

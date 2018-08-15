@@ -9,7 +9,17 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Certificate;
+use Illuminate\Http\Request;
+
 class CertificateController extends Controller
 {
     protected $eagerLoadForShow = ['person','category'];
+
+
+    public function store(Request $request)
+    {
+
+
+    }
 }

@@ -116,7 +116,7 @@ abstract class Controller extends BaseController
         // Applying the filters
         $filterParams = $this->getFilterParams($request);
         if(count($filterParams) > 0) {
-            $query->filter($filterParams);
+            call_user_func([$query, 'filter'], $filterParams);
         }
 
         // Check if a full-text-search should be preformed
@@ -177,6 +177,10 @@ abstract class Controller extends BaseController
         $model = $this->getModel($request);
 
         $this->authorize('delete', $model);
+
+        if(isset($model->is_required) && $model->is_required) {
+            abort(403, 'Not allowed to delete this model because this model is required by the system.');
+        }
 
         $model->delete();
     }

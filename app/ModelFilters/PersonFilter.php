@@ -28,7 +28,7 @@ class PersonFilter extends ModelFilter
      */
     public function birthDateBefore($date)
     {
-        $this->where('birth_date','<=',Carbon::parse($date));
+        $this->where('birth_date','<=',\Parse::date($date, true));
     }
 
     /**
@@ -38,7 +38,7 @@ class PersonFilter extends ModelFilter
      */
     public function birthDateAfter($date)
     {
-        $this->where('birth_date','>=', Carbon::parse($date));
+        $this->where('birth_date','>=', \Parse::date($date, true));
     }
 
     /**

@@ -16,7 +16,12 @@ class GroupCategoryController extends Controller
     protected $eagerLoadForShow = ['groups'];
 
 
-    /*
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
+     */
     public function store(Request $request)
     {
 
@@ -32,12 +37,17 @@ class GroupCategoryController extends Controller
         $groupCategory = new GroupCategory($validatedData);
         $groupCategory->saveOrFail();
 
-        return $this->prepare($groupCategory, $request);
-    }*/
+        return $this->createResource($groupCategory);
+    }
 
 
-
-    /*
+    /**
+     * @param Request $request
+     * @param GroupCategory $groupCategory
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Throwable
+     */
     public function update(Request $request, GroupCategory $groupCategory)
     {
         $this->authorize('update', $groupCategory);
@@ -52,25 +62,6 @@ class GroupCategoryController extends Controller
         $groupCategory->fill($validatedData);
         $groupCategory->saveOrFail();
 
-        return $this->prepare($groupCategory, $request);
-    }*/
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request $request
-     * @throws
-     */
-    public function destroy(Request $request)
-    {
-        /** @var GroupCategory $groupCategory */
-        $groupCategory = $this->getModel($request);
-        $this->authorize('delete', $groupCategory);
-
-        if($groupCategory->is_required) {
-            abort(403, 'Deze groep categorie kan niet worden verwijderd omdat deze groep categorie nodig is voor het goed functioneren van dit systeem.');
-        } else {
-            $groupCategory->delete();
-        }
+        return $this->createResource($groupCategory);
     }
 }

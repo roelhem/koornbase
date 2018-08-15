@@ -10,7 +10,14 @@ namespace App\Services\Parsers;
 
 
 use Carbon\Carbon;
+use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 
+/**
+ * Class ParseService
+ * @package App\Services\Parsers
+ *
+ * @property-read ParseWithAlternative $try
+ */
 class ParseService
 {
 
@@ -25,15 +32,37 @@ class ParseService
         return new ParseWithAlternative($this, $default);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if($name === 'try') {
+            return $this->try();
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        if($name === 'try') {
+            return true;
+        }
+    }
+
 
     /**
      * Function that tries to return a Carbon instance.
      *
      * @param mixed $input
      * @param boolean $nowOnNull
-     * @return Carbon|null
+     * @return \Carbon\Carbon|null
      */
-    public function date($input, $nowOnNull = true)
+    public function date($input, $nowOnNull = false)
     {
         if($input instanceof Carbon) {
             return $input;
@@ -60,6 +89,49 @@ class ParseService
         }
 
         throw new NotParsableException('date', $input);
+    }
+
+    /**
+     * A list of all the countries and there names.
+     *
+     * @var array
+     */
+    protected $countryList = null;
+
+    /**
+     * A function that tries to return a valid country-code string.
+     *
+     * @param mixed $input
+     * @param boolean $checkWithRepository
+     * @return string
+     */
+    public function countryCode($input, $checkWithRepository = false)
+    {
+        if(is_string($input)) {
+            $val = $input;
+        } elseif(is_object($input) && method_exists($input, '__toString')) {
+            $val = strval($input);
+        } else {
+            throw new NotParsableException('country_code', $input);
+        }
+
+        $val = mb_strtoupper(trim($val));
+
+        if(strlen($val) !== 2) {
+            throw new NotParsableException('country_code', $input);
+        }
+
+        if($checkWithRepository) {
+            if($this->countryList === null) {
+                $this->countryList = app(CountryRepositoryInterface::class)->getList('nl');
+            }
+
+            if(!array_key_exists($val, $this->countryList)) {
+                throw new NotParsableException('country', $input);
+            }
+        }
+
+        return $val;
     }
 
 }

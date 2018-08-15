@@ -57,7 +57,9 @@ class AddressingProvider extends ServiceProvider
 
         // ADDRESSING
         // Repositories
-        $this->app->singleton(CountryRepository::class);
+        $this->app->singleton(CountryRepository::class, function() {
+            return new CountryRepository('nl','en');
+        });
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
         $this->app->singleton(AddressFormatRepository::class);
         $this->app->bind(AddressFormatRepositoryInterface::class, AddressFormatRepository::class);
