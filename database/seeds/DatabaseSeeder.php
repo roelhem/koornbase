@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         // First (system) account.
         $system = factory(\App\User::class)->create([
             'name' => 'system',
-            'email' => 'system@koornbeurs.nl'
+            'email' => 'system@koornbase.test'
         ]);
 
         $system->created_by = $system->id;
