@@ -2,69 +2,63 @@
 
 namespace App\Http\Resources\Api;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\Api\Traits\HasStamps;
+use App\Http\Resources\Api\Types\AvatarResource;
+use App\Person;
+use App\PersonEmailAddress;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class PersonResource extends Resource
+class PersonResource extends JsonResource
 {
+
+    use HasStamps;
 
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'name' => $this->name,
-                'name_short' => $this->name_short,
-                'name_formal' => $this->name_formal,
-                'name_full' => $this->name_full,
-                'name_first' => $this->name_first,
-                'name_middle' => $this->name_middle,
-                'name_prefix' => $this->name_prefix,
-                'name_last' => $this->name_last,
-                'name_initials' => $this->name_initials,
-                'name_nickname' => $this->name_nickname,
-                'avatar' => $this->avatar,
-                'birth_date' => $this->formatDate($this->birth_date, $request),
-                'age' => $this->age,
+        /** @var Person $person */
+        $person = $this->resource;
 
-                'address' => new PersonAddressResource($this->whenLoaded('address')),
-                'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
-                'emailAddress' => new PersonEmailAddressResource($this->whenLoaded('emailAddress')),
-                'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
-                'phoneNumber' => new PersonPhoneNumberResource($this->whenLoaded('phoneNumber')),
-                'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
+        return [
+            'id' => $person->id,
+            'name' => $person->name,
+            'name_short' => $person->name_short,
+            'name_full' => $person->name_full,
+            'name_formal' => $person->name_formal,
+            'name_first' => $person->name_first,
+            'name_middle' => $person->name_middle,
+            'name_prefix' => $person->name_prefix,
+            'name_last' => $person->name_last,
+            'name_initials' => $person->name_initials,
+            'name_nickname' => $person->name_nickname,
+            'avatar' => new AvatarResource($person->avatar),
+            'birth_date' => $person->birth_date,
+            'age' => $person->age,
 
-                'users' => UserResource::collection($this->whenLoaded('users')),
-                'groups' => GroupResource::collection($this->whenLoaded('groups')),
-                'memberships' => MembershipResource::collection($this->whenLoaded('memberships')),
-                'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
-                'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards')),
-                'activeCards' => KoornbeursCardResource::collection($this->whenLoaded('activeCards'))
+            'membership_status' => $person->membership_status->getName(),
+            'membership_status_since' => $person->membership_status_since,
+            'memberships' => MembershipResource::collection($this->whenLoaded('memberships')),
 
-            ] + $this->tailArray($request);
-    }
+            'groups' => GroupResource::collection($this->whenLoaded('groups')),
+            'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
+            'users' => UserResource::collection($this->whenLoaded('users')),
+            'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards')),
 
-    public function fieldMembershipStatus($request) {
-        if($this->membership_status === null) {
-            return null;
-        }
+            'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
+            'address' => new PersonAddressResource($this->whenLoaded('address')),
+            'emailAddresses' => PersonEmailAddressResource::collection($this->whenLoaded('emailAddresses')),
+            'emailAddress' => new PersonEmailAddressResource($this->whenLoaded('emailAddress')),
+            'phoneNumbers' => PersonPhoneNumberResource::collection($this->whenLoaded('phoneNumbers')),
+            'phoneNumber' => new PersonPhoneNumberResource($this->whenLoaded('phoneNumber')),
 
-        $res = [
-            'status' => $this->membership_status->value,
-            'name' => $this->membership_status->name,
-            'title' => $this->membership_status->title,
+            'remarks' => $person->remarks,
+
+            $this->getStampFields($request),
         ];
-
-        $since = $this->membership_status_since;
-
-        if($since !== null) {
-            $res['since'] = $since->format('Y-m-d');
-        }
-
-        return $res;
-
     }
 }

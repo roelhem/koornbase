@@ -2,9 +2,14 @@
 
 namespace App\Http\Resources\Api;
 
+use App\CertificateCategory;
+use App\Http\Resources\Api\Traits\HasStamps;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class CertificateCategoryResource extends Resource
+class CertificateCategoryResource extends JsonResource
 {
+    use HasStamps;
+
     /**
      * Transform the resource into an array.
      *
@@ -13,14 +18,22 @@ class CertificateCategoryResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request) + [
-                'name' => $this->name,
-                'name_short' => $this->name_short,
-                'description' => $this->description,
-                'default_expire_years' => $this->default_expire_years,
-                'is_required' => $this->is_required,
 
-                'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
-            ] + $this->tailArray($request);
+        /** @var CertificateCategory $category */
+        $category = $this->resource;
+
+        return [
+            'id' => $category->id,
+            'slug' => $category->slug,
+            'name' => $category->name,
+            'name_short' => $category->name_short,
+            'description' => $category->description,
+            'default_expire_years' => $category->default_expire_years,
+            'is_required' => $category->is_required,
+
+            'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
+
+            $this->getStampFields($request),
+        ];
     }
 }
