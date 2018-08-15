@@ -9,6 +9,8 @@
 /.vagrant
 Homestead.json
 Homestead.yaml
+homestead.test.crt
+graphql.config.json
 npm-debug.log
 yarn-error.log
 _ide_helper.php
