@@ -3,23 +3,23 @@
  * Created by PhpStorm.
  * User: roel
  * Date: 15-08-18
- * Time: 13:47
+ * Time: 18:28
  */
 
 namespace App\Http\Requests\Api;
 
 
 use App\Certificate;
+use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Services\Validators\AfterValidation;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
-class CertificateStoreRequest extends FormRequest
+class CertificateUpdateRequest extends FormRequest
 {
 
-    use HandlesValidation;
+    use HandlesValidation, FindsModels;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,8 @@ class CertificateStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create', Certificate::class);
+        $certificate = $this->findFromUrl('certificate');
+        return $this->user()->can('update', $certificate);
     }
 
     /**
@@ -39,8 +40,6 @@ class CertificateStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'person' => 'required|finds:person',
-            'category' => 'required|finds:certificate_category',
             'examination_at' => 'nullable|date',
             'passed' => 'boolean',
             'valid_at' => 'nullable|date',
@@ -56,9 +55,12 @@ class CertificateStoreRequest extends FormRequest
      */
     public function afterValidation(Validator $validator)
     {
+        /** @var Certificate $certificate */
+        $certificate = $this->findFromUrl('certificate');
+
         $after = new AfterValidation($validator);
+        $after->setDefaults($certificate->only(['examination_at','valid_at','expired_at']));
         $after->ensureChronology(['examination_at','valid_at','expired_at']);
     }
-
 
 }

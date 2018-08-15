@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\Http\Requests\Api\Traits\HandlesValidation;
 use App\Membership;
 use App\Person;
-use Carbon\Carbon;
+use App\Services\Validators\AfterValidation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -48,16 +47,16 @@ class MembershipStoreRequest extends FormRequest
      */
     public function afterValidation($validator) {
 
+        $after = new AfterValidation($validator);
+        $after->ensureChronology(['application','start','end']);
+
         // Collect and parse the input data
-        $data        = $validator->getData();
-        $application = $this->parseDate(array_get($data,'application'));
-        $start       = $this->parseDate(array_get($data, 'start'));
-        $end         = $this->parseDate(array_get($data, 'end'));
+        $application = \Parse::try()->date($after->getValue('application'));
+        $start       = \Parse::try()->date($after->getValue('start'));
+        $end         = \Parse::try()->date($after->getValue('end'));
 
-        $person = $this->findFromInput('person', $data);
-        if(!($person instanceof Person)) { return; }
-
-        $this->validateChronology($application, $start, $end, $validator);
+        /** @var Person $person */
+        $person = $this->findFromInput('person', $validator->getData());
 
         // Determine the lower- and upper bounds of the whole membership
         $lowerBound = $this->findLowerBound($application, $start, $end);

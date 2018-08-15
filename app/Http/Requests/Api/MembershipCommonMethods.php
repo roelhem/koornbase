@@ -17,42 +17,6 @@ trait MembershipCommonMethods
 {
 
     /**
-     * The way a date should be parsed to use in the after-validation.
-     *
-     * @param $input
-     * @return Carbon|null
-     */
-    protected function parseDate($input) {
-        if($input instanceof Carbon) {
-            return $input;
-        } elseif(is_string($input)) {
-            return Carbon::parse($input);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param Carbon|null $application
-     * @param Carbon|null $start
-     * @param Carbon|null $end
-     * @param Validator $validator
-     */
-    protected function validateChronology($application, $start, $end, $validator) {
-        if($application !== null) {
-            if ($start !== null && $application > $start) {
-                $validator->errors()->add('start', 'De start-datum moet na de inschrijvingsdatum zijn.');
-            }
-            if ($end !== null && $application > $end) {
-                $validator->errors()->add('end', 'De eind-datum moet na de inschrijvingsdatum zijn.');
-            }
-        }
-        if($start !== null && $end !== null && $start > $end) {
-            $validator->errors()->add('end', 'De eind-datum moet na de start-datum zijn.');
-        }
-    }
-
-    /**
      * Returns the lowest date of the three membership dates.
      *
      * @param Carbon|null $application
