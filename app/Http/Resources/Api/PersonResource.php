@@ -28,8 +28,6 @@ class PersonResource extends JsonResource
             'id' => $person->id,
             'name' => $person->name,
             'name_short' => $person->name_short,
-            'name_full' => $person->name_full,
-            'name_formal' => $person->name_formal,
             'name_first' => $person->name_first,
             'name_middle' => $person->name_middle,
             'name_prefix' => $person->name_prefix,
@@ -47,7 +45,9 @@ class PersonResource extends JsonResource
             'groups' => GroupResource::collection($this->whenLoaded('groups')),
             'certificates' => CertificateResource::collection($this->whenLoaded('certificates')),
             'users' => UserResource::collection($this->whenLoaded('users')),
+
             'cards' => KoornbeursCardResource::collection($this->whenLoaded('cards')),
+            'activeCards' => KoornbeursCardResource::collection($this->whenLoaded('activeCards')),
 
             'addresses' => PersonAddressResource::collection($this->whenLoaded('addresses')),
             'address' => new PersonAddressResource($this->whenLoaded('address')),

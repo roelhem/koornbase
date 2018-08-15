@@ -2,32 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Finders\FinderCollection;
-use App\Exceptions\Finders\InputNotAcceptedException;
-use App\Exceptions\Finders\ModelNotFoundException;
+
 use App\Group;
 use App\Http\Resources\Api\GroupResource;
-use App\Services\Sorters\GroupSorter;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Symfony\Component\Finder\Finder;
+use Roelhem\RbacGraph\Services\RbacQueryFilter;
+
 
 class GroupController extends Controller
 {
 
-    protected $modelClass = Group::class;
-    protected $resourceClass = GroupResource::class;
-    protected $sorterClass = GroupSorter::class;
+    protected $eagerLoadForShow = [
+        'emailAddresses', 'persons'
+    ];
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param FinderCollection   $finders
-     * @return Resource
-     * @throws
-     */
+    /*
     public function store(Request $request, FinderCollection $finders)
     {
         $this->authorize('create', Group::class);
@@ -46,14 +36,6 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Group  $group
-     * @param  Request     $request
-     * @return Resource
-     * @throws
-     */
     public function show(Group $group, Request $request)
     {
         $this->authorize('view', $group);
@@ -61,15 +43,6 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $group
-     * @param  FinderCollection $finders
-     * @return Resource
-     * @throws
-     */
     public function update(Request $request, Group $group, FinderCollection $finders)
     {
         $this->authorize('update', $group);
@@ -94,12 +67,7 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Group  $group
-     * @throws
-     */
+
     public function destroy(Group $group)
     {
         $this->authorize('delete', $group);
@@ -111,15 +79,7 @@ class GroupController extends Controller
         }
     }
 
-    /**
-     * Endpoint to attach some persons.
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws
-     */
+
     public function attach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -149,16 +109,7 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Endpoint to detach attached persons from this group.
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     */
+
     public function detach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -188,16 +139,7 @@ class GroupController extends Controller
         return $this->prepare($group, $request);
     }
 
-    /**
-     * Endpoint to sync attached persons with the input
-     *
-     * @param Request $request
-     * @param Group $group
-     * @param FinderCollection $finders
-     * @return Resource
-     * @throws \App\Exceptions\Finders\InputNotAcceptedException
-     * @throws \App\Exceptions\Finders\ModelNotFoundException
-     */
+
     public function sync(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'array',
@@ -218,5 +160,5 @@ class GroupController extends Controller
         }
 
         return $this->prepare($group, $request);
-    }
+    }*/
 }

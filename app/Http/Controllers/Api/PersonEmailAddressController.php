@@ -13,8 +13,7 @@ use Illuminate\Http\Request;
 class PersonEmailAddressController extends Controller
 {
 
-    protected $modelClass = PersonEmailAddress::class;
-    protected $resourceClass = PersonEmailAddressResource::class;
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Store a newly created resource in storage.
@@ -24,7 +23,7 @@ class PersonEmailAddressController extends Controller
      * @return Resource
      * @throws
      */
-    public function store(PersonEmailAddressStoreRequest $request, FinderCollection $finders)
+    /*public function store(PersonEmailAddressStoreRequest $request, FinderCollection $finders)
     {
         $person = $finders->find($request->validated()['person'], 'person');
         $personEmailAddress = $person->emailAddresses()->create($request->validated());
@@ -35,21 +34,7 @@ class PersonEmailAddressController extends Controller
         }
 
         return $this->prepare($personEmailAddress, $request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Request $request
-     * @param  \App\PersonEmailAddress  $personEmailAddress
-     * @return Resource
-     */
-    public function show(Request $request, PersonEmailAddress $personEmailAddress)
-    {
-        $this->authorize('view', $personEmailAddress);
-
-        return $this->prepare($personEmailAddress, $request);
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
@@ -59,7 +44,7 @@ class PersonEmailAddressController extends Controller
      * @return Resource
      * @throws
      */
-    public function update(PersonEmailAddressUpdateRequest $request, PersonEmailAddress $personEmailAddress)
+    /*public function update(PersonEmailAddressUpdateRequest $request, PersonEmailAddress $personEmailAddress)
     {
         $personEmailAddress->fill($request->validated());
         $personEmailAddress->saveOrFail();
@@ -70,18 +55,5 @@ class PersonEmailAddressController extends Controller
         }
 
         return $this->prepare($personEmailAddress, $request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PersonEmailAddress  $personEmailAddress
-     * @throws
-     */
-    public function destroy(PersonEmailAddress $personEmailAddress)
-    {
-        $this->authorize('delete', $personEmailAddress);
-
-        $personEmailAddress->delete();
-    }
+    }*/
 }

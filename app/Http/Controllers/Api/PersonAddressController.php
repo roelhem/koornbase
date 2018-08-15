@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 class PersonAddressController extends Controller
 {
 
-    protected $modelClass = PersonAddress::class;
-    protected $resourceClass = PersonAddressResource::class;
-
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Store a newly created resource in storage.
@@ -26,7 +24,7 @@ class PersonAddressController extends Controller
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    public function store(PersonAddressStoreRequest $request, FinderCollection $finders)
+    /*public function store(PersonAddressStoreRequest $request, FinderCollection $finders)
     {
         $person = $finders->find($request->validated()['person'], 'person');
         $personAddress = $person->addresses()->create($request->validated());
@@ -37,22 +35,7 @@ class PersonAddressController extends Controller
         }
 
         return $this->prepare($personAddress, $request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request $request
-     * @param  \App\PersonAddress  $personAddress
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, PersonAddress $personAddress)
-    {
-        $this->authorize('view', $personAddress);
-
-        return $this->prepare($personAddress, $request);
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
@@ -62,7 +45,7 @@ class PersonAddressController extends Controller
      * @return Resource
      * @throws
      */
-    public function update(PersonAddressUpdateRequest $request, PersonAddress $personAddress)
+    /*public function update(PersonAddressUpdateRequest $request, PersonAddress $personAddress)
     {
         $personAddress->fill($request->validated());
         $personAddress->saveOrFail();
@@ -73,18 +56,5 @@ class PersonAddressController extends Controller
         }
 
         return $this->prepare($personAddress, $request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PersonAddress  $personAddress
-     * @throws
-     */
-    public function destroy(PersonAddress $personAddress)
-    {
-        $this->authorize('delete', $personAddress);
-
-        $personAddress->delete();
-    }
+    }*/
 }

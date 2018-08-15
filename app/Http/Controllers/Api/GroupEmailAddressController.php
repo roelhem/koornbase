@@ -12,10 +12,7 @@ use Illuminate\Validation\Rule;
 class GroupEmailAddressController extends Controller
 {
 
-    protected $modelClass = GroupEmailAddress::class;
-    protected $resourceClass = GroupEmailAddressResource::class;
-    protected $sorterClass = GroupEmailAddressSorter::class;
-
+    protected $eagerLoadForShow = ['group'];
 
     /**
      * Creates a new GroupEmailAddress.
@@ -25,7 +22,7 @@ class GroupEmailAddressController extends Controller
      * @return Resource
      * @throws
      */
-    public function store(Request $request, FinderCollection $finders) {
+    /*public function store(Request $request, FinderCollection $finders) {
 
         $this->authorize('create', GroupEmailAddress::class);
 
@@ -40,22 +37,7 @@ class GroupEmailAddressController extends Controller
         $emailAddress = $group->emailAddresses()->create($validatedData);
 
         return $this->prepare($emailAddress, $request);
-    }
-
-    /**
-     * Shows one particular GroupEmailAddress.
-     *
-     * @param Request $request
-     * @param GroupEmailAddress $emailAddress
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, GroupEmailAddress $emailAddress) {
-
-        $this->authorize('view', $emailAddress);
-
-        return $this->prepare($emailAddress, $request);
-    }
+    }*/
 
     /**
      * Updates a GroupEmailAddress.
@@ -65,7 +47,7 @@ class GroupEmailAddressController extends Controller
      * @return Resource
      * @throws \Throwable
      */
-    public function update(Request $request, GroupEmailAddress $emailAddress) {
+    /*public function update(Request $request, GroupEmailAddress $emailAddress) {
 
         $this->authorize('update', $emailAddress);
 
@@ -84,18 +66,6 @@ class GroupEmailAddressController extends Controller
         $emailAddress->saveOrFail();
 
         return $this->prepare($emailAddress, $request);
-    }
+    }*/
 
-    /**
-     * Deletes a PersonEmailAddress
-     *
-     * @param GroupEmailAddress $emailAddress
-     * @throws \Exception
-     */
-    public function destroy(GroupEmailAddress $emailAddress) {
-
-        $this->authorize('delete', $emailAddress);
-
-        $emailAddress->delete();
-    }
 }

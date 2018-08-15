@@ -113,9 +113,7 @@ trait HasMemberships
             $at = $at->toDateString();
         }
 
-        if($status instanceof MembershipStatus) {
-            $status = $status->getValue();
-        }
+        $status = MembershipStatus::by($status)->getValue();
 
         if(is_array($status)) {
             $status = collect($status)->map(function($status) {

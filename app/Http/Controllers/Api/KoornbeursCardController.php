@@ -12,9 +12,7 @@ use Illuminate\Validation\Rule;
 class KoornbeursCardController extends Controller
 {
 
-    protected $modelClass = KoornbeursCard::class;
-    protected $resourceClass = KoornbeursCardResource::class;
-    protected $sorterClass = KoornbeursCardSorter::class;
+    protected $eagerLoadForShow = ['owner'];
 
     /**
      * Action to store a new KoornbeursCard
@@ -24,7 +22,7 @@ class KoornbeursCardController extends Controller
      * @return Resource
      * @throws
      */
-    public function store(Request $request, FinderCollection $finders) {
+    /*public function store(Request $request, FinderCollection $finders) {
 
         $this->authorize('create', KoornbeursCard::class);
 
@@ -50,22 +48,7 @@ class KoornbeursCardController extends Controller
         $card->saveOrFail();
 
         return $this->prepare($card, $request);
-    }
-
-    /**
-     * Action to show one specific KoornbeursCard
-     *
-     * @param Request $request
-     * @param KoornbeursCard $card
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, KoornbeursCard $card)
-    {
-        $this->authorize('view', $card);
-
-        return $this->prepare($card, $request);
-    }
+    }*/
 
     /**
      * Action to update the values one specific KoornbeursCard
@@ -76,7 +59,7 @@ class KoornbeursCardController extends Controller
      * @return Resource
      * @throws
      */
-    public function update(Request $request, KoornbeursCard $koornbeursCard, FinderCollection $finders) {
+    /*public function update(Request $request, KoornbeursCard $koornbeursCard, FinderCollection $finders) {
 
         $this->authorize('update',$koornbeursCard);
 
@@ -106,20 +89,7 @@ class KoornbeursCardController extends Controller
         $koornbeursCard->saveOrFail();
 
         return $this->prepare($koornbeursCard, $request);
-    }
-
-    /**
-     * Deletes a KoornbeursCard
-     *
-     * @param KoornbeursCard $koornbeursCard
-     * @throws \Exception
-     */
-    public function destroy(KoornbeursCard $koornbeursCard)
-    {
-        $this->authorize('delete', $koornbeursCard);
-
-        $koornbeursCard->delete();
-    }
+    }*/
 
 
 }

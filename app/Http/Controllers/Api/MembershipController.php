@@ -15,10 +15,7 @@ use Symfony\Component\Finder\Finder;
 class MembershipController extends Controller
 {
 
-    protected $modelClass = Membership::class;
-    protected $resourceClass = MembershipResource::class;
-    protected $sorterClass = MembershipSorter::class;
-
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Endpoint that is used to store new
@@ -28,7 +25,7 @@ class MembershipController extends Controller
      * @return Resource
      * @throws
      */
-    public function store(MembershipStoreRequest $request, FinderCollection $finders)
+    /*public function store(MembershipStoreRequest $request, FinderCollection $finders)
     {
         $personInput = array_get($request->validated(),'person');
         $person = $finders->find($personInput, 'person');
@@ -36,23 +33,8 @@ class MembershipController extends Controller
             array_only($request->validated(), ['application','start','end','remarks'])
         );
         return $this->prepare($membership, $request);
-    }
+    }*/
 
-
-    /**
-     * Endpoint that shows a specific membership
-     *
-     * @param Request $request
-     * @param Membership $membership
-     * @return Resource
-     * @throws 
-     */
-    public function show(Request $request, Membership $membership)
-    {
-        $this->authorize('view', $membership);
-
-        return $this->prepare($membership, $request);
-    }
 
 
     /**
@@ -61,26 +43,12 @@ class MembershipController extends Controller
      * @throws
      * @return Resource
      */
-    public function update(MembershipUpdateRequest $request, Membership $membership)
+    /*public function update(MembershipUpdateRequest $request, Membership $membership)
     {
         $membership->fill($request->validated());
         $membership->saveOrFail();
 
         return $this->prepare($membership, $request);
-    }
-
-
-    /**
-     * Endpoint that deletes a membership
-     *
-     * @param Membership $membership
-     * @throws
-     */
-    public function destroy(Membership $membership)
-    {
-        $this->authorize('delete', $membership);
-
-        $membership->delete();
-    }
+    }*/
 
 }

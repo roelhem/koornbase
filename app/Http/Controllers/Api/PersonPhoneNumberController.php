@@ -13,8 +13,7 @@ use Illuminate\Http\Request;
 class PersonPhoneNumberController extends Controller
 {
 
-    protected $modelClass = PersonPhoneNumber::class;
-    protected $resourceClass = PersonPhoneNumberResource::class;
+    protected $eagerLoadForShow = ['person'];
 
     /**
      * Store a newly created resource in storage.
@@ -24,7 +23,7 @@ class PersonPhoneNumberController extends Controller
      * @return Resource
      * @throws
      */
-    public function store(PersonPhoneNumberStoreRequest $request, FinderCollection $finders)
+    /*public function store(PersonPhoneNumberStoreRequest $request, FinderCollection $finders)
     {
         $person = $finders->find($request->validated()['person'], 'person');
         $personPhoneNumber = $person->phoneNumbers()->create($request->validated());
@@ -35,22 +34,7 @@ class PersonPhoneNumberController extends Controller
         }
 
         return $this->prepare($personPhoneNumber, $request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request $request
-     * @param  \App\PersonPhoneNumber  $personPhoneNumber
-     * @return Resource
-     * @throws
-     */
-    public function show(Request $request, PersonPhoneNumber $personPhoneNumber)
-    {
-        $this->authorize('view', $personPhoneNumber);
-
-        return $this->prepare($personPhoneNumber, $request);
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
@@ -60,7 +44,7 @@ class PersonPhoneNumberController extends Controller
      * @return Resource
      * @throws
      */
-    public function update(PersonPhoneNumberUpdateRequest $request, PersonPhoneNumber $personPhoneNumber)
+    /*public function update(PersonPhoneNumberUpdateRequest $request, PersonPhoneNumber $personPhoneNumber)
     {
         $personPhoneNumber->fill($request->validated());
         $personPhoneNumber->saveOrFail();
@@ -71,18 +55,6 @@ class PersonPhoneNumberController extends Controller
         }
 
         return $this->prepare($personPhoneNumber, $request);
-    }
+    }*/
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PersonPhoneNumber  $personPhoneNumber
-     * @throws
-     */
-    public function destroy(PersonPhoneNumber $personPhoneNumber)
-    {
-        $this->authorize('delete', $personPhoneNumber);
-
-        $personPhoneNumber->delete();
-    }
 }

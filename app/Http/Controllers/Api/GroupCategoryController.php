@@ -13,17 +13,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class GroupCategoryController extends Controller
 {
 
-    protected $modelClass = GroupCategory::class;
-    protected $resourceClass = GroupCategoryResource::class;
-    protected $sorterClass = GroupCategorySorter::class;
+    protected $eagerLoadForShow = ['groups'];
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Resource
-     * @throws
-     */
+
+    /*
     public function store(Request $request)
     {
 
@@ -40,31 +33,11 @@ class GroupCategoryController extends Controller
         $groupCategory->saveOrFail();
 
         return $this->prepare($groupCategory, $request);
-    }
+    }*/
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\GroupCategory $groupCategory
-     * @param  Request $request
-     * @return Resource
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function show(GroupCategory $groupCategory, Request $request)
-    {
-        $this->authorize('view', $groupCategory);
 
-        return $this->prepare($groupCategory, $request);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\GroupCategory  $groupCategory
-     * @return Resource
-     * @throws
-     */
+    /*
     public function update(Request $request, GroupCategory $groupCategory)
     {
         $this->authorize('update', $groupCategory);
@@ -80,17 +53,18 @@ class GroupCategoryController extends Controller
         $groupCategory->saveOrFail();
 
         return $this->prepare($groupCategory, $request);
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\GroupCategory  $groupCategory
+     * @param  Request $request
      * @throws
      */
-    public function destroy(GroupCategory $groupCategory)
+    public function destroy(Request $request)
     {
-
+        /** @var GroupCategory $groupCategory */
+        $groupCategory = $this->getModel($request);
         $this->authorize('delete', $groupCategory);
 
         if($groupCategory->is_required) {

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Finders\FinderCollection;
-use App\Http\Resources\Api\UserResource;
-use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
 
+    public $eagerLoadForIndex = ['person'];
+    public $eagerLoadForShow = [
+        'person','person.groups','person.certificates','person.emailAddresses',
+        'person.phoneNumbers','accounts'
+    ];
+
+
+    /*
     protected $modelClass = User::class;
     protected $resourceClass = UserResource::class;
 
@@ -22,7 +24,7 @@ class UserController extends Controller
      * @param FinderCollection $finders
      * @return UserResource
      * @throws \Throwable
-     */
+     *
     public function store(Request $request, FinderCollection $finders)
     {
         $this->authorize('store', User::class);
@@ -51,31 +53,7 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request    $request
-     * @param  \App\User  $user
-     * @return UserResource
-     * @throws
-     */
-    public function show(Request $request, User $user)
-    {
-        $this->authorize('view', $user);
 
-        $user->load($this->getAskedRelations($request));
-        return new UserResource($user);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @param  FinderCollection $finders
-     * @return UserResource
-     * @throws
-     */
     public function update(Request $request, User $user, FinderCollection $finders)
     {
         $this->authorize('update', $user);
@@ -115,14 +93,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    /**
-     * @param User $user
-     * @throws
-     */
+
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
 
         $user->delete();
     }
+    */
 }
