@@ -227,11 +227,11 @@ $ vagrant ssh
 > in een bepaalde map op de *VM* moet worden uitgevoerd. Commando's die beginnen met `$` daarintegen moeten je op je
 > eigen systeem uitvoeren (meestal in de map met de broncode.)
 
-De broncode van de KoornBase staat in de map `~/code` op de *VM*. De meeste commando's (met name die beginnen met 
+De broncode van de KoornBase staat in de map `~/koornbase` op de *VM*. De meeste commando's (met name die beginnen met 
 `php artisan`) moeten in deze map worden uitgevoerd. Ga naar deze map met het volgende commando:
 
 ```shell
-vagrant@koornbase ~$ cd ~/code
+vagrant@koornbase ~$ cd ~/koornbase
 ```
 
 Om de **ssh**-connectie te sluiten kun je het commando `logout` gebruiken.
@@ -261,10 +261,10 @@ vullen we de database met willekeurige gegevens die het makkelijk maken om te be
 ### 5.1 *'Migrations'* uitvoeren
 
 Eerst moeten we de database dezelfde structuur geven als die van de *KoornBase-database*. Dit doen we door het volgende
-commando uit te voeren in de `~/code` map in de *VM*:
+commando uit te voeren in de `~/koornbase` map in de *VM*:
 
 ```shell
-vagrant@koornbase ~/code$ php artisan migrate
+vagrant@koornbase ~/koornbase$ php artisan migrate
 ```
 
 Dit commando moet altijd worden uitgevoerd nadat je een nieuwe versie van de broncode hebt gedownload. Voor meer
@@ -276,13 +276,13 @@ Met het volgende commando wordt de database gevuld met (willekeurig gegenereerde
 direct kunt beginnen met het systeem in de testomgeving.
 
 ```shell
-vagrant@koornbase ~/code$ php artisan db:seed
+vagrant@koornbase ~/koornbase$ php artisan db:seed
 ```
 
 Je kunt ook de database structuur aanmaken èn de database vullen in één commando: 
 
 ```shell
-vagrant@koornbase ~/code$ php artisan migrate:fresh --seed
+vagrant@koornbase ~/koornbase$ php artisan migrate:fresh --seed
 ```
 
 Voor meer informatie over *seeding*, zie de [Laravel Docs over Seeding](https://laravel.com/docs/5.6/seeding).

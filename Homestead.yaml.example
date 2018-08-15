@@ -9,7 +9,7 @@ folders:
 sites:
     -
         map: koornbase.test
-        to: /home/vagrant/code/public
+        to: /home/vagrant/koornbase/public
 databases:
     - homestead
 name: koornbase
