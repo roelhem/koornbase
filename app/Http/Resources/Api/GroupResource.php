@@ -26,7 +26,7 @@ class GroupResource extends JsonResource
             'id' => $group->id,
             'slug' => $group->slug,
             'category_id' => $group->category_id,
-            'category' => GroupCategoryResource::collection($this->whenLoaded('category')),
+            'category' => new GroupCategoryResource($this->whenLoaded('category')),
 
             'name' => $group->name,
             'name_short' => $group->name_short,

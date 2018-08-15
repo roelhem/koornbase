@@ -15,8 +15,6 @@ use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 /**
  * Class ParseService
  * @package App\Services\Parsers
- *
- * @property-read ParseWithAlternative $try
  */
 class ParseService
 {
@@ -32,28 +30,10 @@ class ParseService
         return new ParseWithAlternative($this, $default);
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        if($name === 'try') {
-            return $this->try();
-        }
-    }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        if($name === 'try') {
-            return true;
-        }
-    }
-
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- DATE ----------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
      * Function that tries to return a Carbon instance.
@@ -91,6 +71,10 @@ class ParseService
         throw new NotParsableException('date', $input);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- COUNTRY CODE --------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
     /**
      * A list of all the countries and there names.
      *
@@ -127,11 +111,43 @@ class ParseService
             }
 
             if(!array_key_exists($val, $this->countryList)) {
-                throw new NotParsableException('country', $input);
+                throw new NotParsableException('country_code', $input);
             }
         }
 
         return $val;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- INTEGER -------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * A function that tries to return a valid integer from the provided input.
+     *
+     * @param mixed $input
+     * @return int
+     */
+    public function int($input)
+    {
+        if(is_integer($input)) {
+            return $input;
+        }
+
+        if(is_string($input)) {
+            $trimmed = trim($input);
+            if(ctype_digit($trimmed)) {
+                return intval($trimmed);
+            } else {
+                throw new NotParsableException('int', $input);
+            }
+        }
+
+        if(is_numeric($input)) {
+            return intval(round($input));
+        }
+
+        throw new NotParsableException('int', $input);
     }
 
 }
