@@ -33,12 +33,12 @@ aanpast.)
 De rest van dit document gaat ervanuit dat je de volgende onderdelen geïnstaleerd hebt op jouw systeem. Kijk voor
 meer informatie in de [Officiële Homestead Documentatie](https://laravel.com/docs/5.6/homestead#first-steps).
 
- - ####[GIT-CLI](https://git-scm.com)
+ - **[GIT-CLI](https://git-scm.com)**
  
    Wordt alleen gebruikt voor het *'clonen'* van deze repository. Je zou ook alle bestanden kunnen downloaden via de
    [GitHub pagina](https://github.com/roelhem/koornbase).
 
- - ####[PHP 7.1.3](http://php.net/manual/en/install.php) of hoger
+ - **[PHP 7.1.3](http://php.net/manual/en/install.php) of hoger**
    
    Je kunt controleren of dit juist is geinstalleerd via het commando `$ php -version`. Je zou dan iets vergelijkbaars
    als hieronder moeten krijgen.
@@ -50,7 +50,7 @@ meer informatie in de [Officiële Homestead Documentatie](https://laravel.com/do
 
    ```
    
- - ####[Composer 1.6.2](https://getcomposer.org) of hoger
+ - **[Composer 1.6.2](https://getcomposer.org) of hoger**
  
    Deze documentatie gaat ervan uit dat je composer globaal geïnstalleerd hebt op je systeem. Alle stappen in dit
    document kunnen ook worden uitgevoerd met een locale of tijdelijke installatie (met een `composer.phar` bestand).
@@ -63,7 +63,7 @@ meer informatie in de [Officiële Homestead Documentatie](https://laravel.com/do
    Composer version 1.6.2 2018-01-05 15:28:41
    ```
    
- - ####[VirtualBox 5.2](https://www.virtualbox.org/wiki/Downloads) of een andere *virtualizer*
+ - **[VirtualBox 5.2](https://www.virtualbox.org/wiki/Downloads) of een andere ___virtualizer___**
  
    Aangeraden wordt om [VirtualBox 5.2](https://www.virtualbox.org/wiki/Downloads) te gebruiken. Dit programma is
    *gratis*, ondersteunt de meeste functies en is het makkelijkst om in te stellen.
@@ -73,7 +73,7 @@ meer informatie in de [Officiële Homestead Documentatie](https://laravel.com/do
    [Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v) gebruiken.
    Er is dan wel iets meer configuratie nodig (zie de [Officiële Homestead documentatie](https://laravel.com/docs/5.6/homestead#first-steps)).
    
- - #### [Vagrant](https://www.vagrantup.com/downloads.html)
+ - **[Vagrant](https://www.vagrantup.com/downloads.html)**
  
    Gebruik het commando `$ vagrant --version` om te controleren of dit goed geïnstalleerd is. Je zou dan iets
    vergelijkbaars moeten krijgen als:
