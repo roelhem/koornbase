@@ -312,19 +312,24 @@ gebruikers:
         <tr>
             <th>Naam</th>
             <th>E-mail</th>
-            <th>Rechten</th>
+            <th>Opmerkingen</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td>system</td>
+            <td>system@koornbase.test</td>
+            <td>'Creator' van alle gegenereerde gegevens.</td>
+        </tr>
+        <tr>
             <td>admin</td>
             <td>admin@koornbase.test</td>
-            <td>Admin</td>
+            <td>Heeft <em>Admin</em>-rechten.</td>
         </tr>
         <tr>
             <td>super</td>
             <td>super@koornbase.test</td>
-            <td><em>alle</em></td>
+            <td>Heeft altijd <em>alle</em> rechten.</td>
         </tr>
     </tbody>
 </table>
