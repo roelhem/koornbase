@@ -79,7 +79,7 @@ meer informatie in de [Officiële Homestead Documentatie](https://laravel.com/do
    vergelijkbaars moeten krijgen als:
    
    ```
-   Vagrant 2.0.1
+   Vagrant 2.1.2
    ```
    
 # Installatie
@@ -146,11 +146,12 @@ bestand `.env.example` kopiëeren.
 $ cp .env.example .env
 ```
 
-Als laatste stap moeten we een *key* genereren voor de applicatie. Deze *key* wordt onder andere gebruikt om met de 
-testomgeving te communiceren.
+Als laatste stap moeten we de *keys* genereren voor de applicatie. Deze *keys* wordt onder andere gebruikt om met de 
+testomgeving te communiceren. Daarnaast moeten er *keys* gegenereerd worden om de OAuth2-server van het 
+KoornBase-systeem goed te laten werken.
 
 ```
-$ php artisan key:generate
+$ php artisan init:keys
 ```
 
 De broncode is nu klaar om gebruikt te worden op een server.
@@ -160,13 +161,8 @@ De broncode is nu klaar om gebruikt te worden op een server.
 In dit hoofdstukje maken we de bestanden aan die nodig zijn om de testomgeving op te starten. In deze bestanden
 veranderen we een paar instellingen om de virtuele *KoornBase-server* goed te laten werken op jouw systeem.
 
-> De stappen in dit hoofdstukje gaan ervanuit dat je **Homestead** alleen gaat gebruiken voor de KoornBase testomgeving.
-> We doen daarom een [Per Project Installation](https://laravel.com/docs/5.6/homestead#per-project-installation) van
-> **Homestead**.
->
-> Als je **Homestead** ook voor andere toepassingen wilt gebruiken, kun je 
-> [hier](https://laravel.com/docs/5.6/homestead#first-steps) vinden hoe je één (globale) **Homestead** omgeving voor al 
-> je toepassingen kunt aanmaken.
+> We installeren **Homstead** in deze handleiding via een
+> [Per Project Installation](https://laravel.com/docs/5.6/homestead#per-project-installation).
 
 Voer het volgende commando uit om de bestanden aan te maken die nodig zijn om **Homestead** te gebruiken:
 
@@ -177,33 +173,8 @@ $ php vendor/bin/homestead make
 > Voor *Windows*, gebruik `vendor\\bin\\homestead make`.
 
 Dit commando maakt onder andere het bestand **Homestead.yaml** aan. In dit bestand staan de instellingen van de 
-*virtuele server*. De inhoud van dit bestand zou vergelijkbaar moeten zijn de onderstaande code. De comments in
-de onderstaande code geven aan hoe je het bestand moet aanpassen om **Homestead** goed te laten werken voor de
-**KoornBase**.
-
-```yaml
-ip: 192.168.10.10 # Kies hier een IP-adres dat niet in je locale netwerk gebruikt wordt.
-memory: 2048
-cpus: 1
-provider: virtualbox # Pas deze waarde aan als je een andere 'virtualizer' gebruikt
-authorize: ~/.ssh/id_rsa.pub
-keys:
-    - ~/.ssh/id_rsa
-folders:
-    -
-        map: /Users/roel/workspace/koornbase # De map waar de KoornBase-broncode staat.
-        to: /home/vagrant/code
-sites:
-    -
-        map: homestead.test # Verander deze waarde naar 'koornbase.test'
-        to: /home/vagrant/code/public
-databases:
-    - homestead
-name: koornbase
-hostname: koornbase
-```
-
-Nadat je deze wijzigingen hebt opgeslagen, is **Homestead** klaar om opgestart te worden.
+*virtuele server*. (Als je een andere *virtualizer* dan **VirtualBox** gebruikt, moet je waarschijnlijk enkele
+instellingen in dit bestand aanpassen.)
 
 ### Hosts instellen
 
