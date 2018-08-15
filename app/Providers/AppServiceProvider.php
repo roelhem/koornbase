@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\Navigation\BreadcrumbService;
-use App\Services\Navigation\NavbarService;
-use App\Services\Navigation\NavigationItemRepository;
-use App\Services\Navigation\SitemapService;
+use App\Services\Parsers\ParseService;
 use App\Services\Sorters\CertificateCategorySorter;
 use App\Services\Sorters\CertificateSorter;
 use App\Services\Sorters\GroupCategorySorter;
@@ -54,11 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(KoornbeursCardSorter::class);
         $this->app->singleton(MembershipSorter::class);
 
-        $this->app->singleton(NavigationItemRepository::class);
-
-        $this->app->bind(NavbarService::class);
-        $this->app->bind(BreadcrumbService::class);
-        $this->app->bind(SitemapService::class);
+        $this->app->singleton(ParseService::class);
 
     }
 }
