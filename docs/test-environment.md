@@ -94,7 +94,7 @@ aanmaakt.
 Als **Vagrant** en de *Virtualizer* geïnstalleerd zijn, kun je de `laravel/homestead` box installeren. Voer hiervoor
 het volgende commando uit:
 
-```
+```shell
 $ vagrant box add laravel/homestead
 ```
 
@@ -116,7 +116,7 @@ uitgevoerd kunnen worden.
 Ga naar de map waarvanuit je de testomgeving wilt draaien (voor dit voorbeeld `~/workspace`) en clone deze repository
 in deze map.
 
-```
+```shell
 $ cd ~/workspace
 $ git clone https://github.com/roelhem/koornbase
 ```
@@ -124,13 +124,13 @@ $ git clone https://github.com/roelhem/koornbase
 Als je het bovenstaande commando uitvoerd, wordt er een nieuwe map met de naam `koornbase` aangemaakt. Alle
 hieropvolgende commando's worden vanuit deze map uitgevoerd.
 
-```
+```shell
 $ cd koornbase
 ```
 
 We zorgen eerst dat alle *composer dependencies* geïnstalleerd worden zodat de PHP-scripts uitgevoerd kunnen worden.
 
-```
+```shell
 $ composer install
 ```
 
@@ -142,7 +142,7 @@ De KoornBase-map moet een bestand met de naam `.env` bevatten. In dit bestandje 
 op welke mannier het KoornBase-systeem uitgevoerd moet worden. Om te beginnen kun je de inhoud van het
 bestand `.env.example` kopiëeren.
 
-```
+```shell
 $ cp .env.example .env
 ```
 
@@ -150,7 +150,7 @@ Als laatste stap moeten we de *keys* genereren voor de applicatie. Deze *keys* w
 testomgeving te communiceren. Daarnaast moeten er *keys* gegenereerd worden om de OAuth2-server van het 
 KoornBase-systeem goed te laten werken.
 
-```
+```shell
 $ php artisan init:keys
 ```
 
@@ -166,7 +166,7 @@ veranderen we een paar instellingen om de virtuele *KoornBase-server* goed te la
 
 Voer het volgende commando uit om de bestanden aan te maken die nodig zijn om **Homestead** te gebruiken:
 
-```
+```shell
 $ php vendor/bin/homestead make
 ```
 
@@ -207,7 +207,7 @@ Voer het volgende commando uit om de testomgeving op te starten:
 
 ### 4.1 Opstarten
 
-```
+```shell
 $ vagrant up
 ```
 
@@ -219,7 +219,7 @@ $ vagrant up
 Alle command-line opdrachten voor de KoornBase moeten uitgevoerd worden op de *VM* van de testomgeving. Met het
 volgende commando start je gemakkelijk een **ssh**-connectie:
 
-```
+```shell
 $ vagrant ssh
 ```
 
@@ -230,7 +230,7 @@ $ vagrant ssh
 De broncode van de KoornBase staat in de map `~/code` op de *VM*. De meeste commando's (met name die beginnen met 
 `php artisan`) moeten in deze map worden uitgevoerd. Ga naar deze map met het volgende commando:
 
-```
+```shell
 vagrant@koornbase ~$ cd ~/code
 ```
 
@@ -240,7 +240,7 @@ Om de **ssh**-connectie te sluiten kun je het commando `logout` gebruiken.
 
 Met het volgende commando wordt de testomgeving (tijdelijk) afgesloten:
 
-```
+```shell
 $ vagrant halt
 ```
 
@@ -249,7 +249,7 @@ bijvoorbeeld de gegevens in de database bewaart.
 
 
 Als je de testomgeving volledig wilt afsluiten (en verwijderen), gebruik je het volgende commando:
-```
+```shell
 $ vagrant destroy --force
 ```
 
@@ -263,7 +263,7 @@ vullen we de database met willekeurige gegevens die het makkelijk maken om te be
 Eerst moeten we de database dezelfde structuur geven als die van de *KoornBase-database*. Dit doen we door het volgende
 commando uit te voeren in de `~/code` map in de *VM*:
 
-```
+```shell
 vagrant@koornbase ~/code$ php artisan migrate
 ```
 
@@ -275,13 +275,13 @@ informatie over *migrations*, zie de [Laravel Docs over Migrations](https://lara
 Met het volgende commando wordt de database gevuld met (willekeurig gegenereerde) gegevens. Dit zorgt ervoor dat je
 direct kunt beginnen met het systeem in de testomgeving.
 
-```
+```shell
 vagrant@koornbase ~/code$ php artisan db:seed
 ```
 
 Je kunt ook de database structuur aanmaken èn de database vullen in één commando: 
 
-```
+```shell
 vagrant@koornbase ~/code$ php artisan migrate:fresh --seed
 ```
 
