@@ -1,0 +1,69 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: roel
+ * Date: 15-08-18
+ * Time: 14:10
+ */
+
+namespace App\Services\Parsers;
+
+
+class ParseWithAlternative
+{
+
+    /**
+     * @var ParseService
+     */
+    protected $service;
+
+    /**
+     * @var mixed
+     */
+    protected $default;
+
+    /**
+     * ParseWithAlternative constructor.
+     * @param ParseService $service
+     * @param mixed $default
+     */
+    public function __construct(ParseService $service, $default = null)
+    {
+        $this->service = $service;
+        $this->default = $default;
+    }
+
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        try {
+            $reflection = new \ReflectionClass($this->service);
+
+            $method = $reflection->getMethod($name);
+            $paramCount = $method->getNumberOfParameters();
+            $argsCount = count($arguments);
+
+            if($paramCount >= $argsCount) {
+                $default = $this->default;
+                $args = $arguments;
+            } else {
+                $default = $arguments[$paramCount];
+                $args = array_slice($arguments, 0, $paramCount);
+            }
+
+            try {
+                return $method->invokeArgs($this->service, $args);
+            } catch (NotParsableException $notParsableException) {
+                return $default;
+            }
+
+        } catch (\ReflectionException $reflectionException) {
+            throw new \InvalidArgumentException("The method $name does not exist.", 0, $reflectionException);
+        }
+    }
+
+}
