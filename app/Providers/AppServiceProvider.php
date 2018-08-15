@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Carbon::serializeUsing(function(\Carbon\Carbon $carbon) {
-            return $carbon->format('c');
+            return $carbon->format('Y-m-d H:i:s');
         });
 
     }
