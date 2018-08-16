@@ -4,3 +4,12 @@ mutation updateGroupDescription($id:ID!, $description:String) {
         description
     }
 }
+
+mutation updateGroupNames($id:ID!, $name:String,$name_short:String,$member_name:String) {
+    updateGroup(id:$id,name:$name,name_short:$name_short,member_name:$member_name) {
+        id
+        name
+        name_short
+        member_name
+    }
+}

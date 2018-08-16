@@ -4,7 +4,7 @@
 
 
 
-        <template v-if="!editing">
+        <template v-if="!formActive">
 
             <div v-if="value"
                  key="display"
@@ -23,32 +23,35 @@
 
         </template>
 
-        <div v-if="editing"
+        <div v-if="formActive"
              key="input"
              class="subtile-card-body-form--input"
-             v-contenteditable:inputValue="editing"
+             v-contenteditable:inputValue="formActive"
         ></div>
 
 
         <div class="subtile-card-body-form--toolbar" :class="toolbarClass">
 
 
-            <subtile-form-button v-if="!editing"
+            <subtile-form-button v-if="!formActive"
                                  class="subtile-card-body-form--edit-button"
                                  icon="edit-3"
-                                 @click="startEdit"
+                                 color="blue"
+                                 @click="activateForm"
             />
 
-            <subtile-form-button v-if="editing"
+            <subtile-form-button v-if="formActive"
                                  class="subtile-card-body-form--save-button"
                                  icon="save"
-                                 @click="saveEdit"
+                                 color="green"
+                                 @click="submitForm"
             />
 
-            <subtile-form-button v-if="editing"
+            <subtile-form-button v-if="formActive"
                                  class="subtile-card-body-form--cancel-button"
                                  icon="x"
-                                 @click="cancelEdit"
+                                 color="red"
+                                 @click="cancelForm"
             />
 
         </div>
@@ -59,13 +62,15 @@
 
 <script>
     import SubtileFormButton from "./SubtileFormButton";
+    import subtileFormMixin from "../../../mixins/subtileFormMixin";
 
     export default {
         components: {SubtileFormButton},
         name: "subtile-card-body-form",
 
+        mixins:[subtileFormMixin],
+
         props: {
-            value:String,
             placeholder:String,
 
             // Class configuration
@@ -87,13 +92,6 @@
 
         },
 
-        data() {
-            return {
-                inputValue:'',
-                editing:false,
-            }
-        },
-
         computed: {
             // DETERMINE THE STRINGS TO DISPLAY
             displayPlaceholder() {
@@ -104,25 +102,6 @@
                 return this.placeholder;
             },
         },
-
-        methods: {
-
-            startEdit() {
-                this.inputValue = this.value || '';
-                this.editing = true;
-                this.$emit('start');
-            },
-
-            cancelEdit() {
-                this.editing = false;
-                this.$emit('cancel');
-            },
-
-            saveEdit() {
-                this.$emit('submit', this.inputValue);
-                this.editing = false;
-            }
-        }
     }
 </script>
 

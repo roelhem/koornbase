@@ -46,10 +46,18 @@ query getGroupDetailsQuery($id:ID!) {
         persons {
             id
             name
+            name_nickname
             avatar {
                 image
                 letters
             }
+            membership_status
+            membership_status_since
+        }
+        emailAddresses {
+            id
+            email_address
+            remarks
         }
     }
 }

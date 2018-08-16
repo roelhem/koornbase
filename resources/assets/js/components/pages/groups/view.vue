@@ -1,7 +1,11 @@
 <template>
     <b-container>
 
-        <tabler-page-header title="Groep" />
+        <tabler-page-header no-breadcrumb>
+            <template slot="title">
+                Groep '<em>{{ group.name }}</em>'
+            </template>
+        </tabler-page-header>
 
         <!-- START of the main row -->
         <b-row>
@@ -13,15 +17,14 @@
 
                 <!-- START of the GROUP card -->
                 <tabler-card header-class="pl-3"
-                             no-body=""
+                             no-body
                 >
 
                     <!-- start header -->
                     <template slot="header">
                         <base-stamp :default-style="group.category.style" />
-                        <h3 class="card-title pl-3">
-                            {{ group.name }}
-                            <span class="text-muted small font-italic ml-1">(Groep)</span>
+                        <h3 class="card-title pl-3 w-100">
+                            <subtile-single-input-form :value="group.name" @submit="updateNameHandler" />
                         </h3>
                     </template>
                     <!-- end header -->
@@ -36,14 +39,9 @@
                     <detail-view in-card>
 
 
-                        <detail-entry label="Korte naam">
-                            {{ group.name_short }}
-                            <a href="#" style="position:absolute;right:0;bottom:0" class="btn btn-icon btn-muted">
-                                <base-icon icon="edit-3" from="fe" />
-                            </a>
+                        <subtile-detail-entry-form label="Korte naam" :value="group.name_short" @submit="updateNameShortHandler" />
+                        <subtile-detail-entry-form label="Persoons-titel" :value="group.member_name" @submit="updateMemberNameHandler" />
 
-                        </detail-entry>
-                        <detail-entry label="Persoons-titel">{{ group.member_name }}</detail-entry>
                         <detail-entry label="categorie">
                             <display-group-category :category="group.category" />
                         </detail-entry>
@@ -51,17 +49,15 @@
                     </detail-view>
                     <!-- end body -->
 
-                    <!-- start footer -->
-                    <template slot="footer">
-                        <div>
-                            <b-button class="ml-1">Notificatie Sturen</b-button>
-                            <b-button variant="danger mx-1">Verwijderen</b-button>
-                        </div>
-                    </template>
-                    <!-- end footer -->
-
                 </tabler-card>
                 <!-- END of the GROUP card -->
+
+
+
+                <!-- START of the EMAIL ADDRESSES card -->
+                <group-email-addresses-card :group="group" />
+                <!-- END of the EMAIL ADDRESSES card -->
+
 
             </b-col>
             <!-- END of the GROUP info column -->
@@ -71,7 +67,39 @@
 
 
             <!-- START of the PERSONS column -->
-            <b-col lg="7">
+            <b-col lg="5">
+
+                <tabler-card title="Personen in deze groep" body-class="o-auto" body-style="max-height:600px">
+
+                    <template slot="options">
+                        <b-button variant="success">Toevoegen</b-button>
+                    </template>
+
+                    <ul class="list-unstyled list-separated">
+                        <li v-for="person in group.persons" class="list-separated-item">
+                            <b-row>
+                                <div class="col-auto">
+                                    <base-avatar :image="person.avatar.image" :letters="person.avatar.letters" default-style="person-default" size="md" />
+                                </div>
+                                <b-col>
+                                    <div>{{ person.name }}
+                                        <span v-if="person.name_nickname" class="text-muted-dark font-italic ml-1">[ {{ person.name_nickname }} ]</span>
+                                    </div>
+                                    <div class="small text-muted-dark">
+                                        <display-membership-status :status="person.membership_status"
+                                                                   :since="person.membership_status_since"
+                                                                   date-size="sm"
+                                        />
+                                    </div>
+                                </b-col>
+                                <div class="col-auto">
+                                    <b-button class="btn-icon" variant="danger" ><base-icon icon="x" from="fe" /></b-button>
+                                </div>
+                            </b-row>
+                        </li>
+                    </ul>
+
+                </tabler-card>
 
             </b-col>
             <!-- END of the PERSONS column -->
@@ -88,19 +116,31 @@
 <script>
     import TablerPageHeader from "../../TablerPageHeader";
     import { getGroupDetailsQuery } from "../../../graphql/queries/groups.graphql";
-    import { updateGroupDescription } from "../../../graphql/mutations/groups.graphql";
+    import { updateGroupDescription, updateGroupNames } from "../../../graphql/mutations/groups.graphql";
     import TablerCard from "../../TablerCard";
     import DetailView from "../../DetailView";
     import DetailEntry from "../../DetailEntry";
     import BaseStamp from "../../BaseStamp";
     import DisplayGroupCategory from "../../DisplayGroupCategory";
     import BaseIcon from "../../BaseIcon";
+    import BaseAvatar from "../../BaseAvatar";
     import SubtileCardBodyForm from "../../forms/subtile/SubtileCardBodyForm";
+    import SubtileSingleInputForm from "../../forms/subtile/SubtileSingleInputForm";
+    import SubtileDetailEntryForm from "../../forms/subtile/SubtileDetailEntryForm";
+    import DisplayMembershipStatus from "../../DisplayMembershipStatus";
+    import FormSwitch from "../../FormSwitch";
+    import GroupEmailAddressesCard from "../../GroupEmailAddressesCard";
 
     export default {
         components: {
+            GroupEmailAddressesCard,
+            FormSwitch,
+            DisplayMembershipStatus,
+            SubtileDetailEntryForm,
+            SubtileSingleInputForm,
             SubtileCardBodyForm,
             BaseIcon,
+            BaseAvatar,
             DisplayGroupCategory,
             BaseStamp,
             DetailEntry,
@@ -131,12 +171,73 @@
         data() {
             return {
                 group: {
-                    category: {}
+                    category: {},
+                    persons:[],
+                    emailAddresses:[]
                 }
             };
         },
 
+        computed: {
+            defaultNameMutationParams() {
+                return {
+                    id: this.group.id,
+                    name: this.group.name,
+                    name_short: this.group.name_short,
+                    member_name: this.group.member_name,
+                }
+            }
+        },
+
         methods: {
+
+
+
+            updateNameHandler(newValue) {
+                return this.runNameMutation({
+                    id: this.group.id,
+                    name: newValue,
+                });
+            },
+
+            updateNameShortHandler(newValue) {
+                return this.runNameMutation({
+                    id: this.group.id,
+                    name_short: newValue,
+                });
+            },
+
+            updateMemberNameHandler(newValue) {
+                return this.runNameMutation({
+                    id: this.group.id,
+                    member_name: newValue,
+                });
+            },
+
+            runNameMutation(variables) {
+                let {id, name, name_short, member_name} = Object.assign(this.defaultNameMutationParams, variables);
+
+
+                this.$apollo.mutate({
+                    mutation: updateGroupNames,
+                    variables: variables,
+                    update: (store, {data:{updateGroup: {id, name, name_short, member_name}}}) => {
+                        const data = store.readQuery({query: getGroupDetailsQuery, variables:{id} });
+                        data.group.name = name;
+                        data.group.name_short = name_short;
+                        data.group.member_name = member_name;
+                        store.writeQuery({ query: getGroupDetailsQuery, data});
+                    },
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        updateGroup: {
+                            __typename:'Group',
+                            id, name, name_short, member_name,
+                        }
+                    }
+
+                }).then(data => console.log(data)).catch(error => console.log(error));
+            },
 
             updateDescriptionHandler(newValue) {
                 const inputId = this.group.id;
@@ -149,10 +250,10 @@
                         description: inputDescr,
                     },
 
-                    update: (store, {data:{ updateGroup: { description }}}) => {
-                        const data = store.readQuery({query: getGroupDetailsQuery });
+                    update: (store, {data:{ updateGroup: { id, description }}}) => {
+                        const data = store.readQuery({query: getGroupDetailsQuery, variables: {id} });
 
-                        data.data.group.description = description;
+                        data.group.description = description;
 
                         store.writeQuery({query: getGroupDetailsQuery, data });
                     },
@@ -165,9 +266,8 @@
                             description:inputDescr,
                         }
                     }
-                }).then(data => console.log(data))
-                    .catch(error => console.log(error))
-            }
+                }).then(data => console.log(data)).catch(error => console.log(error))
+            },
 
         }
     }

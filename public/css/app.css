@@ -23247,13 +23247,148 @@ fieldset[disabled] .multiselect {
           box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.btn-muted {
+.btn-subtile {
   background-color: transparent;
   color: #ced4da;
 }
 
-.btn-muted :hover {
-  color: #467fcf;
+.btn-subtile :hover {
+  color: #343a40;
+}
+
+.btn-subtile-blue {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-blue:hover {
+  color: #467fcf !important;
+}
+
+.btn-subtile-azure {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-azure:hover {
+  color: #45aaf2 !important;
+}
+
+.btn-subtile-indigo {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-indigo:hover {
+  color: #6574cd !important;
+}
+
+.btn-subtile-purple {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-purple:hover {
+  color: #a55eea !important;
+}
+
+.btn-subtile-pink {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-pink:hover {
+  color: #f66d9b !important;
+}
+
+.btn-subtile-red {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-red:hover {
+  color: #cd201f !important;
+}
+
+.btn-subtile-orange {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-orange:hover {
+  color: #fd9644 !important;
+}
+
+.btn-subtile-yellow {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-yellow:hover {
+  color: #f1c40f !important;
+}
+
+.btn-subtile-lime {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-lime:hover {
+  color: #7bd235 !important;
+}
+
+.btn-subtile-green {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-green:hover {
+  color: #5eba00 !important;
+}
+
+.btn-subtile-teal {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-teal:hover {
+  color: #2bcbba !important;
+}
+
+.btn-subtile-cyan {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-cyan:hover {
+  color: #17a2b8 !important;
+}
+
+.btn-subtile-white {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-white:hover {
+  color: #fff !important;
+}
+
+.btn-subtile-gray {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-gray:hover {
+  color: #868e96 !important;
+}
+
+.btn-subtile-gray-dark {
+  background-color: transparent;
+  color: #ced4da !important;
+}
+
+.btn-subtile-gray-dark:hover {
+  color: #343a40 !important;
 }
 
 .stamp-xs {

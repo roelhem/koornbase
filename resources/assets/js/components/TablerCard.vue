@@ -42,7 +42,7 @@
         </div>
 
         <tabler-dimmer :active="isLoading">
-            <div v-if="!noBody" class="card-body">
+            <div v-if="!noBody" class="card-body" :class="bodyClass" :style="bodyStyle">
                 <slot />
             </div>
             <template v-else>
@@ -90,6 +90,9 @@
                 type:Boolean,
                 default:false
             },
+
+            bodyClass: [String,Array],
+            bodyStyle: [String,Object],
 
             noHeader: {
                 type:Boolean,

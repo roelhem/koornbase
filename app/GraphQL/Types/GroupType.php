@@ -79,6 +79,12 @@ class GroupType extends GraphQLType
                 'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
+            'emailAddresses' => [
+                'type' => Type::listOf(GraphQL::type('GroupEmailAddress')),
+                'description' => 'All the e-mail addresses that are registered for this Group.',
+                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
+            ],
+
             'is_required' => IsRequiredField::class,
 
             'created_at' => CreatedAtField::class,

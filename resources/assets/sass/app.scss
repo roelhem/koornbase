@@ -78,12 +78,23 @@
 
 
 
-.btn-muted {
+.btn-subtile {
   background-color: transparent;
   color: $gray-400;
 
   :hover {
-    color: $blue;
+    color: $gray-800;
+  }
+}
+
+@each $vendor, $color in $colors {
+  .btn-subtile-#{$vendor} {
+    background-color: transparent;
+    color: $gray-400 !important;
+  }
+
+  .btn-subtile-#{$vendor}:hover {
+    color: $color !important;
   }
 }
 

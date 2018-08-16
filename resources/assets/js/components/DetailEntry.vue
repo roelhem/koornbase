@@ -1,4 +1,4 @@
-<template>
+ <template>
     <tr>
         <th :title="title">
             <slot name="label">
@@ -9,7 +9,9 @@
                 {{ label }}
             </slot>
         </th>
-        <td><slot></slot></td>
+        <slot name="td">
+            <td colspan="2"><slot></slot></td>
+        </slot>
     </tr>
 </template>
 
@@ -36,7 +38,7 @@
                 }
             },
 
-            title:null
+            title:null,
 
         },
 
