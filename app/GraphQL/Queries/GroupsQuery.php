@@ -24,6 +24,11 @@ class GroupsQuery extends ModelListQuery
             'categoryId' => [
                 'type' => Type::id(),
                 'description' => 'Filters all the Groups that belong to the GroupCategory with the provided id.'
+            ],
+
+            'anyCategoryId' => [
+                'type' => Type::listOf(Type::id()),
+                'description' => 'Filtes all the Groups that belong to a category that has an `ID` in the provided list.'
             ]
 
         ]);

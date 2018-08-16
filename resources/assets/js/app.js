@@ -49,6 +49,13 @@ Vue.use(VCalendar, {
     }
 });
 
+// Including the contenteditableDirective
+
+import contenteditableDirective from 'vue-contenteditable-directive';
+
+Vue.use(contenteditableDirective);
+
+
 // Including and configuring the vue-google-maps plugin
 /*
 import * as VueGoogleMaps from 'vue2-google-maps';

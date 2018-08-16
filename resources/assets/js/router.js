@@ -114,6 +114,18 @@ export const routes = [
         ]
     },
 
+    {
+        path:'/db/groups',
+        name:'db.groups.index',
+        component: require('./components/pages/groups/index'),
+    },
+    {
+        path:'/db/groups/:id',
+        name:'db.groups.view',
+        component: require('./components/pages/groups/view'),
+        props:true,
+    },
+
 
     {
         path:'/users',

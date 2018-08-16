@@ -148,6 +148,9 @@ return [
                 'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
+                'updateGroup' => \App\GraphQL\Mutations\Crud\UpdateGroupMutation::class,
+
+
                 'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class,
 
                 'createOAuthClient' => \App\GraphQL\Mutations\CreateOAuthClientMutation::class,

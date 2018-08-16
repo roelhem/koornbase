@@ -17,7 +17,8 @@ class NameShortField extends Field
 
     protected $attributes = [
         'name' => 'name_short',
-        'description' => 'A short representation of the name of this object. Can be used in user interfaces where there is little space.'
+        'description' => 'A short representation of the name of this object. Can be used in user interfaces where there is little space.',
+        'always' => ['name'],
     ];
 
     public function type()
@@ -27,6 +28,6 @@ class NameShortField extends Field
 
     public function resolve($root)
     {
-        return $root->name_short ?? $root->name;
+        return $root->name_short;
     }
 }

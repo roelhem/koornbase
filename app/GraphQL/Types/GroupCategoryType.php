@@ -28,6 +28,7 @@ use App\GraphQL\Fields\Stamps\UpdatedByField;
 use App\GroupCategory;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Database\Eloquent\Builder;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
@@ -67,6 +68,15 @@ class GroupCategoryType extends GraphQLType
                 'type' => Type::listOf(GraphQL::type('Group')),
                 'description' => 'A list of all the groups that have this category.',
                 'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
+            ],
+
+            'groups_count' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'Returns the number of Groups in this category.',
+                'resolve' => function(GroupCategory $root) {
+                    return $root->groups()->count();
+                },
+                'selectable' => false,
             ],
 
             'is_required' => IsRequiredField::class,

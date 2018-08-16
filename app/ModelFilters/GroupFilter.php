@@ -21,4 +21,14 @@ class GroupFilter extends ModelFilter
     {
         $this->where('category_id','=',$id);
     }
+
+    /**
+     * Filters the groups that belong to a category in the provided list.
+     *
+     * @param $ids
+     */
+    public function anyCategoryId($ids)
+    {
+        $this->whereIn('category_id', $ids);
+    }
 }

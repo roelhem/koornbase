@@ -65,6 +65,7 @@ final class OAuthClientType extends Enum
             $user_id = \Auth::user()->id;
         }
 
+
         // Pick the right constructor
         switch ($this->getValue()) {
             case self::PERSONAL:
@@ -76,6 +77,8 @@ final class OAuthClientType extends Enum
             case self::AUTH_CODE:
                 return $clients->create($user_id, $name, $redirect);
         }
+
+
     }
 
 

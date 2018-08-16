@@ -33,6 +33,15 @@ export default {
         getStyle() {
             return objectPath.coalesce(this.defaultStyleObject, arguments);
         },
+
+        getNamedStyle() {
+            let style = this.getStyleFromName(arguments[1]);
+            if(style === undefined) {
+                style = this.defaultStyleObject();
+            }
+            let keys = arguments.slice(1);
+            return objectPath.coalesce(style, keys);
+        }
     }
 
 };

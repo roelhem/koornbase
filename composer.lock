@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "723fa3a85a1a1323f3c8c51dd04273a6",
+    "content-hash": "a1e44c926d20cb68911b6fe4e3db0137",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -1648,16 +1648,16 @@
         },
         {
             "name": "laravel/passport",
-            "version": "v6.0.7",
+            "version": "v7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "5a3dbeb0904573fcfecf11c018eaa42bfc935372"
+                "reference": "90124969cdd4ff39d4cd5a608c23bbe16e772f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/passport/zipball/5a3dbeb0904573fcfecf11c018eaa42bfc935372",
-                "reference": "5a3dbeb0904573fcfecf11c018eaa42bfc935372",
+                "url": "https://api.github.com/repos/laravel/passport/zipball/90124969cdd4ff39d4cd5a608c23bbe16e772f7e",
+                "reference": "90124969cdd4ff39d4cd5a608c23bbe16e772f7e",
                 "shasum": ""
             },
             "require": {
@@ -1713,20 +1713,20 @@
                 "oauth",
                 "passport"
             ],
-            "time": "2018-08-09T19:10:08+00:00"
+            "time": "2018-08-13T14:45:04+00:00"
         },
         {
             "name": "laravel/scout",
-            "version": "v4.0.4",
+            "version": "v5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "f1b5d65a7d4a70bafaba7ec996176e95341c44ec"
+                "reference": "ac7e8d2de8fba37473e3a802347d8f24141993cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/f1b5d65a7d4a70bafaba7ec996176e95341c44ec",
-                "reference": "f1b5d65a7d4a70bafaba7ec996176e95341c44ec",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/ac7e8d2de8fba37473e3a802347d8f24141993cd",
+                "reference": "ac7e8d2de8fba37473e3a802347d8f24141993cd",
                 "shasum": ""
             },
             "require": {
@@ -1749,7 +1749,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "5.0-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -1778,7 +1778,7 @@
                 "laravel",
                 "search"
             ],
-            "time": "2018-05-24T13:35:34+00:00"
+            "time": "2018-08-05T18:16:13+00:00"
         },
         {
             "name": "laravel/socialite",
@@ -4279,16 +4279,16 @@
         },
         {
             "name": "teamtnt/laravel-scout-tntsearch-driver",
-            "version": "v3.0.8",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/laravel-scout-tntsearch-driver.git",
-                "reference": "c00c6b3aeb0676428bff0e3b278405c5c12bfc4a"
+                "reference": "5bc95351ec32195c64b3853309ab6e65282c6a35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/laravel-scout-tntsearch-driver/zipball/c00c6b3aeb0676428bff0e3b278405c5c12bfc4a",
-                "reference": "c00c6b3aeb0676428bff0e3b278405c5c12bfc4a",
+                "url": "https://api.github.com/repos/teamtnt/laravel-scout-tntsearch-driver/zipball/5bc95351ec32195c64b3853309ab6e65282c6a35",
+                "reference": "5bc95351ec32195c64b3853309ab6e65282c6a35",
                 "shasum": ""
             },
             "require": {
@@ -4298,7 +4298,7 @@
                 "illuminate/pagination": "~5.4",
                 "illuminate/queue": "~5.4",
                 "illuminate/support": "~5.4",
-                "laravel/scout": "*",
+                "laravel/scout": "5.0.*",
                 "php": ">=7.0",
                 "teamtnt/tntsearch": "1.3.*"
             },
@@ -4342,7 +4342,7 @@
                 "search",
                 "tntsearch"
             ],
-            "time": "2018-07-30T09:35:11+00:00"
+            "time": "2018-08-03T21:24:19+00:00"
         },
         {
             "name": "teamtnt/tntsearch",

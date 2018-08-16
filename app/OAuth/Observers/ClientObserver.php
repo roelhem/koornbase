@@ -11,15 +11,17 @@ namespace App\OAuth\Observers;
 
 use App\Notifications\FoundSomething;
 use App\OAuth\Client;
+use App\OAuth\Notifications\ClientCreatedNotification;
 
 class ClientObserver
 {
 
     public function created(Client $client)
     {
-
-
-        \Auth::user()->notify(new FoundSomething($client));
+        $user = $client->user;
+        if($user !== null) {
+            $user->notify(new ClientCreatedNotification($client));
+        }
     }
 
 }

@@ -2,7 +2,7 @@
 
     <div class="card" :class="cardClass">
 
-        <div v-if="!noHeader" class="card-header" @click="headerClickHandler">
+        <div v-if="!noHeader" class="card-header" :class="headerClass" @click="headerClickHandler">
             <slot name="header">
                 <h3 class="card-title">
                     <span v-if="isLoading && collapsed"
@@ -95,6 +95,8 @@
                 type:Boolean,
                 default:false
             },
+
+            headerClass: [String,Array],
 
             isLoading:{
                 type:Boolean,

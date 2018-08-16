@@ -11,6 +11,7 @@
                 <!-- PLACE FOR THE LOGIN AND ACCOUNT INFO -->
                 <div class="d-flex order-lg-2 ml-auto">
 
+                    <notification-dropdown />
                     <user-dropdown v-bind="user" />
 
                 </div>
@@ -31,9 +32,11 @@
     import TheHeaderBrand from "./TheHeaderBrand";
     import UserDropdown from "./UserDropdown";
     import { mapState } from "vuex";
+    import NotificationDropdown from "./NotificationDropdown";
 
     export default {
         components: {
+            NotificationDropdown,
             UserDropdown,
             TheHeaderBrand
         },
