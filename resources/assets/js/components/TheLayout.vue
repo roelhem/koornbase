@@ -3,7 +3,7 @@
     <div class="page-main">
 
 
-        <template v-if="!!user">
+        <template>
 
             <the-top-header />
             <the-nav-header />

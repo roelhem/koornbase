@@ -244,5 +244,13 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
         ]);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- NOTIFICATIONS -------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function routeNotificationForSlack($notification)
+    {
+        return 'https://hooks.slack.com/services/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';
+    }
 
 }

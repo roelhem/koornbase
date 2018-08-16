@@ -10,11 +10,7 @@ export const CURRENT_USER__LOGOUT = 'logoutCurrentUser';
 export default {
 
     [CURRENT_USER__LOAD] ({ commit }) {
-        axios.get('/api/me', {
-            params: {
-                fields:['avatar','name_display','person_id']
-            }
-        }).then(result => {
+        axios.get('/api/me').then(result => {
             commit(mutations.CURRENT_USER_SET, result.data.data);
         }).catch(error => {
             console.log(error);

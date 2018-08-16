@@ -10,6 +10,7 @@ use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
 
@@ -31,7 +32,7 @@ use Carbon\Carbon;
 class PersonEmailAddress extends Model implements OwnedByPerson
 {
     use Userstamps;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -57,6 +58,21 @@ class PersonEmailAddress extends Model implements OwnedByPerson
     public function __toString()
     {
         return $this->email_address ?? '(onbekend)';
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIG ---------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'label' => $this->label,
+            'remarks' => $this->remarks,
+            'emailAddress' => $this->email_address,
+            'name' => $this->person->name_full,
+        ];
     }
 
 }

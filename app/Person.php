@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\AuthorizableGroup;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
@@ -56,6 +57,8 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
     use Filterable, Sortable, Searchable;
 
     use HasRemarks;
+
+    use Notifiable;
 
     use HasName, HasMemberships, HasAddresses, HasPhoneNumbers, HasEmailAddresses, HasGroups;
     use HasMorphedRbacAssignments;
@@ -268,5 +271,23 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
         ]);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- NOTIFIABLE CONFIGURATION --------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function routeNotificationForMail($notification = null)
+    {
+        $personEmailAddress = $this->emailAddress;
+        if($personEmailAddress !== null) {
+            return $personEmailAddress->email_address;
+        }
+
+        $user = $this->users()->first();
+        if($user instanceof User) {
+            return $user->email;
+        }
+
+        return 'unknown@koornbase.test';
+    }
 
 }

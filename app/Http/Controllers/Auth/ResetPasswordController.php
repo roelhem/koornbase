@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
@@ -32,6 +35,23 @@ class ResetPasswordController extends Controller
     }
 
     /**
+     * Reset the given user's password.
+     *
+     * @param  User  $user
+     * @param  string  $password
+     * @return void
+     */
+    public function resetPassword($user, $password)
+    {
+        $user->password = $password;
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+
+        event(new PasswordReset($user));
+    }
+
+
+    /**
      * Get the response for a successful password reset.
      *
      * @param  string  $response
@@ -39,8 +59,6 @@ class ResetPasswordController extends Controller
      */
     public function sendResetResponse($response)
     {
-        \Auth::logout();
-
         return redirect(route('login'))->with('status', 'Je wachtwoord is succesvol geweizigd!');
     }
 }

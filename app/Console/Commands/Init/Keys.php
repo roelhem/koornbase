@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Init;
 
+use App\Notifications\TestMobileMessage;
 use Illuminate\Console\Command;
 
 class Keys extends Command
@@ -38,6 +39,7 @@ class Keys extends Command
      */
     public function handle()
     {
+
         $this->line('Generating the application key...');
 
         $this->call('key:generate');

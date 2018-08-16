@@ -128,7 +128,7 @@
                     variables:{id}
                 }).then(data => console.log(data));
 
-            }
+            },
         }
     }
 </script>

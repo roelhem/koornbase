@@ -12,6 +12,7 @@ use App\Traits\PersonContactEntry\OrderableWithIndex;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
@@ -37,7 +38,7 @@ use Wildside\Userstamps\Userstamps;
 class PersonPhoneNumber extends Model implements OwnedByPerson
 {
     use Userstamps;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -162,5 +163,19 @@ class PersonPhoneNumber extends Model implements OwnedByPerson
         if($value instanceof PhoneNumber) {
             $this->attributes['phone_number'] = $this->util->format($value, PhoneNumberFormat::E164);
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIG ---------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'label' => $this->label,
+            'remarks' => $this->remarks,
+            'name' => $this->person->name_full,
+        ];
     }
 }

@@ -17,7 +17,7 @@ use App\PersonEmailAddress;
  *
  * @package App\Traits\Person
  *
- * @property-read PersonEmailAddress|null $email_address
+ * @property-read PersonEmailAddress|null $emailAddress
  *
  * @property-read PersonEmailAddress[] $emailAddresses
  */

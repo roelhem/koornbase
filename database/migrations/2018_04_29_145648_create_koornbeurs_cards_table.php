@@ -18,7 +18,7 @@ class CreateKoornbeursCardsTable extends Migration
 
             $table->unsignedInteger('owner_id')->nullable();
 
-            $table->string('ref', 63)->nullable();
+            $table->string('ref', 63);
             $table->string('version', 63)->nullable();
 
 

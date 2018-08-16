@@ -170,5 +170,29 @@ class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
         ]);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEND NOTIFICATIONS TO ALL CURRENT MEMBERS ---------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Sends the provided notification to all the persons in this group.
+     *
+     * @param $instance
+     */
+    public function notify($instance)
+    {
+        \Notification::send($this->persons, $instance);
+    }
+
+    /**
+     * Immediately sends the provided notification to all the persons in this group.
+     *
+     * @param $instance
+     */
+    public function notifyNow($instance)
+    {
+        \Notification::sendNow($this->persons, $instance);
+    }
+
 
 }

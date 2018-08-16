@@ -18,6 +18,7 @@ use CommerceGuys\Addressing\Formatter\FormatterInterface;
 use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Wildside\Userstamps\Userstamps;
 
 /**
@@ -48,7 +49,7 @@ class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 {
 
     use Userstamps;
-    use Filterable, Sortable;
+    use Filterable, Sortable, Searchable;
 
     use HasRemarks, BelongsToPerson;
 
@@ -139,6 +140,20 @@ class PersonAddress extends Model implements AddressInterface, OwnedByPerson
         return [
             'administrative_area','locality','dependent_locality','postal_code','sorting_code',
             'address_line_1','address_line_2','organisation'
+        ];
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- SEARCHABLE CONFIG ---------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'label' => $this->label,
+            'remarks' => $this->remarks,
+            'address' => $this->format(),
         ];
     }
 

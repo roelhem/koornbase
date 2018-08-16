@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Requests\Api\PersonUpdateRequest;
+use App\Notifications\FoundSomething;
 use App\Person;
 
 class PersonController extends Controller

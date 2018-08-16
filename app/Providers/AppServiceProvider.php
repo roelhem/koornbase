@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\OAuth\Client;
+use App\OAuth\Observers\ClientObserver;
 use App\Services\Parsers\ParseService;
 use App\Services\Sorters\CertificateCategorySorter;
 use App\Services\Sorters\CertificateSorter;
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         Carbon::serializeUsing(function(\Carbon\Carbon $carbon) {
             return $carbon->format('Y-m-d H:i:s');
         });
+
+        Client::observe(ClientObserver::class);
 
     }
 
