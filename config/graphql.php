@@ -148,8 +148,17 @@ return [
                 'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
+                'createGroup' => \App\GraphQL\Mutations\Crud\CreateGroupMutation::class,
                 'updateGroup' => \App\GraphQL\Mutations\Crud\UpdateGroupMutation::class,
 
+                'createGroupCategory' => \App\GraphQL\Mutations\Crud\CreateGroupCategoryMutation::class,
+                'updateGroupCategory' => \App\GraphQL\Mutations\Crud\UpdateGroupCategoryMutation::class,
+
+                'createGroupEmailAddress' => \App\GraphQL\Mutations\Crud\CreateGroupEmailAddressMutation::class,
+                'updateGroupEmailAddress' => \App\GraphQL\Mutations\Crud\UpdateGroupEmailAddressMutation::class,
+
+                'createCertificateCategory' => \App\GraphQL\Mutations\Crud\CreateCertificateCategoryMutation::class,
+                'updateCertificateCategory' => \App\GraphQL\Mutations\Crud\UpdateCertificateCategoryMutation::class,
 
                 'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class,
 

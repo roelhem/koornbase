@@ -13,17 +13,28 @@ use Wildside\Userstamps\Userstamps;
 
 /**
  * Class KoornbeursCard
- * @package App
  *
+ * @package App
  * @property integer $id
  * @property integer|null $owner_id
  * @property string|null $ref
  * @property string|null $version
  * @property Carbon|null $activated_at
  * @property Carbon|null $deactivated_at
- *
  * @property-read boolean $is_active
  * @property-read Person|null $owner
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard active($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard inactive($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\KoornbeursCard whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class KoornbeursCard extends Model implements OwnedByPerson
 {

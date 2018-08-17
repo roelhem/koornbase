@@ -29,25 +29,61 @@ use Wildside\Userstamps\Userstamps;
  * Class Person
  *
  * @package App
- *
  * @property integer $id
  * @property Carbon|null $birth_date
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
  * @property Carbon|null $deleted_at
  * @property integer|null $deleted_by
- *
  * @property-read string $avatar_letters
  * @property-read AvatarType $avatar
  * @property-read integer|null $age
- *
  * @property-read Collection $users
  * @property-read Collection $debtors
  * @property-read Collection $cards
  * @property-read Collection $certificates
+ * @property-read \App\PersonAddress $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\PersonAddress[] $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Node[] $assignedNodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Assignment[] $assignments
+ * @property-read \App\PersonEmailAddress $emailAddress
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\PersonEmailAddress[] $emailAddresses
+ * @property-read \MembershipStatus $membership_status
+ * @property-read \Carbon|null $membership_status_since
+ * @property-read string $name
+ * @property-read string $name_formal
+ * @property-read string $name_full
+ * @property-read string $name_short
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Group[] $groups
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Helpers\MembershipStatusChange[] $membershipStatusChanges
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Membership[] $memberships
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \App\Person $owner
+ * @property-read \App\PersonPhoneNumber $phoneNumber
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\PersonPhoneNumber[] $phoneNumbers
+ * @property-write mixed $name_initials
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person filter($input = array(), $filter = null)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person formerMember($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person member($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person membershipStatus($status, $at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person novice($at = null)
+ * @method static \Illuminate\Database\Query\Builder|\App\Person onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person outsider($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Person whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Query\Builder|\App\Person withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Person withoutTrashed()
+ * @mixin \Eloquent
  */
 class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup, OwnedByPerson
 {

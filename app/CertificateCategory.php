@@ -16,10 +16,27 @@ use Wildside\Userstamps\Userstamps;
  * Class CertificateCategory
  *
  * @package App
- *
  * @property integer $id
  * @property integer|null $default_expire_years
  * @property boolean $is_required
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Certificate[] $certificates
+ * @property-read string $name_short
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory findSimilarSlugs($attribute, $config, $slug)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\CertificateCategory onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CertificateCategory whereSlug($slug)
+ * @method static \Illuminate\Database\Query\Builder|\App\CertificateCategory withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\CertificateCategory withoutTrashed()
+ * @mixin \Eloquent
  */
 class CertificateCategory extends Model
 {

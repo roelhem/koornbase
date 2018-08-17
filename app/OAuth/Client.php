@@ -18,8 +18,8 @@ use Wildside\Userstamps\Userstamps;
 
 /**
  * Class Client
- * @package App\OAuth
  *
+ * @package App\OAuth
  * @property integer $id
  * @property integer|null $user_id
  * @property string $name
@@ -28,16 +28,24 @@ use Wildside\Userstamps\Userstamps;
  * @property boolean $personal_access_client
  * @property boolean $password_client
  * @property boolean $revoked
- *
  * @property-read Carbon|null $created_at
  * @property-read Carbon|null $updated_at
- *
  * @property-read integer $created_by
  * @property-read integer $updated_by
- *
  * @property-read OAuthClientType $type
- *
  * @property-read User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\OAuth\AuthCode[] $authCodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\OAuth\PersonalAccessClient[] $personalAccessClients
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\OAuth\Token[] $tokens
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\Client whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class Client extends PassportClient
 {

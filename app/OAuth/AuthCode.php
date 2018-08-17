@@ -16,16 +16,16 @@ use Laravel\Passport\AuthCode as PassportAuthCode;
  * Class AuthCode
  *
  * @package App\OAuth
- *
  * @property string $id
  * @property int $user_id
  * @property int $client_id
  * @property boolean $revoked
- *
  * @property-read Carbon|null $expires_at
- *
  * @property-read boolean $expired
  * @property-read boolean $is_valid
+ * @property-read \App\OAuth\Client $client
+ * @property-read \App\User $user
+ * @mixin \Eloquent
  */
 class AuthCode extends PassportAuthCode
 {

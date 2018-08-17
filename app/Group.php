@@ -25,24 +25,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Group
  *
  * @package App
- *
  * @property integer $id
  * @property string $category_id
  * @property string $slug
  * @property string $member_name
  * @property boolean $is_required
- *
  * @property-read GroupCategory $category
  * @property-read Collection|Person[] $persons
- *
  * @property-read Carbon $created_at
  * @property-read integer|null $created_by
  * @property-read Carbon $updated_at
  * @property-read integer|null $updated_by
  * @property-read Carbon|null $deleted_at
  * @property-read integer|null $deleted_by
- *
  * @property-read string $style
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Node[] $assignedNodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Assignment[] $assignments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\GroupEmailAddress[] $emailAddresses
+ * @property-read string $name_short
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group category($categories)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group findSimilarSlugs($attribute, $config, $slug)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Group onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Group whereSlug($slug)
+ * @method static \Illuminate\Database\Query\Builder|\App\Group withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Group withoutTrashed()
+ * @mixin \Eloquent
  */
 class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {

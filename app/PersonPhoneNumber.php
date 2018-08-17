@@ -23,17 +23,31 @@ use Wildside\Userstamps\Userstamps;
  * Class PersonPhoneNumber
  *
  * @package App
- *
  * @property integer $id
  * @property string $label
  * @property boolean $is_mobile
  * @property PhoneNumber $phone_number
  * @property PhoneNumberType $number_type
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
+ * @property-read mixed $country
+ * @property string $country_code
+ * @property \OptionsType $options
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonPhoneNumber whereOptions($options)
+ * @mixin \Eloquent
  */
 class PersonPhoneNumber extends Model implements OwnedByPerson
 {

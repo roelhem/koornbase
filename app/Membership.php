@@ -17,23 +17,36 @@ use Wildside\Userstamps\Userstamps;
  * Class Membership
  *
  * @package App
- *
  * @property integer|null $id
  * @property Carbon|null $application
  * @property Carbon|null $start
  * @property Carbon|null $end
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
- *
  * @property-read boolean $applied
  * @property-read boolean $started
  * @property-read boolean $ended
- *
  * @property-read MembershipStatus $status
  * @property-read Carbon|null $status_at
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership formerMember($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership member($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership novice($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership outsider($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership status($status, $at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class Membership extends Model implements OwnedByPerson
 {

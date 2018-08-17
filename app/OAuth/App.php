@@ -16,6 +16,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
+/**
+ * App\OAuth\App
+ *
+ * @property-read string $name_short
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\App findSimilarSlugs($attribute, $config, $slug)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\OAuth\App onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OAuth\App whereSlug($slug)
+ * @method static \Illuminate\Database\Query\Builder|\App\OAuth\App withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\OAuth\App withoutTrashed()
+ * @mixin \Eloquent
+ */
 class App extends Model
 {
 

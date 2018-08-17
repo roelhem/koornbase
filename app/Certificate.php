@@ -18,16 +18,31 @@ use Wildside\Userstamps\Userstamps;
  * Class Certificate
  *
  * @package App
- *
  * @property integer $id
  * @property integer $category_id
  * @property boolean $passed
  * @property Carbon|null $examination_at
  * @property Carbon|null $valid_at
  * @property Carbon|null $expired_at
- *
  * @property-read CertificateCategory $category
  * @property-read boolean $is_valid
+ * @property-read \Carbon|null $valid_since
+ * @property-read \Carbon|null $valid_till
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate category($categories)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate invalid($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate valid($at = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class Certificate extends Model implements OwnedByPerson
 {

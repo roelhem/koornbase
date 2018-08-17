@@ -15,29 +15,36 @@ use Laravel\Socialite\Two\User as OAuthUser;
 
 /**
  * Class UserAccount
- * @package App
  *
+ * @package App
  * @property integer $id
  * @property integer $user_id
  * @property OAuthProvider $provider
  * @property string $token
  * @property string|null $refresh_token
  * @property integer|null $expires_in
- *
  * @property string|null $ref_id
  * @property string|null $nickname
  * @property string|null $name
  * @property string|null $email
  * @property string|null $avatar
- *
  * @property array|null $user_json
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
- *
  * @property-read User $user
+ * @property \OAuthUser $o_auth_user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount provider($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\UserAccount whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class UserAccount extends Model
 {

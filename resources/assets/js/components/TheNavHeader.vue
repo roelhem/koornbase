@@ -6,6 +6,10 @@
 
             <b-row class="align-items-center">
 
+                <b-col lg="3" class="ml-auto">
+                    <the-global-search />
+                </b-col>
+
                 <b-col lg order-lg="first">
 
                     <b-nav tabs class="border-0 flex-column flex-lg-row">
@@ -38,16 +42,6 @@
 
                         <b-nav-item to="/users"><base-icon icon="users" from="fe" /> Gebruikers</b-nav-item>
 
-                        <b-nav-item v-for="navItem in navItems"
-                                    :key="navItem.id"
-                                    :to="navItem.to">
-
-                            <base-icon :icon="navItem.icon" :from="['fe','fa']" />
-
-                            {{ navItem.label }}
-
-                        </b-nav-item>
-
                     </b-nav>
 
                 </b-col>
@@ -62,45 +56,13 @@
 
 <script>
     import BaseIcon from "./BaseIcon";
+    import TheGlobalSearch from "./TheGlobalSearch";
 
     export default {
 
-        components: {BaseIcon},
-
-        computed: {
-            routes: function() {
-                return this.$router.options.routes;
-            },
-
-            navItems: function() {
-                let res = [];
-                for(let i=0; i<this.routes.length; i++) {
-                    let route = this.routes[i];
-                    let navItem = this.routeToNavItem(route);
-                    if(navItem) {
-                        res.push(navItem);
-                    }
-                }
-                return res;
-            }
-        },
-
-        methods: {
-            routeToNavItem(route) {
-                if(!route.meta || !route.meta.headerNavbar) {
-                    return false;
-                }
-
-                const meta = route.meta;
-
-                return {
-                    id:'nav-for' + route.name,
-                    to:{name: route.name},
-                    label: meta.label || route.name,
-                    icon: meta.icon || {}
-                };
-            }
-        },
+        components: {
+            TheGlobalSearch,
+            BaseIcon},
 
 
         name: "the-nav-header"

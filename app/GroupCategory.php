@@ -22,13 +22,32 @@ use Wildside\Userstamps\Userstamps;
  * Class GroupCategory
  *
  * @package App
- *
  * @property integer $id
  * @property-read string $slug
  * @property boolean $is_required
  * @property string $style
- *
  * @property-read Collection|Group[] $groups
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Node[] $assignedNodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Assignment[] $assignments
+ * @property-read string $name_short
+ * @property \OptionsType $options
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory findSimilarSlugs($attribute, $config, $slug)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupCategory onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory whereOptions($options)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupCategory whereSlug($slug)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupCategory withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupCategory withoutTrashed()
+ * @mixin \Eloquent
  */
 class GroupCategory extends Model implements RbacDatabaseAssignable, AuthorizableGroup
 {

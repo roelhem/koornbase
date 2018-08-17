@@ -10,11 +10,21 @@ use Wildside\Userstamps\Userstamps;
 
 /**
  * Class GroupEmailAddress
- * @package App
  *
+ * @package App
  * @property-read integer $id
  * @property integer $group_id
  * @property string $email_address
+ * @property-read \App\Group $group
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\GroupEmailAddress whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class GroupEmailAddress extends Model
 {

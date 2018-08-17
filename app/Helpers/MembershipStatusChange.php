@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class MembershipStatusChange
- * @package App\Helpers
  *
+ * @package App\Helpers
  * @property-read MembershipStatus $status
  * @property-read Carbon $date
  * @property-read integer $person_id
  * @property-read integer $membership_id
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Helpers\MembershipStatusChange past()
+ * @mixin \Eloquent
  */
 class MembershipStatusChange extends Model
 {

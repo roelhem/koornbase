@@ -22,27 +22,43 @@ use Wildside\Userstamps\Userstamps;
  * Class User
  *
  * @package App
- *
  * @property integer|null $id
  * @property string|null $name
  * @property string|null $email
  * @property string|null $password
  * @property string|null $remember_token
- *
- *
  * @property-read string|null $name_display
  * @property-read string|null $name_short
  * @property-read string|null $avatar_letters
  * @property-read AvatarType $avatar
- *
  * @property-read Carbon $created_at
  * @property-read integer|null $created_by
  * @property-read Carbon $updated_at
  * @property-read integer|null $updated_by
- *
  * @method static User|null find(integer $id)
- *
- * @inheritdoc
+ * @inheritdoc 
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\UserAccount[] $accounts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Node[] $assignedNodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Assignment[] $assignments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\OAuth\Client[] $clients
+ * @property-read \App\UserAccount $facebookAccount
+ * @property-read \App\UserAccount $githubAccount
+ * @property-read \App\UserAccount $googleAccount
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\OAuth\Token[] $tokens
+ * @property-read \App\UserAccount $twitterAccount
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLike($column, $value, $boolean = 'and')
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPerson
 {

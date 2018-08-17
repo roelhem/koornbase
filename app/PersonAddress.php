@@ -23,11 +23,10 @@ use Wildside\Userstamps\Userstamps;
 
 /**
  * Class PersonAddress
- * @package App
  *
+ * @package App
  * @property integer|null $id
  * @property string|null $label
- *
  * @property string|null $administrative_area
  * @property string|null $locality
  * @property string|null $dependent_locality
@@ -37,13 +36,28 @@ use Wildside\Userstamps\Userstamps;
  * @property string|null $address_line_2
  * @property string|null $organisation
  * @property string|null $locale
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
- *
  * @property-read AddressFormat $addressFormat
+ * @property-read \AddressFormat $address_format
+ * @property-read mixed $country
+ * @property string $country_code
+ * @property \OptionsType $options
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonAddress whereOptions($options)
+ * @mixin \Eloquent
  */
 class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 {

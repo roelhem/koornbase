@@ -19,15 +19,27 @@ use Carbon\Carbon;
  * Class PersonEmailAddress
  *
  * @package App
- *
  * @property integer $id
  * @property string $label
  * @property string $email_address
- *
  * @property Carbon|null $created_at
  * @property integer|null $created_by
  * @property Carbon|null $updated_at
  * @property integer|null $updated_by
+ * @property \OptionsType $options
+ * @property-read \App\Person $owner
+ * @property-read \App\Person $person
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress filter($input = array(), $filter = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress ownedBy($person_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress paginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress simplePaginateFilter($perPage = null, $columns = array(), $pageName = 'page', $page = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress sortBy($sortName, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress sortByList($sortList)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress whereEndsWith($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress whereLike($column, $value, $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PersonEmailAddress whereOptions($options)
+ * @mixin \Eloquent
  */
 class PersonEmailAddress extends Model implements OwnedByPerson
 {
