@@ -46,7 +46,7 @@ class GroupEmailAddressType extends GraphQLType
             'id' => IdField::class,
 
             'group_id' => [
-                'type' => Type::nonNull(Type::int()),
+                'type' => Type::nonNull(Type::id()),
                 'description' => 'The `ID` of the Group where this GroupEmailAddress belongs to.'
             ],
             'group' => [
