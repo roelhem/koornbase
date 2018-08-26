@@ -206,7 +206,7 @@ trait HasMemberships
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function memberships() {
-        return $this->hasMany(Membership::class, 'person_id');
+        return $this->hasMany(Membership::class, 'person_id')->orderBy('end');
     }
 
     /**

@@ -30,6 +30,11 @@ class AddressingProvider extends ServiceProvider
         \Validator::extend('postal_code', 'App\Services\Validators\AddressValidator@validatePostalCode');
         \Validator::extendImplicit('address_field', 'App\Services\Validators\AddressValidator@validateAddressField');
 
+        \Validator::extend('before_fields', 'App\Services\Validators\DateTimeValidator@validateBeforeFields');
+        \Validator::extend('before_or_equal_fields', 'App\Services\Validators\DateTimeValidator@validateBeforeOrEqualFields');
+        \Validator::extend('after_fields', 'App\Services\Validators\DateTimeValidator@validateAfterFields');
+        \Validator::extend('after_or_equal_fields', 'App\Services\Validators\DateTimeValidator@validateAfterOrEqualFields');
+
         \Validator::extend('phone', function($attribute, $value, $parameters, $validator) {
             $country_code_attr = str_replace('phone_number','country_code',$attribute);
             $country_code = array_get($validator->getData(), $country_code_attr, 'NL');

@@ -34,8 +34,8 @@ class MembershipStoreRequest extends FormRequest
         return [
             'person' => 'required|finds:person',
             'application' => 'nullable|date',
-            'start' => 'nullable|date',
-            'end' => 'nullable|date',
+            'start' => 'nullable|date|after_or_equal_fields:application',
+            'end' => 'nullable|date|after_or_equal_fields:application,start',
             'remarks' => 'nullable|string'
         ];
     }
@@ -48,7 +48,6 @@ class MembershipStoreRequest extends FormRequest
     public function afterValidation($validator) {
 
         $after = new AfterValidation($validator);
-        $after->ensureChronology(['application','start','end']);
 
         // Collect and parse the input data
         $application = \Parse::try()->date($after->getValue('application'));

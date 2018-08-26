@@ -30,6 +30,8 @@ use Wildside\Userstamps\Userstamps;
  * @property-read boolean $ended
  * @property-read MembershipStatus $status
  * @property-read Carbon|null $status_at
+ * @property-read Carbon|null $upper_bound
+ * @property-read Carbon|null $lower_bound
  * @property-read \App\Person $owner
  * @property-read \App\Person $person
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Membership filter($input = array(), $filter = null)
@@ -274,6 +276,26 @@ class Membership extends Model implements OwnedByPerson
      */
     public function getStatusAtAttribute() {
         return $this->getStatusSince();
+    }
+
+    /**
+     * Returns the last DateTime when this membership was active for the Person it belongs to. If `null` is returned,
+     * there is no upper bound for the active state of this membership.
+     *
+     * @return Carbon|null
+     */
+    public function getUpperBoundAttribute() {
+        return $this->end;
+    }
+
+    /**
+     * Returns the first DateTime when this membership was active for the Person it belongs to. If `null` is returned,
+     * there is no lower bound for the active state of this membership.
+     *
+     * @return Carbon|null
+     */
+    public function getLowerBoundAttribute() {
+        return $this->application ?? $this->start;
     }
 
 }
