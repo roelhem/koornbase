@@ -31,7 +31,7 @@ class CreateGroupEmailAddressMutation extends Mutation
             'group_id' => [
                 'description' => 'The `ID` of the Group that should be associated with this new email-address.',
                 'type' => Type::nonNull(Type::id()),
-                'rules' => ['required','exists:groups'],
+                'rules' => ['required','exists:groups,id'],
             ],
             'email_address' => [
                 'description' => 'The new email-address itself.',
@@ -51,6 +51,6 @@ class CreateGroupEmailAddressMutation extends Mutation
         /** @var Group $group */
         $group = Group::findOrFail($group_id);
 
-        return $group->emailAddresses()->create(array_except($args,['group_id']));
+        return $group->emailAddresses()->create(array_except($args,'group_id'));
     }
 }
