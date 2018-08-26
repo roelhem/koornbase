@@ -145,11 +145,11 @@
 
         <template slot="footer">
             <div class="text-right">
-                <b-button v-if="!hasEnd && !hasStart && hasApplication">
+                <b-button v-if="!hasEnd && !hasStart && hasApplication" @click="startMembership">
                     Lid Maken
                 </b-button>
 
-                <b-button v-if="!hasEnd && (hasStart || hasApplication)">
+                <b-button v-if="!hasEnd && (hasStart || hasApplication)" @click="stopMembership">
                     Uitschrijven
                 </b-button>
 
@@ -386,7 +386,7 @@
 
                 this.$apollo.mutate({
                     mutation: gql`mutation updateMembershipDates($id:ID!, $application:Date, $start:Date, $end:Date) {
-                                updateMembership(id:$id, application:$application, start:$start, end:$end) {
+                                membership:updateMembership(id:$id, application:$application, start:$start, end:$end) {
                                     id,
                                     person_id,
                                     application,
@@ -397,39 +397,89 @@
                     }`,
                     variables: {id, application, start, end},
 
-                    update:(store, {data:{updateMembership: { id, person_id, application, start, end, status}}}) => {
-                        const data = store.readQuery({
-                            query:getPersonMembershipsQuery,
-                            variables:{id:person_id},
-                        });
-
-                        const memberships = data.person.memberships;
-                        const index = memberships.findIndex(membership => membership.id === id);
-
-                        if(index >= 0) {
-                            const membership = memberships[index];
-                            membership.application = application;
-                            membership.start = start;
-                            membership.end = end;
-                            membership.status = status;
-
-                            store.writeQuery({
-                                query:getPersonMembershipsQuery,
-                                variables:{id:person_id},
-                                data
-                            });
-                        }
-                    },
+                    update:this.membershipUpdateHandler,
 
                     optimisticResponse: {
                         __typename:'Mutation',
-                        updateMembership: {
+                        membership: {
                             __typename:'Membership',
                             id, person_id, application, start, end, status
                         }
                     }
                 }).then(data => console.log(data));
 
+            },
+
+            membershipUpdateHandler(store, {data:{membership:{id, person_id, application, start, end, status}}}) {
+                const data = store.readQuery({
+                    query:getPersonMembershipsQuery,
+                    variables:{id:person_id},
+                });
+
+                const memberships = data.person.memberships;
+                const index = memberships.findIndex(membership => membership.id === id);
+
+                if(index >= 0) {
+                    const membership = memberships[index];
+                    membership.application = application;
+                    membership.start = start;
+                    membership.end = end;
+                    membership.status = status;
+
+                    store.writeQuery({
+                        query:getPersonMembershipsQuery,
+                        variables:{id:person_id},
+                        data
+                    });
+                }
+            },
+
+            startMembership() {
+                const id = this.membership.id;
+                const person_id = this.personId;
+                const application = this.membership.application;
+                const start = moment().format("YYYY-MM-DD");
+                const end = null;
+                const status = 'MEMBER';
+
+                this.$apollo.mutate({
+                    mutation: gql`mutation startMembership($id:ID!) {
+                        membership:startMembership(id:$id) { id, person_id, application, start, end, status }
+                    }`,
+                    variables:{id},
+                    update:this.membershipUpdateHandler,
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        membership: {
+                            __typename:'Membership',
+                            id, person_id, application, start, end, status
+                        }
+                    },
+                });
+            },
+
+            stopMembership() {
+                const id = this.membership.id;
+                const person_id = this.personId;
+                const application = this.membership.application;
+                const start = this.membership.start;
+                const end = moment().format("YYYY-MM-DD");
+                const status = "FORMER_MEMBER";
+
+                this.$apollo.mutate({
+                    mutation: gql`mutation stopMembership($id:ID!) {
+                        membership:stopMembership(id:$id) { id, person_id, application, start, end, status }
+                    }`,
+                    variables:{id},
+                    update:this.membershipUpdateHandler,
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        membership: {
+                            __typename:'Membership',
+                            id, person_id, application, start, end, status
+                        }
+                    },
+                });
             },
 
 

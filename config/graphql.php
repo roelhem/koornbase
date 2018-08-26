@@ -159,6 +159,13 @@ return [
                 'createPersonGroupConnection' => \App\GraphQL\Mutations\Crud\CreatePersonGroupConnectionMutation::class,
                 'deletePersonGroupConnection' => \App\GraphQL\Mutations\Crud\DeletePersonGroupConnectionMutation::class,
 
+                'createMembership' => \App\GraphQL\Mutations\Crud\CreateMembershipMutation::class,
+                'updateMembership' => \App\GraphQL\Mutations\Crud\UpdateMembershipMutation::class,
+                'deleteMembership' => \App\GraphQL\Mutations\Crud\DeleteMembershipMutation::class,
+                'newMembershipApplication' => \App\GraphQL\Mutations\NewMembershipApplicationMutation::class,
+                'startMembership' => \App\GraphQL\Mutations\StartMembershipMutation::class,
+                'stopMembership' => \App\GraphQL\Mutations\StopMembershipMutation::class,
+
                 'createGroup' => \App\GraphQL\Mutations\Crud\CreateGroupMutation::class,
                 'updateGroup' => \App\GraphQL\Mutations\Crud\UpdateGroupMutation::class,
 

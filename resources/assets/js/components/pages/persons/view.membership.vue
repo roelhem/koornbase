@@ -3,9 +3,6 @@
     <b-container>
         <b-row>
             <b-col lg="6">
-
-            </b-col>
-            <b-col lg="6">
                 <display-membership-card v-for="(membership) in person.memberships"
                                          :key="membership.id"
                                          :membership="membership"
@@ -13,7 +10,7 @@
                 />
 
                 <div class="mb-4" v-if="canApplyToMembership && !$apollo.loading">
-                    <b-button block>Nieuwe inschrijving toevoegen...</b-button>
+                    <b-button block @click="newMembership">Nieuwe inschrijving toevoegen...</b-button>
                 </div>
             </b-col>
         </b-row>
@@ -27,6 +24,8 @@
     import TablerCard from "../../TablerCard";
     import DisplayMembershipCard from "../../DisplayMembershipCard";
     import { getPersonMembershipsQuery } from "../../../graphql/queries/persons.graphql";
+    import moment from "moment";
+    import gql from "graphql-tag";
 
     export default {
         components: {
@@ -66,6 +65,53 @@
             canApplyToMembership() {
                 return this.person.memberships.every(membership => membership.status === 'FORMER_MEMBER' || membership.status === 'OUTSIDER');
             }
+        },
+
+        methods: {
+
+            newMembership() {
+                const person_id = this.personId;
+
+                this.$apollo.mutate({
+                    mutation:gql`mutation newMembership($person_id:ID!) {
+                        membership:newMembershipApplication(person_id:$person_id) {
+                            id person_id application start end status remarks
+                        }
+                    }`,
+                    variables: {person_id},
+
+                    update:(store, {data: {membership}}) => {
+                        const data = store.readQuery({
+                            query:getPersonMembershipsQuery,
+                            variables: {id:membership.person_id},
+                        });
+
+                        const memberships = data.person.memberships;
+                        memberships.push(membership);
+
+                        store.writeQuery({
+                            query:getPersonMembershipsQuery,
+                            variables:{id:membership.person_id},
+                            data
+                        })
+                    },
+
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        membership: {
+                            __typename:'Membership',
+                            id:"-1",
+                            person_id,
+                            application:moment().format('YYYY-MM-DD'),
+                            start:null,
+                            end:null,
+                            status:"NOVICE",
+                            remarks:null
+                        }
+                    },
+                });
+            }
+
         },
 
         name: "page-person-membership"
