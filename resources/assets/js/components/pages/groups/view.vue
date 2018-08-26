@@ -42,8 +42,12 @@
                         <subtile-detail-entry-form label="Korte naam" :value="group.name_short" @submit="updateNameShortHandler" />
                         <subtile-detail-entry-form label="Persoons-titel" :value="group.member_name" @submit="updateMemberNameHandler" />
 
-                        <detail-entry label="categorie">
+                        <detail-entry label="Categorie">
                             <display-group-category :category="group.category" />
+                        </detail-entry>
+
+                        <detail-entry label="Tag">
+                            <kb-group-tag :group="group" label="name" />
                         </detail-entry>
 
                     </detail-view>
@@ -69,37 +73,7 @@
             <!-- START of the PERSONS column -->
             <b-col lg="5">
 
-                <tabler-card title="Personen in deze groep" body-class="o-auto" body-style="max-height:600px">
-
-                    <template slot="options">
-                        <b-button variant="success">Toevoegen</b-button>
-                    </template>
-
-                    <ul class="list-unstyled list-separated">
-                        <li v-for="person in group.persons" class="list-separated-item">
-                            <b-row>
-                                <div class="col-auto">
-                                    <base-avatar :image="person.avatar.image" :letters="person.avatar.letters" default-style="person-default" size="md" />
-                                </div>
-                                <b-col>
-                                    <div>{{ person.name }}
-                                        <span v-if="person.name_nickname" class="text-muted-dark font-italic ml-1">[ {{ person.name_nickname }} ]</span>
-                                    </div>
-                                    <div class="small text-muted-dark">
-                                        <display-membership-status :status="person.membership_status"
-                                                                   :since="person.membership_status_since"
-                                                                   date-size="sm"
-                                        />
-                                    </div>
-                                </b-col>
-                                <div class="col-auto">
-                                    <b-button class="btn-icon" variant="danger" ><base-icon icon="x" from="fe" /></b-button>
-                                </div>
-                            </b-row>
-                        </li>
-                    </ul>
-
-                </tabler-card>
+                <group-persons-card :group="group" />
 
             </b-col>
             <!-- END of the PERSONS column -->
@@ -130,9 +104,13 @@
     import DisplayMembershipStatus from "../../DisplayMembershipStatus";
     import FormSwitch from "../../FormSwitch";
     import GroupEmailAddressesCard from "../../GroupEmailAddressesCard";
+    import GroupPersonsCard from "../../GroupPersonsCard";
+    import KbGroupTag from "../../KbGroupTag";
 
     export default {
         components: {
+            KbGroupTag,
+            GroupPersonsCard,
             GroupEmailAddressesCard,
             FormSwitch,
             DisplayMembershipStatus,

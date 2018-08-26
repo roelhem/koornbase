@@ -60,12 +60,45 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 940);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1014);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 13:
+/***/ 1014:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(1015);
+
+
+/***/ }),
+
+/***/ 1015:
+/***/ (function(module, exports, __webpack_require__) {
+
+
+
+/**
+ * First, we will import and configure all the packages that are needed to display the bootstrap theme properly.
+ *
+ * This will enable the following packages:
+ *  - `lodash`
+ *  - `popper.js`
+ *  - `jquery`
+ *  - `bootstrap`
+ */
+
+window._ = __webpack_require__(65);
+window.Popper = __webpack_require__(21).default;
+
+try {
+  window.$ = window.jQuery = __webpack_require__(32);
+  __webpack_require__(66);
+} catch (e) {}
+
+/***/ }),
+
+/***/ 14:
 /***/ (function(module, exports) {
 
 var g;
@@ -2619,11 +2652,11 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(14)))
 
 /***/ }),
 
-/***/ 30:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -12995,7 +13028,7 @@ return jQuery;
 
 /***/ }),
 
-/***/ 45:
+/***/ 47:
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -13024,7 +13057,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 59:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -30134,11 +30167,11 @@ module.exports = function(module) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(45)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(47)(module)))
 
 /***/ }),
 
-/***/ 60:
+/***/ 66:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -30147,7 +30180,7 @@ module.exports = function(module) {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(30), __webpack_require__(21)) :
+   true ? factory(exports, __webpack_require__(32), __webpack_require__(21)) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
   (factory((global.bootstrap = {}),global.jQuery,global.Popper));
 }(this, (function (exports,$,Popper) { 'use strict';
@@ -34086,39 +34119,6 @@ module.exports = function(module) {
 })));
 //# sourceMappingURL=bootstrap.js.map
 
-
-/***/ }),
-
-/***/ 940:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(941);
-
-
-/***/ }),
-
-/***/ 941:
-/***/ (function(module, exports, __webpack_require__) {
-
-
-
-/**
- * First, we will import and configure all the packages that are needed to display the bootstrap theme properly.
- *
- * This will enable the following packages:
- *  - `lodash`
- *  - `popper.js`
- *  - `jquery`
- *  - `bootstrap`
- */
-
-window._ = __webpack_require__(59);
-window.Popper = __webpack_require__(21).default;
-
-try {
-  window.$ = window.jQuery = __webpack_require__(30);
-  __webpack_require__(60);
-} catch (e) {}
 
 /***/ })
 

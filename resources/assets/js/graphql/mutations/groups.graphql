@@ -13,3 +13,54 @@ mutation updateGroupNames($id:ID!, $name:String,$name_short:String,$member_name:
         member_name
     }
 }
+
+mutation updateGroupEmailAddress($id:ID!, $email_address:String, $remarks:String) {
+    updateGroupEmailAddress(id:$id, email_address:$email_address, remarks:$remarks) {
+        id
+        group_id
+        email_address
+    }
+}
+
+mutation addEmailAddressToGroup($group_id:ID!, $email_address:String!) {
+    createGroupEmailAddress(group_id:$group_id, email_address:$email_address) {
+        id
+        group_id
+        email_address
+        remarks
+    }
+}
+
+mutation deleteGroupEmailAddress($id:ID!) {
+    deleteGroupEmailAddress(id:$id) {
+        id
+        group_id
+    }
+}
+
+mutation addPersonToGroup($person_id:ID!, $group_id:ID!) {
+    createPersonGroupConnection(person_id:$person_id, group_id:$group_id) {
+        person_id
+        person {
+            id
+            name_first
+            name_nickname
+            name_prefix
+            name_last
+            avatar {
+                image
+                letters
+            }
+            membership_status
+            membership_status_since
+        }
+        group_id
+    }
+}
+
+mutation removePersonFromGroup($person_id:ID!, $group_id:ID!) {
+    deletePersonGroupConnection(person_id:$person_id, group_id:$group_id) {
+        person_id
+        group_id
+    }
+}

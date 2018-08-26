@@ -9,6 +9,7 @@
 namespace App\Traits\Person;
 
 use App\Group;
+use App\Pivots\PersonGroup;
 use Illuminate\Database\Eloquent\Collection;
 
 
@@ -70,7 +71,9 @@ trait HasGroups
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function groups() {
-        return $this->belongsToMany(Group::class, 'person_group','person_id','group_id');
+        return $this
+            ->belongsToMany(Group::class, 'person_group','person_id','group_id')
+            ->using(PersonGroup::class);
     }
 
 }

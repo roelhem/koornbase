@@ -1,5 +1,5 @@
 <template>
-    <span class="display-group-category d-inline-block bg-light rounded" v-b-tooltip.hover.bottom.d500="category.description">
+    <span class="display-group-category d-inline-block bg-light rounded" v-b-tooltip.hover.bottom.d500="category.description || ''">
         <base-stamp :default-style="category.style"
                     size="xs"
         />

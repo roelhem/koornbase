@@ -23,7 +23,13 @@ query selectPersonQuery($limit:Int, $search:String) {
         data {
             id
             name
+            name_first
+            name_nickname
+            name_prefix
+            name_last
             name_formal
+            membership_status
+            membership_status_since
             avatar {
                 letters
                 image

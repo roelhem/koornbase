@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\Finders\FinderCollection;
+use App\Pivots\PersonGroup;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasDescription;
 use App\Traits\HasShortName;
@@ -43,7 +44,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Roelhem\RbacGraph\Database\Assignment[] $assignments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\GroupEmailAddress[] $emailAddresses
  * @property-read string $name_short
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Group category($categories)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Group filter($input = array(), $filter = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Group findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
@@ -116,7 +116,9 @@ class Group extends Model implements RbacDatabaseAssignable, AuthorizableGroup
      * @return BelongsToMany
      */
     public function persons() {
-        return $this->belongsToMany(Person::class, 'person_group','group_id','person_id');
+        return $this
+            ->belongsToMany(Person::class, 'person_group','group_id','person_id')
+            ->using(PersonGroup::class);
     }
 
     /**

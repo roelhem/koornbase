@@ -148,6 +148,17 @@ return [
                 'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
+                'createPersonAddress' => \App\GraphQL\Mutations\Crud\CreatePersonAddressMutation::class,
+
+                'createPersonEmailAddress' => \App\GraphQL\Mutations\Crud\CreatePersonEmailAddressMutation::class,
+                'updatePersonEmailAddress' => \App\GraphQL\Mutations\Crud\UpdatePersonPhoneNumberMutation::class,
+
+                'createPersonPhoneNumber' => \App\GraphQL\Mutations\Crud\CreatePersonPhoneNumberMutation::class,
+                'updatePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\UpdatePersonPhoneNumberMutation::class,
+
+                'createPersonGroupConnection' => \App\GraphQL\Mutations\Crud\CreatePersonGroupConnectionMutation::class,
+                'deletePersonGroupConnection' => \App\GraphQL\Mutations\Crud\DeletePersonGroupConnectionMutation::class,
+
                 'createGroup' => \App\GraphQL\Mutations\Crud\CreateGroupMutation::class,
                 'updateGroup' => \App\GraphQL\Mutations\Crud\UpdateGroupMutation::class,
 
@@ -156,6 +167,7 @@ return [
 
                 'createGroupEmailAddress' => \App\GraphQL\Mutations\Crud\CreateGroupEmailAddressMutation::class,
                 'updateGroupEmailAddress' => \App\GraphQL\Mutations\Crud\UpdateGroupEmailAddressMutation::class,
+                'deleteGroupEmailAddress' => \App\GraphQL\Mutations\Crud\DeleteGroupEmailAddressMutation::class,
 
                 'createCertificateCategory' => \App\GraphQL\Mutations\Crud\CreateCertificateCategoryMutation::class,
                 'updateCertificateCategory' => \App\GraphQL\Mutations\Crud\UpdateCertificateCategoryMutation::class,
@@ -207,6 +219,7 @@ return [
         'PersonAddress' => \App\GraphQL\Types\PersonAddressType::class,
         'PersonEmailAddress' => \App\GraphQL\Types\PersonEmailAddressType::class,
         'PersonPhoneNumber' => \App\GraphQL\Types\PersonPhoneNumberType::class,
+        'PersonGroupConnection' => \App\GraphQL\Types\PersonGroupConnectionType::class,
         'User' => \App\GraphQL\Types\UserType::class,
         'UserAccount' => \App\GraphQL\Types\UserAccountType::class,
 
