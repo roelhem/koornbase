@@ -35,7 +35,7 @@ class CreateGroupEmailAddressMutation extends Mutation
             ],
             'email_address' => [
                 'description' => 'The new email-address itself.',
-                'type' => Type::nonNull(Type::string()),
+                'type' => Type::nonNull(\GraphQL::type('Email')),
                 'rules' => ['required','email','max:255','unique:group_email_addresses'],
             ],
             'remarks' => [

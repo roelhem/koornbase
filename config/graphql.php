@@ -270,7 +270,8 @@ return [
 
         'Date' => \App\Http\GraphQL\Types\Scalars\DateType::class,
         'DateTime' => \App\Http\GraphQL\Types\Scalars\DateTimeType::class,
-        'CountryCode' => \App\Http\GraphQL\Types\Scalars\CountryCodeType::class
+        'CountryCode' => \App\Http\GraphQL\Types\Scalars\CountryCodeType::class,
+        \App\Http\GraphQL\Types\Scalars\EmailType::class,
 
         //'RbacNode' => \Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType::class
     ],

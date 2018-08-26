@@ -61,7 +61,7 @@ class PersonEmailAddressType extends GraphQLType
             $personContactEntryInterface->getField('label'),
 
             'email_address' => [
-                'type' => Type::string(),
+                'type' => \GraphQL::type('Email'),
                 'description' => 'The value of the e-mail address.'
             ],
 

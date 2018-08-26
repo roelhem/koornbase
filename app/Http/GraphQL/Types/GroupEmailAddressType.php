@@ -56,7 +56,7 @@ class GroupEmailAddressType extends GraphQLType
             ],
 
             'email_address' => [
-                'type' => Type::nonNull(Type::string()),
+                'type' => Type::nonNull(\GraphQL::type('Email')),
                 'description' => 'The e-mail address.',
             ],
 

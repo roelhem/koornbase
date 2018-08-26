@@ -47,7 +47,7 @@ class UpdatePersonEmailAddressMutation extends Mutation
             ],
             'email_address' => [
                 'description' => 'The updated email address.',
-                'type' => Type::string(),
+                'type' => \GraphQL::type('Email'),
                 'rules' => ['sometimes','required','email','max:255'],
             ],
         ];

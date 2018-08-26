@@ -78,7 +78,7 @@ class UserAccountType extends GraphQLType
                 'description' => 'The nickname of the OAuth-account.'
             ],
             'email' => [
-                'type' => Type::string(),
+                'type' => \GraphQL::type('Email'),
                 'description' => 'The e-mail address of the OAuth-account.'
             ],
             'avatar' => [

@@ -10,6 +10,7 @@ namespace App\Http\GraphQL\Exceptions;
 
 
 use GraphQL\Error\Error;
+use Rebing\GraphQL\Error\ValidationError;
 
 class ErrorFormatter
 {
@@ -48,11 +49,11 @@ class ErrorFormatter
         ];
 
         $locations = $this->getLocations();
-        if(sizeof($locations)) {
+        if(!empty($locations)) {
             $res['locations'] = $locations;
         }
 
-        return $res;
+        return array_merge($res, $this->getPrevious());
     }
 
     /**
@@ -62,11 +63,39 @@ class ErrorFormatter
      */
     protected function getLocations()
     {
+        $locations = $this->error->getLocations();
+        if(empty($locations)) {
+            return [];
+        }
+
         $res = [];
-        foreach ($this->error->getLocations() as $location) {
+        foreach ($locations as $location) {
             $res[] = $location->toArray();
         }
         return $res;
+    }
+
+    protected function getPrevious()
+    {
+        $previous = $this->error->getPrevious();
+
+        if($previous instanceof \Exception) {
+
+            if($previous instanceof ValidationError) {
+                return ['validation' => $previous->getValidatorMessages()];
+            }
+
+            return [
+                'previous' => [
+                    'message' => $previous->getMessage(),
+                    'file' => $previous->getFile(),
+                    'line' => $previous->getLine(),
+                ]
+            ];
+
+        }
+
+        return [];
     }
 
 }

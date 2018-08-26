@@ -46,7 +46,7 @@ class CreatePersonEmailAddressMutation extends Mutation
             ],
             'email_address' => [
                 'description' => 'The E-mail address to add.',
-                'type' => Type::nonNull(Type::string()),
+                'type' => Type::nonNull(\GraphQL::type('Email')),
                 'rules' => ['required','email','max:255'],
             ]
         ];

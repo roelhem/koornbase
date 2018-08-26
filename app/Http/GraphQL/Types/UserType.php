@@ -80,7 +80,7 @@ class UserType extends GraphQLType
             ],
 
             'email' => [
-                'type' => Type::nonNull(Type::string()),
+                'type' => Type::nonNull(\GraphQL::type('Email')),
                 'description' => 'The e-mailaddress of this User'
             ],
 

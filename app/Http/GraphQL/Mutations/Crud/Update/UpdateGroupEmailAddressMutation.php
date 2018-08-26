@@ -37,7 +37,7 @@ class UpdateGroupEmailAddressMutation extends Mutation
             ],
             'email_address' => [
                 'description' => 'The new email address for the GroupEmailAddress that is updated.',
-                'type' => Type::string(),
+                'type' => \GraphQL::type('Email'),
                 'rules' => ['sometimes','required','email','max:255'],
             ],
             'remarks' => [
@@ -48,6 +48,12 @@ class UpdateGroupEmailAddressMutation extends Mutation
         ];
     }
 
+    /**
+     * @param $root
+     * @param $args
+     * @return GroupEmailAddress
+     * @throws \Throwable
+     */
     public function resolve($root, $args)
     {
         $id = array_get($args, 'id');
