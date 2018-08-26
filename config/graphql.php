@@ -57,7 +57,7 @@ return [
     //  'schemas' => [
     //      'default' => [
     //          'query' => [
-    //              'users' => 'App\GraphQL\Query\UsersQuery'
+    //              'users' => 'App\Http\GraphQL\Query\UsersQuery'
     //          ],
     //          'mutation' => [
     //
@@ -65,7 +65,7 @@ return [
     //      ],
     //      'user' => [
     //          'query' => [
-    //              'profile' => 'App\GraphQL\Query\ProfileQuery'
+    //              'profile' => 'App\Http\GraphQL\Query\ProfileQuery'
     //          ],
     //          'mutation' => [
     //
@@ -74,7 +74,7 @@ return [
     //      ],
     //      'user/me' => [
     //          'query' => [
-    //              'profile' => 'App\GraphQL\Query\MyProfileQuery'
+    //              'profile' => 'App\Http\GraphQL\Query\MyProfileQuery'
     //          ],
     //          'mutation' => [
     //
@@ -88,113 +88,113 @@ return [
             'query' => [
 
                 // MODEL QUERIES
-                'certificateCategories' => \App\GraphQL\Queries\CertificateCategoriesQuery::class,
-                'certificateCategory' => \App\GraphQL\Queries\CertificateCategoryQuery::class,
+                'certificateCategories' => \App\Http\GraphQL\Queries\CertificateCategoriesQuery::class,
+                'certificateCategory' => \App\Http\GraphQL\Queries\CertificateCategoryQuery::class,
 
-                'certificates' => \App\GraphQL\Queries\CertificatesQuery::class,
-                'certificate' => \App\GraphQL\Queries\CertificateQuery::class,
+                'certificates' => \App\Http\GraphQL\Queries\CertificatesQuery::class,
+                'certificate' => \App\Http\GraphQL\Queries\CertificateQuery::class,
 
-                'debtors' => \App\GraphQL\Queries\DebtorsQuery::class,
-                'debtor' => \App\GraphQL\Queries\DebtorQuery::class,
+                'debtors' => \App\Http\GraphQL\Queries\DebtorsQuery::class,
+                'debtor' => \App\Http\GraphQL\Queries\DebtorQuery::class,
 
-                'groupCategories' => \App\GraphQL\Queries\GroupCategoriesQuery::class,
-                'groupCategory' => \App\GraphQL\Queries\GroupCategoryQuery::class,
+                'groupCategories' => \App\Http\GraphQL\Queries\GroupCategoriesQuery::class,
+                'groupCategory' => \App\Http\GraphQL\Queries\GroupCategoryQuery::class,
 
-                'groupEmailAddresses' => \App\GraphQL\Queries\GroupEmailAddressesQuery::class,
-                'groupEmailAddress' => \App\GraphQL\Queries\GroupEmailAddressQuery::class,
+                'groupEmailAddresses' => \App\Http\GraphQL\Queries\GroupEmailAddressesQuery::class,
+                'groupEmailAddress' => \App\Http\GraphQL\Queries\GroupEmailAddressQuery::class,
 
-                'groups' => \App\GraphQL\Queries\GroupsQuery::class,
-                'group' => \App\GraphQL\Queries\GroupQuery::class,
+                'groups' => \App\Http\GraphQL\Queries\GroupsQuery::class,
+                'group' => \App\Http\GraphQL\Queries\GroupQuery::class,
 
-                'koornbeursCards' => \App\GraphQL\Queries\KoornbeursCardsQuery::class,
-                'koornbeursCard' => \App\GraphQL\Queries\KoornbeursCardQuery::class,
+                'koornbeursCards' => \App\Http\GraphQL\Queries\KoornbeursCardsQuery::class,
+                'koornbeursCard' => \App\Http\GraphQL\Queries\KoornbeursCardQuery::class,
 
-                'memberships' => \App\GraphQL\Queries\MembershipsQuery::class,
-                'membership' => \App\GraphQL\Queries\MembershipQuery::class,
+                'memberships' => \App\Http\GraphQL\Queries\MembershipsQuery::class,
+                'membership' => \App\Http\GraphQL\Queries\MembershipQuery::class,
 
-                'persons' => \App\GraphQL\Queries\PersonsQuery::class,
-                'person' => \App\GraphQL\Queries\PersonQuery::class,
+                'persons' => \App\Http\GraphQL\Queries\PersonsQuery::class,
+                'person' => \App\Http\GraphQL\Queries\PersonQuery::class,
 
-                'personPhoneNumbers' => \App\GraphQL\Queries\PersonPhoneNumbersQuery::class,
-                'personPhoneNumber' => \App\GraphQL\Queries\PersonPhoneNumberQuery::class,
+                'personPhoneNumbers' => \App\Http\GraphQL\Queries\PersonPhoneNumbersQuery::class,
+                'personPhoneNumber' => \App\Http\GraphQL\Queries\PersonPhoneNumberQuery::class,
 
-                'personAddresses' => \App\GraphQL\Queries\PersonAddressesQuery::class,
-                'personAddress' => \App\GraphQL\Queries\PersonAddressQuery::class,
+                'personAddresses' => \App\Http\GraphQL\Queries\PersonAddressesQuery::class,
+                'personAddress' => \App\Http\GraphQL\Queries\PersonAddressQuery::class,
 
-                'personEmailAddresses' => \App\GraphQL\Queries\PersonEmailAddressesQuery::class,
-                'personEmailAddress' => \App\GraphQL\Queries\PersonEmailAddressQuery::class,
+                'personEmailAddresses' => \App\Http\GraphQL\Queries\PersonEmailAddressesQuery::class,
+                'personEmailAddress' => \App\Http\GraphQL\Queries\PersonEmailAddressQuery::class,
 
-                'users' => \App\GraphQL\Queries\UsersQuery::class,
-                'user' => \App\GraphQL\Queries\UserQuery::class,
+                'users' => \App\Http\GraphQL\Queries\UsersQuery::class,
+                'user' => \App\Http\GraphQL\Queries\UserQuery::class,
 
-                'userAccounts' => \App\GraphQL\Queries\UserAccountsQuery::class,
-                'userAccount' => \App\GraphQL\Queries\UserAccountQuery::class,
+                'userAccounts' => \App\Http\GraphQL\Queries\UserAccountsQuery::class,
+                'userAccount' => \App\Http\GraphQL\Queries\UserAccountQuery::class,
 
-                'apps' => \App\GraphQL\Queries\AppsQuery::class,
-                'app' => \App\GraphQL\Queries\AppQuery::class,
+                'apps' => \App\Http\GraphQL\Queries\AppsQuery::class,
+                'app' => \App\Http\GraphQL\Queries\AppQuery::class,
 
-                'oauthClients' => \App\GraphQL\Queries\OAuthClientsQuery::class,
-                'oauthClient' => \App\GraphQL\Queries\OAuthClientQuery::class,
+                'oauthClients' => \App\Http\GraphQL\Queries\OAuthClientsQuery::class,
+                'oauthClient' => \App\Http\GraphQL\Queries\OAuthClientQuery::class,
 
                 'rbacGraph' => \Roelhem\RbacGraph\Http\GraphQL\Queries\RbacGraphQuery::class,
 
-                'hello' => \App\GraphQL\Queries\HelloQuery::class,
+                'hello' => \App\Http\GraphQL\Queries\HelloQuery::class,
                 // QUERIES ABOUT THE CURRENT SESSION
-                'me' => \App\GraphQL\Queries\MeQuery::class
+                'me' => \App\Http\GraphQL\Queries\MeQuery::class
             ],
             'mutation' => [
-                'createPerson' => \App\GraphQL\Mutations\Crud\Create\CreatePersonMutation::class,
-                'updatePerson' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonMutation::class,
-                'deletePerson' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonMutation::class,
-                'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
+                'createPerson' => \App\Http\GraphQL\Mutations\Crud\Create\CreatePersonMutation::class,
+                'updatePerson' => \App\Http\GraphQL\Mutations\Crud\Update\UpdatePersonMutation::class,
+                'deletePerson' => \App\Http\GraphQL\Mutations\Crud\Delete\DeletePersonMutation::class,
+                'restorePerson' => \App\Http\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
-                'createPersonAddress' => \App\GraphQL\Mutations\Crud\Create\CreatePersonAddressMutation::class,
-                'deletePersonAddress' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonAddressMutation::class,
+                'createPersonAddress' => \App\Http\GraphQL\Mutations\Crud\Create\CreatePersonAddressMutation::class,
+                'deletePersonAddress' => \App\Http\GraphQL\Mutations\Crud\Delete\DeletePersonAddressMutation::class,
 
-                'createPersonEmailAddress' => \App\GraphQL\Mutations\Crud\Create\CreatePersonEmailAddressMutation::class,
-                'updatePersonEmailAddress' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
-                'deletePersonEmailAddress' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonEmailAddressMutation::class,
+                'createPersonEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Create\CreatePersonEmailAddressMutation::class,
+                'updatePersonEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
+                'deletePersonEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Delete\DeletePersonEmailAddressMutation::class,
 
-                'createPersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Create\CreatePersonPhoneNumberMutation::class,
-                'updatePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
-                'deletePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonPhoneNumberMutation::class,
+                'createPersonPhoneNumber' => \App\Http\GraphQL\Mutations\Crud\Create\CreatePersonPhoneNumberMutation::class,
+                'updatePersonPhoneNumber' => \App\Http\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
+                'deletePersonPhoneNumber' => \App\Http\GraphQL\Mutations\Crud\Delete\DeletePersonPhoneNumberMutation::class,
 
-                'createPersonGroupConnection' => \App\GraphQL\Mutations\Crud\Create\CreatePersonGroupConnectionMutation::class,
-                'deletePersonGroupConnection' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonGroupConnectionMutation::class,
+                'createPersonGroupConnection' => \App\Http\GraphQL\Mutations\Crud\Create\CreatePersonGroupConnectionMutation::class,
+                'deletePersonGroupConnection' => \App\Http\GraphQL\Mutations\Crud\Delete\DeletePersonGroupConnectionMutation::class,
 
-                'createMembership' => \App\GraphQL\Mutations\Crud\Create\CreateMembershipMutation::class,
-                'updateMembership' => \App\GraphQL\Mutations\Crud\Update\UpdateMembershipMutation::class,
-                'deleteMembership' => \App\GraphQL\Mutations\Crud\Delete\DeleteMembershipMutation::class,
-                'newMembershipApplication' => \App\GraphQL\Mutations\NewMembershipApplicationMutation::class,
-                'startMembership' => \App\GraphQL\Mutations\StartMembershipMutation::class,
-                'stopMembership' => \App\GraphQL\Mutations\StopMembershipMutation::class,
+                'createMembership' => \App\Http\GraphQL\Mutations\Crud\Create\CreateMembershipMutation::class,
+                'updateMembership' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateMembershipMutation::class,
+                'deleteMembership' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteMembershipMutation::class,
+                'newMembershipApplication' => \App\Http\GraphQL\Mutations\NewMembershipApplicationMutation::class,
+                'startMembership' => \App\Http\GraphQL\Mutations\StartMembershipMutation::class,
+                'stopMembership' => \App\Http\GraphQL\Mutations\StopMembershipMutation::class,
 
-                'createGroup' => \App\GraphQL\Mutations\Crud\Create\CreateGroupMutation::class,
-                'updateGroup' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupMutation::class,
-                'deleteGroup' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupMutation::class,
+                'createGroup' => \App\Http\GraphQL\Mutations\Crud\Create\CreateGroupMutation::class,
+                'updateGroup' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateGroupMutation::class,
+                'deleteGroup' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteGroupMutation::class,
 
-                'createGroupCategory' => \App\GraphQL\Mutations\Crud\Create\CreateGroupCategoryMutation::class,
-                'updateGroupCategory' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupCategoryMutation::class,
-                'deleteGroupCategory' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupCategoryMutation::class,
+                'createGroupCategory' => \App\Http\GraphQL\Mutations\Crud\Create\CreateGroupCategoryMutation::class,
+                'updateGroupCategory' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateGroupCategoryMutation::class,
+                'deleteGroupCategory' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteGroupCategoryMutation::class,
 
-                'createGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Create\CreateGroupEmailAddressMutation::class,
-                'updateGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupEmailAddressMutation::class,
-                'deleteGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupEmailAddressMutation::class,
+                'createGroupEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Create\CreateGroupEmailAddressMutation::class,
+                'updateGroupEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateGroupEmailAddressMutation::class,
+                'deleteGroupEmailAddress' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteGroupEmailAddressMutation::class,
 
-                'createCertificateCategory' => \App\GraphQL\Mutations\Crud\Create\CreateCertificateCategoryMutation::class,
-                'updateCertificateCategory' => \App\GraphQL\Mutations\Crud\Update\UpdateCertificateCategoryMutation::class,
-                'deleteCertificateCategory' => \App\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
+                'createCertificateCategory' => \App\Http\GraphQL\Mutations\Crud\Create\CreateCertificateCategoryMutation::class,
+                'updateCertificateCategory' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateCertificateCategoryMutation::class,
+                'deleteCertificateCategory' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
 
-                'createApp' => \App\GraphQL\Mutations\Crud\Create\CreateAppMutation::class,
+                'createApp' => \App\Http\GraphQL\Mutations\Crud\Create\CreateAppMutation::class,
 
-                'createCertificate' => \App\GraphQL\Mutations\Crud\Create\CreateCertificateMutation::class,
-                'updateCertificate' => \App\GraphQL\Mutations\Crud\Update\UpdateCertificateMutation::class,
-                'deleteCertificate' => \App\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
+                'createCertificate' => \App\Http\GraphQL\Mutations\Crud\Create\CreateCertificateMutation::class,
+                'updateCertificate' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateCertificateMutation::class,
+                'deleteCertificate' => \App\Http\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
 
-                'createOAuthClient' => \App\GraphQL\Mutations\Crud\Create\CreateOAuthClientMutation::class,
-                'updateOAuthClient' => \App\GraphQL\Mutations\Crud\Update\UpdateOAuthClientMutation::class,
-                'revokeOAuthClient' => \App\GraphQL\Mutations\RevokeOAuthClientMutation::class,
-                'requestPersonalAccessToken' => \App\GraphQL\Mutations\RequestPersonalAccessTokenMutation::class,
+                'createOAuthClient' => \App\Http\GraphQL\Mutations\Crud\Create\CreateOAuthClientMutation::class,
+                'updateOAuthClient' => \App\Http\GraphQL\Mutations\Crud\Update\UpdateOAuthClientMutation::class,
+                'revokeOAuthClient' => \App\Http\GraphQL\Mutations\RevokeOAuthClientMutation::class,
+                'requestPersonalAccessToken' => \App\Http\GraphQL\Mutations\RequestPersonalAccessTokenMutation::class,
             ],
             'middleware' => []
         ],
@@ -212,54 +212,54 @@ return [
     // Example:
     //
     // 'types' => [
-    //     'user' => 'App\GraphQL\Type\UserType'
+    //     'user' => 'App\Http\GraphQL\Type\UserType'
     // ]
     //
     'types' => [
-        'Model' => \App\GraphQL\Interfaces\ModelInterface::class,
-        'OwnedByPerson' => \App\GraphQL\Interfaces\OwnedByPersonInterface::class,
-        'PersonContactEntry' => \App\GraphQL\Interfaces\PersonContactEntryInterface::class,
-        'OAuthClient' => \App\GraphQL\Interfaces\OAuthClientInterface::class,
+        'Model' => \App\Http\GraphQL\Interfaces\ModelInterface::class,
+        'OwnedByPerson' => \App\Http\GraphQL\Interfaces\OwnedByPersonInterface::class,
+        'PersonContactEntry' => \App\Http\GraphQL\Interfaces\PersonContactEntryInterface::class,
+        'OAuthClient' => \App\Http\GraphQL\Interfaces\OAuthClientInterface::class,
 
-        'PhoneNumberFormat' => \App\GraphQL\Enums\PhoneNumberFormatEnum::class,
-        'PhoneNumberType' => \App\GraphQL\Enums\PhoneNumberTypeEnum::class,
+        'PhoneNumberFormat' => \App\Http\GraphQL\Enums\PhoneNumberFormatEnum::class,
+        'PhoneNumberType' => \App\Http\GraphQL\Enums\PhoneNumberTypeEnum::class,
 
-        'Certificate' => \App\GraphQL\Types\CertificateType::class,
-        'CertificateCategory' => \App\GraphQL\Types\CertificateCategoryType::class,
-        'Debtor' => \App\GraphQL\Types\DebtorType::class,
-        'Group' => \App\GraphQL\Types\GroupType::class,
-        'GroupCategory' => \App\GraphQL\Types\GroupCategoryType::class,
-        'GroupEmailAddress' => \App\GraphQL\Types\GroupEmailAddressType::class,
-        'KoornbeursCard' => \App\GraphQL\Types\KoornbeursCardType::class,
-        'Membership' => \App\GraphQL\Types\MembershipType::class,
-        'Person' => \App\GraphQL\Types\PersonType::class,
-        'PersonAddress' => \App\GraphQL\Types\PersonAddressType::class,
-        'PersonEmailAddress' => \App\GraphQL\Types\PersonEmailAddressType::class,
-        'PersonPhoneNumber' => \App\GraphQL\Types\PersonPhoneNumberType::class,
-        'PersonGroupConnection' => \App\GraphQL\Types\PersonGroupConnectionType::class,
-        'User' => \App\GraphQL\Types\UserType::class,
-        'UserAccount' => \App\GraphQL\Types\UserAccountType::class,
+        'Certificate' => \App\Http\GraphQL\Types\CertificateType::class,
+        'CertificateCategory' => \App\Http\GraphQL\Types\CertificateCategoryType::class,
+        'Debtor' => \App\Http\GraphQL\Types\DebtorType::class,
+        'Group' => \App\Http\GraphQL\Types\GroupType::class,
+        'GroupCategory' => \App\Http\GraphQL\Types\GroupCategoryType::class,
+        'GroupEmailAddress' => \App\Http\GraphQL\Types\GroupEmailAddressType::class,
+        'KoornbeursCard' => \App\Http\GraphQL\Types\KoornbeursCardType::class,
+        'Membership' => \App\Http\GraphQL\Types\MembershipType::class,
+        'Person' => \App\Http\GraphQL\Types\PersonType::class,
+        'PersonAddress' => \App\Http\GraphQL\Types\PersonAddressType::class,
+        'PersonEmailAddress' => \App\Http\GraphQL\Types\PersonEmailAddressType::class,
+        'PersonPhoneNumber' => \App\Http\GraphQL\Types\PersonPhoneNumberType::class,
+        'PersonGroupConnection' => \App\Http\GraphQL\Types\PersonGroupConnectionType::class,
+        'User' => \App\Http\GraphQL\Types\UserType::class,
+        'UserAccount' => \App\Http\GraphQL\Types\UserAccountType::class,
 
-        'App' => \App\GraphQL\Types\AppType::class,
+        'App' => \App\Http\GraphQL\Types\AppType::class,
 
-        'OAuthPersonalClient' => \App\GraphQL\Types\OAuthPersonalClientType::class,
-        'OAuthPasswordClient' => \App\GraphQL\Types\OAuthPasswordClientType::class,
-        'OAuthCredentialsClient' => \App\GraphQL\Types\OAuthCredentialsClientType::class,
-        'OAuthAuthCodeClient' => \App\GraphQL\Types\OAuthAuthCodeClientType::class,
+        'OAuthPersonalClient' => \App\Http\GraphQL\Types\OAuthPersonalClientType::class,
+        'OAuthPasswordClient' => \App\Http\GraphQL\Types\OAuthPasswordClientType::class,
+        'OAuthCredentialsClient' => \App\Http\GraphQL\Types\OAuthCredentialsClientType::class,
+        'OAuthAuthCodeClient' => \App\Http\GraphQL\Types\OAuthAuthCodeClientType::class,
 
-        'OAuthPersonalAccessClient' => \App\GraphQL\Types\OAuthPersonalAccessClientType::class,
-        'OAuthPersonalAccessTokenResult' => \App\GraphQL\Types\OAuthPersonalAccessTokenResultType::class,
+        'OAuthPersonalAccessClient' => \App\Http\GraphQL\Types\OAuthPersonalAccessClientType::class,
+        'OAuthPersonalAccessTokenResult' => \App\Http\GraphQL\Types\OAuthPersonalAccessTokenResultType::class,
 
-        'OAuthAuthCode' => \App\GraphQL\Types\OAuthAuthCodeType::class,
-        'OAuthToken' => \App\GraphQL\Types\OAuthTokenType::class,
+        'OAuthAuthCode' => \App\Http\GraphQL\Types\OAuthAuthCodeType::class,
+        'OAuthToken' => \App\Http\GraphQL\Types\OAuthTokenType::class,
 
-        'Avatar' => \App\GraphQL\Types\AvatarType::class,
+        'Avatar' => \App\Http\GraphQL\Types\AvatarType::class,
 
-        'HtmlAttributes' => \App\GraphQL\Types\Inputs\HtmlAttributesType::class,
+        'HtmlAttributes' => \App\Http\GraphQL\Types\Inputs\HtmlAttributesType::class,
 
-        'Date' => \App\GraphQL\Types\Scalars\DateType::class,
-        'DateTime' => \App\GraphQL\Types\Scalars\DateTimeType::class,
-        'CountryCode' => \App\GraphQL\Types\Scalars\CountryCodeType::class
+        'Date' => \App\Http\GraphQL\Types\Scalars\DateType::class,
+        'DateTime' => \App\Http\GraphQL\Types\Scalars\DateTimeType::class,
+        'CountryCode' => \App\Http\GraphQL\Types\Scalars\CountryCodeType::class
 
         //'RbacNode' => \Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType::class
     ],

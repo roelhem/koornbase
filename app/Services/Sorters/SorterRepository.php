@@ -9,7 +9,6 @@
 namespace App\Services\Sorters;
 
 
-use App\GraphQL\Enums\SortFieldEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class SorterRepository
