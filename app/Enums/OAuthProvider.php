@@ -3,6 +3,7 @@
 namespace App\Enums;
 
 use App\Enums\Traits\HasConfigFile;
+use App\Enums\Traits\HasGraphQLEnumType;
 use App\User;
 use App\UserAccount;
 use MabeEnum\Enum;
@@ -22,7 +23,7 @@ use Symfony\Component\Yaml\Yaml;
 final class OAuthProvider extends Enum
 {
 
-    use HasConfigFile;
+    use HasConfigFile, HasGraphQLEnumType;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
@@ -33,6 +34,16 @@ final class OAuthProvider extends Enum
     const TWITTER = 'twitter';
     const GITHUB = 'github';
     const TUDELFT = 'tudelft';
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GraphQL OPTIONS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    protected static function getDescription()
+    {
+        return 'This `Enum`-type represent the different (OAuth protected) online services that the KoornBase uses as a client.';
+    }
 
 
     // ---------------------------------------------------------------------------------------------------------- //

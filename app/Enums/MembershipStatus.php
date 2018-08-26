@@ -3,6 +3,7 @@
 namespace App\Enums;
 
 use App\Enums\Traits\HasConfigFile;
+use App\Enums\Traits\HasGraphQLEnumType;
 use App\Membership;
 use App\Person;
 use Carbon\Carbon;
@@ -34,7 +35,7 @@ use Symfony\Component\Yaml\Yaml;
 final class MembershipStatus extends Enum implements DynamicRole, \JsonSerializable
 {
 
-    use HasConfigFile;
+    use HasConfigFile, HasGraphQLEnumType;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
@@ -44,6 +45,16 @@ final class MembershipStatus extends Enum implements DynamicRole, \JsonSerializa
     const NOVICE = 1;
     const MEMBER = 2;
     const FORMER_MEMBER = 3;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GraphQL OPTIONS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    protected static function getDescription()
+    {
+        return 'This `Enum`-type contains the different states in which the membership of a `Person` at the Koornbeurs can be.';
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  USING THE CONFIG-FILE  ------------------------------------------------------------------------- //

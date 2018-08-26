@@ -19,7 +19,7 @@ class CreatorField extends Field
 
     protected $attributes = [
         'name' => 'creator',
-        'description' => 'Relation to the user that created this object.'
+        'description' => 'Relation to the user that created this object.',
     ];
 
 

@@ -70,27 +70,11 @@ class GraphQLServiceProvider extends ServiceProvider
             \GraphQL::addType(new SortRuleType($modelClass, $typeName));
         }
 
-        $enums = [
-            MembershipStatus::class => [
-                "description" => 'This `Enum`-type contains the different states in which the membership of a Person at the Koornbeurs can be.'
-            ],
-            OAuthClientType::class => [
-                "description" => 'This `Enum`-type contains the different types of OAuthClients that exist for the OAuth server of the KoornBase.'
-            ],
-            OAuthProvider::class => [
-                "description" => "This `Enum`-type represent the different (OAuth protected) online services that the KoornBase uses as a client."
-            ],
-            SortOrderDirection::class => [
-                "description" => "This `Enum`-type represent the two different ways to order a sorted list."
-            ],
-            OAuthScope::class => [
-                "description" => "This `Enum`-type represent the Token Scopes in the system. These Scopes give an OAuth-Token more permissions."
-            ],
-        ];
-
-        foreach ($enums as $enumClass => $attributes) {
-            \GraphQL::addType(new PhpEnumWrapper($enumClass, $attributes));
-        }
+        \GraphQL::addType(MembershipStatus::getGraphQLType());
+        \GraphQL::addType(OAuthClientType::getGraphQLType());
+        \GraphQL::addType(OAuthProvider::getGraphQLType());
+        \GraphQL::addType(SortOrderDirection::getGraphQLType());
+        \GraphQL::addType(OAuthScope::getGraphQLType());
 
     }
 

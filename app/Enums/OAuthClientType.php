@@ -9,6 +9,7 @@
 namespace App\Enums;
 
 
+use App\Enums\Traits\HasGraphQLEnumType;
 use App\OAuth\Client;
 use Laravel\Passport\ClientRepository;
 use MabeEnum\Enum;
@@ -31,6 +32,7 @@ use MabeEnum\Enum;
 final class OAuthClientType extends Enum
 {
 
+    use HasGraphQLEnumType;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
@@ -40,6 +42,16 @@ final class OAuthClientType extends Enum
     const PASSWORD = 1;
     const CREDENTIALS = 2;
     const AUTH_CODE = 3;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GraphQL OPTIONS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    protected static function getDescription()
+    {
+        return 'This `Enum`-type contains the different types of OAuthClients that exist for the OAuth server of the KoornBase.';
+    }
 
 
     // ---------------------------------------------------------------------------------------------------------- //

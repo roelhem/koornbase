@@ -9,6 +9,7 @@
 namespace App\Enums;
 
 
+use App\Enums\Traits\HasGraphQLEnumType;
 use MabeEnum\Enum;
 
 /**
@@ -22,11 +23,28 @@ use MabeEnum\Enum;
 final class SortOrderDirection extends Enum
 {
 
+    use HasGraphQLEnumType;
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
+    // ---------------------------------------------------------------------------------------------------------- //
+
     const ASC = 'asc';
     const DESC = 'desc';
 
-    protected static $ascValues = ['ascending','a', '+'];
-    protected static $descValues = ['descending','d', '-'];
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GraphQL OPTIONS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    protected static function getDescription()
+    {
+        return 'This `Enum`-type represent the two different ways to order a sorted list.';
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  Operation METHODS  ----------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
 
     /**
      * Returns the inverted direction of this direction.
@@ -40,6 +58,13 @@ final class SortOrderDirection extends Enum
             default: return $this;
         }
     }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  STATIC PARSER METHODS  ------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    protected static $ascValues = ['ascending','a', '+'];
+    protected static $descValues = ['descending','d', '-'];
 
     /**
      * Returns the default sorting order.

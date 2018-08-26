@@ -10,6 +10,7 @@ namespace App\Enums;
 
 
 use App\Enums\Traits\HasConfigFile;
+use App\Enums\Traits\HasGraphQLEnumType;
 use MabeEnum\Enum;
 use Symfony\Component\Yaml\Yaml;
 
@@ -26,7 +27,7 @@ use Symfony\Component\Yaml\Yaml;
 final class OAuthScope extends Enum
 {
 
-    use HasConfigFile;
+    use HasConfigFile, HasGraphQLEnumType;
 
     // ---------------------------------------------------------------------------------------------------------- //
     // --------  ENUM-VALUE DEFINITIONS  ------------------------------------------------------------------------ //
@@ -38,6 +39,16 @@ final class OAuthScope extends Enum
     const GRAPHQL_MUTATIONS = 'graphql-mutations';
 
     const MANAGE_OAUTH_CLIENTS = 'manage-oauth-clients';
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // --------  GraphQL OPTIONS  ------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /** @inheritdoc */
+    protected static function getDescription()
+    {
+        return 'This `Enum`-type represent the Token Scopes in the system. These Scopes give an OAuth-Token more permissions.';
+    }
 
 
     // ---------------------------------------------------------------------------------------------------------- //
