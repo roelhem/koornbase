@@ -14,7 +14,7 @@ use App\Traits\HasShortName;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * App\OAuth\App

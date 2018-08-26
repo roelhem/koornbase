@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class KoornbeursCard

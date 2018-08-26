@@ -16,7 +16,7 @@ use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class User

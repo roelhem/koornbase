@@ -17,7 +17,7 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class PersonPhoneNumber

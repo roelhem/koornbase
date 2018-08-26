@@ -18,7 +18,8 @@ class RestorePersonMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'restorePerson'
+        'name' => 'restorePerson',
+        'description' => 'Restores a (soft-deleted) `Person` from the invisible database to the visible database.'
     ];
 
     public function type()

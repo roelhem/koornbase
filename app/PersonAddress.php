@@ -19,7 +19,7 @@ use CommerceGuys\Addressing\Formatter\PostalLabelFormatterInterface;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class PersonAddress

@@ -6,7 +6,7 @@ use App\Contracts\OwnedByPerson;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use Illuminate\Database\Eloquent\Model;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * App\Debtor

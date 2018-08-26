@@ -19,7 +19,8 @@ class CreatePersonMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'CreatePerson'
+        'name' => 'createPerson',
+        'description' => 'Adds a new `Person` to the database.'
     ];
 
     /** @inheritdoc */

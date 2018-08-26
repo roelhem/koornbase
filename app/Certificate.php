@@ -7,12 +7,11 @@ use App\Contracts\OwnedByPerson;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Traits\HasRemarks;
-use App\Traits\HasStartEnd;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class Certificate
@@ -30,7 +29,6 @@ use Wildside\Userstamps\Userstamps;
  * @property-read \Carbon|null $valid_till
  * @property-read \App\Person $owner
  * @property-read \App\Person $person
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate category($categories)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate filter($input = array(), $filter = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate invalid($at = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Certificate ownedBy($person_id)

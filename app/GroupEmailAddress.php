@@ -6,7 +6,7 @@ use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class GroupEmailAddress

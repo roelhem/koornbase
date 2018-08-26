@@ -10,7 +10,6 @@ use App\Enums\OAuthClientType;
 use App\Enums\OAuthProvider;
 use App\Enums\OAuthScope;
 use App\Enums\SortOrderDirection;
-use App\Http\GraphQL\Enums\PhpEnumWrapper;
 use App\Http\GraphQL\Enums\SortFieldEnum;
 use App\Http\GraphQL\Types\Inputs\SortRuleType;
 use App\Group;
@@ -70,12 +69,22 @@ class GraphQLServiceProvider extends ServiceProvider
             \GraphQL::addType(new SortRuleType($modelClass, $typeName));
         }
 
+
+        $this->bootEnumTypes();
+    }
+
+    /**
+     * Adds the Enum-types that represent the Enum-classes on the server.
+     *
+     * @return void
+     */
+    protected function bootEnumTypes()
+    {
         \GraphQL::addType(MembershipStatus::getGraphQLType());
         \GraphQL::addType(OAuthClientType::getGraphQLType());
         \GraphQL::addType(OAuthProvider::getGraphQLType());
         \GraphQL::addType(SortOrderDirection::getGraphQLType());
         \GraphQL::addType(OAuthScope::getGraphQLType());
-
     }
 
     /**

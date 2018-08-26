@@ -11,7 +11,7 @@ use App\Traits\PersonContactEntry\OrderableWithIndex;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 use Carbon\Carbon;
 
 

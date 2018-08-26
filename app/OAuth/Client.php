@@ -14,7 +14,7 @@ use App\User;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Laravel\Passport\Client as PassportClient;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 /**
  * Class Client

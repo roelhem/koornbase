@@ -17,7 +17,8 @@ class UpdatePersonMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'UpdatePerson'
+        'name' => 'updatePerson',
+        'description' => 'Changes the values of the properties of a specific `Person`.'
     ];
 
     public function type()

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 use Laravel\Socialite\Contracts\User as OAuthUserContract;
 use Laravel\Socialite\AbstractUser as AbstractOAuthUser;
 use Laravel\Socialite\Two\User as OAuthUser;
