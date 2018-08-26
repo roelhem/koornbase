@@ -6,7 +6,7 @@
  * Time: 02:01
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Create;
 
 
 use App\Group;

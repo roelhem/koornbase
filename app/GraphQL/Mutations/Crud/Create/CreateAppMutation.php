@@ -6,7 +6,7 @@
  * Time: 15:25
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Create;
 
 
 use App\OAuth\App;

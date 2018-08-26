@@ -6,33 +6,33 @@
  * Time: 02:48
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Create;
 
 
-use App\GroupCategory;
+use App\CertificateCategory;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
 
-class CreateGroupCategoryMutation extends Mutation
+class CreateCertificateCategoryMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'createGroupCategory',
-        'description' => 'Creates a new GroupCategory.'
+        'name' => 'createCertificateCategory',
+        'description' => 'Creates a new CertificateCategory.'
     ];
 
     public function type()
     {
-        return \GraphQL::type('GroupCategory');
+        return \GraphQL::type('CertificateCategory');
     }
 
     public function args()
     {
         return [
             'name' => [
-                'description' => 'The name for the new GroupCategory',
+                'description' => 'The name for the new CertificateCategory',
                 'type' => Type::nonNull(Type::string()),
-                'rules' => ['required','string','max:255','unique:group_categories'],
+                'rules' => ['required','string','max:255','unique:certificate_categories'],
             ],
             'name_short' => [
                 'description' => 'A short version of the name.',
@@ -44,17 +44,17 @@ class CreateGroupCategoryMutation extends Mutation
                 'type' => Type::string(),
                 'rules' => ['nullable','string'],
             ],
-            'style' => [
-                'description' => 'The name of the style in which this category and all the groups of this category should be displayed',
-                'type' => Type::string(),
-                'rules' => ['nullable','string','max:63'],
+            'default_expire_years' => [
+                'description' => 'The default amount of years that a certificate of this category is valid.',
+                'type' => Type::int(),
+                'rules' => ['nullable','integer'],
             ]
         ];
     }
 
     public function resolve($root, $args)
     {
-        return GroupCategory::create($args);
+        return CertificateCategory::create($args);
     }
 
 }

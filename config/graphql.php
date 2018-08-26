@@ -143,47 +143,57 @@ return [
                 'me' => \App\GraphQL\Queries\MeQuery::class
             ],
             'mutation' => [
-                'createPerson' => \App\GraphQL\Mutations\Crud\CreatePersonMutation::class,
-                'updatePerson' => \App\GraphQL\Mutations\Crud\UpdatePersonMutation::class,
-                'deletePerson' => \App\GraphQL\Mutations\Crud\DeletePersonMutation::class,
+                'createPerson' => \App\GraphQL\Mutations\Crud\Create\CreatePersonMutation::class,
+                'updatePerson' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonMutation::class,
+                'deletePerson' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonMutation::class,
                 'restorePerson' => \App\GraphQL\Mutations\Crud\RestorePersonMutation::class,
 
-                'createPersonAddress' => \App\GraphQL\Mutations\Crud\CreatePersonAddressMutation::class,
+                'createPersonAddress' => \App\GraphQL\Mutations\Crud\Create\CreatePersonAddressMutation::class,
+                'deletePersonAddress' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonAddressMutation::class,
 
-                'createPersonEmailAddress' => \App\GraphQL\Mutations\Crud\CreatePersonEmailAddressMutation::class,
-                'updatePersonEmailAddress' => \App\GraphQL\Mutations\Crud\UpdatePersonPhoneNumberMutation::class,
+                'createPersonEmailAddress' => \App\GraphQL\Mutations\Crud\Create\CreatePersonEmailAddressMutation::class,
+                'updatePersonEmailAddress' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
+                'deletePersonEmailAddress' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonEmailAddressMutation::class,
 
-                'createPersonPhoneNumber' => \App\GraphQL\Mutations\Crud\CreatePersonPhoneNumberMutation::class,
-                'updatePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\UpdatePersonPhoneNumberMutation::class,
+                'createPersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Create\CreatePersonPhoneNumberMutation::class,
+                'updatePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Update\UpdatePersonPhoneNumberMutation::class,
+                'deletePersonPhoneNumber' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonPhoneNumberMutation::class,
 
-                'createPersonGroupConnection' => \App\GraphQL\Mutations\Crud\CreatePersonGroupConnectionMutation::class,
-                'deletePersonGroupConnection' => \App\GraphQL\Mutations\Crud\DeletePersonGroupConnectionMutation::class,
+                'createPersonGroupConnection' => \App\GraphQL\Mutations\Crud\Create\CreatePersonGroupConnectionMutation::class,
+                'deletePersonGroupConnection' => \App\GraphQL\Mutations\Crud\Delete\DeletePersonGroupConnectionMutation::class,
 
-                'createMembership' => \App\GraphQL\Mutations\Crud\CreateMembershipMutation::class,
-                'updateMembership' => \App\GraphQL\Mutations\Crud\UpdateMembershipMutation::class,
-                'deleteMembership' => \App\GraphQL\Mutations\Crud\DeleteMembershipMutation::class,
+                'createMembership' => \App\GraphQL\Mutations\Crud\Create\CreateMembershipMutation::class,
+                'updateMembership' => \App\GraphQL\Mutations\Crud\Update\UpdateMembershipMutation::class,
+                'deleteMembership' => \App\GraphQL\Mutations\Crud\Delete\DeleteMembershipMutation::class,
                 'newMembershipApplication' => \App\GraphQL\Mutations\NewMembershipApplicationMutation::class,
                 'startMembership' => \App\GraphQL\Mutations\StartMembershipMutation::class,
                 'stopMembership' => \App\GraphQL\Mutations\StopMembershipMutation::class,
 
-                'createGroup' => \App\GraphQL\Mutations\Crud\CreateGroupMutation::class,
-                'updateGroup' => \App\GraphQL\Mutations\Crud\UpdateGroupMutation::class,
+                'createGroup' => \App\GraphQL\Mutations\Crud\Create\CreateGroupMutation::class,
+                'updateGroup' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupMutation::class,
+                'deleteGroup' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupMutation::class,
 
-                'createGroupCategory' => \App\GraphQL\Mutations\Crud\CreateGroupCategoryMutation::class,
-                'updateGroupCategory' => \App\GraphQL\Mutations\Crud\UpdateGroupCategoryMutation::class,
+                'createGroupCategory' => \App\GraphQL\Mutations\Crud\Create\CreateGroupCategoryMutation::class,
+                'updateGroupCategory' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupCategoryMutation::class,
+                'deleteGroupCategory' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupCategoryMutation::class,
 
-                'createGroupEmailAddress' => \App\GraphQL\Mutations\Crud\CreateGroupEmailAddressMutation::class,
-                'updateGroupEmailAddress' => \App\GraphQL\Mutations\Crud\UpdateGroupEmailAddressMutation::class,
-                'deleteGroupEmailAddress' => \App\GraphQL\Mutations\Crud\DeleteGroupEmailAddressMutation::class,
+                'createGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Create\CreateGroupEmailAddressMutation::class,
+                'updateGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Update\UpdateGroupEmailAddressMutation::class,
+                'deleteGroupEmailAddress' => \App\GraphQL\Mutations\Crud\Delete\DeleteGroupEmailAddressMutation::class,
 
-                'createCertificateCategory' => \App\GraphQL\Mutations\Crud\CreateCertificateCategoryMutation::class,
-                'updateCertificateCategory' => \App\GraphQL\Mutations\Crud\UpdateCertificateCategoryMutation::class,
+                'createCertificateCategory' => \App\GraphQL\Mutations\Crud\Create\CreateCertificateCategoryMutation::class,
+                'updateCertificateCategory' => \App\GraphQL\Mutations\Crud\Update\UpdateCertificateCategoryMutation::class,
+                'deleteCertificateCategory' => \App\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
 
-                'createApp' => \App\GraphQL\Mutations\Crud\CreateAppMutation::class,
+                'createApp' => \App\GraphQL\Mutations\Crud\Create\CreateAppMutation::class,
 
-                'createOAuthClient' => \App\GraphQL\Mutations\CreateOAuthClientMutation::class,
+                'createCertificate' => \App\GraphQL\Mutations\Crud\Create\CreateCertificateMutation::class,
+                'updateCertificate' => \App\GraphQL\Mutations\Crud\Update\UpdateCertificateMutation::class,
+                'deleteCertificate' => \App\GraphQL\Mutations\Crud\Delete\DeleteCertificateCategoryMutation::class,
+
+                'createOAuthClient' => \App\GraphQL\Mutations\Crud\Create\CreateOAuthClientMutation::class,
+                'updateOAuthClient' => \App\GraphQL\Mutations\Crud\Update\UpdateOAuthClientMutation::class,
                 'revokeOAuthClient' => \App\GraphQL\Mutations\RevokeOAuthClientMutation::class,
-                'updateOAuthClient' => \App\GraphQL\Mutations\UpdateOAuthClientMutation::class,
                 'requestPersonalAccessToken' => \App\GraphQL\Mutations\RequestPersonalAccessTokenMutation::class,
             ],
             'middleware' => []

@@ -6,7 +6,7 @@
  * Time: 14:14
  */
 
-namespace App\GraphQL\Mutations;
+namespace App\GraphQL\Mutations\Crud\Update;
 
 
 use App\OAuth\Client;

@@ -6,7 +6,7 @@
  * Time: 14:14
  */
 
-namespace App\GraphQL\Mutations;
+namespace App\GraphQL\Mutations\Crud\Create;
 
 
 use App\Enums\OAuthClientType;

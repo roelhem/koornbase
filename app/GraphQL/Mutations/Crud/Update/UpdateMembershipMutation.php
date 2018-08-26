@@ -6,7 +6,7 @@
  * Time: 09:07
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Update;
 
 
 use App\Membership;
@@ -74,6 +74,8 @@ class UpdateMembershipMutation extends Mutation
         $application = array_get($args, 'application', $membership->application);
         $start = array_get($args, 'start', $membership->start);
         $end = array_get($args, 'end', $membership->end);
+
+        // TODO: CHECK CHRONOLOGICAL ORDER
 
         // Check if there is at least one date filled in
         if($application === null && $start === null && $end === null) {

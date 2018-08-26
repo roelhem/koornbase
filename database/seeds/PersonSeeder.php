@@ -39,7 +39,7 @@ class PersonSeeder extends Seeder
             $groups = \App\Group::query()
                 ->whereNotIn('slug', ['init','random'])
                 ->inRandomOrder()
-                ->limit($faker->numberBetween(1, 5))
+                ->limit($faker->numberBetween(0, 4))
                 ->get();
             $person->addGroups(...$groups);
 

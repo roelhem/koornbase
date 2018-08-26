@@ -6,7 +6,7 @@
  * Time: 02:31
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Delete;
 
 
 use App\Group;

@@ -6,7 +6,7 @@
  * Time: 03:02
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Update;
 
 
 

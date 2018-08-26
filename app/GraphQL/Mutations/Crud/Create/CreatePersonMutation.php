@@ -3,40 +3,39 @@
  * Created by PhpStorm.
  * User: roel
  * Date: 15-07-18
- * Time: 06:19
+ * Time: 05:57
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Create;
 
 use App\Person;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
 
-class UpdatePersonMutation extends Mutation
+
+
+class CreatePersonMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'UpdatePerson'
+        'name' => 'CreatePerson'
     ];
 
+    /** @inheritdoc */
     public function type()
     {
         return GraphQL::type('Person');
     }
 
+    /** @inheritdoc */
     public function args()
     {
         return [
-            'id' => [
-                'name' => 'id',
-                'type' => Type::nonNull(Type::id()),
-                'rules' => ['required']
-            ],
             'name_first' => [
                 'name' => 'name_first',
-                'type' => Type::string(),
-                'rules' => ['sometimes','required','string','max:255']
+                'type' => Type::nonNull(Type::string()),
+                'rules' => ['required','string','max:255']
             ],
             'name_middle' => [
                 'name' => 'name_middle',
@@ -50,8 +49,8 @@ class UpdatePersonMutation extends Mutation
             ],
             'name_last' => [
                 'name' => 'name_last',
-                'type' => Type::string(),
-                'rules' => ['sometimes','required','string','max:255']
+                'type' => Type::nonNull(Type::string()),
+                'rules' => ['required','string','max:255']
             ],
             'name_initials' => [
                 'name' => 'name_initials',
@@ -71,26 +70,10 @@ class UpdatePersonMutation extends Mutation
         ];
     }
 
-    /**
-     * Updates the person.
-     *
-     * @param mixed $root
-     * @param array $args
-     * @return Person
-     * @throws
-     */
+    /** Creates a new person */
     public function resolve($root, $args)
     {
-        $id = array_get($args,'id');
-        if($id === null) {
-            return null;
-        }
-        /** @var Person $person */
-        $person = Person::findOrFail($id);
-
-        $person->fill($args);
-        $person->saveOrFail();
-        return $person;
+        return Person::create($args);
     }
 
 }

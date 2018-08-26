@@ -2,23 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 17-08-18
- * Time: 03:33
+ * Date: 26-08-18
+ * Time: 17:11
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Update;
 
 
-
+use App\Certificate;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
 
-class CreateCertificateMutation extends Mutation
+class UpdateCertificateMutation extends Mutation
 {
 
     protected $attributes = [
-        'name' => 'createCertificate',
-        'description' => 'Creates a new certificate entry in the database.'
+        'name' => 'updateCertificate',
+        'description' => 'Updates the values of a `Certificate`.'
     ];
 
     public function type()
@@ -29,18 +29,13 @@ class CreateCertificateMutation extends Mutation
     public function args()
     {
         return [
-            'category_id' => [
-                'description' => 'The CertificateCategory of the new Certificate',
+            'id' => [
+                'description' => 'The `ID` of the `Certificate` that should be updated.',
                 'type' => Type::nonNull(Type::id()),
-                'rules' => ['required','exists:certificate_categories'],
-            ],
-            'person_id' => [
-                'description' => 'The `ID` of the Person for whom this Certificate is valid.',
-                'type' => Type::nonNull(Type::id()),
-                'rules' => ['required','exists:persons'],
+                'rules' => ['required','exists:certificates,id'],
             ],
             'examination_at' => [
-                'description' => 'The date on which the examination of the new Certificate took/will take place.',
+                'description' => 'The date on which the examination of the Certificate took/will take place.',
                 'type' => \GraphQL::type('Date'),
                 'rules' => ['nullable','date'],
             ],
@@ -60,15 +55,33 @@ class CreateCertificateMutation extends Mutation
                 'rules' => ['nullable','date'],
             ],
             'remarks' => [
-                'description' => 'Some remarks regarding this new Certificate',
+                'description' => 'Some remarks regarding this new Certificate.',
                 'type' => Type::string(),
-                'rules' => ['nullable','date'],
+                'rules' => ['nullable','string'],
             ]
         ];
     }
 
-    public function resolve($root, $args) {
-        // TODO
-    }
+    /**
+     * @param $root
+     * @param $args
+     * @throws \Throwable
+     * @return Certificate
+     */
+    public function resolve($root, $args)
+    {
+        // Find the Certificate model
+        $id = array_get($args,'id');
+        /** @var Certificate $certificate */
+        $certificate = Certificate::findOrFail($id);
 
+        // TODO: Validate the chronological order
+
+        // Load the new values and save.
+        $certificate->fill(array_except($args, 'id'));
+        $certificate->saveOrFail();
+
+        // Return the updated Certificate
+        return $certificate;
+    }
 }

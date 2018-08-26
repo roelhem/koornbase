@@ -6,7 +6,7 @@
  * Time: 04:36
  */
 
-namespace App\GraphQL\Mutations\Crud;
+namespace App\GraphQL\Mutations\Crud\Update;
 
 
 use App\PersonEmailAddress;
