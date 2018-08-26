@@ -25,6 +25,15 @@
 
                 <b-col lg="4">
 
+                    <div class="mb-2">
+                        <b-button block>
+                            <base-icon :icon="{fa:'pencil',fe:'edit'}"
+                                       :from="['fe','fa']"
+                                       class="mr-2" />
+                            Groep-categori&euml;en bewerken&hellip;
+                        </b-button>
+                    </div>
+
                     <show-group-category-list-card :highlighted.sync="highlightedCategory"
                                                    v-model="selectedCategories"
                     />

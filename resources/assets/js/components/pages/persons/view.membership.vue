@@ -3,42 +3,18 @@
     <b-container>
         <b-row>
             <b-col lg="6">
-                <tabler-card title="Lidmaatschap" status="red" collapsible>
-                    <ul class="timeline">
-                        <li class="timeline-item">
-                            <div class="timeline-badge bg-yellow"></div>
-                            Inschrijving
-                            <div class="timeline-time">12 januari 2018</div>
-                        </li>
 
-                        <li class="timeline-item">
-                            <span class="text-muted-dark">Kennismakerstijd</span>
-                            <div class="timeline-time">3 maanden</div>
-                        </li>
+            </b-col>
+            <b-col lg="6">
+                <display-membership-card v-for="(membership) in person.memberships"
+                                         :key="membership.id"
+                                         :membership="membership"
+                                         :person-id="personId"
+                />
 
-                        <li class="timeline-item">
-                            <div class="timeline-badge bg-green"></div>
-                            Inauguratie
-                            <div class="timeline-time">12 februari 2019</div>
-                        </li>
-
-                        <li class="timeline-item">
-                            <span class="text-muted-dark">Lidmaatschap</span>
-                            <div class="timeline-time">1 jaar</div>
-                        </li>
-
-                        <li class="timeline-item">
-                            <div class="timeline-badge bg-red"></div>
-                            Uitschrijving
-                            <div class="timeline-time">1 september 2020</div>
-                        </li>
-
-                        <li class="timeline-item">
-                            <span class="text-muted-dark">Oud-lid</span>
-                            <div class="timeline-time">1 jaar</div>
-                        </li>
-                    </ul>
-                </tabler-card>
+                <div class="mb-4" v-if="canApplyToMembership && !$apollo.loading">
+                    <b-button block>Nieuwe inschrijving toevoegen...</b-button>
+                </div>
             </b-col>
         </b-row>
 
@@ -49,9 +25,49 @@
 
 <script>
     import TablerCard from "../../TablerCard";
+    import DisplayMembershipCard from "../../DisplayMembershipCard";
+    import { getPersonMembershipsQuery } from "../../../graphql/queries/persons.graphql";
 
     export default {
-        components: {TablerCard},
+        components: {
+            DisplayMembershipCard,
+            TablerCard
+        },
+
+        apollo: {
+            person: {
+                query: getPersonMembershipsQuery,
+                variables() {
+                    return {
+                        id:this.personId
+                    };
+                }
+            }
+        },
+
+        data() {
+            return {
+                person: {
+                    id:"-1",
+                    memberships:[]
+                },
+
+            }
+        },
+
+        props: {
+            personId:{
+                type:[String,Number],
+                required:true,
+            },
+        },
+
+        computed: {
+            canApplyToMembership() {
+                return this.person.memberships.every(membership => membership.status === 'FORMER_MEMBER' || membership.status === 'OUTSIDER');
+            }
+        },
+
         name: "page-person-membership"
     }
 </script>

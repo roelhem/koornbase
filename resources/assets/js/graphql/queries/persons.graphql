@@ -153,3 +153,17 @@ query getPersonAddressesQuery($id: ID!) {
     }
 }
 
+
+query getPersonMembershipsQuery($id: ID!) {
+    person(id:$id) {
+        id,
+        memberships {
+            id
+            application
+            start
+            end
+            status
+            remarks
+        }
+    }
+}
