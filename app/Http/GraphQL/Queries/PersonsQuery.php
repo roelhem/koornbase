@@ -49,6 +49,11 @@ class PersonsQuery extends ModelListQuery
             'inAnyGroup' => [
                 'type' => Type::listOf(Type::id()),
                 'description' => 'Filters the persons that are in at least one of the provided groups.'
+            ],
+
+            'notInGroup' => [
+                'type' => Type::id(),
+                'description' => 'Filters the persons that are not in the group with the provided `ID`.'
             ]
 
         ]);

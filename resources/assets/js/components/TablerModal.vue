@@ -5,6 +5,10 @@
             <span></span>
         </template>
 
+        <template slot="modal-title">
+            <slot name="title">{{ title }}</slot>
+        </template>
+
         <template v-if="withLoader">
             <tabler-dimmer :active="busy">
                 <slot />
@@ -95,7 +99,6 @@
             bModalProps() {
                 return {
                     id: this.id,
-                    title: this.title,
                     titleTag: this.titleTag,
 
                     size:this.size,

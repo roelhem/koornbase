@@ -73,5 +73,17 @@ class PersonFilter extends ModelFilter
         });
     }
 
+    /**
+     * Filter that only returns the persons that are not in the provided group.
+     *
+     * @param $groupId
+     */
+    public function notInGroup($groupId) {
+        $this->query->whereDoesntHave('groups',function($query) use ($groupId) {
+            /** @var Builder $query */
+            $query->where('id',$groupId);
+        });
+    }
+
 
 }

@@ -14,7 +14,7 @@ mutation updateGroupNames($id:ID!, $name:String,$name_short:String,$member_name:
     }
 }
 
-mutation updateGroupEmailAddress($id:ID!, $email_address:String, $remarks:String) {
+mutation updateGroupEmailAddress($id:ID!, $email_address:Email, $remarks:String) {
     updateGroupEmailAddress(id:$id, email_address:$email_address, remarks:$remarks) {
         id
         group_id
@@ -22,7 +22,7 @@ mutation updateGroupEmailAddress($id:ID!, $email_address:String, $remarks:String
     }
 }
 
-mutation addEmailAddressToGroup($group_id:ID!, $email_address:String!) {
+mutation addEmailAddressToGroup($group_id:ID!, $email_address:Email!) {
     createGroupEmailAddress(group_id:$group_id, email_address:$email_address) {
         id
         group_id

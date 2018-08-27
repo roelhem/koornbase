@@ -3,7 +3,15 @@
 
         <template slot="option" slot-scope="{ option }">
             <base-avatar v-bind="option.avatar" default-style="person-default" size="sm" style="vertical-align: middle" />
-            <span class="ml-1">{{ option.name }}</span>
+            <span class="ml-1">
+                {{ option.name_first }}
+                <span v-if="option.name_nickname" style="opacity: 0.6">
+                    [<span class="font-italic">{{ option.name_nickname }}</span>]
+                </span>
+                {{ option.name_prefix }}
+                {{ option.name_last }}
+
+            </span>
         </template>
 
         <template slot="singleLabel" slot-scope="{ option }">

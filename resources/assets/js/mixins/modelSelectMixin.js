@@ -112,13 +112,12 @@ export default {
         noBorder: {
             type:Boolean,
             default:false,
-        }
+        },
     },
 
 
     data() {
         let res =  {
-            selected:this.getInitSelectedData(),
             searchQuery:null
         };
 
@@ -181,7 +180,7 @@ export default {
             return {
                 id: this.id,
                 options: this.selectOptions,
-                value: this.selected,
+                value: this.value,
                 multiple: this.multiple,
                 trackBy: this.trackBy,
                 label: this.label,
@@ -250,9 +249,7 @@ export default {
         // EVENT HANDLERS
 
         inputHandler(value, id) {
-            this.selected = value;
-            this.$emit('input', this.getSelectedValue(), id);
-            this.$emit('change', this.selected, id);
+            this.$emit('input', value, id);
         },
 
         selectHandler(selectedOption, id) {
@@ -294,17 +291,6 @@ export default {
                 [this.valueKey]: value,
                 needsLoading: true
             };
-        },
-
-
-        getInitSelectedData() {
-            if(this.multiple) {
-                if(!Array.isArray(this.value)) {
-                    return [];
-                }
-                return this.value.map(item => this.getOptionFromValue(item));
-            }
-            return this.getOptionFromValue(this.value);
         },
 
 
