@@ -6,13 +6,12 @@ use App\Membership;
 use App\Person;
 use Carbon\Carbon;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MembershipTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
 
     /**
@@ -22,26 +21,15 @@ class MembershipTest extends TestCase
      */
     public function testBasicIndex()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get("/api/memberships")->assertStatus(200)
             ->assertJsonCount(0, 'data');
 
-        $memberships = factory(Membership::class, 5)->create();
+        factory(Membership::class, 5)->create();
 
         $this->get("/api/memberships")->assertStatus(200)
-            ->assertJsonCount(5, 'data')
-            /*->assertJson([
-                'data' => $memberships->map(function($membership) {
-                    return [
-                        'id' => $membership->id,
-                        'application' => $membership->application->toDateString(),
-                        'start' => $membership->start->toDateString(),
-                        'end' => $membership->end->toDateString(),
-                        'status' => $membership->status->jsonSerialize()
-                    ];
-                })->all()
-            ])*/;
+            ->assertJsonCount(5, 'data');
     }
 
     /**
@@ -49,7 +37,7 @@ class MembershipTest extends TestCase
      */
     public function testBasicStore()
     {
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
         $this->defaultHeaders = ['Accept', 'application/json'];
 
         $this->postJson("/api/memberships", [])->assertStatus(422);
@@ -121,48 +109,34 @@ class MembershipTest extends TestCase
      */
     public function testBasicShow()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get("/api/memberships/1")->assertStatus(404);
 
         $membershipA = factory(Membership::class)->create();
 
-        $this->get("/api/memberships/{$membershipA->id}")->assertStatus(200)
-            /*->assertJson([
-                'data' => [
-                    'id' => $membershipA->id,
-                    'application' => $membershipA->application->toDateString(),
-                    'start' => $membershipA->start->toDateString(),
-                    'end' => $membershipA->end->toDateString(),
-                    'status' => $membershipA->status->jsonSerialize()
-                ]
-            ])*/;
+        $this->get("/api/memberships/{$membershipA->id}")->assertStatus(200);
 
         $membershipB = factory(Membership::class)->states('novice')->create();
 
-        $this->get("/api/memberships/{$membershipB->id}")->assertStatus(200)
-            /*->assertJson([
-                'data' => [
-                    'id' => $membershipB->id,
-                    'application' => $membershipB->application->toDateString(),
-                    'start' => null,
-                    'end' => null,
-                    'status' => $membershipB->status->jsonSerialize()
-                ]
-            ])*/;
+        $this->get("/api/memberships/{$membershipB->id}")->assertStatus(200);
     }
 
     /**
      * Tests the basic usage of the update endpoint
+     *
+     * @throws
      */
     public function testBasicUpdate()
     {
-        $user = $this->asAdmin();
+        $this->asSuper();
 
         // Update a non-existant membership
         $this->putJson("/api/memberships/1")->assertStatus(404);
 
+        /** @var Membership $membership */
         $membership = factory(Membership::class)->create();
+        /** @var Person $person */
         $person = $membership->person;
 
         // Send an empty update request
@@ -285,6 +259,7 @@ class MembershipTest extends TestCase
         ]);
 
         // Do not overlap a membership below
+        /** @var Membership $lowerMembership */
         $lowerMembership = $person->memberships()->create(['end' => $date_before]);
         $this->assertDatabaseHas('memberships', [
             'id' => $lowerMembership->id,
@@ -312,6 +287,7 @@ class MembershipTest extends TestCase
         ]);
 
         // Do not overlap a membership above
+        /** @var Membership $upperMembership */
         $upperMembership = $person->memberships()->create(['start' => $date_after]);
         $this->assertDatabaseHas('memberships', [
             'id' => $upperMembership->id,
@@ -348,7 +324,7 @@ class MembershipTest extends TestCase
      */
     public function testBasicDestroy()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->delete("/api/memberships/1")->assertStatus(404);
 

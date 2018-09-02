@@ -6,20 +6,19 @@ use App\Person;
 use App\PersonAddress;
 use Faker\Factory as FakerFactory;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PersonAddressTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * Tests the basic usage of the index endpoint
      */
     public function testBasicIndex()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->getJson("/api/person-addresses")->assertStatus(200);
     }
@@ -29,7 +28,7 @@ class PersonAddressTest extends TestCase
      */
     public function testBasicStore()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $nlFaker = FakerFactory::create('nl_NL');
         $usFaker = FakerFactory::create('en_US');
@@ -135,7 +134,7 @@ class PersonAddressTest extends TestCase
      */
     public function testLabelUniqueStore() {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         $nlFaker = FakerFactory::create('nl_NL');
 
@@ -205,7 +204,7 @@ class PersonAddressTest extends TestCase
      */
     public function testBasicShow()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->getJson("/api/person-addresses/0")->assertStatus(404);
 
@@ -221,7 +220,7 @@ class PersonAddressTest extends TestCase
      */
     public function testBasicUpdate()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $nlFaker = FakerFactory::create('nl_NL');
         $usFaker = FakerFactory::create('en_US');
@@ -316,7 +315,7 @@ class PersonAddressTest extends TestCase
      */
     public function testIndexUpdate() {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $personAddress = factory(PersonAddress::class)->create(['person_id' => $person->id]);
@@ -353,7 +352,7 @@ class PersonAddressTest extends TestCase
      */
     public function testUniqueLabelUpdate() {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $personAddresses = factory(PersonAddress::class, 3)->create(['person_id' => $person->id]);

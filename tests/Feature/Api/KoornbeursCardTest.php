@@ -4,17 +4,13 @@ namespace Tests\Feature\Api;
 
 use App\KoornbeursCard;
 use App\Person;
-use App\User;
-use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class KoornbeursCardTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * Tests the basic usage of the index endpoint
@@ -23,7 +19,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicIndex()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get("/api/koornbeurs-cards")->assertStatus(200)
             ->assertJsonCount(0, 'data');
@@ -49,7 +45,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicShow()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get("/api/koornbeurs-cards/1")->assertStatus(404);
         $this->get("/api/koornbeurs-cards/v_n")->assertStatus(404);
@@ -81,7 +77,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicStore()
     {
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
 
         // TEST INVALID INPUT
         $card = factory(KoornbeursCard::class)->make();
@@ -165,7 +161,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicUpdate() {
 
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
 
         $this->putJson("/api/koornbeurs-cards/_test")->assertStatus(404);
         $this->patchJson("/api/koornbeurs-cards/2")->assertStatus(404);
@@ -256,7 +252,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicDelete() {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->delete("/api/koornbeurs-cards/1")->assertStatus(404);
         $this->delete("/api/koornbeurs-cards/_test")->assertStatus(404);

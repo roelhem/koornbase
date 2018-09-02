@@ -4,15 +4,12 @@ namespace Tests\Feature\Api;
 
 use App\Group;
 use App\Person;
-use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GroupTest extends TestCase
 {
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * A basic test example.
@@ -21,7 +18,7 @@ class GroupTest extends TestCase
      */
     public function testAttachPerson()
     {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         // Check if the not-found works properly
         $this->postJson("/api/groups/1/attach" , [])->assertStatus(404);
@@ -89,7 +86,7 @@ class GroupTest extends TestCase
      */
     public function testPersonDetach()
     {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         // Check when group does not exist
         $this->postJson("/api/groups/1/detach")->assertStatus(404);
@@ -152,7 +149,7 @@ class GroupTest extends TestCase
      */
     public function testPersonSync()
     {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         // Database structure
         $group = factory(Group::class)->create();

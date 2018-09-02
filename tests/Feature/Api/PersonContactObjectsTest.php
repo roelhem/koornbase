@@ -6,15 +6,13 @@ use App\Person;
 use App\PersonAddress;
 use App\PersonEmailAddress;
 use App\PersonPhoneNumber;
-use function foo\func;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PersonContactObjectsTest extends TestCase
 {
 
-    use UsePassportAsAdmin, RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * Gives the different types of contact-objects
@@ -56,7 +54,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testBasicIndex($class, $path)
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->getJson($path)->assertStatus(200)
             ->assertJsonCount(0, 'data');
@@ -77,7 +75,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testBasicShow($class, $path)
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         // Empty request
         $this->getJson($path."/0")->assertStatus(404);
@@ -119,7 +117,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testStoreBasic($class, $path, $requiredValues)
     {
-        $this->asAdmin();
+        $this->asSuper();
         $table = factory($class)->make()->getTable();
 
         $person = factory(Person::class)->create();
@@ -170,7 +168,7 @@ class PersonContactObjectsTest extends TestCase
 
         // PREPARING THE TEST
 
-        $this->asAdmin();
+        $this->asSuper();
         $table = factory($class)->make()->getTable();
         $persons = factory(Person::class, 2)->create();
 
@@ -248,7 +246,7 @@ class PersonContactObjectsTest extends TestCase
     public function testStoreUniqueLabel($class, $path, $requiredValues) {
 
         // PREPARATION
-        $this->asAdmin();
+        $this->asSuper();
         $persons = factory(Person::class, 2)->create();
 
         $params = function($label, $person = 0) use ($persons, $requiredValues) {
@@ -276,7 +274,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testUpdateBasic($class, $path) {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->putJson("{$path}/0", [])->assertStatus(404);
 
@@ -296,7 +294,7 @@ class PersonContactObjectsTest extends TestCase
     public function testUpdateIndexValues($class, $path) {
 
         // PREPARATION
-        $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $models = factory($class, 5)->create(['person_id' => $person->id]);
@@ -349,7 +347,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testUpdateUniqueLabel($class, $path) {
 
-        $this->asAdmin();
+        $this->asSuper();
 
         // For multiple persons
         $persons = factory(Person::class, 2)->create();
@@ -386,7 +384,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testDeleteBasic($class, $path)
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->deleteJson("{$path}/0")->assertStatus(404);
 
@@ -408,7 +406,7 @@ class PersonContactObjectsTest extends TestCase
      */
     public function testDeleteIndexValues($class, $path)
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $modelA = factory($class)->create(['person_id' => $person]);

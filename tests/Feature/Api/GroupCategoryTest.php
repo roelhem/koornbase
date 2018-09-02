@@ -3,16 +3,13 @@
 namespace Tests\Feature\Api;
 
 use App\GroupCategory;
-use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GroupCategoryTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * Tests the basic usage of the index endpoint
@@ -21,7 +18,7 @@ class GroupCategoryTest extends TestCase
      */
     public function testIndex()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get('/api/group-categories')
             ->assertStatus(200)
@@ -41,7 +38,7 @@ class GroupCategoryTest extends TestCase
      */
     public function testShow()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->get('/api/group-categories/1')->assertStatus(404);
 
@@ -67,7 +64,7 @@ class GroupCategoryTest extends TestCase
      */
     public function testStore()
     {
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
 
         $this->postJson('/api/group-categories', [])->assertStatus(422);
 
@@ -122,7 +119,7 @@ class GroupCategoryTest extends TestCase
      */
     public function testUpdate()
     {
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
 
         $this->putJson('/api/group-categories/1', [])->assertStatus(404);
 
@@ -168,7 +165,7 @@ class GroupCategoryTest extends TestCase
      * Testing the basic usage of the delete endpoint
      */
     public function testDelete() {
-        $user = $this->asAdmin();
+        $user = $this->asSuper();
 
         $this->delete("/api/group-categories/1")->assertStatus(404);
 

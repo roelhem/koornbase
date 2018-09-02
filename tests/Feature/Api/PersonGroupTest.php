@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class PersonGroupTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * Tests the enpoint to attach a new group to this person.
@@ -20,7 +20,7 @@ class PersonGroupTest extends TestCase
      */
     public function testGroupAttach()
     {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         $this->postJson('/api/persons/0/attach', [])->assertStatus(404);
 
@@ -72,7 +72,7 @@ class PersonGroupTest extends TestCase
     }
 
     public function testGroupDetach() {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $groups = factory(Group::class, 5)->create();
@@ -120,7 +120,7 @@ class PersonGroupTest extends TestCase
     }
 
     public function testGroupSync() {
-        $admin = $this->asAdmin();
+        $this->asSuper();
 
         $person = factory(Person::class)->create();
         $groups = factory(Group::class, 4)->create();

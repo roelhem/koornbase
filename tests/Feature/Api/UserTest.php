@@ -11,14 +11,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class UserTest extends TestCase
 {
 
-    use RefreshDatabase, UsePassportAsAdmin;
+    use RefreshDatabase;
 
     /**
      * Tests the basic index endpoint usage.
      */
     public function testBasicIndex()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         factory(User::class, 4)->create();
 
@@ -43,7 +43,7 @@ class UserTest extends TestCase
      */
     public function testBasicStore()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         // Empty request
         $this->postJson("/api/users",[])->assertStatus(422);
@@ -119,7 +119,7 @@ class UserTest extends TestCase
      */
     public function testBasicShow()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->getJson("/api/users/0")->assertStatus(404);
         $this->getJson("/api/users/bla")->assertStatus(404);
@@ -151,7 +151,7 @@ class UserTest extends TestCase
      */
     public function testBasicUpdate()
     {
-        $this->asAdmin();
+        $this->asSuper();
 
         $this->putJson("/api/users/0", [])->assertStatus(404);
         $this->putJson("/api/users/bla", [])->assertStatus(404);
