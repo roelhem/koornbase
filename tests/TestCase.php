@@ -58,4 +58,35 @@ abstract class TestCase extends BaseTestCase
         $this->asUser($user);
         return $user;
     }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- GraphQL REQUESTS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * Sends a GraphQL request with the provided query and variables
+     *
+     * @param string $query
+     * @param bool|array $variables
+     * @param string $endpoint
+     * @return \Illuminate\Foundation\Testing\TestResponse
+     */
+    public function graphql($query, $variables = false, $endpoint = '/graphql') {
+
+        if(is_string($query)) {
+            $params = [
+                'query' => $query
+            ];
+        } elseif(is_array($query)) {
+            $params = $query;
+        } else {
+            throw new \InvalidArgumentException("The query variable has to be a string (with the query) or array (with the parameters).");
+        }
+
+        if($variables && is_array($variables)) {
+            $params[config('graphql.params_key')] = $variables;
+        }
+
+        return $this->postJson($endpoint, $params, ['Accept','application/json']);
+    }
 }

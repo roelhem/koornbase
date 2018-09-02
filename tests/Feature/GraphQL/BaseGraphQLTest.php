@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\GraphQL;
 
+use GraphQL\Utils\SchemaPrinter;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,8 +14,21 @@ class BaseGraphQLTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testGetSchema()
     {
-        $this->assertTrue(true);
+        $this->asSuper();
+
+        echo SchemaPrinter::doPrint(\GraphQL::schema());
+
+        $this->graphql(/** @lang GraphQL */"
+        {
+            __schema {
+                types {
+                    name
+                    description
+                }
+            }
+        }
+        ")->assertStatus(200);
     }
 }

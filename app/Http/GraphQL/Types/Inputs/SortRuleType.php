@@ -80,7 +80,7 @@ class SortRuleType extends GraphQLType
             'dir' => [
                 'type' => GraphQL::type('SortOrderDirection'),
                 'description' => 'The direction on which the sort should be performed.',
-                'defaultValue' => SortOrderDirection::ASC
+                'defaultValue' => SortOrderDirection::ASC()
             ]
         ];
     }
