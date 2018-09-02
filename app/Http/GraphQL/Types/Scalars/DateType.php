@@ -12,10 +12,15 @@ namespace App\Http\GraphQL\Types\Scalars;
 class DateType extends DateTimeType
 {
 
-    protected $format = 'Y-m-d';
-
     protected $attributes = [
-        'name' => 'Date'
+        'name' => 'Date',
+        'description' => 'The `Date` scalar type represents a specific day (date). It\'s JSON-value is a `string` formatted like "`yyyy-mm-dd`".'
     ];
+
+    /** @inheritdoc */
+    protected function getFormat()
+    {
+        return config('graphql.output_formats.date');
+    }
 
 }

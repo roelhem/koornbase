@@ -288,6 +288,11 @@ return [
     // You can set the key, which will be used to retrieve the dynamic variables
     'params_key'    => 'variables',
 
+    'output_formats' => [
+        'date' => 'Y-m-d',
+        'datetime' => 'Y-m-d H:i:s',
+    ],
+
     /*
      * Options to limit the query complexity and depth. See the doc
      * @ https://github.com/webonyx/graphql-php#security

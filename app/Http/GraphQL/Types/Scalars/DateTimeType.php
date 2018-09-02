@@ -18,17 +18,24 @@ use GraphQL\Language\AST\StringValueNode;
 class DateTimeType extends ScalarType
 {
 
-    protected $format = 'Y-m-d H:i:s';
-
     protected $attributes = [
         'name' => 'DateTime',
         'description' => 'The `DateTime` scalar type represents a specific moment (date and time). It\'s JSON-value is a `string` formatted like "`yyyy-mm-dd hh:ii:ss`".'
     ];
 
+    /**
+     * Returns the format in which the DateTime-object should be outputted in the response.
+     *
+     * @return string
+     */
+    protected function getFormat() {
+        return config('graphql.output_formats.datetime');
+    }
+
     /** @inheritdoc */
     public function serialize($value)
     {
-        return \Parse::date($value)->format($this->format);
+        return \Parse::date($value)->format($this->getFormat());
     }
 
     /** @inheritdoc */
