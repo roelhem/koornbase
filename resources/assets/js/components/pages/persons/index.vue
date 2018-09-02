@@ -329,7 +329,7 @@
 
             inAnyGroup() {
                 if(this.filters.groups.active) {
-                    return this.filters.groups.value;
+                    return this.filters.groups.value.map(group => group.id);
                 } else {
                     return null;
                 }
