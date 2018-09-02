@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laravel\Passport\Passport;
 use Roelhem\RbacGraph\Contracts\Nodes\Node;
 use Roelhem\RbacGraph\Exceptions\RbacGraphException;
+use Tests\Helpers\GraphQLTestResponse;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -69,7 +70,7 @@ abstract class TestCase extends BaseTestCase
      * @param string $query
      * @param bool|array $variables
      * @param string $endpoint
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return GraphQLTestResponse
      */
     public function graphql($query, $variables = false, $endpoint = '/graphql') {
 
@@ -87,6 +88,7 @@ abstract class TestCase extends BaseTestCase
             $params[config('graphql.params_key')] = $variables;
         }
 
-        return $this->postJson($endpoint, $params, ['Accept','application/json']);
+        $response = $this->postJson($endpoint, $params, ['Accept','application/json']);
+        return new GraphQLTestResponse($response);
     }
 }

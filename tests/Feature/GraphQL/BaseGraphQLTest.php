@@ -2,33 +2,48 @@
 
 namespace Tests\Feature\GraphQL;
 
-use GraphQL\Utils\SchemaPrinter;
+use Tests\Helpers\GraphQLTestResponse;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BaseGraphQLTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     /**
-     * A basic test example.
+     * Tests if the GraphQLTestResponse class is working properly
      *
-     * @return void
+     * @throws
      */
-    public function testGetSchema()
+    public function testTestResponse()
     {
+        $validQuery = /** @lang GraphQL */'{ __type(name:"Int") { name }}';
+
+        // An unauthenticated GraphQL response
+        $unauthenticatedResponse = $this->graphql($validQuery);
+        $this->assertInstanceOf(GraphQLTestResponse::class, $unauthenticatedResponse);
+        $unauthenticatedResponse->assertErrors()->assertStatus(401);
+
+        // Use the Super-user
         $this->asSuper();
 
-        echo SchemaPrinter::doPrint(\GraphQL::schema());
+        // An valid response
+        $validResponse = $this->graphql($validQuery);
+        $this->assertInstanceOf(GraphQLTestResponse::class, $validResponse);
+        $validResponse
+            ->assertGraphQLResponse()
+            ->assertGraphQLNoErrors()
+            ->assertNoErrors()
+            ->assertData(['__type'=>['name'=>'Int']]);
 
-        $this->graphql(/** @lang GraphQL */"
-        {
-            __schema {
-                types {
-                    name
-                    description
-                }
-            }
-        }
-        ")->assertStatus(200);
+        // An invalid response
+        $wrongResponse = $this->graphql("{wrong}");
+        $this->assertInstanceOf(GraphQLTestResponse::class, $wrongResponse);
+        $wrongResponse
+            ->assertGraphQLResponse()
+            ->assertGraphQLErrors()
+            ->assertErrors()
+            ->assertData(null);
     }
 }
