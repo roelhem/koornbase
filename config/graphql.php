@@ -287,6 +287,7 @@ return [
 
     // You can set the key, which will be used to retrieve the dynamic variables
     'params_key'    => 'variables',
+    'operation_name_key' => 'operationName',
 
     'output_formats' => [
         'date' => 'Y-m-d',

@@ -1,0 +1,36 @@
+
+mutation testCreatePerson(
+    $name_first:String!
+    $name_initials:String
+    $name_last:String!
+    $name_middle:String
+    $name_prefix:String
+    $name_nickname:String
+    $birth_date:Date
+    $remarks:String
+) {
+    createPerson(
+        name_first:$name_first
+        name_initials:$name_initials
+        name_last:$name_last
+        name_middle:$name_middle
+        name_prefix:$name_prefix
+        name_nickname:$name_nickname
+        birth_date:$birth_date
+        remarks:$remarks
+    ) { id }
+}
+
+mutation testCreateCertificateCategory(
+    $name:String!
+    $name_short:String,
+    $description:String,
+    $default_expire_years:Int
+) {
+    createCertificateCategory(
+        name:$name,
+        name_short:$name_short,
+        description:$description,
+        default_expire_years:$default_expire_years
+    ) { id }
+}

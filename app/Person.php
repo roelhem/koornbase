@@ -37,6 +37,7 @@ use App\Traits\Userstamps;
  * @property integer|null $updated_by
  * @property Carbon|null $deleted_at
  * @property integer|null $deleted_by
+ * @property string $name_initials
  * @property-read string $avatar_letters
  * @property-read AvatarType $avatar
  * @property-read integer|null $age
@@ -63,7 +64,6 @@ use App\Traits\Userstamps;
  * @property-read \App\Person $owner
  * @property-read \App\PersonPhoneNumber $phoneNumber
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\PersonPhoneNumber[] $phoneNumbers
- * @property-write mixed $name_initials
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Person filter($input = array(), $filter = null)
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Person formerMember($at = null)

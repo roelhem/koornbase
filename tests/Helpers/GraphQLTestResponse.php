@@ -202,6 +202,23 @@ class GraphQLTestResponse extends TestResponse
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
+     * Returns the data of the GraphQL-response.
+     *
+     * @param null|string|array $key
+     * @return mixed
+     * @throws
+     */
+    public function data($key = null)
+    {
+        $jsonData = $this->decodeResponseJson('data');
+        if($key !== null) {
+            return array_get($jsonData, $key);
+        } else {
+            return $jsonData;
+        }
+    }
+
+    /**
      * Returns the array object that creates a json-array of a GraphQL-response that corresponds with provided
      * data.
      *

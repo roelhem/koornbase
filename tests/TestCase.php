@@ -68,12 +68,14 @@ abstract class TestCase extends BaseTestCase
      * Sends a GraphQL request with the provided query and variables
      *
      * @param string $query
-     * @param bool|array $variables
+     * @param array|null $variables
+     * @param string|null $operationName
      * @param string $endpoint
      * @return GraphQLTestResponse
      */
-    public function graphql($query, $variables = false, $endpoint = '/graphql') {
+    public function graphql($query, $variables = null, $operationName = null, $endpoint = '/graphql') {
 
+        // Determine the parameters of the GraphQL-request
         if(is_string($query)) {
             $params = [
                 'query' => $query
@@ -84,8 +86,14 @@ abstract class TestCase extends BaseTestCase
             throw new \InvalidArgumentException("The query variable has to be a string (with the query) or array (with the parameters).");
         }
 
-        if($variables && is_array($variables)) {
+        // Add the variables to the GraphQL-request if the $variables are set
+        if($variables !== null && is_array($variables)) {
             $params[config('graphql.params_key')] = $variables;
+        }
+
+        // Add the operation to the GraphQL-request if the $operationName is set
+        if($operationName !== null) {
+            $params[config('graphql.operation_name_key')] = $operationName;
         }
 
         $response = $this->postJson($endpoint, $params, ['Accept','application/json']);
