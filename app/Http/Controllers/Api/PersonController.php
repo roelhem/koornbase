@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 
 
 
+use App\Contracts\Finders\FinderCollection;
 use App\Http\Requests\Api\PersonStoreRequest;
 use App\Http\Requests\Api\PersonUpdateRequest;
 use App\Person;
+use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {
@@ -49,8 +51,17 @@ class PersonController extends Controller
     }
 
 
-
-    /*public function attach(Request $request, Person $person, FinderCollection $finders)
+    /**
+     * Attach some objects to the current person.
+     *
+     * @param Request $request
+     * @param Person $person
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
+    public function attach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
@@ -77,7 +88,9 @@ class PersonController extends Controller
             }
         }
 
-        return $this->prepare($person, $request);
+        $person->load($this->createEagerLoadDefinition(['groups']));
+
+        return $this->createResource($person);
     }
 
     /**
@@ -86,11 +99,11 @@ class PersonController extends Controller
      * @param Request $request
      * @param Person $person
      * @param FinderCollection $finders
-     * @return Resource
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    /*public function detach(Request $request, Person $person, FinderCollection $finders)
+    public function detach(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'nullable|array',
@@ -117,7 +130,9 @@ class PersonController extends Controller
             }
         }
 
-        return $this->prepare($person, $request);
+        $person->load($this->createEagerLoadDefinition(['groups']));
+
+        return $this->createResource($person);
     }
 
     /**
@@ -126,11 +141,11 @@ class PersonController extends Controller
      * @param Request $request
      * @param Person $person
      * @param FinderCollection $finders
-     * @return Resource
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      * @throws \App\Exceptions\Finders\InputNotAcceptedException
      * @throws \App\Exceptions\Finders\ModelNotFoundException
      */
-    /*public function sync(Request $request, Person $person, FinderCollection $finders)
+    public function sync(Request $request, Person $person, FinderCollection $finders)
     {
         $validatedData = $request->validate([
             'groups' => 'array',
@@ -150,6 +165,7 @@ class PersonController extends Controller
             $person->groups()->sync($syncIds, !$withoutDetaching);
         }
 
-        return $this->prepare($person, $request);
-    }*/
+        $person->load($this->createEagerLoadDefinition(['groups']));
+        return $this->createResource($person);
+    }
 }

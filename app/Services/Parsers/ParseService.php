@@ -53,7 +53,11 @@ class ParseService
         }
 
         if(is_string($input)) {
-            return Carbon::parse($input);
+            try {
+                return Carbon::parse($input);
+            } catch (\Exception $e) {
+                throw new NotParsableException('date', $input, 0, $e);
+            }
         }
 
         if(is_integer($input)) {

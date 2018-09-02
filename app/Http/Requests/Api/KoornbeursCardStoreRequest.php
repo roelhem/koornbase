@@ -33,17 +33,16 @@ class KoornbeursCardStoreRequest extends FormRequest
         return [
             'person' => 'nullable|finds:person',
             'ref' => 'required|string|max:63',
-            'version' => 'nullable|string|max:63',
+            'version' => 'required|nullable|string|max:63',
             'remarks' => 'nullable|string',
             'activated_at' => 'nullable|date',
-            'deactivated_at' => 'nullable|date'
+            'deactivated_at' => 'nullable|date|after_or_equal_fields:activated_at'
         ];
     }
 
     public function afterValidation(Validator $validator)
     {
         $after = new AfterValidation($validator);
-        $after->ensureChronology(['activated_at','deactivated_at']);
 
         $query = KoornbeursCard::query()
             ->where('ref','=',$after->getValue('ref'))

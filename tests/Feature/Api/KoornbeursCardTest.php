@@ -92,12 +92,12 @@ class KoornbeursCardTest extends TestCase
         $this->postJson("/api/koornbeurs-cards", [
             'ref' => $card->ref,
             'version' => $card->version,
-            'owner' => "DEZE KAN NIET"
+            'person' => "DEZE KAN NIET"
         ])->assertStatus(422);
         $this->postJson("/api/koornbeurs-cards", [
             'ref' => $card->ref,
             'version' => $card->version,
-            'owner' => -1
+            'person' => -1
         ])->assertStatus(422);
         $this->postJson("/api/koornbeurs-cards", [
             'ref' => $card->ref,
@@ -143,7 +143,7 @@ class KoornbeursCardTest extends TestCase
             'owner_id' => $owner->id
         ]);
         $this->postJson("/api/koornbeurs-cards", [
-            'owner' => $owner->id,
+            'person' => $owner->id,
             'ref' => $cardWithOwner->ref,
             'version' => $cardWithOwner->version,
         ])->assertStatus(201);
@@ -171,7 +171,6 @@ class KoornbeursCardTest extends TestCase
         $this->patchJson("/api/koornbeurs-cards/2")->assertStatus(404);
 
         $card = factory(KoornbeursCard::class)->states('no-owner')->create();
-        $extraCard = factory(KoornbeursCard::class)->create();
         $this->assertNull($card->owner_id);
 
 
@@ -221,9 +220,7 @@ class KoornbeursCardTest extends TestCase
         $owner = factory(Person::class)->create();
         $newCardValues = factory(KoornbeursCard::class)->make(['owner_id' => $owner->id]);
         $this->putJson("/api/koornbeurs-cards/{$card->version}_{$card->ref}", [
-            'ref' => $newCardValues->ref,
-            'version' => $newCardValues->version,
-            'owner' => $owner->id,
+            'person' => $owner->id,
             'activated_at' => $newCardValues->activated_at->toDateTimeString(),
             'deactivated_at' => $newCardValues->deactivated_at->toDateTimeString(),
             'remarks' => $newCardValues->remarks
@@ -231,8 +228,6 @@ class KoornbeursCardTest extends TestCase
 
         $this->assertDatabaseHas('koornbeurs_cards', [
             'id' => $card->id,
-            'ref' => $newCardValues->ref,
-            'version' => $newCardValues->version,
             'owner_id' => $newCardValues->owner_id,
             'activated_at' => $newCardValues->activated_at->toDateTimeString(),
             'deactivated_at' => $newCardValues->deactivated_at->toDateTimeString(),
@@ -241,13 +236,9 @@ class KoornbeursCardTest extends TestCase
         ]);
 
         // WRONG VARIABLE VALUES
-        $this->putJson("/api/koornbeurs-cards/{$card->id}", [
-            'ref' => $extraCard->ref,
-            'version' => $extraCard->version
-        ])->assertStatus(422);
 
         $this->putJson("/api/koornbeurs-cards/{$card->id}", [
-            'owner' => -1
+            'person' => -1
         ])->assertStatus(422);
 
         $this->putJson("/api/koornbeurs-cards/{$card->id}", [
@@ -265,7 +256,7 @@ class KoornbeursCardTest extends TestCase
      */
     public function testBasicDelete() {
 
-        $user = $this->asAdmin();
+        $this->asAdmin();
 
         $this->delete("/api/koornbeurs-cards/1")->assertStatus(404);
         $this->delete("/api/koornbeurs-cards/_test")->assertStatus(404);

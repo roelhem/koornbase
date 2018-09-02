@@ -5,6 +5,7 @@ namespace App\Http\Requests\Api;
 use App\Http\Requests\Api\Traits\FindsModels;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -28,8 +29,26 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        /** @var User $user */
+        $user = $this->findFromUrl('user');
+
         return [
-            'person' => 'nullable|finds:person'
+            'person' => 'nullable|finds:person',
+            'name' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users')->ignore($user->id)
+            ],
+            'email' => [
+                'sometimes',
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id)
+            ],
+            'password' => 'sometimes|required|string|min:8',
         ];
     }
 }

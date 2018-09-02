@@ -29,10 +29,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $user = new User();
-        $user->name = array_get($data, 'name');
-        $user->email = array_get($data, 'email');
-        $user->password = array_get($data, 'password');
+        $user = new User(array_except($data,'person'));
 
         $personInput = array_get($data, 'person');
         if($personInput !== null) {
@@ -70,6 +67,8 @@ class UserController extends Controller
                 $user->person()->associate($person);
             }
         }
+
+        $user->fill(array_except($data, 'person'));
 
         $user->saveOrFail();
 

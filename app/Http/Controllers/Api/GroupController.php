@@ -84,7 +84,17 @@ class GroupController extends Controller
         return $this->createResource($group);
     }
 
-    /*
+
+    /**
+     * Attaches Persons to this group.
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
     public function attach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -111,10 +121,21 @@ class GroupController extends Controller
             }
         }
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition(['persons']));
+        return $this->createResource($group);
     }
 
 
+    /**
+     * Detaches Persons form Groups.
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
     public function detach(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'nullable|array',
@@ -141,10 +162,20 @@ class GroupController extends Controller
             }
         }
 
-        return $this->prepare($group, $request);
+        $group->load($this->createEagerLoadDefinition(['persons']));
+        return $this->createResource($group);
     }
 
-
+    /**
+     * Synchronizes the Persons that are attached to this Group.
+     *
+     * @param Request $request
+     * @param Group $group
+     * @param FinderCollection $finders
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @throws \App\Exceptions\Finders\InputNotAcceptedException
+     * @throws \App\Exceptions\Finders\ModelNotFoundException
+     */
     public function sync(Request $request, Group $group, FinderCollection $finders) {
         $validatedData = $request->validate([
             'persons' => 'array',
@@ -164,6 +195,7 @@ class GroupController extends Controller
             $group->persons()->sync($syncIds, !$withoutDetaching);
         }
 
-        return $this->prepare($group, $request);
-    }*/
+        $group->load($this->createEagerLoadDefinition(['persons']));
+        return $this->createResource($group);
+    }
 }
