@@ -35,7 +35,7 @@ return [
     //     'mutation' => '\Rebing\GraphQL\GraphQLController@mutation'
     // ]
     //
-    'controllers' => \Rebing\GraphQL\GraphQLController::class . '@query',
+    'controllers' => \App\Http\Controllers\GraphQLController::class . '@query',
 
     // Any middleware for the graphql route group
     'middleware' => ['auth:api'],

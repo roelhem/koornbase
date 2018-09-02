@@ -36,7 +36,7 @@ class CreatePersonTest extends TestCase
             'remarks' => $person->remarks,
         ];
 
-        $res = $this->graphql($query, $variables)->assertNoErrors();
+        $res = $this->graphql($query, $variables, 'testCreatePerson')->assertNoErrors();
         $id = $res->data('createPerson.id');
         $this->assertDatabaseHas('persons', [
             'id' => $id,
