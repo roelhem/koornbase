@@ -52,6 +52,8 @@ class Client extends PassportClient
 
     use Userstamps, Filterable, Sortable;
 
+    protected $visible = ['id','user_id','name','secret','redirect','personal_access_client','password_client','revoked'];
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //

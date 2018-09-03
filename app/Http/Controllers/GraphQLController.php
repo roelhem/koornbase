@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\GraphQL\Operation;
+use App\Services\GraphQL\QueryInput;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -33,12 +34,13 @@ class GraphQLController extends Controller
     public function query(Request $request)
     {
         $request = $this->processUploadRequest($request);
+        $schema = $this->getSchemaName($request);
         if($this->isBatch($request)) {
-            return $this->getBatch($request)->map(function($batchItem) use ($request) {
-                return $this->runInputArray($batchItem, $request);
+            return $this->getBatch($request)->map(function($batchItem) use ($schema) {
+                return QueryInput::createFromInput($batchItem, $schema)->run();
             })->all();
         } else {
-            return $this->runInputArray($request->all(), $request);
+            return QueryInput::createFromInput($request->all(), $schema)->run();
         }
     }
 
@@ -52,20 +54,6 @@ class GraphQLController extends Controller
     {
         $middleware = new GraphQLUploadMiddleware();
         return $middleware->processRequest($request);
-    }
-
-    /**
-     * Runs the array of a GraphQL-request input.
-     *
-     * @param array $inputArray
-     * @param Request|null $request
-     * @return mixed
-     */
-    protected function runInputArray($inputArray, $request = null)
-    {
-        $paramKey = config('graphql.params_key');
-        $operation = Operation::fromInputArray($inputArray, $this->getSchemaName($request));
-        return $operation->run(array_get($inputArray, $paramKey));
     }
 
     /**
