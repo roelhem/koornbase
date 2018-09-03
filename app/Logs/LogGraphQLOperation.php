@@ -10,12 +10,12 @@ namespace App\Logs;
 
 
 use App\Enums\GraphQLOperationType;
-use App\Events\GraphQL\OperationExecuted;
 use App\OAuth\Client;
 use App\OAuth\Token;
-use App\Services\GraphQL\Operation;
+use App\Services\Sorters\Traits\Sortable;
 use App\User;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -45,6 +45,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LogGraphQLOperation extends Model
 {
+
+    use Sortable, Filterable;
+
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- MODEL CONFIGURATION -------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
@@ -180,6 +183,6 @@ class LogGraphQLOperation extends Model
      */
     public function token()
     {
-        return $this->belongsTo(Token::class, 'token_id');
+        return $this->belongsTo(Token::class, 'access_token_id');
     }
 }

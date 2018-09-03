@@ -138,6 +138,9 @@ return [
 
                 'rbacGraph' => \Roelhem\RbacGraph\Http\GraphQL\Queries\RbacGraphQuery::class,
 
+                'logGraphQLOperation' => \App\Http\GraphQL\Queries\LogGraphQLOperationQuery::class,
+                'logGraphQLOperations' => \App\Http\GraphQL\Queries\LogGraphQLOperationsQuery::class,
+
                 'hello' => \App\Http\GraphQL\Queries\HelloQuery::class,
                 // QUERIES ABOUT THE CURRENT SESSION
                 'me' => \App\Http\GraphQL\Queries\MeQuery::class
@@ -263,6 +266,8 @@ return [
 
         'OAuthAuthCode' => \App\Http\GraphQL\Types\OAuthAuthCodeType::class,
         'OAuthToken' => \App\Http\GraphQL\Types\OAuthTokenType::class,
+
+        \App\Http\GraphQL\Types\LogGraphQLOperationType::class,
 
         'Avatar' => \App\Http\GraphQL\Types\AvatarType::class,
 

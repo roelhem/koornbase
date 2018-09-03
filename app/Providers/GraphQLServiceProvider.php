@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Certificate;
 use App\CertificateCategory;
 use App\Debtor;
+use App\Enums\GraphQLOperationType;
 use App\Enums\MembershipStatus;
 use App\Enums\OAuthClientType;
 use App\Enums\OAuthProvider;
@@ -15,7 +16,9 @@ use App\Http\GraphQL\Types\Inputs\SortRuleType;
 use App\Group;
 use App\GroupCategory;
 use App\GroupEmailAddress;
+use App\Http\GraphQL\Types\LogGraphQLOperationType;
 use App\KoornbeursCard;
+use App\Logs\LogGraphQLOperation;
 use App\Membership;
 use App\OAuth\Client;
 use App\Person;
@@ -55,6 +58,7 @@ class GraphQLServiceProvider extends ServiceProvider
             User::class,
             UserAccount::class,
             Client::class => 'OAuthClient',
+            LogGraphQLOperation::class,
         ];
 
         foreach ($models as $key => $value) {
@@ -85,6 +89,7 @@ class GraphQLServiceProvider extends ServiceProvider
         \GraphQL::addType(OAuthProvider::getGraphQLType());
         \GraphQL::addType(SortOrderDirection::getGraphQLType());
         \GraphQL::addType(OAuthScope::getGraphQLType());
+        \GraphQL::addType(GraphQLOperationType::getGraphQLType());
     }
 
     /**
