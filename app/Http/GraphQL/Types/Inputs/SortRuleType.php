@@ -11,7 +11,6 @@ namespace App\Http\GraphQL\Types\Inputs;
 use App\Enums\SortOrderDirection;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Database\Eloquent\Model;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class SortRuleType extends GraphQLType
@@ -25,56 +24,35 @@ class SortRuleType extends GraphQLType
     protected $inputObject = true;
 
     /**
-     * @var Model|string $model
-     */
-    protected $model;
-
-    /**
      * @var null|string $typeName
      */
     protected $typeName;
 
     /**
      * SortOrderType constructor.
-     * @param Model|string $model
      * @param string|null $typeName
      * @param array $attributes
      */
-    public function __construct($model, $typeName = null, $attributes = [])
+    public function __construct($typeName, $attributes = [])
     {
-        $this->model = $model;
         $this->typeName = $typeName;
-
-        if($this->typeName === null) {
-            $this->typeNameFromModel();
-        }
 
         parent::__construct($attributes);
     }
 
-    /**
-     * Sets the value of `$this->typeName` based on the model.
-     */
-    protected function typeNameFromModel() {
-        try {
-            $this->typeName = (new \ReflectionClass($this->model))->getShortName();
-        } catch (\ReflectionException $exception) {
-            $this->typeName = strval($this->model);
-        }
-    }
-
     public function attributes() {
         return [
-            'name' => $this->typeName.'_sortRule',
+            'name' => $this->typeName.'_orderRule',
             'description' => 'An input object that specifies the sortable field of '.$this->typeName.', and the direction in which the sort will be done.'
         ];
     }
 
+    /** @inheritdoc */
     public function fields()
     {
         return [
             'by' => [
-                'type' => Type::nonNull(GraphQL::type($this->typeName.'_sortField')),
+                'type' => Type::nonNull(GraphQL::sortFields($this->typeName)),
                 'description' => 'The field to order by.'
             ],
             'dir' => [

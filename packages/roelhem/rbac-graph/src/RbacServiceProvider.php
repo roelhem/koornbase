@@ -71,10 +71,8 @@ class RbacServiceProvider extends ServiceProvider
         Edge::observe(EdgeObserver::class);
         Path::observe(PathObserver::class);
 
-
         // Gates
         resolve(CompatibilityService::class)->registerGate();
-
 
         // GraphQL
         resolve(GraphQLService::class)->register();

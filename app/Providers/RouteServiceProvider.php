@@ -52,10 +52,8 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
+        $this->mapGraphQLRoutes();
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -85,5 +83,20 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Define the "graphql" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapGraphQLRoutes()
+    {
+        Route::prefix('graphql')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/graphql.php'));
     }
 }

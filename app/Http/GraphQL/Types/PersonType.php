@@ -11,6 +11,7 @@ namespace App\Http\GraphQL\Types;
 use App\Http\GraphQL\Fields\Authorization\ViewableField;
 use App\Http\GraphQL\Fields\AvatarField;
 use App\Http\GraphQL\Fields\IdField;
+use App\Http\GraphQL\Fields\PaginatedField;
 use App\Http\GraphQL\Fields\RemarksField;
 use App\Http\GraphQL\Fields\Stamps\CreatedAtField;
 use App\Http\GraphQL\Fields\Stamps\CreatedByField;
@@ -24,6 +25,8 @@ use App\Http\GraphQL\Fields\Stamps\UpdatedByField;
 use App\Person;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use Roelhem\RbacGraph\Services\RbacQueryFilter;
 
@@ -145,24 +148,23 @@ class PersonType extends GraphQLType
 
             // RELATIONS
 
-            'groups' => [
-                'type' => Type::listOf(GraphQL::type('Group')),
-                'description' => 'The groups of this person.',
-                'query' => $queryCallback,
-                'always' => ['id']
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'groups',
+                'type' => 'Group',
+                'description' => 'The current groups of this person.'
+            ]),
 
-            'certificates' => [
-                'type' => Type::listOf(GraphQL::type('Certificate')),
-                'description' => 'All the certificates of this person.',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'certificates',
+                'type' => 'Certificate',
+                'description' => 'All the certificates of this person.'
+            ]),
 
-            'debtors' => [
-                'type' => Type::listOf(GraphQL::type('Debtor')),
-                'description' => 'All the debtors of this person.',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'debtors',
+                'type' => 'Debtor',
+                'description' => 'All the debtors of this person.'
+            ]),
 
             'cards' => [
                 'type' => Type::listOf(GraphQL::type('KoornbeursCard')),
@@ -186,39 +188,41 @@ class PersonType extends GraphQLType
                 }
             ],
 
-            'users' => [
-                'type' => Type::listOf(GraphQL::type('User')),
-                'description' => 'All the users that are linked to this person.',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'users',
+                'type' => 'User',
+                'description' => 'All the users that have this Person as it\'s owner.'
+            ]),
 
-            'addresses' => [
-                'type' => Type::listOf(GraphQL::type('PersonAddress')),
-                'description' => 'All the addresses of this person',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'Addresses',
+                'type' => 'PersonAddress',
+                'description' => 'All the addresses of this person.'
+            ]),
+
             'address' => [
                 'type' => GraphQL::type('PersonAddress'),
                 'description' => 'The address that can be used as primary address for this Person.',
                 'query' => $queryCallback
             ],
 
-            'emailAddresses' => [
-                'type' => Type::listOf(GraphQL::type('PersonEmailAddress')),
-                'description' => 'All the e-mail addresses of this person',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'emailAddresses',
+                'type' => 'PersonEmailAddress',
+                'description' => 'All the e-mail addresses of this person.'
+            ]),
+
             'emailAddress' => [
                 'type' => GraphQL::type('PersonEmailAddress'),
                 'description' => 'The e-mail address that can be used as a primary e-mail address for this Person.',
                 'query' => $queryCallback
             ],
 
-            'phoneNumbers' => [
-                'type' => Type::listOf(GraphQL::type('PersonPhoneNumber')),
-                'description' => 'All the phone numbers of this person',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'phoneNumbers',
+                'type' => 'PersonPhoneNumber',
+                'description' => 'All the phone numbers of this person'
+            ]),
 
             'phoneNumber' => [
                 'type' => GraphQL::type('PersonPhoneNumber'),
@@ -226,11 +230,11 @@ class PersonType extends GraphQLType
                 'query' => $queryCallback
             ],
 
-            'memberships' => [
-                'type' => Type::listOf(GraphQL::type('Membership')),
-                'description' => 'All the memberships of this person',
-                'query' => $queryCallback
-            ],
+            GraphQL::builder()->relationField([
+                'name' => 'memberships',
+                'type' => 'Membership',
+                'description' => 'All the memberships of this Person.'
+            ]),
 
             'avatar' => AvatarField::class,
 

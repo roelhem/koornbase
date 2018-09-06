@@ -14,17 +14,7 @@ use App\Debtor;
 class DebtorsQuery extends ModelListQuery
 {
 
-    protected $modelClass = Debtor::class;
+    protected $typeName = 'Debtor';
 
-
-    protected function filterArgs()
-    {
-        return array_merge(parent::filterArgs(), [
-
-
-
-
-        ]);
-    }
 
 }

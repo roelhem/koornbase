@@ -9,23 +9,9 @@
 namespace App\Http\GraphQL\Queries;
 
 
-use App\OAuth\App;
-
 class AppsQuery extends ModelListQuery
 {
 
-    protected $modelClass = App::class;
-
-
-
-    protected function filterArgs()
-    {
-        return array_merge(parent::filterArgs(), [
-
-
-
-
-        ]);
-    }
+    protected $typeName = 'App';
 
 }

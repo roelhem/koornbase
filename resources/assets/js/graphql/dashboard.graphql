@@ -1,0 +1,155 @@
+
+# ------------------------------------------------------------------------------------------------------------------- #
+# ----- QUERIES FOR PAGES ------------------------------------------------------------------------------------------- #
+# ------------------------------------------------------------------------------------------------------------------- #
+
+# Query for the header
+query currentUser {
+    me {
+        id
+    }
+}
+
+# Query for the persons.index page
+query personsIndex {
+    persons {
+        ...vueSearchTable
+        data {
+            id
+            ...on Person @include(if:true) {
+                name
+                name_formal
+                name_short
+                name_nickname
+            }
+            ...vueDisplayPersonBirthDate
+            ...vueDisplayMembershipStatus
+        }
+    }
+}
+
+# Query for the persons.view page
+query personsView($id:ID!) {
+    person(id:$id) {
+        id
+        ...vueDisplayPersonName
+        ...vueDisplayPersonBirthDate
+        ...vueDisplayMembershipStatus
+        addresses {
+            id
+            label
+            ...vueDisplayPersonAddress
+        }
+        groups {
+            id
+            ...vueKbGroupTag
+        }
+        avatar {
+            ...vueBaseAvatar
+        }
+    }
+}
+
+# Query for the groups.index page
+query groupsIndex {
+    groups {
+        ...vueSearchTable
+        data {
+            id
+        }
+    }
+}
+
+# Query for the groups.view page
+query groupsView {
+    hello
+    groupCategories {
+        data {
+            id
+            ...vueDisplayGroupCategory
+        }
+    }
+}
+
+# Query for the users.index page
+query usersIndex {
+    hello
+}
+
+# ------------------------------------------------------------------------------------------------------------------- #
+# ----- FRAGMENTS FOR VUE-COMPONENTS -------------------------------------------------------------------------------- #
+# ------------------------------------------------------------------------------------------------------------------- #
+
+
+# __Avatar________________________________________________
+
+fragment vueBaseAvatar on Avatar {
+    image
+    letters
+}
+
+# __Pagination________________________________________________
+
+fragment vueSearchTable on Pagination {
+    from
+    to
+    total
+}
+
+# __Person________________________________________________
+
+# Needed data for a DisplayPersonName component
+fragment vueDisplayPersonName on Person {
+    name_initials
+    name_first
+    name_middle
+    name_prefix
+    name_last
+    name_nickname
+}
+
+# Needed data from a Person for the DisplayPersonBirthDate component
+fragment vueDisplayPersonBirthDate on Person {
+    birth_date
+    age
+}
+
+# Needed data from a Person for the DisplayMembershipStatus component
+fragment vueDisplayMembershipStatus on Person {
+    membership_status
+    membership_status_since
+}
+
+# __PersonAddress________________________________________________
+
+
+# Needed data from a PersonAddress for the DisplayPersonAddress component
+fragment vueDisplayPersonAddress on PersonAddress {
+    address_line_1
+    locality
+    country_code
+    country
+}
+
+# __Group________________________________________________
+
+# Needed data for a KbGroupTag component
+fragment vueKbGroupTag on Group {
+    name
+    name_short
+    description
+    member_name
+    category {
+        style
+    }
+}
+
+# __GroupCategory________________________________________________
+
+# Needed data for a DisplayGroupCategory component
+fragment vueDisplayGroupCategory on GroupCategory {
+    name
+    name_short
+    description
+    style
+}

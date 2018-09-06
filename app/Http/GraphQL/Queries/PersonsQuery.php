@@ -12,51 +12,11 @@ use Roelhem\RbacGraph\Services\RbacQueryFilter;
 class PersonsQuery extends ModelListQuery
 {
 
-    protected $modelClass = Person::class;
+    protected $typeName = 'Person';
 
     public function name()
     {
         return 'persons';
-    }
-
-
-    protected function filterArgs()
-    {
-
-        return array_merge(parent::filterArgs(), [
-
-
-            'membershipStatus' => [
-                'type' => GraphQL::type('MembershipStatus'),
-                'description' => 'Filters the Persons that currently have the provided membership status.'
-            ],
-
-            'anyMembershipStatus' => [
-                'type' => Type::listOf(GraphQL::type('MembershipStatus')),
-                'description' => 'Filters the Persons that have one of the provided membership statuses.'
-            ],
-
-            'birthDateBefore' => [
-                'type' => GraphQL::type('Date'),
-                'description' => 'Filters the persons who were born before the provided date.',
-            ],
-
-            'birthDateAfter' => [
-                'type' => GraphQL::type('Date'),
-                'description' => 'Filters the persons who were born after the provided date.',
-            ],
-
-            'inAnyGroup' => [
-                'type' => Type::listOf(Type::id()),
-                'description' => 'Filters the persons that are in at least one of the provided groups.'
-            ],
-
-            'notInGroup' => [
-                'type' => Type::id(),
-                'description' => 'Filters the persons that are not in the group with the provided `ID`.'
-            ]
-
-        ]);
     }
 
 }

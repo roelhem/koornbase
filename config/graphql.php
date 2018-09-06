@@ -2,41 +2,6 @@
 
 return [
 
-    // The prefix for routes
-    'prefix' => 'graphql',
-
-    // The routes to make GraphQL request. Either a string that will apply
-    // to both query and mutation or an array containing the key 'query' and/or
-    // 'mutation' with the according Route
-    //
-    // Example:
-    //
-    // Same route for both query and mutation
-    //
-    // 'routes' => 'path/to/query/{graphql_schema?}',
-    //
-    // or define each route
-    //
-    // 'routes' => [
-    //     'query' => 'query/{graphql_schema?}',
-    //     'mutation' => 'mutation/{graphql_schema?}',
-    // ]
-    //
-    'routes' => '{schema?}',
-
-    // The controller to use in GraphQL request. Either a string that will apply
-    // to both query and mutation or an array containing the key 'query' and/or
-    // 'mutation' with the according Controller and method
-    //
-    // Example:
-    //
-    // 'controllers' => [
-    //     'query' => '\Rebing\GraphQL\GraphQLController@query',
-    //     'mutation' => '\Rebing\GraphQL\GraphQLController@mutation'
-    // ]
-    //
-    'controllers' => \App\Http\Controllers\GraphQLController::class . '@query',
-
     // Any middleware for the graphql route group
     'middleware' => ['auth:api'],
 
@@ -45,44 +10,6 @@ return [
     // parameter.
     'default_schema' => 'default',
 
-    // The schemas for query and/or mutation. It expects an array of schemas to provide
-    // both the 'query' fields and the 'mutation' fields.
-    //
-    // You can also provide a middleware that will only apply to the given schema
-    //
-    // Example:
-    //
-    //  'schema' => 'default',
-    //
-    //  'schemas' => [
-    //      'default' => [
-    //          'query' => [
-    //              'users' => 'App\Http\GraphQL\Query\UsersQuery'
-    //          ],
-    //          'mutation' => [
-    //
-    //          ]
-    //      ],
-    //      'user' => [
-    //          'query' => [
-    //              'profile' => 'App\Http\GraphQL\Query\ProfileQuery'
-    //          ],
-    //          'mutation' => [
-    //
-    //          ],
-    //          'middleware' => ['auth'],
-    //      ],
-    //      'user/me' => [
-    //          'query' => [
-    //              'profile' => 'App\Http\GraphQL\Query\MyProfileQuery'
-    //          ],
-    //          'mutation' => [
-    //
-    //          ],
-    //          'middleware' => ['auth'],
-    //      ],
-    //  ]
-    //
     'schemas' => [
         'default' => [
             'query' => [
@@ -212,12 +139,6 @@ return [
             ],
             'middleware' => []
         ],
-        'rbac' => []
-        /*'rbac' => [
-            'query' => [
-                'nodes' => \Roelhem\RbacGraph\Http\GraphQL\Queries\RbacNodesQuery::class
-            ]
-        ]*/
     ],
     
     // The types available in the application. You can then access it from the
@@ -231,6 +152,7 @@ return [
     //
     'types' => [
         'Model' => \App\Http\GraphQL\Interfaces\ModelInterface::class,
+        'Pagination' => \App\Http\GraphQL\Interfaces\PaginationInterface::class,
         'OwnedByPerson' => \App\Http\GraphQL\Interfaces\OwnedByPersonInterface::class,
         'PersonContactEntry' => \App\Http\GraphQL\Interfaces\PersonContactEntryInterface::class,
         'OAuthClient' => \App\Http\GraphQL\Interfaces\OAuthClientInterface::class,
@@ -277,6 +199,19 @@ return [
         'DateTime' => \App\Http\GraphQL\Types\Scalars\DateTimeType::class,
         'CountryCode' => \App\Http\GraphQL\Types\Scalars\CountryCodeType::class,
         \App\Http\GraphQL\Types\Scalars\EmailType::class,
+
+        \App\Http\GraphQL\Types\Inputs\Filters\CertificateCategoryFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\CertificateFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\GroupEmailAddressFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\GroupFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\KoornbeursCardFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\LogGraphQLOperationFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\MembershipFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\PersonAddressFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\PersonFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\PersonPhoneNumberFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\UserAccountFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\UserFilterType::class,
 
         //'RbacNode' => \Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType::class
     ],

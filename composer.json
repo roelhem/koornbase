@@ -63,6 +63,7 @@
     "extra": {
         "laravel": {
             "dont-discover": [
+                "rebing/graphql-laravel"
             ]
         }
     },

@@ -69,15 +69,6 @@ class GroupCategoryType extends GraphQLType
                 'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
             ],
 
-            'groups_count' => [
-                'type' => Type::nonNull(Type::int()),
-                'description' => 'Returns the number of Groups in this category.',
-                'resolve' => function(GroupCategory $root) {
-                    return $root->groups()->count();
-                },
-                'selectable' => false,
-            ],
-
             'is_required' => IsRequiredField::class,
 
             'created_at' => CreatedAtField::class,

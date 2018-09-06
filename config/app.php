@@ -219,6 +219,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'EloquentView' => Jwz104\EloquentView\Facades\EloquentView::class,
+        'GraphQL' => \Rebing\GraphQL\Support\Facades\GraphQL::class,
 
         'Parse' => \App\Services\Parsers\Parse::class,
     ],

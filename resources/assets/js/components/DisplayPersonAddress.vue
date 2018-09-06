@@ -18,7 +18,6 @@
         name: "display-person-address",
 
         props: {
-            label:String,
             country_code:String,
             country:String,
             locality:String,

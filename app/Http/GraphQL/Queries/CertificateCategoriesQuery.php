@@ -9,23 +9,9 @@
 namespace App\Http\GraphQL\Queries;
 
 
-use App\CertificateCategory;
-
 class CertificateCategoriesQuery extends ModelListQuery
 {
 
-    protected $modelClass = CertificateCategory::class;
-
-
-
-    protected function filterArgs()
-    {
-        return array_merge(parent::filterArgs(), [
-
-
-
-
-        ]);
-    }
+    protected $typeName = 'CertificateCategory';
 
 }

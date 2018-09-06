@@ -14,7 +14,6 @@ use EloquentFilter\ModelFilter as Filter;
 abstract class ModelFilter extends Filter
 {
 
-
     public function createdBefore($timestamp) {
         $this->where('created_at', '<', \Parse::date($timestamp));
     }
