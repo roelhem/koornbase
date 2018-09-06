@@ -135,10 +135,8 @@ class ModelListQuery extends Query
 
         // Apply the arguments
         $query = \GraphQL::builder()->filterResolve($query, $args);
+        $query = \GraphQL::builder()->orderingResolve($query, $args);
         $query = \GraphQL::builder()->searchingResolve($query, $args);
-        if(!($query instanceof Builder)) {
-            $query = \GraphQL::builder()->orderingResolve($query, $args);
-        }
 
 
         return \GraphQL::builder()->paginationInstance($query, $args);

@@ -43,7 +43,9 @@ class GroupCategoryType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model')
+            GraphQL::type('Model'),
+            GraphQL::type('StampedModel'),
+            GraphQL::type('SoftDeleteModel')
         ];
     }
 
@@ -63,11 +65,11 @@ class GroupCategoryType extends GraphQLType
                 'description' => 'The name of the style in which a Group of this GroupCategory should be displayed.'
             ],
 
-            'groups' => [
-                'type' => Type::listOf(GraphQL::type('Group')),
-                'description' => 'A list of all the groups that have this category.',
-                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
-            ],
+            \GraphQL::builder()->relationField([
+                'name' => 'groups',
+                'type' => 'Group',
+                'description' => 'A list of all the groups that belong to this category.',
+            ]),
 
             'is_required' => IsRequiredField::class,
 

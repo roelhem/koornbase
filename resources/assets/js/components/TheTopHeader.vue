@@ -12,7 +12,7 @@
                 <div class="d-flex order-lg-2 ml-auto">
 
                     <notification-dropdown />
-                    <user-dropdown v-bind="user" />
+                    <user-dropdown />
 
                 </div>
 
@@ -31,7 +31,6 @@
 <script>
     import TheHeaderBrand from "./TheHeaderBrand";
     import UserDropdown from "./UserDropdown";
-    import { mapState } from "vuex";
     import NotificationDropdown from "./NotificationDropdown";
 
     export default {
@@ -41,12 +40,6 @@
             TheHeaderBrand
         },
         name: "the-top-header",
-
-        computed: {
-            ...mapState({
-                user: state => state.currentUser
-            })
-        }
     }
 </script>
 

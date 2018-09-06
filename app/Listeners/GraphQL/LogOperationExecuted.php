@@ -41,7 +41,6 @@ class LogOperationExecuted implements ShouldQueue
 
         $query = array_get($data, 'query');
         $operation_name = array_get($data, 'operationName');
-        /** @var OperationDefinitionNode|null $def */
         $def = null;
 
         // Search the docs for extra values
@@ -60,18 +59,19 @@ class LogOperationExecuted implements ShouldQueue
             }
         }
 
-
-        LogGraphQLOperation::create([
-            'schema'          => array_get($data,'schema'),
-            'operation_name'  => $operation_name,
-            'query'           => $query,
-            'type'            => $def->operation,
-            'variables'       => $variables,
-            'user_id'         => array_get($data,'context.user_id'),
-            'client_id'       => array_get($data,'context.client_id'),
-            'access_token_id' => array_get($data,'context.access_token_id'),
-            'requested_at'    => $event->emitDate,
-        ]);
+        if($def instanceof OperationDefinitionNode) {
+            LogGraphQLOperation::create([
+                'schema'          => array_get($data,'schema'),
+                'operation_name'  => $operation_name,
+                'query'           => $query,
+                'type'            => $def->operation,
+                'variables'       => $variables,
+                'user_id'         => array_get($data,'context.user_id'),
+                'client_id'       => array_get($data,'context.client_id'),
+                'access_token_id' => array_get($data,'context.access_token_id'),
+                'requested_at'    => $event->emitDate,
+            ]);
+        }
     }
 
 }

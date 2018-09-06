@@ -42,7 +42,9 @@ class CertificateCategoryType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model')
+            \GraphQL::type('Model'),
+            \GraphQL::type('StampedModel'),
+            \GraphQL::type('SoftDeleteModel'),
         ];
     }
 
@@ -67,11 +69,11 @@ class CertificateCategoryType extends GraphQLType
 
             'is_required' => IsRequiredField::class,
 
-            'certificates' => [
-                'type' => Type::listOf(GraphQL::type('Certificate')),
-                'description' => 'A list of all the certificates that belong to this CertificateCategory.',
-                'query' => $queryCallback
-            ],
+            \GraphQL::builder()->relationField([
+                'name' => 'certificates',
+                'type' => 'Certificate',
+                'description' => 'A list of all the certificates that belong to this `CertificateCategory`.',
+            ]),
 
             'created_at' => CreatedAtField::class,
             'created_by' => CreatedByField::class,

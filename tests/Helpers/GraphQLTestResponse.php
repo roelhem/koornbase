@@ -169,7 +169,7 @@ class GraphQLTestResponse extends TestResponse
      */
     public function hasErrors()
     {
-        return $this->isClientError() || $this->hasGraphQLErrors();
+        return $this->isClientError() || $this->isServerError() || $this->hasGraphQLErrors();
     }
 
     /**

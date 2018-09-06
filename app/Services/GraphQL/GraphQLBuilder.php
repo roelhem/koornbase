@@ -93,14 +93,9 @@ class GraphQLBuilder
 
             // Apply the filtering
             $query = $this->filterResolve($query, $args);
-
-            // Apply the searching
+            $query = $this->orderingResolve($query, $args);
             $query = $this->searchingResolve($query, $args);
 
-            // Apply the ordering if there was no searching
-            if(!($query instanceof Builder)) {
-                $query = $this->orderingResolve($query, $args);
-            }
 
             // Returning a new pagination instance
             return $this->paginationInstance($query, $args);
@@ -262,10 +257,15 @@ class GraphQLBuilder
     public function orderingResolve($query, $args)
     {
         $orderRules = array_get($args, self::ARG_ORDER_BY, []);
+        if(!is_array($orderRules)) {
+            return $query;
+        }
         foreach ($orderRules as $orderRule) {
             $field = array_get($orderRule, self::ARG_ORDER_BY_FIELD);
             $direction = array_get($orderRule, self::ARG_ORDER_BY_DIRECTION, SortOrderDirection::default());
-            $query->sortBy($field, $direction);
+            if($field !== null) {
+                $query->sortBy($field, $direction);
+            }
         }
         return $query;
     }

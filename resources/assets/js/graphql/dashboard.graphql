@@ -5,14 +5,21 @@
 
 # Query for the header
 query currentUser {
-    me {
-        id
+    currentUser:me {
+        ...vueUserDropdown
     }
 }
 
 # Query for the persons.index page
-query personsIndex {
-    persons {
+query personsIndex(
+        $page:Int = 1,
+        $limit:Int = 10,
+        $orderBy:Person_orderField = name,
+        $orderDir:SortOrderDirection = ASC,
+        $filter:Person_filter,
+        $search:String
+    ) {
+    persons(page:$page, limit:$limit, orderBy:[{by:$orderBy, dir:$orderDir}], filter:$filter, search:$search) {
         ...vueSearchTable
         data {
             id
@@ -35,14 +42,32 @@ query personsView($id:ID!) {
         ...vueDisplayPersonName
         ...vueDisplayPersonBirthDate
         ...vueDisplayMembershipStatus
-        addresses {
-            id
-            label
-            ...vueDisplayPersonAddress
+        groups(limit:10) {
+            data {
+                id
+                ...vueKbGroupTag
+            }
         }
-        groups {
-            id
-            ...vueKbGroupTag
+        addresses {
+            data {
+                id
+                label
+                ...vueDisplayPersonAddress
+            }
+        }
+        emailAddresses {
+            data {
+                id
+                label
+                email_address
+            }
+        }
+        phoneNumbers {
+            data {
+                id
+                label
+                phone_number
+            }
         }
         avatar {
             ...vueBaseAvatar
@@ -95,6 +120,22 @@ fragment vueSearchTable on Pagination {
     to
     total
 }
+
+# __User__________________________________________________
+
+
+fragment vueUserDropdown on User {
+    id
+    avatar {
+        ...vueBaseAvatar
+    }
+    name_display
+    person {
+        id name_first name_prefix name_last
+    }
+    email
+}
+
 
 # __Person________________________________________________
 

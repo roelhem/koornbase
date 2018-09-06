@@ -135,7 +135,7 @@
                     />
 
                     <pre>
-                        {{ filters }}
+                        {{ filterValues }}
                     </pre>
 
                 </b-col>
@@ -161,7 +161,7 @@
     import BaseIcon from "../../BaseIcon";
     import searchTableMixin from "../../../mixins/searchTableMixin";
 
-    import { getPersonsForTableQuery } from "../../../graphql/queries/persons.graphql";
+    import { personsIndex } from "../../../graphql/dashboard.graphql";
 
     import displayFilters from '../../../filters/display';
     import SearchHeaderContainer from "../../SearchHeaderContainer";
@@ -268,16 +268,15 @@
         searchTable: {
             queryKey:'persons',
             query: {
-                query: getPersonsForTableQuery,
+                query: personsIndex,
                 variables() {
                     return {
                         page:this.page,
                         limit:this.perPage,
                         orderBy:this.sortBy,
                         orderDir:this.sortDir,
-                        inAnyGroup:this.inAnyGroup,
-                        search:this.search,
-                        anyMembershipStatus:this.anyMembershipStatus,
+                        filter:this.filterValues,
+                        search:this.search
                     }
                 }
             },
@@ -319,21 +318,12 @@
 
         computed: {
 
-            anyMembershipStatus() {
-                if(this.filters.membershipStatus.active) {
-                    return this.filters.membershipStatus.value;
-                } else {
-                    return null;
-                }
+            filterValues: function () {
+                const res = {};
+                if (this.filters.membershipStatus.active) res.anyMembershipStatus = this.filters.membershipStatus.value;
+                if (this.filters.groups.active) res.inAnyGroup = this.filters.groups.value.map(group => group.id);
+                return res;
             },
-
-            inAnyGroup() {
-                if(this.filters.groups.active) {
-                    return this.filters.groups.value.map(group => group.id);
-                } else {
-                    return null;
-                }
-            }
 
         }
     }

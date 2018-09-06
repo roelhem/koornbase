@@ -152,6 +152,8 @@ return [
     //
     'types' => [
         'Model' => \App\Http\GraphQL\Interfaces\ModelInterface::class,
+        \App\Http\GraphQL\Interfaces\StampedModelInterface::class,
+        \App\Http\GraphQL\Interfaces\SoftDeleteModelInterface::class,
         'Pagination' => \App\Http\GraphQL\Interfaces\PaginationInterface::class,
         'OwnedByPerson' => \App\Http\GraphQL\Interfaces\OwnedByPersonInterface::class,
         'PersonContactEntry' => \App\Http\GraphQL\Interfaces\PersonContactEntryInterface::class,

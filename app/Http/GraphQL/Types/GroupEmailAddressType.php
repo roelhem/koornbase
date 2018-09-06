@@ -35,7 +35,8 @@ class GroupEmailAddressType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model')
+            GraphQL::type('Model'),
+            GraphQL::type('StampedModel'),
         ];
     }
 

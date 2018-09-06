@@ -3,7 +3,10 @@
     <div class="page-main">
 
 
-        <template>
+        <template v-if="$apollo.queries.currentUser.loading">
+            <h1>Even wachten hoor...</h1>
+        </template>
+        <template v-else>
 
             <the-top-header />
             <the-nav-header />
@@ -12,7 +15,6 @@
 
 
             <div class="my-3 my-md-5">
-                <!--<the-page-header />-->
 
                 <router-view />
             </div>
@@ -28,25 +30,23 @@
 <script>
     import TheTopHeader from "./TheTopHeader";
     import TheNavHeader from "./TheNavHeader";
-    import { mapState } from 'vuex';
-    import ThePageHeader from "./ThePageHeader";
+    import { currentUser } from "../graphql/dashboard.graphql";
 
     export default {
 
         data: function() {
-            return {}
+            return {
+                currentUser:{}
+            }
+        },
+
+        apollo: {
+            currentUser:currentUser
         },
 
         components: {
-            ThePageHeader,
             TheNavHeader,
             TheTopHeader
-        },
-
-        computed: {
-            ...mapState({
-                user: state => state.currentUser
-            })
         },
 
         name: "the-layout"

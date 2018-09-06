@@ -36,7 +36,8 @@ class UserType extends GraphQLType
     {
         return [
             GraphQL::type('Model'),
-            GraphQL::type('OwnedByPerson')
+            GraphQL::type('StampedModel'),
+            GraphQL::type('OwnedByPerson'),
         ];
     }
 
@@ -84,11 +85,12 @@ class UserType extends GraphQLType
                 'description' => 'The e-mailaddress of this User'
             ],
 
-            'accounts' => [
-                'type' => Type::listOf(GraphQL::type('UserAccount')),
-                'description' => 'An OAuth account from an external server.',
-                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure(),
-            ],
+            \GraphQL::builder()->relationField([
+                'name' => 'accounts',
+                'type' => 'UserAccount',
+                'description' => 'All the accounts on external OAuth servers of this User that can also be used by the
+                  applications of the KoornBase.'
+            ]),
 
             'facebookAccount' => [
                 'type' => GraphQL::type('UserAccount'),

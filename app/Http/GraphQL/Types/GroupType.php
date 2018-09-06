@@ -42,7 +42,9 @@ class GroupType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model')
+            GraphQL::type('Model'),
+            GraphQL::type('StampedModel'),
+            GraphQL::type('SoftDeleteModel')
         ];
     }
 
@@ -72,17 +74,17 @@ class GroupType extends GraphQLType
                 'description' => 'A string that contains a name for a person that is a member of this Group.'
             ],
 
-            'persons' => [
-                'type' => Type::listOf(GraphQL::type('Person')),
-                'description' => 'All the persons that are in this group.',
-                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
-            ],
+            \GraphQL::builder()->relationField([
+                'name' => 'persons',
+                'type' => 'Person',
+                'description' => 'A list of the `Person`s that are currently members of this group.',
+            ]),
 
-            'emailAddresses' => [
-                'type' => Type::listOf(GraphQL::type('GroupEmailAddress')),
-                'description' => 'All the e-mail addresses that are registered for this Group.',
-                'query' => RbacQueryFilter::eagerLoadingContraintGraphQLClosure()
-            ],
+            \GraphQL::builder()->relationField([
+                'name' => 'emailAddresses',
+                'type' => 'GroupEmailAddress',
+                'description' => 'All the email addresses that are registered for this `Group`.',
+            ]),
 
             'is_required' => IsRequiredField::class,
 

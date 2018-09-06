@@ -129,7 +129,7 @@ class BaseGraphQLTest extends TestCase
             ->assertData(['__type' => ['name' => 'String']]);
 
         $this->graphql($query, null, 'getIDQuery')
-            ->assertErrors();
+            ->assertErrors()->isClientError();
     }
 
 

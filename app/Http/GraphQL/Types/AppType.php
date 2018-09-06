@@ -17,6 +17,7 @@ use App\Http\GraphQL\Fields\Stamps\EditorField;
 use App\Http\GraphQL\Fields\Stamps\UpdatedAtField;
 use App\Http\GraphQL\Fields\Stamps\UpdatedByField;
 use App\OAuth\App;
+use App\Services\GraphQL\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class AppType extends GraphQLType
@@ -26,6 +27,15 @@ class AppType extends GraphQLType
         'description' => 'An external app.',
         'model' => App::class,
     ];
+
+    public function interfaces()
+    {
+        return [
+            \GraphQL::type('Model'),
+            \GraphQL::type('StampedModel'),
+            \GraphQL::type('SoftDeleteModel'),
+        ];
+    }
 
     public function fields()
     {

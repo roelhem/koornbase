@@ -38,8 +38,9 @@ class CertificateType extends GraphQLType
     public function interfaces()
     {
         return [
-            GraphQL::type('Model'),
-            GraphQL::type('OwnedByPerson')
+            \GraphQL::type('Model'),
+            \GraphQL::type('StampedModel'),
+            \GraphQL::type('OwnedByPerson'),
         ];
     }
 

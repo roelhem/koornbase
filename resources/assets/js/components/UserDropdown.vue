@@ -3,10 +3,10 @@
     <div class="dropdown">
 
         <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-            <base-avatar v-bind="avatar" color="blue" />
+            <base-avatar v-bind="currentUser.avatar" color="blue" />
             <span class="ml-2 d-none d-lg-block">
-                <span class="text-default">{{ name_display }}</span>
-                <span class="text-muted d-block mt-1 small">{{ email }}</span>
+                <span class="text-default">{{ currentUser.name_display }}</span>
+                <span class="text-muted d-block mt-1 small">{{ currentUser.email }}</span>
             </span>
         </a>
 
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+    import { currentUser } from "../graphql/dashboard.graphql";
     import BaseAvatar from "./BaseAvatar";
     import BaseIcon from "./BaseIcon";
 
@@ -45,6 +46,16 @@
             BaseAvatar
         },
         name: "user-menu",
+
+        apollo: {
+            currentUser:currentUser
+        },
+
+        data() {
+            return {
+                currentUser:{}
+            }
+        },
 
         props: {
             id: Number,

@@ -26,7 +26,7 @@
                         <span>{{ person.name_prefix }} {{ person.name_last }}</span>
                     </h1>
                     <div class="tags">
-                        <kb-group-tag v-for="group in person.groups"
+                        <kb-group-tag v-for="group in person.groups.data"
                                       :key="group.slug"
                                       :group="group"
                                       label="member_name" />
@@ -78,7 +78,7 @@
     import BaseIcon from "../../BaseIcon";
     import TablerDimmer from "../../TablerDimmer";
 
-    import { getPersonPageHeaderData } from "../../../graphql/queries/persons.graphql";
+    import { personsView } from "../../../graphql/dashboard.graphql";
 
     export default {
         components: {
@@ -97,7 +97,7 @@
 
         apollo: {
             person: {
-                query: getPersonPageHeaderData,
+                query: personsView,
                 variables() {
                     return {
                         id:this.id

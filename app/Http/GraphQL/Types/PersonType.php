@@ -49,6 +49,8 @@ class PersonType extends GraphQLType
     {
         return [
             GraphQL::type('Model'),
+            GraphQL::type('StampedModel'),
+            GraphQL::type('SoftDeleteModel'),
             GraphQL::type('OwnedByPerson')
         ];
     }
@@ -195,7 +197,7 @@ class PersonType extends GraphQLType
             ]),
 
             GraphQL::builder()->relationField([
-                'name' => 'Addresses',
+                'name' => 'addresses',
                 'type' => 'PersonAddress',
                 'description' => 'All the addresses of this person.'
             ]),

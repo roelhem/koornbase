@@ -37,6 +37,7 @@ class MembershipType extends GraphQLType
     {
         return [
             GraphQL::type('Model'),
+            GraphQL::type('StampedModel'),
             GraphQL::type('OwnedByPerson')
         ];
     }
