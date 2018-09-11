@@ -32,4 +32,4 @@ Route::get('/test', function() {
     \App\User::first()->notify(new \App\Notifications\TestSlackNotification());
 });
 
-Route::any('/dashboard','AppController@index')->name('dashboard');
+Route::any('/dashboard','DashboardController@index')->name('dashboard');

@@ -1,0 +1,26 @@
+/*
+
+ This file creates scss styles for the data display.
+
+ */
+
+.data-display:hover {
+
+  border-bottom: 1px dotted;
+
+}
+
+
+.data-field:hover {
+  border-bottom: 1px dotted $gray-300;
+}
+
+.generated_address_html .given-name,
+.generated_address_html .family-name,
+.generated_address_html .family-name + br {
+  display: none;
+}
+
+.generated_address_html span:hover {
+  border-bottom: 1px dotted;
+}

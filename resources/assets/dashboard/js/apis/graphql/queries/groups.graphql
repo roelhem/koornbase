@@ -1,0 +1,87 @@
+query getGroupsForTableQuery($page: Int = 1, $limit: Int = 15, $search: String, $orderBy: Group_sortField = id, $orderDir: SortOrderDirection = ASC, $anyCategoryId:[ID]) {
+    groups(page: $page, limit: $limit, search: $search, orderBy: [{by: $orderBy, dir: $orderDir}], anyCategoryId:$anyCategoryId) {
+        from
+        to
+        total
+        data {
+            id
+            category {
+                id
+                name_short
+                style
+            }
+            persons {
+                id
+                name
+                name_short
+                avatar {
+                    image
+                    letters
+                }
+            }
+            name
+            name_short
+            description
+            member_name
+        }
+    }
+}
+
+query getGroupDetailsQuery($id:ID!) {
+    group(id:$id) {
+        id
+        slug
+        name
+        name_short
+        description
+        member_name
+        is_required
+
+        category {
+            id
+            name
+            description
+            style
+        }
+        persons {
+            id
+            name_first
+            name_nickname
+            name_prefix
+            name_last
+            avatar {
+                image
+                letters
+            }
+            membership_status
+            membership_status_since
+        }
+        emailAddresses {
+            id
+            email_address
+            remarks
+        }
+    }
+}
+
+
+
+query groupCategoryListQuery {
+    groupCategories {
+        from
+        to
+        total
+        data {
+            id
+            name
+            name_short
+            slug
+            description
+            style
+            is_required
+            groups {
+                total
+            }
+        }
+    }
+}

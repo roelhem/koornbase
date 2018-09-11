@@ -31,14 +31,14 @@ mix.webpackConfig({
     }
 });
 
-// The application
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+// The dashboard-application
+mix.js('resources/assets/dashboard/js/main.js', 'public/js/dashboard.js')
+   .sass('resources/assets/dashboard/sass/main.scss', 'public/css/dashboard.css');
 
 // The home page
-mix.js('resources/assets/js/home.js', 'public/js')
-    .sass('resources/assets/sass/home.scss','public/css');
+mix.js('resources/assets/homepage/js/main.js', 'public/js/home.js')
+    .sass('resources/assets/homepage/sass/main.scss','public/css/home.css');
 
-mix.copyDirectory('resources/assets/images/koornbase', 'public/images/koornbase');
+mix.copyDirectory('resources/assets/shared/images/koornbase', 'public/images/koornbase');
 
 mix.browserSync('https://koornbase.test/');
