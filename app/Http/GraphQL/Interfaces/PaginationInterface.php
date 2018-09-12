@@ -72,6 +72,14 @@ class PaginationInterface extends InterfaceType
                     return $paginator->lastItem();
                 },
                 'selectable' => false,
+            ],
+            'has_more' => [
+                'type' => Type::nonNull(Type::boolean()),
+                'description' => 'Indicates if the pagination-object has more items on the next page.',
+                'resolve' => function(LengthAwarePaginator $paginator) {
+                    return $paginator->hasMorePages();
+                },
+                'selectable' => false,
             ]
         ];
     }
