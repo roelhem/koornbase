@@ -23,7 +23,9 @@
         components: {
             BaseField
         },
+
         name: "display-membership-status",
+
         props: {
             status:String,
             title:String,

@@ -6,10 +6,11 @@
                     v-bind="user.avatar"
                     size="xxl"
                     class="mr-5"
-                    default-style="person-default"
+                    :default-style="user.person ? 'person-default' : 'user-default'"
             />
             <h4 class="m-0">
-                <base-field title="Naam" name="name_display" :value="user.name_display" />
+                <span-person-name v-if="user.person" :person="user.person" />
+                <base-field v-else title="Gebruikersnaam" name="name" :value="user.name" />
             </h4>
             <p class="text-muted mb-0">
                 <base-field title="Inlog E-mail" name="email" :value="user.email" />
@@ -25,6 +26,7 @@
     import TablerCard from "../layouts/cards/TablerCard";
     import BaseAvatar from "./BaseAvatar";
     import BaseField from "./BaseField";
+    import SpanPersonName from "./spans/SpanPersonName";
 
     export default {
 
@@ -40,6 +42,7 @@
         },
 
         components: {
+            SpanPersonName,
             BaseField,
             BaseAvatar,
             TablerCard

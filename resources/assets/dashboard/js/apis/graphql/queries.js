@@ -13,17 +13,15 @@ export const CURRENT_USER = gql`
             id
             name
             ...UserAvatar
-            name_display
             person {
                 id
-                name_first
-                name_prefix
-                name_last
+                ...PersonNameSpan
             }
             email
         }
     }
     ${fragments.UserAvatar}
+    ${fragments.PersonNameSpan}
 `;
 
 // ---------------------------------------------------------------------------------------------------------------- //

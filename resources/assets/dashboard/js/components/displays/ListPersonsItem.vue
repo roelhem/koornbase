@@ -15,10 +15,7 @@
 
             <b-col>
                 <div>
-                    {{ person.name_first }}
-                    <span v-if="person.name_nickname" class="text-muted-dark font-italic ml-1">[ {{ person.name_nickname }} ]</span>
-                    {{ person.name_prefix }}
-                    {{ person.name_last }}
+                    <span-person-name :person="person" with-nickname />
                 </div>
                 <div class="small text-muted-dark">
                     <span-membership-status :status="person.membership_status"
@@ -41,19 +38,35 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
+    import fragments from "../../apis/graphql/queries/fragments";
     import BaseAvatar from "./BaseAvatar";
     import SpanMembershipStatus from "./spans/SpanMembershipStatus";
     import BaseIcon from "./BaseIcon";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
+    import SpanPersonName from "./spans/SpanPersonName";
 
     export default {
         components: {
+            SpanPersonName,
             SubtileFormButton,
             BaseIcon,
             SpanMembershipStatus,
             BaseAvatar
         },
         name: "list-persons-item",
+
+        fragment:gql`
+            fragment ListPersonsItem on Person {
+                id
+                ...PersonAvatar
+                ...PersonNameSpan
+                ...PersonMembershipStatus
+            }
+            ${fragments.PersonAvatar}
+            ${fragments.PersonNameSpan}
+            ${fragments.PersonMembershipStatus}
+        `,
 
         props: {
             person: {

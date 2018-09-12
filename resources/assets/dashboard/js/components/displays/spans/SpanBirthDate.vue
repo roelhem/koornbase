@@ -2,7 +2,7 @@
 
     <span>
         <base-field title="Geboortedatum">{{ birth_date | date('bday') }}</base-field>
-        <small class="font-italic" :class="{'text-muted': !underAged, 'text-warning': underAged}">
+        <small class="font-italic" :class="{'text-muted': !underAged, 'text-danger': underAged}">
             (
             <base-field title="Leeftijd">{{ age }} jaar</base-field>
             )

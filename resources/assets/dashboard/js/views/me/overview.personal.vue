@@ -2,70 +2,119 @@
 
     <div>
 
-        <kb-person-detail-card :person="person"
-                               :collapsed.sync="cards.personal.collapsed"
+        <h1>Mijn Persoonsgegevens</h1>
+
+        <person-detail-card
+                :person="person"
+                status="azure"
+                status-left
+                collapsible
+                collapsibleWithHeader
+                :collapsed.sync="cards.personDetailCard.collapsed"
+        >
+            <div class="text-right" slot="footer">
+                <b-button variant="link"
+                          :to="{ name:'db.persons.view.overview', params:{id:person.id} }"
+                >Naar Persoonspagina...</b-button>
+            </div>
+        </person-detail-card>
+
+        <h2>Contactgegevens</h2>
+
+        <person-email-addresses-card
+                :person="person"
+                status="orange"
+                status-left
+                collapsible
+                collapsibleWithHeader
+                :collapsed.sync="cards.personEmailAddressesCard.collapsed"
+        />
+        <person-phone-numbers-card
+                :person="person"
+                status="orange"
+                status-left
+                collapsible
+                collapsibleWithHeader
+                :collapsed.sync="cards.personPhoneNumbersCard.collapsed"
+        />
+        <person-addresses-card
+                :person="person"
+                status="orange"
+                status-left
+                collapsible
+                collapsibleWithHeader
+                :collapsed.sync="cards.personAddressesCard.collapsed"
         />
 
-        <show-email-addresses-of-person-card :person-id="this.currentUser.person.id"
-                                             :collapsed.sync="cards.emailAddresses.collapsed"
-        />
-
-        <show-phone-numbers-of-person-card :person-id="this.currentUser.person.id"
-                                           :collapsed.sync="cards.phoneNumbers.collapsed"
-        />
-
-
-        <show-addresses-of-person-card :person-id="this.currentUser.person.id"
-                                       :collapsed.sync="cards.addresses.collapsed"
-        />
 
     </div>
 
 </template>
 
 <script>
-    import { CURRENT_USER } from "../../apis/graphql/queries";
-    import ShowEmailAddressesOfPersonCard from "../../components/displays/ShowEmailAddressesOfPersonCard";
-    import { getPersonDetailsShowCardData } from "../../apis/graphql/queries/persons.graphql";
-    import ShowPhoneNumbersOfPersonCard from "../../components/displays/ShowPhoneNumbersOfPersonCard";
-    import ShowAddressesOfPersonCard from "../../components/displays/ShowAddressesOfPersonCard";
+    import gql from "graphql-tag";
+    import PersonEmailAddressesCard from "../../components/displays/PersonEmailAddressesCard";
+    import PersonPhoneNumbersCard from "../../components/displays/PersonPhoneNumbersCard";
+    import PersonAddressesCard from "../../components/displays/PersonAddressesCard";
+    import PersonDetailCard from "../../components/displays/PersonDetailCard";
 
     export default {
 
         components: {
-            ShowAddressesOfPersonCard,
-            ShowPhoneNumbersOfPersonCard,
-            ShowEmailAddressesOfPersonCard,
+            PersonDetailCard,
+            PersonAddressesCard,
+            PersonPhoneNumbersCard,
+            PersonEmailAddressesCard,
         },
 
         apollo: {
 
-            currentUser:CURRENT_USER,
-
-            person: {
-                query: getPersonDetailsShowCardData,
-                variables() {
-                    return {
-                        id: this.currentUser.person.id
-                    };
-                }
-            }
+            currentUser: {
+                query:gql`
+                    query viewMeOverviewPersonal {
+                        currentUser:me {
+                            id
+                            person {
+                                ...PersonDetailCard
+                                ...PersonAddressesCard
+                                ...PersonPhoneNumbersCard
+                                ...PersonEmailAddressesCard
+                            }
+                        }
+                    }
+                    ${PersonDetailCard.fragment}
+                    ${PersonAddressesCard.fragment}
+                    ${PersonPhoneNumbersCard.fragment}
+                    ${PersonEmailAddressesCard.fragment}
+                `,
+            },
         },
 
 
         data: function() {
             return {
-                currentUser: CURRENT_USER,
-                person: null,
+                currentUser: {},
 
-                cards:{
-                    personal:{collapsed: false},
-                    emailAddresses:{collapsed:true},
-                    phoneNumbers:{collapsed:true},
-                    addresses:{collapsed:true},
-                    koornbeursCards:{collapsed:true}
-                },
+                cards: {
+                    personDetailCard:{collapsed:false},
+                    personEmailAddressesCard:{collapsed:true},
+                    personPhoneNumbersCard:{collapsed:true},
+                    personAddressesCard:{collapsed:true}
+                }
             };
+        },
+
+        computed: {
+            person() {
+                if(this.currentUser && this.currentUser.person) {
+                    return this.currentUser.person;
+                }
+                return {
+                    addresses:{data:[],total:0},
+                    phoneNumbers:{data:[],total:0},
+                    emailAddresses:{data:[],total:0},
+                };
+            }
         },
 
         name: "view-me-overview-personal"

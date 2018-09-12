@@ -4,31 +4,39 @@
                   :icon="icon"
                   :icon-from="iconFrom"
                   :title="title"
+                  :flipped="flipped"
     >
         <template slot="td">
-            <template v-if="!formActive">
                 <td>
                     <slot>{{ value }}</slot>
                 </td>
                 <td class="px-0 py-1" style="width: 1px">
                     <subtile-form-button icon="edit-3" color="blue" @click="activateForm" />
                 </td>
-            </template>
+        </template>
 
-            <template v-if="formActive">
-                <td class="p-1" colspan="2">
+        <template slot="back">
+
+            <h4>{{ label }} bewerken</h4>
+
+            <div>
+                <slot name="form" :input-value="inputValue" :input-callback="inputCallback">
+                    <pre>{{ value }}</pre>
+                </slot>
+            </div>
 
 
-                    <span class="input-group">
-                        <input type="text" class="form-control" :placeholder="placeholder" v-model="inputValue" />
-                        <span class="input-group-append">
-                            <subtile-form-button icon="save" color="green" @click="submitForm" />
-                            <subtile-form-button icon="x" color="red" @click="cancelForm" />
-                        </span>
-                    </span>
+            <div class="text-right">
+                <b-button variant="secondary"
+                          size="sm"
+                          @click="cancelForm"
+                >Annuleren</b-button>
 
-                </td>
-            </template>
+                <b-button variant="primary"
+                          size="sm"
+                          @click="submitForm"
+                >Opslaan</b-button>
+            </div>
 
         </template>
 
@@ -40,13 +48,16 @@
     import subtileFormMixin from "../../../mixins/subtileFormMixin";
     import DetailEntry from "../../layouts/cards/DetailEntry";
     import SubtileFormButton from "./SubtileFormButton";
+    import BaseIcon from "../../displays/BaseIcon";
 
     export default {
+        name: "subtile-detail-entry-flip-form",
+
         components: {
+            BaseIcon,
             SubtileFormButton,
             DetailEntry
         },
-        name: "subtile-detail-entry-form",
 
         mixins:[subtileFormMixin],
 
@@ -59,6 +70,18 @@
             iconFrom:[String,Array],
             title:null,
         },
+
+        computed: {
+            flipped() {
+                return this.formActive;
+            },
+
+            inputCallback() {
+                return (newValue) => {
+                    this.inputValue = newValue;
+                }
+            }
+        }
     }
 </script>
 

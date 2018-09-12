@@ -7,6 +7,7 @@
             Personen in
             <template v-if="group.name">'<span class="font-italic">{{ group.name }}</span>'</template>
             <template v-else>deze groep</template>
+            <span class="text-muted">({{ total }})</span>
         </template>
 
         <template slot="options">
@@ -80,6 +81,7 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import TablerCard from "../layouts/cards/TablerCard";
     import ListPersons from "./ListPersons";
     import { removePersonFromGroup, addPersonToGroup } from "../../apis/graphql/mutations/groups.graphql";
@@ -103,13 +105,26 @@
         },
         name: "group-persons-card",
 
+        fragment: gql`
+            fragment GroupPersonsCard on Group {
+                persons {
+                    total
+                    ...ListPersons
+                }
+            }
+            ${ListPersons.fragment}
+        `,
+
         props: {
             group: {
                 type:Object,
                 default() {
                     return {
                         id:null,
-                        persons:[],
+                        persons:{
+                            total:0,
+                            data:[]
+                        },
                     }
                 }
             }
@@ -124,8 +139,15 @@
 
         computed: {
             persons() {
-                return this.group.persons.data;
+                return this.group.persons;
             },
+
+            total() {
+                if(this.persons && typeof this.persons.total === 'number') {
+                    return this.persons.total;
+                }
+                return 0;
+            }
         },
 
         methods: {

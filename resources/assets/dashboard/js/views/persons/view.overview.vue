@@ -13,6 +13,8 @@
 
         <b-col lg="8">
 
+            <person-detail-card :person="person" />
+
         </b-col>
     </b-row>
 
@@ -24,9 +26,11 @@
     import PersonDetailsCardSmall from "../../components/displays/PersonDetailsCardSmall";
     import CertificateTableSmall from "../../components/displays/CertificateTableSmall";
     import PersonValidCertificatesCard from "../../components/displays/PersonValidCertificatesCard";
+    import PersonDetailCard from "../../components/displays/PersonDetailCard";
 
     export default {
         components: {
+            PersonDetailCard,
             PersonValidCertificatesCard,
             CertificateTableSmall,
             PersonDetailsCardSmall,
@@ -38,6 +42,8 @@
                     query viewPersonOverview($id:ID!) {
                         person(id:$id) {
                             id
+                            remarks
+                            name_short
                             ...PersonDetailsCardSmall
                             ...PersonValidCertificatesCard
                         }

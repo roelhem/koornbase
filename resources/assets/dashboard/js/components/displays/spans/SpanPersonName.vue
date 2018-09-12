@@ -48,6 +48,17 @@
 
         name: "span-person-name",
 
+        fragment:gql`
+            fragment SpanPersonName on Person {
+                name_initials
+                name_first
+                name_middle
+                name_prefix
+                name_last
+                name_nickname
+            }
+        `,
+
 
         props: {
 

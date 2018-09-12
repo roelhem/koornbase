@@ -59,6 +59,10 @@ class UpdatePersonMutation extends Mutation
                 'type' => Type::string(),
                 'rules' => ['nullable','string','max:63'],
             ],
+            'name_nickname' => [
+                'type' => Type::string(),
+                'rules' => ['nullable','string','max:255'],
+            ],
             'birth_date' => [
                 'name' => 'birth_date',
                 'type' => GraphQL::type('Date'),

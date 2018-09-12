@@ -11,6 +11,7 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import BaseField from "../BaseField";
 
     export default {
@@ -18,6 +19,15 @@
             BaseField,
         },
         name: "span-address",
+
+        fragment:gql`
+            fragment SpanAddress on PersonAddress {
+                address_line_1
+                locality
+                country
+                country_code
+            }
+        `,
 
         props: {
             address:{

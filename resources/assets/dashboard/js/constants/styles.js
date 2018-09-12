@@ -160,7 +160,7 @@ export const USER_STYLE = {
     name: 'user-default',
     label: 'Gebruiker',
     avatar: {
-        color:'azure'
+        color:'gray'
     },
 };
 

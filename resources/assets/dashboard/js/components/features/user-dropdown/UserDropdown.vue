@@ -3,9 +3,12 @@
     <div class="dropdown">
 
         <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-            <base-avatar v-bind="currentUser.avatar" color="blue" />
+            <base-avatar v-bind="currentUser.avatar" :default-style="currentUser.person ? 'person-default' : 'user-default'" />
             <span class="ml-2 d-none d-lg-block">
-                <span class="text-default">{{ currentUser.name_display }}</span>
+                <span class="text-default">
+                    <span-person-name v-if="currentUser.person" :person="currentUser.person" />
+                    <span v-else>{{ currentUser.name }}</span>
+                </span>
                 <span class="text-muted d-block mt-1 small">{{ currentUser.email }}</span>
             </span>
         </a>
@@ -44,9 +47,11 @@
     import { CURRENT_USER } from "../../../apis/graphql/queries";
     import BaseAvatar from "../../displays/BaseAvatar";
     import BaseIcon from "../../displays/BaseIcon";
+    import SpanPersonName from "../../displays/spans/SpanPersonName";
 
     export default {
         components: {
+            SpanPersonName,
             BaseIcon,
             BaseAvatar
         },

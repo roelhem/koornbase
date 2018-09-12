@@ -3,9 +3,24 @@
     <b-row class="justify-content-center">
 
         <b-col lg="10">
-            <person-phone-numbers-card :person="person" status="orange" status-left />
-            <person-email-addresses-card :person="person" status="orange" status-left />
-            <person-addresses-card :person="person" status="orange" status-left />
+            <person-email-addresses-card
+                    :person="person"
+                    collapsible
+                    collapsible-with-header
+                    :collapsed.sync="cards.personEmailAddressesCard.collapsed"
+            />
+            <person-phone-numbers-card
+                    :person="person"
+                    collapsible
+                    collapsible-with-header
+                    :collapsed.sync="cards.personPhoneNumbersCard.collapsed"
+            />
+            <person-addresses-card
+                    :person="person"
+                    collapsible
+                    collapsible-with-header
+                    :collapsed.sync="cards.personAddressesCard.collapsed"
+            />
         </b-col>
 
     </b-row>
@@ -50,6 +65,12 @@
         data:function() {
             return {
                 person:{},
+
+                cards:{
+                    personEmailAddressesCard:{collapsed:false},
+                    personPhoneNumbersCard:{collapsed:false},
+                    personAddressesCard:{collapsed:false}
+                }
             };
         },
 

@@ -62,7 +62,7 @@
     import BaseIcon from "./BaseIcon";
     import SubtileSingleInputForm from "../inputs/subtile/SubtileSingleInputForm";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
-    import { updateGroupEmailAddress, addEmailAddressToGroup, deleteGroupEmailAddress } from "../../apis/graphql/mutations/groups.graphql";
+    import gql from "graphql-tag";
 
     export default {
         components: {
@@ -72,6 +72,18 @@
             TablerCard
         },
         name: "group-email-addresses-card",
+
+        fragment: gql`
+            fragment GroupEmailAddressesCard on Group {
+                emailAddresses {
+                    data {
+                        id
+                        email_address
+                        remarks
+                    }
+                }
+            }
+        `,
 
         props: {
             group: {
@@ -127,8 +139,17 @@
         },*/
 
         computed: {
+
+            emailAddresses() {
+                if(this.group && this.group.emailAddresses) {
+                    return this.group.emailAddresses;
+                }
+                return {data:[]};
+            },
+
             items() {
-                const emailAddresses = this.group.emailAddresses.data;
+
+                const emailAddresses = this.emailAddresses.data;
 
                 if(emailAddresses) {
                     return emailAddresses.map(emailAddress => {
@@ -155,36 +176,18 @@
 
                 this.$apollo.mutate({
 
-                    mutation: addEmailAddressToGroup,
-
-                    variables: { group_id, email_address },
-
-                    update:( store, {
-                        data: {
-                            createGroupEmailAddress: {
-                                __typename,
-                                id,
-                                group_id,
-                                email_address,
+                    mutation: gql`
+                        mutation addEmailAddressToGroup($group_id:ID!, $email_address:Email!) {
+                            createGroupEmailAddress(group_id:$group_id, email_address:$email_address) {
+                                id
+                                group_id
+                                email_address
                                 remarks
                             }
                         }
-                    } ) => {
-                        /*
-                        const data = store.readQuery({
-                            query:getGroupDetailsQuery,
-                            variables:{ id:group_id },
-                        });
+                    `,
 
-                        const newEmailAddressEntry = {
-                            __typename, id, email_address, remarks
-                        };
-
-                        data.group.emailAddresses.push(newEmailAddressEntry);
-
-                        store.writeQuery({query: getGroupDetailsQuery, data })
-                        */
-                    },
+                    variables: { group_id, email_address },
 
                     optimisticResponse: {
                         __typename:'Mutation',
@@ -202,34 +205,25 @@
             },
 
             updateEmailAddress(index, id, newValue) {
+                const email_address = newValue;
 
                 this.$apollo.mutate({
 
-                    mutation: updateGroupEmailAddress,
+                    mutation: gql`
+                        mutation updateGroupEmailAddressEmailAddress($id:ID!, $email_address:Email) {
+                            updateGroupEmailAddress(id:$id, email_address:$email_address) {
+                                id email_address
+                            }
+                        }
+                    `,
 
-                    variables: {
-                        id: id,
-                        email_address:newValue,
-                    },
-
-                    update: (store, { data: { updateGroupEmailAddress: { id, group_id, email_address }} }) => {
-                        /*const data = store.readQuery({
-                            query:getGroupDetailsQuery,
-                            variables: { id:group_id }
-                        });
-
-                        data.group.emailAddresses[index].email_address = email_address;
-
-                        store.writeQuery({query: getGroupDetailsQuery, data })*/
-                    },
+                    variables: { id, email_address },
 
                     optimisticResponse: {
                         __typename:'Mutation',
                         updateGroupEmailAddress: {
                             __typename:'GroupEmailAddress',
-                            id:id,
-                            group_id:this.group.id,
-                            email_address:newValue
+                            id, email_address
                         }
                     },
 
@@ -244,33 +238,15 @@
 
                 this.$apollo.mutate({
 
-                    mutation: deleteGroupEmailAddress,
-
-                    variables: { id },
-
-                    update:(store, {
-                        data: {
-                            deleteGroupEmailAddress: {
-                                id,
-                                group_id
+                    mutation: gql`
+                        mutation deleteGroupEmailAddress($id:ID!) {
+                            deleteGroupEmailAddress(id:$id) {
+                                id group_id
                             }
                         }
-                    }) => {
-                        /*const data = store.readQuery({
-                            query:getGroupDetailsQuery,
-                            variables: {id:group_id }
-                        });
+                    `,
 
-                        const emailAddresses = data.group.emailAddresses;
-
-                        const index = emailAddresses.findIndex(emailAddress => emailAddress.id === id);
-
-                        if(index >= 0) {
-                            emailAddresses.splice(index, 1);
-
-                            store.writeQuery({query: getGroupDetailsQuery, data});
-                        }*/
-                    },
+                    variables: { id },
 
                     optimisticResponse: {
                         __typename:'Mutation',
