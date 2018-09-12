@@ -17,14 +17,9 @@
 
                 <div class="p-1 pt-3">
                     <h1 class="m-1">
-                        <display-person-name v-bind="person" with-nickname />
+                        <span-person-name :person="person" with-nickname />
                     </h1>
-                    <div class="tags">
-                        <kb-group-tag v-for="group in person.groups.data"
-                                      :key="group.slug"
-                                      :group="group"
-                                      label="member_name" />
-                    </div>
+                    <group-tag-list :groups="person.groups" label="member_name" />
                 </div>
             </div>
         </b-container>
@@ -65,25 +60,28 @@
 </template>
 
 <script>
+
+    import { PERSONS_VIEW } from "../../apis/graphql/queries";
+
     import TablerBanner from "../../components/layouts/title/TablerBanner";
     import BaseAvatar from "../../components/displays/BaseAvatar";
     import DataDisplay from "../../components/displays/DataDisplay";
-    import KbGroupTag from "../../components/displays/KbGroupTag";
+    import GroupTag from "../../components/displays/GroupTag";
     import BaseIcon from "../../components/displays/BaseIcon";
     import TablerDimmer from "../../components/layouts/cards/TablerDimmer";
-
-    import { personsView } from "../../apis/graphql/dashboard.graphql";
-    import DisplayPersonName from "../../components/displays/DisplayPersonName";
+    import SpanPersonName from "../../components/displays/spans/SpanPersonName";
+    import GroupTagList from "../../components/displays/GroupTagList";
 
     export default {
         components: {
-            DisplayPersonName,
+            GroupTagList,
+            SpanPersonName,
             TablerDimmer,
             BaseIcon,
             DataDisplay,
             BaseAvatar,
             TablerBanner,
-            KbGroupTag
+            GroupTag
         },
         name: "page-person",
 
@@ -93,7 +91,7 @@
 
         apollo: {
             person: {
-                query: personsView,
+                query: PERSONS_VIEW,
                 variables() {
                     return {
                         id:this.id

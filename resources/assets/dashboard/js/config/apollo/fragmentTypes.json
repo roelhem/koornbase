@@ -1,0 +1,1004 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "SCALAR",
+        "name": "ID",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "String",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Float",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Int",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Boolean",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Schema",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Type",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "__TypeKind",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Field",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__InputValue",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__EnumValue",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Directive",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "__DirectiveLocation",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Query",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CertificateCategory_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CertificateCategory_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SortOrderDirection",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CertificateCategory_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "DateTime",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CertificateCategory_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Pagination",
+        "possibleTypes": [
+          {
+            "name": "CertificateCategory_pagination"
+          },
+          {
+            "name": "Group_pagination"
+          },
+          {
+            "name": "Person_pagination"
+          },
+          {
+            "name": "GroupEmailAddress_pagination"
+          },
+          {
+            "name": "Certificate_pagination"
+          },
+          {
+            "name": "Debtor_pagination"
+          },
+          {
+            "name": "User_pagination"
+          },
+          {
+            "name": "PersonAddress_pagination"
+          },
+          {
+            "name": "PersonEmailAddress_pagination"
+          },
+          {
+            "name": "PersonPhoneNumber_pagination"
+          },
+          {
+            "name": "Membership_pagination"
+          },
+          {
+            "name": "UserAccount_pagination"
+          },
+          {
+            "name": "GroupCategory_pagination"
+          },
+          {
+            "name": "KoornbeursCard_pagination"
+          },
+          {
+            "name": "App_pagination"
+          },
+          {
+            "name": "OAuthClient_pagination"
+          },
+          {
+            "name": "LogGraphQLOperation_pagination"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CertificateCategory",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Model",
+        "possibleTypes": [
+          {
+            "name": "CertificateCategory"
+          },
+          {
+            "name": "User"
+          },
+          {
+            "name": "Person"
+          },
+          {
+            "name": "Group"
+          },
+          {
+            "name": "GroupCategory"
+          },
+          {
+            "name": "GroupEmailAddress"
+          },
+          {
+            "name": "Certificate"
+          },
+          {
+            "name": "Debtor"
+          },
+          {
+            "name": "KoornbeursCard"
+          },
+          {
+            "name": "PersonAddress"
+          },
+          {
+            "name": "PersonEmailAddress"
+          },
+          {
+            "name": "PersonPhoneNumber"
+          },
+          {
+            "name": "Membership"
+          },
+          {
+            "name": "UserAccount"
+          },
+          {
+            "name": "App"
+          },
+          {
+            "name": "LogGraphQLOperation"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "StampedModel",
+        "possibleTypes": [
+          {
+            "name": "CertificateCategory"
+          },
+          {
+            "name": "User"
+          },
+          {
+            "name": "Person"
+          },
+          {
+            "name": "Group"
+          },
+          {
+            "name": "GroupCategory"
+          },
+          {
+            "name": "GroupEmailAddress"
+          },
+          {
+            "name": "Certificate"
+          },
+          {
+            "name": "Debtor"
+          },
+          {
+            "name": "KoornbeursCard"
+          },
+          {
+            "name": "PersonAddress"
+          },
+          {
+            "name": "PersonEmailAddress"
+          },
+          {
+            "name": "PersonPhoneNumber"
+          },
+          {
+            "name": "Membership"
+          },
+          {
+            "name": "UserAccount"
+          },
+          {
+            "name": "App"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "User",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "OwnedByPerson",
+        "possibleTypes": [
+          {
+            "name": "User"
+          },
+          {
+            "name": "Person"
+          },
+          {
+            "name": "Certificate"
+          },
+          {
+            "name": "Debtor"
+          },
+          {
+            "name": "KoornbeursCard"
+          },
+          {
+            "name": "PersonAddress"
+          },
+          {
+            "name": "PersonEmailAddress"
+          },
+          {
+            "name": "PersonPhoneNumber"
+          },
+          {
+            "name": "Membership"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Person",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "SoftDeleteModel",
+        "possibleTypes": [
+          {
+            "name": "CertificateCategory"
+          },
+          {
+            "name": "Person"
+          },
+          {
+            "name": "Group"
+          },
+          {
+            "name": "GroupCategory"
+          },
+          {
+            "name": "App"
+          }
+        ]
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Date",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Group_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Group_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Group_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Group_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Group",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "GroupCategory",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Person_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Person_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Person_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "MembershipStatus",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Person_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "GroupEmailAddress_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "GroupEmailAddress_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "GroupEmailAddress_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "GroupEmailAddress_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "GroupEmailAddress",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Email",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Certificate_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Certificate_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Certificate_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Certificate_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Certificate",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Debtor_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Debtor_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Debtor_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Debtor",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "KoornbeursCard",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "User_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "User_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "User_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "User_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "PersonAddress_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PersonAddress_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "PersonAddress_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "CountryCode",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonAddress_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonAddress",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "PersonContactEntry",
+        "possibleTypes": [
+          {
+            "name": "PersonAddress"
+          },
+          {
+            "name": "PersonEmailAddress"
+          },
+          {
+            "name": "PersonPhoneNumber"
+          }
+        ]
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "HtmlAttributes",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "PersonEmailAddress_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PersonEmailAddress_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonEmailAddress_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonEmailAddress",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "PersonPhoneNumber_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PersonPhoneNumber_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "PersonPhoneNumber_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonPhoneNumber_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonPhoneNumber",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PhoneNumberFormat",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PhoneNumberType",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Membership_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Membership_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "Membership_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Membership_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Membership",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Avatar",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "UserAccount_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "UserAccount_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "UserAccount_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OAuthProvider",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UserAccount_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UserAccount",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "GroupCategory_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "GroupCategory_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "GroupCategory_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "KoornbeursCard_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "KoornbeursCard_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "KoornbeursCard_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "KoornbeursCard_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "App_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "App_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "App_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "App",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "OAuthClient_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OAuthClient_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthClient_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "OAuthClient",
+        "possibleTypes": [
+          {
+            "name": "OAuthPersonalClient"
+          },
+          {
+            "name": "OAuthPasswordClient"
+          },
+          {
+            "name": "OAuthCredentialsClient"
+          },
+          {
+            "name": "OAuthAuthCodeClient"
+          }
+        ]
+      },
+      {
+        "kind": "ENUM",
+        "name": "OAuthClientType",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthToken",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "RbacGraph",
+        "possibleTypes": [
+          {
+            "name": "PostgresRbacGraph"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "RbacNode",
+        "possibleTypes": [
+          {
+            "name": "RbacDefaultNode"
+          },
+          {
+            "name": "RbacRole"
+          },
+          {
+            "name": "RbacSuperRole"
+          },
+          {
+            "name": "RbacAbstractRole"
+          },
+          {
+            "name": "RbacDynamicRole"
+          },
+          {
+            "name": "RbacTask"
+          },
+          {
+            "name": "RbacPermission"
+          },
+          {
+            "name": "RbacRoutePermission"
+          },
+          {
+            "name": "RbacAbility"
+          },
+          {
+            "name": "RbacModelAbility"
+          },
+          {
+            "name": "RbacPermissionSet"
+          },
+          {
+            "name": "RbacCrudAbilitySet"
+          },
+          {
+            "name": "RbacGate"
+          },
+          {
+            "name": "RbacModelGate"
+          }
+        ]
+      },
+      {
+        "kind": "ENUM",
+        "name": "RbacNodeType",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacEdge",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacPath",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacAssignment",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "RbacAssignableNode",
+        "possibleTypes": [
+          {
+            "name": "RbacRole"
+          },
+          {
+            "name": "RbacSuperRole"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "LogGraphQLOperation",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "GraphQLOperationType",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "LogGraphQLOperation_orderRule",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "LogGraphQLOperation_orderField",
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "LogGraphQLOperation_filter",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "LogGraphQLOperation_pagination",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Mutation",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PersonGroupConnection",
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OAuthScope",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthPersonalAccessTokenResult",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PostgresRbacGraph",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacDefaultNode",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacRole",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacSuperRole",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacAbstractRole",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacDynamicRole",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacTask",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacPermission",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacRoutePermission",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacAbility",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacModelAbility",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacPermissionSet",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacCrudAbilitySet",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacGate",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RbacModelGate",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthPersonalClient",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthPersonalAccessClient",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthPasswordClient",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthCredentialsClient",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthAuthCodeClient",
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OAuthAuthCode",
+        "possibleTypes": null
+      }
+    ]
+  }
+}

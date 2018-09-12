@@ -117,7 +117,7 @@
 
 <script>
 
-    import { oAuthClientIndex } from '../../../apis/graphql/dashboard.graphql';
+    import { OAUTH_CLIENTS_INDEX } from '../../../apis/graphql/queries';
     import SearchHeaderContainer from "../../../components/features/table-search/SearchHeaderContainer";
     import SearchColumnSelectCard from "../../../components/features/table-search/SearchColumnSelectCard";
     import CreateOAuthClientForm from "../../../components/features/crud/CreateOAuthClientForm";
@@ -139,7 +139,7 @@
         searchTable: {
             queryKey:'clients',
             query:{
-                query:oAuthClientIndex,
+                query:OAUTH_CLIENTS_INDEX,
                 variables() {
                     return {
                         perPage: this.perPage,

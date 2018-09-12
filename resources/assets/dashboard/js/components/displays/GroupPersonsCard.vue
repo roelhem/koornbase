@@ -63,8 +63,9 @@
                         {{ deletingPerson.name_last }}
                     </div>
                     <div class="small">
-                        <display-membership-status :status="deletingPerson.membership_status"
-                                                   :since="deletingPerson.membership_status_since"
+                        <span-membership-status
+                                :status="deletingPerson.membership_status"
+                                :since="deletingPerson.membership_status_since"
                         />
                     </div>
                 </div>
@@ -82,17 +83,16 @@
     import TablerCard from "../layouts/cards/TablerCard";
     import ListPersons from "./ListPersons";
     import { removePersonFromGroup, addPersonToGroup } from "../../apis/graphql/mutations/groups.graphql";
-    import { getGroupDetailsQuery, getPersonSelectOptions } from "../../apis/graphql/queries/groups.graphql";
     import PersonSelect from "../inputs/select/PersonSelect";
     import TablerModal from "../layouts/modals/TablerModal";
     import VueMultiselect from "vue-multiselect/src/Multiselect";
     import BaseTag from "./BaseTag";
     import BaseAvatar from "./BaseAvatar";
-    import DisplayMembershipStatus from "./DisplayMembershipStatus";
+    import SpanMembershipStatus from "./spans/SpanMembershipStatus";
 
     export default {
         components: {
-            DisplayMembershipStatus,
+            SpanMembershipStatus,
             BaseAvatar,
             BaseTag,
             VueMultiselect,
@@ -124,7 +124,7 @@
 
         computed: {
             persons() {
-                return this.group.persons;
+                return this.group.persons.data;
             },
         },
 
@@ -161,7 +161,7 @@
                             }
                         }
                     }) => {
-                        const data = store.readQuery({
+                        /*const data = store.readQuery({
                             query:getGroupDetailsQuery,
                             variables: {id:group_id }
                         });
@@ -172,7 +172,7 @@
                         store.writeQuery({
                             query: getGroupDetailsQuery,
                             data
-                        });
+                        });*/
 
                     },
 
@@ -223,7 +223,7 @@
                             }
                         }
                     }) => {
-                        const data = store.readQuery({
+                        /*const data = store.readQuery({
                             query:getGroupDetailsQuery,
                             variables: {id:group_id }
                         });
@@ -236,7 +236,7 @@
                             persons.splice(index, 1);
 
                             store.writeQuery({query: getGroupDetailsQuery, data});
-                        }
+                        }*/
                     },
 
                     optimisticResponse: {

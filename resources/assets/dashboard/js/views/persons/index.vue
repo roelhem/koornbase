@@ -61,9 +61,9 @@
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
-                                <div><display-person-name v-bind="item" with-nickname /></div>
+                                <div><span-person-name :person="item" with-nickname /></div>
                                 <div class="small text-muted">
-                                    <display-person-name v-bind="item" formal />
+                                    <span-person-name :person="item" formal />
                                 </div>
                             </template>
 
@@ -161,7 +161,7 @@
     import BaseIcon from "../../components/displays/BaseIcon";
     import searchTableMixin from "../../mixins/searchTableMixin";
 
-    import { personsIndex } from "../../apis/graphql/dashboard.graphql";
+    import { PERSONS_INDEX } from "../../apis/graphql/queries";
 
     import displayFilters from '../../utils/filters/display';
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
@@ -169,7 +169,7 @@
     import DisplayTimestamp from "../../components/displays/DisplayTimestamp";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import BaseField from "../../components/displays/BaseField";
-    import DisplayPersonName from "../../components/displays/DisplayPersonName";
+    import SpanPersonName from "../../components/displays/spans/SpanPersonName";
 
 
 
@@ -247,7 +247,7 @@
 
     export default {
         components: {
-            DisplayPersonName,
+            SpanPersonName,
             BaseField,
             TablerPageHeader,
             DisplayTimestamp,
@@ -272,7 +272,7 @@
         searchTable: {
             queryKey:'persons',
             query: {
-                query: personsIndex,
+                query: PERSONS_INDEX,
                 variables() {
                     return {
                         page:this.page,

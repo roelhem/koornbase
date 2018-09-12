@@ -4,30 +4,63 @@
 
         <b-col lg="4">
 
-            <show-person-details-card-small :person-id="personId" />
+            <person-details-card-small :person="person" />
 
-            <show-valid-certificates-of-person-card-small :person-id="personId" />
+            <person-valid-certificates-card :person="person" />
+
 
         </b-col>
 
-
-        <b-col>
+        <b-col lg="8">
 
         </b-col>
-
-
     </b-row>
 
 </template>
 
 <script>
-    import ShowPersonDetailsCardSmall from "../../components/displays/ShowPersonDetailsCardSmall";
-    import ShowValidCertificatesOfPersonCardSmall from "../../components/displays/ShowValidCertificatesOfPersonCardSmall";
+    import gql from "graphql-tag";
+
+    import PersonDetailsCardSmall from "../../components/displays/PersonDetailsCardSmall";
+    import CertificateTableSmall from "../../components/displays/CertificateTableSmall";
+    import PersonValidCertificatesCard from "../../components/displays/PersonValidCertificatesCard";
 
     export default {
         components: {
-            ShowValidCertificatesOfPersonCardSmall,
-            ShowPersonDetailsCardSmall,
+            PersonValidCertificatesCard,
+            CertificateTableSmall,
+            PersonDetailsCardSmall,
+        },
+
+        apollo: {
+            person:{
+                query:gql`
+                    query viewPersonOverview($id:ID!) {
+                        person(id:$id) {
+                            id
+                            ...PersonDetailsCardSmall
+                            ...PersonValidCertificatesCard
+                        }
+                    }
+                    ${PersonDetailsCardSmall.fragment}
+                    ${PersonValidCertificatesCard.fragment}
+                `,
+                variables() {
+                    return {
+                        id:this.personId
+                    };
+                }
+            }
+        },
+
+        data() {
+            return {
+                person:{
+                    emailAddresses:{data:[]},
+                    addresses:{data:[]},
+                    phoneNumbers:{data:[]},
+                }
+            }
         },
 
         props: {

@@ -24,7 +24,6 @@
         components: {BaseIcon},
         mixins: [useDefaultStyle],
 
-
         props: {
             image:String,
             letters:String,

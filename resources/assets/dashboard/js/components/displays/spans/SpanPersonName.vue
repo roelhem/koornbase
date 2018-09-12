@@ -39,18 +39,32 @@
 </template>
 
 <script>
-    import BaseField from "./BaseField";
+    import gql from "graphql-tag";
+    import BaseField from "../BaseField";
 
     export default {
+
         components: {BaseField},
-        name: "display-person-name",
+
+        name: "span-person-name",
+
+
         props: {
-            name_initials:String,
-            name_first:String,
-            name_middle:String,
-            name_prefix:String,
-            name_last:String,
-            name_nickname:String,
+
+            person:{
+                type:Object,
+                default:function() {
+                    return {
+                        name_initials:null,
+                        name_first:null,
+                        name_middle:null,
+                        name_prefix:null,
+                        name_last:null,
+                        name_nickname:null
+                    }
+                },
+                required:true
+            },
 
             formal:{
                 type:Boolean,
@@ -74,6 +88,13 @@
         },
 
         computed: {
+
+            name_initials() { return this.person.name_initials; },
+            name_first() { return this.person.name_first; },
+            name_middle() { return this.person.name_middle; },
+            name_prefix() { return this.person.name_prefix; },
+            name_last() { return this.person.name_last; },
+            name_nickname() { return this.person.name_nickname; },
 
             format() {
                 if(this.short) { return 'short'; }

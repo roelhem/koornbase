@@ -16,7 +16,7 @@
         <template slot="preview" slot-scope="{ item }">
             <data-display title="Label">{{ item.label }}</data-display>:
             <span class="text-muted-dark">
-                    <display-person-address v-bind="item" />
+                    <span-address :address="item" />
                 </span>
         </template>
 
@@ -34,7 +34,7 @@
 <script>
     import TablerTableCard from "../layouts/cards/TablerTableCard";
     import DataDisplay from "./DataDisplay";
-    import DisplayPersonAddress from "./DisplayPersonAddress";
+    import SpanAddress from "./spans/SpanAddress";
     import { getPersonAddressesQuery } from "../../apis/graphql/queries/persons.graphql";
 
     export default {
@@ -72,7 +72,7 @@
         },
 
         components: {
-            DisplayPersonAddress,
+            SpanAddress,
             DataDisplay,
             TablerTableCard
         },

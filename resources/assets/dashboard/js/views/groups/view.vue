@@ -43,11 +43,11 @@
                         <subtile-detail-entry-form label="Persoons-titel" :value="group.member_name" @submit="updateMemberNameHandler" />
 
                         <detail-entry label="Categorie">
-                            <display-group-category :category="group.category" />
+                            <span-group-category :category="group.category" />
                         </detail-entry>
 
                         <detail-entry label="Tag">
-                            <kb-group-tag :group="group" label="name" />
+                            <group-tag :group="group" label="name" />
                         </detail-entry>
 
                     </detail-view>
@@ -55,7 +55,6 @@
 
                 </tabler-card>
                 <!-- END of the GROUP card -->
-
 
 
                 <!-- START of the EMAIL ADDRESSES card -->
@@ -88,38 +87,39 @@
 </template>
 
 <script>
+    import gql from 'graphql-tag';
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
-    import { getGroupDetailsQuery } from "../../apis/graphql/queries/groups.graphql";
+    import { GROUPS_VIEW } from "../../apis/graphql/queries";
     import { updateGroupDescription, updateGroupNames } from "../../apis/graphql/mutations/groups.graphql";
     import TablerCard from "../../components/layouts/cards/TablerCard";
     import DetailView from "../../components/layouts/cards/DetailView";
     import DetailEntry from "../../components/layouts/cards/DetailEntry";
     import BaseStamp from "../../components/displays/BaseStamp";
-    import DisplayGroupCategory from "../../components/displays/DisplayGroupCategory";
     import BaseIcon from "../../components/displays/BaseIcon";
     import BaseAvatar from "../../components/displays/BaseAvatar";
     import SubtileCardBodyForm from "../../components/inputs/subtile/SubtileCardBodyForm";
     import SubtileSingleInputForm from "../../components/inputs/subtile/SubtileSingleInputForm";
     import SubtileDetailEntryForm from "../../components/inputs/subtile/SubtileDetailEntryForm";
-    import DisplayMembershipStatus from "../../components/displays/DisplayMembershipStatus";
+    import SpanMembershipStatus from "../../components/displays/spans/SpanMembershipStatus";
+    import SpanGroupCategory from "../../components/displays/spans/SpanGroupCategory";
     import FormSwitch from "../../components/inputs/FormSwitch";
     import GroupEmailAddressesCard from "../../components/displays/GroupEmailAddressesCard";
     import GroupPersonsCard from "../../components/displays/GroupPersonsCard";
-    import KbGroupTag from "../../components/displays/KbGroupTag";
+    import GroupTag from "../../components/displays/GroupTag";
 
     export default {
         components: {
-            KbGroupTag,
+            GroupTag,
             GroupPersonsCard,
             GroupEmailAddressesCard,
             FormSwitch,
-            DisplayMembershipStatus,
+            SpanMembershipStatus,
+            SpanGroupCategory,
             SubtileDetailEntryForm,
             SubtileSingleInputForm,
             SubtileCardBodyForm,
             BaseIcon,
             BaseAvatar,
-            DisplayGroupCategory,
             BaseStamp,
             DetailEntry,
             DetailView,
@@ -130,7 +130,7 @@
 
         apollo: {
             group: {
-                query: getGroupDetailsQuery,
+                query: GROUPS_VIEW,
                 variables() {
                     return {
                         id:this.id
@@ -172,76 +172,97 @@
 
 
             updateNameHandler(newValue) {
-                return this.runNameMutation({
-                    id: this.group.id,
-                    name: newValue,
-                });
-            },
-
-            updateNameShortHandler(newValue) {
-                return this.runNameMutation({
-                    id: this.group.id,
-                    name_short: newValue,
-                });
-            },
-
-            updateMemberNameHandler(newValue) {
-                return this.runNameMutation({
-                    id: this.group.id,
-                    member_name: newValue,
-                });
-            },
-
-            runNameMutation(variables) {
-                let {id, name, name_short, member_name} = Object.assign(this.defaultNameMutationParams, variables);
-
+                const id = this.group.id;
+                const name = newValue;
+                const name_short = this.group.name_short;
+                const member_name = this.group.member_name;
 
                 this.$apollo.mutate({
-                    mutation: updateGroupNames,
-                    variables: variables,
-                    update: (store, {data:{updateGroup: {id, name, name_short, member_name}}}) => {
-                        const data = store.readQuery({query: getGroupDetailsQuery, variables:{id} });
-                        data.group.name = name;
-                        data.group.name_short = name_short;
-                        data.group.member_name = member_name;
-                        store.writeQuery({ query: getGroupDetailsQuery, data});
-                    },
+                    mutation: gql`
+                        mutation updateGroupName($id:ID!, $name:String) {
+                            updateGroup(id:$id, name:$name) {
+                                id name name_short member_name
+                            }
+                        }
+                    `,
+                    variables: { id, name },
                     optimisticResponse: {
                         __typename:'Mutation',
                         updateGroup: {
                             __typename:'Group',
-                            id, name, name_short, member_name,
+                            id, name, name_short, member_name
                         }
                     }
+                }).then(data => console.log(data)).catch(error => console.log(error));
+            },
 
+            updateNameShortHandler(newValue) {
+                const id = this.group.id;
+                const name_short = newValue;
+                const member_name = this.group.member_name;
+
+                this.$apollo.mutate({
+                    mutation: gql`
+                        mutation updateGroupNameShort($id:ID!, $name_short:String) {
+                            updateGroup(id:$id, name_short:$name_short) {
+                                id name_short member_name
+                            }
+                        }
+                    `,
+                    variables: { id, name_short },
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        updateGroup: {
+                            __typename:'Group',
+                            id, name_short, member_name
+                        }
+                    }
+                }).then(data => console.log(data)).catch(error => console.log(error));
+            },
+
+            updateMemberNameHandler(newValue) {
+                const id = this.group.id;
+                const member_name = newValue;
+
+                this.$apollo.mutate({
+                    mutation: gql`
+                        mutation updateGroupMemberName($id:ID!, $member_name:String) {
+                            updateGroup(id:$id, member_name:$member_name) {
+                                id member_name
+                            }
+                        }
+                    `,
+                    variables: { id, member_name },
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        updateGroup: {
+                            __typename:'Group',
+                            id, member_name
+                        }
+                    }
                 }).then(data => console.log(data)).catch(error => console.log(error));
             },
 
             updateDescriptionHandler(newValue) {
-                const inputId = this.group.id;
-                const inputDescr = newValue;
+                const id = this.group.id;
+                const description = newValue;
 
                 this.$apollo.mutate({
-                    mutation: updateGroupDescription,
-                    variables: {
-                        id: inputId,
-                        description: inputDescr,
-                    },
-
-                    update: (store, {data:{ updateGroup: { id, description }}}) => {
-                        const data = store.readQuery({query: getGroupDetailsQuery, variables: {id} });
-
-                        data.group.description = description;
-
-                        store.writeQuery({query: getGroupDetailsQuery, data });
-                    },
+                    mutation: gql`
+                        mutation updateGroupDescription($id:ID!, $description:String) {
+                            updateGroup(id:$id, description:$description) {
+                                id description
+                            }
+                        }
+                    `,
+                    variables: {id, description},
 
                     optimisticResponse: {
                         __typename:'Mutation',
                         updateGroup: {
                             __typename:'Group',
-                            id:inputId,
-                            description:inputDescr,
+                            id,
+                            description,
                         }
                     }
                 }).then(data => console.log(data)).catch(error => console.log(error))

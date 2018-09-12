@@ -44,7 +44,7 @@
 
 <script>
     import SearchHeaderContainer from "../../../components/features/table-search/SearchHeaderContainer";
-    import { getAppsForTable } from "../../../apis/graphql/queries/apps.graphql";
+    import { APPS_INDEX } from "../../../apis/graphql/queries";
     import CreateAppForm from "../../../components/features/crud/CreateAppForm";
     import TablerPageHeader from "../../../components/layouts/title/TablerPageHeader";
 
@@ -56,7 +56,7 @@
             SearchHeaderContainer},
         apollo: {
             apps: {
-                query: getAppsForTable,
+                query: APPS_INDEX,
                 variables() {
                     return {
                         page: this.page,

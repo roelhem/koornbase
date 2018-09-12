@@ -58,8 +58,8 @@
     import DataDisplay from "./DataDisplay";
     import DetailView from "../layouts/cards/DetailView";
     import DetailEntry from "../layouts/cards/DetailEntry";
-    import DisplayPersonName from "./DisplayPersonName";
-    import DisplayPersonBirthDate from "./DisplayPersonBirthDate";
+    import DisplayPersonName from "./spans/DisplayPersonName";
+    import DisplayPersonBirthDate from "./spans/DisplayPersonBirthDate";
 
     export default {
 

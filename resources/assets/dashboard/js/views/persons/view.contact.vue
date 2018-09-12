@@ -3,11 +3,9 @@
     <b-row class="justify-content-center">
 
         <b-col lg="10">
-            <show-email-addresses-of-person-card :collapsed.sync="emailAddressesCollapsed" :person-id="personId" />
-
-            <show-phone-numbers-of-person-card :collapsed.sync="phoneNumbersCollapsed" :person-id="personId" />
-
-            <show-addresses-of-person-card :collapsed.sync="addressesCollapsed" :person-id="personId" />
+            <person-phone-numbers-card :person="person" status="orange" status-left />
+            <person-email-addresses-card :person="person" status="orange" status-left />
+            <person-addresses-card :person="person" status="orange" status-left />
         </b-col>
 
     </b-row>
@@ -15,24 +13,43 @@
 </template>
 
 <script>
-    import ShowEmailAddressesOfPersonCard from "../../components/displays/ShowEmailAddressesOfPersonCard";
-    import TablerDimmer from "../../components/layouts/cards/TablerDimmer";
-    import ShowPhoneNumbersOfPersonCard from "../../components/displays/ShowPhoneNumbersOfPersonCard";
-    import ShowAddressesOfPersonCard from "../../components/displays/ShowAddressesOfPersonCard";
+    import gql from "graphql-tag";
+    import PersonPhoneNumbersCard from "../../components/displays/PersonPhoneNumbersCard";
+    import PersonEmailAddressesCard from "../../components/displays/PersonEmailAddressesCard";
+    import PersonAddressesCard from "../../components/displays/PersonAddressesCard";
 
     export default {
-        components: {
-            ShowAddressesOfPersonCard,
-            ShowPhoneNumbersOfPersonCard,
-            TablerDimmer,
-            ShowEmailAddressesOfPersonCard},
         name: "page-person-contact",
+
+        components: {
+            PersonAddressesCard,
+            PersonEmailAddressesCard,
+            PersonPhoneNumbersCard
+
+        },
+
+        apollo: {
+            person: {
+                query:gql`
+                    query viewPersonContact($id:ID!) {
+                        person(id:$id) {
+                            id
+                            ...PersonPhoneNumbersCard
+                            ...PersonEmailAddressesCard
+                            ...PersonAddressesCard
+                        }
+                    }
+                    ${PersonPhoneNumbersCard.fragment}
+                    ${PersonEmailAddressesCard.fragment}
+                    ${PersonAddressesCard.fragment}
+                `,
+                variables() { return {id:this.personId}; }
+            }
+        },
 
         data:function() {
             return {
-                emailAddressesCollapsed:false,
-                phoneNumbersCollapsed:false,
-                addressesCollapsed:false
+                person:{},
             };
         },
 

@@ -36,7 +36,7 @@ require('./config/plugins');
 
 // The most important Vue plug-ins.
 import router from './config/router/index';
-import provider from './config/apollo';
+import provider from './config/apollo/apollo';
 // The leading component.
 import App from './App';
 

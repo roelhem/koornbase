@@ -120,7 +120,7 @@
 
 <script>
 
-    import { groupsIndex } from "../../apis/graphql/dashboard.graphql";
+    import { GROUPS_INDEX } from "../../apis/graphql/queries";
 
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
@@ -155,7 +155,7 @@
         searchTable: {
             queryKey:'groups',
             query:{
-                query: groupsIndex,
+                query: GROUPS_INDEX,
                 variables() {
                     return {
                         page:this.page,

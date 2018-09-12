@@ -2,19 +2,19 @@
 
 
     <b-card no-body>
-        <tabler-dimmer :active="$apollo.queries.person.loading">
+        <tabler-dimmer :active="!person.id">
             <detail-view in-card sm class="table-hover">
 
                 <detail-entry icon="user" title="Naam">
-                    <display-person-name v-bind="person" full />
+                    <span-person-name :person="person" full />
                 </detail-entry>
 
                 <detail-entry icon="birthday-cake" title="Geboortedatum">
-                    <display-person-birth-date v-bind="person" />
+                    <span-birth-date v-bind="person" />
                 </detail-entry>
 
                 <detail-entry icon="book" title="Lid-status">
-                    <display-membership-status :status="person.membership_status" :since="person.membership_status_since" />
+                    <span-membership-status :status="person.membership_status" :since="person.membership_status_since" />
                 </detail-entry>
 
                 <detail-entry icon="credit-card"
@@ -44,7 +44,7 @@
                 </detail-entry>
 
                 <detail-entry v-if="person.address" icon="map-marker" title="Adres">
-                    <display-person-address v-bind="person.address" />
+                    <span-address :address="person.address" />
                 </detail-entry>
             </detail-view>
         </tabler-dimmer>
@@ -53,46 +53,65 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
+    import fragments from "../../apis/graphql/queries/fragments";
+
     import DetailView from "../layouts/cards/DetailView";
     import DetailEntry from "../layouts/cards/DetailEntry";
-    import DisplayPersonName from "./DisplayPersonName";
-    import DisplayPersonBirthDate from "./DisplayPersonBirthDate";
+    import SpanPersonName from "./spans/SpanPersonName";
+    import SpanBirthDate from "./spans/SpanBirthDate";
     import DataDisplay from "./DataDisplay";
-    import DisplayMembershipStatus from "./DisplayMembershipStatus";
-    import DisplayPersonAddress from "./DisplayPersonAddress";
+    import SpanMembershipStatus from "./spans/SpanMembershipStatus";
+    import SpanAddress from "./spans/SpanAddress";
 
-    import { getPersonDetailsData } from "../../apis/graphql/queries/persons.graphql";
     import TablerDimmer from "../layouts/cards/TablerDimmer";
 
 
 
     export default {
-        name: "show-person-details-card-small",
+        name: "person-details-card-small",
 
-        props: {
-            personId: {
-                type:[String,Number],
-                required:true
-            }
-        },
-
-        apollo: {
-
-            person:{
-                query: getPersonDetailsData,
-                variables() {
-                    return {
-                        id:this.personId
-                    };
+        fragment:gql`
+            fragment PersonDetailsCardSmall on Person {
+                ...PersonNameSpan
+                ...PersonBirthDate
+                ...PersonMembershipStatus
+                activeCards: cards(active:true) {
+                    id
+                    ref
+                    version
+                }
+                emailAddress {
+                    id
+                    email_address
+                }
+                phoneNumber {
+                    id
+                    phone_number
+                }
+                address {
+                    id
+                    label
+                    country_code
+                    country
+                    locality
+                    address_line_1
                 }
             }
+            ${fragments.PersonNameSpan}
+            ${fragments.PersonBirthDate}
+            ${fragments.PersonMembershipStatus}
+        `,
 
-        },
-
-        data:function() {
-            return {
-                person:{
-                    activeCards:[]
+        props: {
+            person:{
+                type:Object,
+                default:function() {
+                    return {
+                        person:{
+                            activeCards:[]
+                        }
+                    };
                 }
             }
         },
@@ -102,10 +121,10 @@
             DetailView,
             DetailEntry,
             DataDisplay,
-            DisplayPersonAddress,
-            DisplayMembershipStatus,
-            DisplayPersonBirthDate,
-            DisplayPersonName
+            SpanAddress,
+            SpanMembershipStatus,
+            SpanBirthDate,
+            SpanPersonName
         }
     }
 </script>

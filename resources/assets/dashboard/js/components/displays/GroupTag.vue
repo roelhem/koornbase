@@ -74,7 +74,7 @@
 
 
         components: {BaseTag},
-        name: "kb-group-tag"
+        name: "group-tag"
     }
 </script>
 

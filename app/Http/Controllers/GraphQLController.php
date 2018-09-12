@@ -8,9 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\GraphQL\Operation;
 use App\Services\GraphQL\QueryInput;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Rebing\GraphQL\GraphQLUploadMiddleware;

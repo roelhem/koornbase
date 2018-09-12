@@ -21,9 +21,9 @@
                     {{ person.name_last }}
                 </div>
                 <div class="small text-muted-dark">
-                    <display-membership-status :status="person.membership_status"
-                                               :since="person.membership_status_since"
-                                               date-size="sm"
+                    <span-membership-status :status="person.membership_status"
+                                            :since="person.membership_status_since"
+                                            date-size="sm"
                     />
                 </div>
             </b-col>
@@ -42,7 +42,7 @@
 
 <script>
     import BaseAvatar from "./BaseAvatar";
-    import DisplayMembershipStatus from "./DisplayMembershipStatus";
+    import SpanMembershipStatus from "./spans/SpanMembershipStatus";
     import BaseIcon from "./BaseIcon";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
 
@@ -50,7 +50,7 @@
         components: {
             SubtileFormButton,
             BaseIcon,
-            DisplayMembershipStatus,
+            SpanMembershipStatus,
             BaseAvatar
         },
         name: "list-persons-item",

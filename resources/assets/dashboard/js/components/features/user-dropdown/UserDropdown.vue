@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import { currentUser } from "../../../apis/graphql/dashboard.graphql";
+    import { CURRENT_USER } from "../../../apis/graphql/queries";
     import BaseAvatar from "../../displays/BaseAvatar";
     import BaseIcon from "../../displays/BaseIcon";
 
@@ -53,7 +53,7 @@
         name: "user-menu",
 
         apollo: {
-            currentUser:currentUser
+            currentUser:CURRENT_USER
         },
 
         data() {

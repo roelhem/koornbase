@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import { currentUser } from "./apis/graphql/dashboard.graphql";
+    import { CURRENT_USER } from "./apis/graphql/queries";
 
     import TheMainPage from "./components/layouts/TheMainPage";
     import TheFooter from "./components/layouts/footer/TheFooter";
@@ -31,7 +31,7 @@
     export default {
         name: "app",
 
-        apollo: { currentUser:currentUser },
+        apollo: { currentUser:CURRENT_USER },
 
         data() {
             return {

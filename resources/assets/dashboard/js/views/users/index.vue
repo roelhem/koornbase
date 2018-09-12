@@ -75,7 +75,7 @@
                                 <template v-if="item.person !== null">
                                     <div>{{ item.person.name }}</div>
                                     <div class="small text-muted-dark">
-                                        <display-membership-status
+                                        <span-membership-status
                                                 :status="item.person.membership_status"
                                                 :since="item.person.membership_status_since"
                                                 date-size="sm"
@@ -130,13 +130,13 @@
 </template>
 
 <script>
-    import getUsersForTableQuery from '../../apis/graphql/queries/users.graphql';
+    import { USERS_INDEX } from '../../apis/graphql/queries';
     import SearchPerPageInput from "../../components/features/table-search/SearchPerPageInput";
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
     import SearchColumnSelectCard from "../../components/features/table-search/SearchColumnSelectCard";
     import SearchSortInput from "../../components/features/table-search/SearchSortInput";
     import BaseAvatar from "../../components/displays/BaseAvatar";
-    import DisplayMembershipStatus from "../../components/displays/DisplayMembershipStatus";
+    import SpanMembershipStatus from "../../components/displays/spans/SpanMembershipStatus";
     import searchTableMixin from "../../mixins/searchTableMixin";
     import DisplayTimestamp from "../../components/displays/DisplayTimestamp";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
@@ -150,7 +150,7 @@
         searchTable: {
             queryKey: 'users',
             query: {
-                query:getUsersForTableQuery,
+                query:USERS_INDEX,
                 variables() {
                     return {
                         page: this.page,
@@ -191,7 +191,7 @@
             SearchStatusDisplay,
             TablerPageHeader,
             DisplayTimestamp,
-            DisplayMembershipStatus,
+            SpanMembershipStatus,
             BaseAvatar,
             SearchPerPageInput,
             SearchHeaderContainer,

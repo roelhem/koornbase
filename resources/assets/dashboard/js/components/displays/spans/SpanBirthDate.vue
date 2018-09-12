@@ -1,10 +1,10 @@
 <template>
 
     <span>
-        <data-display title="Geboortedatum">{{ birth_date | moment('D MMMM YYYY') }}</data-display>
+        <base-field title="Geboortedatum">{{ birth_date | date('bday') }}</base-field>
         <small class="font-italic" :class="{'text-muted': !underAged, 'text-warning': underAged}">
             (
-            <data-display title="Leeftijd">{{ age }} jaar</data-display>
+            <base-field title="Leeftijd">{{ age }} jaar</base-field>
             )
         </small>
     </span>
@@ -14,14 +14,22 @@
 
 <script>
     import moment from 'moment';
-    import DataDisplay from "./DataDisplay";
+    import displayFilters from '../../../utils/filters/display';
+    import BaseField from "../BaseField";
 
     export default {
-        components: {DataDisplay},
-        name: "display-person-birth-date",
+        components: {
+            BaseField
+        },
+
+        filters:displayFilters,
+
+        name: "span-birth-date",
+
         props:{
             birth_date:null
         },
+
         computed: {
             age:function() {
                 return moment().diff(this.birth_date, 'years');

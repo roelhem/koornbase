@@ -24,15 +24,8 @@
 </template>
 
 <script>
-    import { currentUser } from "../../apis/graphql/dashboard.graphql";
-    import DataDisplay from "../../components/displays/DataDisplay";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
-    import BaseTag from "../../components/displays/BaseTag";
+    import { CURRENT_USER } from "../../apis/graphql/queries";
     import ShowEmailAddressesOfPersonCard from "../../components/displays/ShowEmailAddressesOfPersonCard";
-    import TablerTableCard from "../../components/layouts/cards/TablerTableCard";
-    import KbPersonDetailCard from "../../components/displays/KbPersonDetailCard";
-    import TablerCard from "../../components/layouts/cards/TablerCard";
-    import DisplayPersonAddress from "../../components/displays/DisplayPersonAddress";
     import { getPersonDetailsShowCardData } from "../../apis/graphql/queries/persons.graphql";
     import ShowPhoneNumbersOfPersonCard from "../../components/displays/ShowPhoneNumbersOfPersonCard";
     import ShowAddressesOfPersonCard from "../../components/displays/ShowAddressesOfPersonCard";
@@ -42,19 +35,12 @@
         components: {
             ShowAddressesOfPersonCard,
             ShowPhoneNumbersOfPersonCard,
-            DisplayPersonAddress,
-            TablerCard,
-            KbPersonDetailCard,
-            TablerTableCard,
             ShowEmailAddressesOfPersonCard,
-            BaseTag,
-            BaseAvatar,
-            DataDisplay
         },
 
         apollo: {
 
-            currentUser:currentUser,
+            currentUser:CURRENT_USER,
 
             person: {
                 query: getPersonDetailsShowCardData,
@@ -69,7 +55,7 @@
 
         data: function() {
             return {
-                currentUser: currentUser,
+                currentUser: CURRENT_USER,
                 person: null,
 
                 cards:{
@@ -82,7 +68,7 @@
             };
         },
 
-        name: "page-me-personal-data"
+        name: "view-me-overview-personal"
     }
 </script>
 

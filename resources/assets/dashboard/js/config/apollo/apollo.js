@@ -12,8 +12,9 @@ import Vue from 'vue';
 // The Apollo-libraries
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
+import introspectionQueryResultData from './fragmentTypes.json';
 
 
 // Loading VueApollo into Vue as a plug-in.
@@ -22,7 +23,7 @@ Vue.use(VueApollo);
 
 
 // Getting the csrf-token.
-import { csrfToken } from "../utils/tokens";
+import { csrfToken } from "../../utils/tokens";
 // The connection with the Backend.
 export const link = new HttpLink({
     url:'/graphql',
@@ -37,7 +38,12 @@ export const link = new HttpLink({
 
 
 // Handles the storing of the cached data.
-export const cache = new InMemoryCache();
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+    introspectionQueryResultData
+});
+export const cache = new InMemoryCache({
+    fragmentMatcher
+});
 
 
 

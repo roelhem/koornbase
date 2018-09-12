@@ -9,24 +9,20 @@
 
             <b-col lg="4">
 
-                <b-card>
-                    <tabler-dimmer :active="$apollo.queries.currentUser.loading">
-                    <b-media>
-                        <base-avatar slot="aside" size="xxl" class="mr-5" color="blue" v-bind="currentUser.avatar" />
-                        <h4 class="m-0"><base-field title="Naam" name="name_display" :value="currentUser.name_display" /></h4>
-                        <p class="text-muted mb-0">
-                            <base-field title="Inlog E-mail" name="email" :value="currentUser.email" />
-                            <small v-if="currentUser.person" class="text-muted-dark">
-                                (<base-field title="Gebruikersnaam" name="name" :value="currentUser.name" class="font-italic" />)
-                            </small>
-                        </p>
-                    </b-media>
-                    </tabler-dimmer>
-                </b-card>
+                <user-media-card :user="currentUser" />
 
                 <b-list-group>
-                    <b-list-group-item :to="{ name:'me.overview.personal' }">Mijn Persoonsgegevens</b-list-group-item>
-                    <b-list-group-item :to="{ name:'me.overview.koornbeurs' }">Mijn Koornbeurs</b-list-group-item>
+                    <b-list-group-item
+                            :to="{ name:'me.overview.user' }"
+                    >Mijn Accountgegevens</b-list-group-item>
+                    <b-list-group-item
+                            :to="{ name:'me.overview.personal' }"
+                            :disabled="!currentUser.person"
+                    >Mijn Persoonsgegevens</b-list-group-item>
+                    <b-list-group-item
+                            :to="{ name:'me.overview.koornbeurs' }"
+                            :disabled="!currentUser.person"
+                    >Mijn Koornbeurs</b-list-group-item>
                 </b-list-group>
 
             </b-col>
@@ -45,17 +41,19 @@
 </template>
 
 <script>
-    import { currentUser } from "../../apis/graphql/dashboard.graphql";
+    import { CURRENT_USER } from "../../apis/graphql/queries";
     import DataDisplay from "../../components/displays/DataDisplay";
     import BaseAvatar from "../../components/displays/BaseAvatar";
     import PageMePersonalData from "./overview.personal";
     import TablerDimmer from "../../components/layouts/cards/TablerDimmer";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import BaseField from "../../components/displays/BaseField";
+    import UserMediaCard from "../../components/displays/UserMediaCard";
 
     export default {
 
         components: {
+            UserMediaCard,
             BaseField,
             TablerPageHeader,
             TablerDimmer,
@@ -71,9 +69,9 @@
         },
 
         apollo: {
-            currentUser:currentUser
+            currentUser:CURRENT_USER
         },
 
-        name: "page-me",
+        name: "view-me-overview",
     }
 </script>

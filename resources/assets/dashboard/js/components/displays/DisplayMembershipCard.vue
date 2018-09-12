@@ -177,6 +177,17 @@
     import { getPersonMembershipsQuery } from "../../apis/graphql/queries/persons.graphql";
     import gql from "graphql-tag";
 
+    const FRAGMENT = gql`
+        fragment DisplayMembershipCard on Membership {
+            id
+            application
+            start
+            end
+            status
+            remarks
+        }
+    `;
+
     export default {
         components: {
             DatePickerInput,
@@ -189,6 +200,8 @@
             TablerCard
         },
         name: "display-membership-card",
+
+        fragment:FRAGMENT,
 
         filters: { ...displayFilters },
 
@@ -397,8 +410,6 @@
                     }`,
                     variables: {id, application, start, end},
 
-                    update:this.membershipUpdateHandler,
-
                     optimisticResponse: {
                         __typename:'Mutation',
                         membership: {
@@ -410,49 +421,31 @@
 
             },
 
-            membershipUpdateHandler(store, {data:{membership:{id, person_id, application, start, end, status}}}) {
-                const data = store.readQuery({
-                    query:getPersonMembershipsQuery,
-                    variables:{id:person_id},
-                });
-
-                const memberships = data.person.memberships;
-                const index = memberships.findIndex(membership => membership.id === id);
-
-                if(index >= 0) {
-                    const membership = memberships[index];
-                    membership.application = application;
-                    membership.start = start;
-                    membership.end = end;
-                    membership.status = status;
-
-                    store.writeQuery({
-                        query:getPersonMembershipsQuery,
-                        variables:{id:person_id},
-                        data
-                    });
-                }
-            },
-
             startMembership() {
                 const id = this.membership.id;
-                const person_id = this.personId;
                 const application = this.membership.application;
                 const start = moment().format("YYYY-MM-DD");
                 const end = null;
                 const status = 'MEMBER';
 
                 this.$apollo.mutate({
-                    mutation: gql`mutation startMembership($id:ID!) {
-                        membership:startMembership(id:$id) { id, person_id, application, start, end, status }
-                    }`,
+                    mutation: gql`
+                        mutation startMembership($id:ID!) {
+                            membership:startMembership(id:$id) {
+                                id,
+                                application,
+                                start,
+                                end,
+                                status
+                            }
+                        }
+                    `,
                     variables:{id},
-                    update:this.membershipUpdateHandler,
                     optimisticResponse: {
                         __typename:'Mutation',
                         membership: {
                             __typename:'Membership',
-                            id, person_id, application, start, end, status
+                            id, application, start, end, status
                         }
                     },
                 });
@@ -460,23 +453,29 @@
 
             stopMembership() {
                 const id = this.membership.id;
-                const person_id = this.personId;
                 const application = this.membership.application;
                 const start = this.membership.start;
                 const end = moment().format("YYYY-MM-DD");
                 const status = "FORMER_MEMBER";
 
                 this.$apollo.mutate({
-                    mutation: gql`mutation stopMembership($id:ID!) {
-                        membership:stopMembership(id:$id) { id, person_id, application, start, end, status }
-                    }`,
+                    mutation: gql`
+                        mutation stopMembership($id:ID!) {
+                            membership:stopMembership(id:$id) {
+                                id,
+                                application,
+                                start,
+                                end,
+                                status
+                            }
+                        }
+                    `,
                     variables:{id},
-                    update:this.membershipUpdateHandler,
                     optimisticResponse: {
                         __typename:'Mutation',
                         membership: {
                             __typename:'Membership',
-                            id, person_id, application, start, end, status
+                            id, application, start, end, status
                         }
                     },
                 });
@@ -489,27 +488,45 @@
                 const person_id = this.personId;
 
                 this.$apollo.mutate({
-                    mutation: gql`mutation deleteMembership($id:ID!) { deleteMembership(id:$id) { id, person_id }}`,
+                    mutation: gql`
+                        mutation deleteMembership($id:ID!) {
+                            deleteMembership(id:$id) {
+                                id
+                                person_id
+                            }
+                        }
+                    `,
                     variables:{id},
 
-                    update:(store, {data:{deleteMembership:{ id, person_id }}}) => {
-                        const data = store.readQuery({
-                            query:getPersonMembershipsQuery,
-                            variables:{id:person_id},
+                    update:(store, {data: {deleteMembership: {id, person_id}}}) => {
+                        const fragment = gql`
+                            fragment PersonMemberships on Person {
+                                id
+                                certificates {
+                                    data {
+                                        ...DisplayMembershipCard
+                                    }
+                                }
+                            }
+                            ${FRAGMENT}
+                        `;
+
+                        const person = store.readFragment({
+                            id:person_id,
+                            fragment:fragment,
+                            fragmentName:'PersonMemberships'
                         });
 
-                        const memberships = data.person.memberships;
-                        const index = memberships.findIndex(membership => membership.id === id);
+                        console.log(person);
 
-                        if(index >= 0) {
-                            memberships.splice(index,1);
+                        person.certificates.data = person.certificates.data.filter(certificate => certificate.id !== id);
 
-                            store.writeQuery({
-                                query:getPersonMembershipsQuery,
-                                variables:{id:person_id},
-                                data
-                            })
-                        }
+                        store.writeFragment({
+                            id:person_id,
+                            fragment:fragment,
+                            fragmentName:'PersonMemberships',
+                            data:person
+                        })
                     },
 
                     optimisticResponse: {
@@ -527,45 +544,22 @@
             handleSubmitRemarks(newValue) {
                 const id = this.membership.id;
                 const remarks = newValue;
-                const person_id = this.personId;
 
                 this.$apollo.mutate({
                     mutation: gql`
                         mutation updateMembershipRemarks($id: ID!, $remarks: String) {
-                          updateMembership(id: $id, remarks: $remarks) {
-                            id
-                            person_id
-                            remarks
-                          }
+                            updateMembership(id: $id, remarks: $remarks) {
+                              id
+                              remarks
+                            }
                         }`,
                     variables: { id, remarks },
-
-                    update:(store, {data:{updateMembership:{ id, person_id, remarks }}}) => {
-                        const data = store.readQuery({
-                            query:getPersonMembershipsQuery,
-                            variables:{id:person_id},
-                        });
-
-                        const memberships = data.person.memberships;
-                        const index = memberships.findIndex(membership => membership.id === id);
-
-                        if(index >= 0) {
-
-                            memberships[index].remarks = remarks;
-
-                            store.writeQuery({
-                                query:getPersonMembershipsQuery,
-                                variables:{id:person_id},
-                                data
-                            });
-                        }
-                    },
 
                     optimisticResponse: {
                         __typename:'Mutation',
                         updateMembership: {
                             __typename:'Membership',
-                            id, remarks, person_id
+                            id, remarks
                         }
                     }
                 })

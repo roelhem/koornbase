@@ -41,14 +41,16 @@ query getPersonPageHeaderData($id: ID!) {
             icon
         }
         groups {
-            id
-            name
-            name_short
-            member_name
-            description
-            category {
+            data {
                 id
-                style
+                name
+                name_short
+                member_name
+                description
+                category {
+                    id
+                    style
+                }
             }
         }
     }
@@ -111,10 +113,12 @@ query getPersonEmailAddressesData($id:ID!) {
     person(id:$id) {
         id
         emailAddresses {
-            id
-            index
-            label
-            email_address
+            data {
+                id
+                index
+                label
+                email_address
+            }
         }
     }
 }
@@ -125,13 +129,15 @@ query getPersonPhoneNumbersQuery($id: ID!) {
     person(id: $id) {
         id
         phoneNumbers {
-            id
-            index
-            label
-            phone_number
-            number_type
-            country
-            location
+            data {
+                id
+                index
+                label
+                phone_number
+                number_type
+                country
+                location
+            }
         }
     }
 }
@@ -141,14 +147,16 @@ query getPersonAddressesQuery($id: ID!) {
     person(id: $id) {
         id
         addresses {
-            id
-            index
-            label
-            country
-            country_code
-            locality
-            address_line_1
-            format(html:true)
+            data {
+                id
+                index
+                label
+                country
+                country_code
+                locality
+                address_line_1
+                format(html:true)
+            }
         }
     }
 }
@@ -158,12 +166,14 @@ query getPersonMembershipsQuery($id: ID!) {
     person(id:$id) {
         id,
         memberships {
-            id
-            application
-            start
-            end
-            status
-            remarks
+            data {
+                id
+                application
+                start
+                end
+                status
+                remarks
+            }
         }
     }
 }

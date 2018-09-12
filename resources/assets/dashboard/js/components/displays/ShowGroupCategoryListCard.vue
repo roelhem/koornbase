@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import { groupCategoryListQuery } from "../../apis/graphql/queries/groups.graphql";
+    import gql from "graphql-tag";
     import TablerCard from "../layouts/cards/TablerCard";
     import ShowGroupCategoryListCardItem from "./ShowGroupCategoryListCardItem";
 
@@ -35,7 +35,23 @@
 
         apollo: {
             groupCategories: {
-                query: groupCategoryListQuery
+                query: gql`
+                    query groupCategoryList {
+                        groupCategories(limit:20) {
+                            data {
+                                id
+                                name
+                                name_short
+                                description
+                                style
+                                is_required
+                                groups {
+                                    total
+                                }
+                            }
+                        }
+                    }
+                `,
             }
         },
 

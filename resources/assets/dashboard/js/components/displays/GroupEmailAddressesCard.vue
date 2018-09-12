@@ -63,7 +63,6 @@
     import SubtileSingleInputForm from "../inputs/subtile/SubtileSingleInputForm";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
     import { updateGroupEmailAddress, addEmailAddressToGroup, deleteGroupEmailAddress } from "../../apis/graphql/mutations/groups.graphql";
-    import { getGroupDetailsQuery } from "../../apis/graphql/queries/groups.graphql";
 
     export default {
         components: {
@@ -129,14 +128,18 @@
 
         computed: {
             items() {
-                const emailAddresses = this.group.emailAddresses;
+                const emailAddresses = this.group.emailAddresses.data;
 
-                return emailAddresses.map(emailAddress => {
-                    return {
-                        ...emailAddress,
-                        _showDetails:false,
-                    }
-                });
+                if(emailAddresses) {
+                    return emailAddresses.map(emailAddress => {
+                        return {
+                            ...emailAddress,
+                            _showDetails: false,
+                        }
+                    });
+                }
+
+                return [];
             }
         },
 
@@ -167,7 +170,7 @@
                             }
                         }
                     } ) => {
-
+                        /*
                         const data = store.readQuery({
                             query:getGroupDetailsQuery,
                             variables:{ id:group_id },
@@ -180,6 +183,7 @@
                         data.group.emailAddresses.push(newEmailAddressEntry);
 
                         store.writeQuery({query: getGroupDetailsQuery, data })
+                        */
                     },
 
                     optimisticResponse: {
@@ -209,14 +213,14 @@
                     },
 
                     update: (store, { data: { updateGroupEmailAddress: { id, group_id, email_address }} }) => {
-                        const data = store.readQuery({
+                        /*const data = store.readQuery({
                             query:getGroupDetailsQuery,
                             variables: { id:group_id }
                         });
 
                         data.group.emailAddresses[index].email_address = email_address;
 
-                        store.writeQuery({query: getGroupDetailsQuery, data })
+                        store.writeQuery({query: getGroupDetailsQuery, data })*/
                     },
 
                     optimisticResponse: {
@@ -252,7 +256,7 @@
                             }
                         }
                     }) => {
-                        const data = store.readQuery({
+                        /*const data = store.readQuery({
                             query:getGroupDetailsQuery,
                             variables: {id:group_id }
                         });
@@ -265,7 +269,7 @@
                             emailAddresses.splice(index, 1);
 
                             store.writeQuery({query: getGroupDetailsQuery, data});
-                        }
+                        }*/
                     },
 
                     optimisticResponse: {
