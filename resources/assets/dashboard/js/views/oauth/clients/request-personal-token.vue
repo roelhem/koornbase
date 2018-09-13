@@ -12,7 +12,7 @@
 
             <tabler-form-group label="OAuth Client" horizontal>
                 <div class="d-flex py-4">
-                    <div><display-o-auth-client-type :type="client.type" large /></div>
+                    <div><o-auth-client-type-tag :type="client.type" large /></div>
                     <div class="px-4">
                         <h4 class="mb-0">{{ client.name }}</h4>
                         <div class="small"><span class="text-muted-dark">Van:</span> {{ client.user.name_display }} <span class="text-muted-dark">[ {{ client.user.email }} ]</span></div>
@@ -86,7 +86,7 @@
     import { showOAuthClientCardQuery } from "../../../apis/graphql/queries/oauth.graphql";
     import { requestPersonalAccessToken } from "../../../apis/graphql/mutations/oauth.graphql";
     import gql from 'graphql-tag';
-    import DisplayOAuthClientType from "../../../components/displays/DisplayOAuthClientType";
+    import OAuthClientTypeTag from "../../../components/displays/OAuthClientTypeTag";
     import DetailView from "../../../components/layouts/cards/DetailView";
     import DetailEntry from "../../../components/layouts/cards/DetailEntry";
     import { date, time } from "../../../utils/filters/display";
@@ -97,7 +97,7 @@
             TablerDimmer,
             DetailEntry,
             DetailView,
-            DisplayOAuthClientType,
+            OAuthClientTypeTag,
             TablerFormGroup,
             FormSimpleInput,
             TablerPageHeader,

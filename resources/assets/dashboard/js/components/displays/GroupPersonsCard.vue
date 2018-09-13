@@ -52,16 +52,11 @@
 
             <div v-if="deletingPerson" class="d-flex mb-2">
                 <div class="flex-shrink-1 p-2">
-                    <base-avatar v-bind="deletingPerson.avatar" default-style="person-default" />
+                    <person-avatar :person="deletingPerson" />
                 </div>
                 <div class="p-2">
                     <div>
-                        {{ deletingPerson.name_first }}
-                        <span v-if="deletingPerson.name_nickname" class="text-muted-dark">
-                            [<em>{{ deletingPerson.name_nickname }}</em>]
-                        </span>
-                        {{ deletingPerson.name_prefix }}
-                        {{ deletingPerson.name_last }}
+                        <span-person-name :person="deletingPerson" with-nickname />
                     </div>
                     <div class="small">
                         <span-membership-status
@@ -89,13 +84,15 @@
     import TablerModal from "../layouts/modals/TablerModal";
     import VueMultiselect from "vue-multiselect/src/Multiselect";
     import BaseTag from "./BaseTag";
-    import BaseAvatar from "./BaseAvatar";
+    import PersonAvatar from "./PersonAvatar";
     import SpanMembershipStatus from "./spans/SpanMembershipStatus";
+    import SpanPersonName from "./spans/SpanPersonName";
 
     export default {
         components: {
+            SpanPersonName,
             SpanMembershipStatus,
-            BaseAvatar,
+            PersonAvatar,
             BaseTag,
             VueMultiselect,
             TablerModal,

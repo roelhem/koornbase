@@ -2,7 +2,12 @@ export default {
 
 
     props: {
-        value:null
+        value:null,
+
+        disabled:{
+            type:Boolean,
+            default:false,
+        }
     },
 
     data() {
@@ -19,9 +24,11 @@ export default {
         },
 
         activateForm() {
-            this.reloadValue();
-            this.formActive = true;
-            this.$emit('active');
+            if(!this.disabled) {
+                this.reloadValue();
+                this.formActive = true;
+                this.$emit('active');
+            }
         },
 
         cancelForm() {

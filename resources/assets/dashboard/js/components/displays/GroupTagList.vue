@@ -9,11 +9,24 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import GroupTag from "./GroupTag";
 
     export default {
         components: {GroupTag},
         name: "group-tag-list",
+
+        fragment:gql`
+            fragment GroupTagList on Group_pagination {
+                data {
+                    id
+                    ...GroupTag
+                }
+                has_more
+                total
+            }
+            ${GroupTag.fragment}
+        `,
 
         props: {
             groups:Object,

@@ -11,7 +11,7 @@
                     <slot>{{ value }}</slot>
                 </td>
                 <td class="px-0 py-1" style="width: 1px">
-                    <subtile-form-button icon="edit-3" color="blue" @click="activateForm" />
+                    <subtile-form-button v-if="!disabled" icon="edit-3" color="blue" @click="activateForm" />
                 </td>
             </template>
 
@@ -19,8 +19,10 @@
                 <td class="p-1" colspan="2">
 
 
-                    <span class="input-group">
-                        <input type="text" class="form-control" :placeholder="placeholder" v-model="inputValue" />
+                    <span class="input-group flex-nowrap">
+                        <slot name="input" :input-value="inputValue" :input-callback="inputCallback">
+                            <input type="text" class="form-control" :placeholder="placeholder" v-model="inputValue" />
+                        </slot>
                         <span class="input-group-append">
                             <subtile-form-button icon="save" color="green" @click="submitForm" />
                             <subtile-form-button icon="x" color="red" @click="cancelForm" />
@@ -59,6 +61,14 @@
             iconFrom:[String,Array],
             title:null,
         },
+
+        computed: {
+            inputCallback() {
+                return (val) => {
+                    this.inputValue = val;
+                };
+            }
+        }
     }
 </script>
 

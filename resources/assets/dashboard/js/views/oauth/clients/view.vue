@@ -1,28 +1,29 @@
 <template>
 
-    <div>
+    <b-container>
+        <tabler-page-header title="OAuth client"
+                            :breadcrumb="[
+                                {icon:'cloud', text:'OAuth Server', active:true},
+                                {text:'Clients', to:{name: 'oauth.clients.index'}},
+                                {text:'Client', active:true}
+                            ]"
+        />
 
-        <b-container>
-            <tabler-page-header title="OAuth client"
-                                :breadcrumb="[
-                                    {icon:'cloud', text:'OAuth Server', active:true},
-                                    {text:'Clients', to:{name: 'oauth.clients.index'}},
-                                    {text:'Client', active:true}
-                                ]"
-            />
-        </b-container>
 
-        <b-container>
-            <show-o-auth-client-card :client-id="id" />
-        </b-container>
+        <b-row>
+            <b-col lg="7">
+                <o-auth-client-card :client="oAuthClient" />
+            </b-col>
+        </b-row>
 
-    </div>
+
+    </b-container>
 
 </template>
 
 <script>
-
-    import ShowOAuthClientCard from "../../../components/displays/ShowOAuthClientCard";
+    import gql from "graphql-tag";
+    import OAuthClientCard from "../../../components/displays/OAuthClientCard";
     import UpdateOAuthClientForm from "../../../components/features/crud/UpdateOAuthClientForm";
     import TablerPageHeader from "../../../components/layouts/title/TablerPageHeader";
 
@@ -30,8 +31,32 @@
         components: {
             TablerPageHeader,
             UpdateOAuthClientForm,
-            ShowOAuthClientCard},
-        name: "page-o-auth-client",
+            OAuthClientCard
+        },
+
+        name: "view-o-auth-client-view",
+
+        apollo: {
+            oAuthClient:{
+                query:gql`
+                    query viewOAuthClient($id:ID!) {
+                        oAuthClient(id:$id) {
+                            ...OAuthClientCard
+                        }
+                    }
+                    ${OAuthClientCard.fragment}
+                `,
+                variables() {
+                    return {id:this.id};
+                }
+            }
+        },
+
+        data() {
+            return {
+                oAuthClient:{user:{}},
+            };
+        },
 
         props: {
             id:[String,Number]

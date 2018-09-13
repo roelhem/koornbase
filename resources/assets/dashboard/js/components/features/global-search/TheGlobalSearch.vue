@@ -22,11 +22,7 @@
                 >
                     <b-form-row>
                         <div class="col-auto">
-                            <base-avatar :image="person.avatar.image"
-                                         :letters="person.avatar.letters"
-                                         default-style="person-default"
-                                         size="sm"
-                            />
+                            <person-avatar :person="person" size="sm" />
                         </div>
                         <b-col>
                             {{ person.name }}
@@ -67,15 +63,15 @@
 <script>
     import TablerInputIcon from "../../layouts/forms/TablerInputIcon";
     import gql from 'graphql-tag';
-    import BaseAvatar from "../../displays/BaseAvatar";
     import TablerDimmer from "../../layouts/cards/TablerDimmer";
     import BaseStamp from "../../displays/BaseStamp";
+    import PersonAvatar from "../../displays/PersonAvatar";
 
     export default {
         components: {
+            PersonAvatar,
             BaseStamp,
             TablerDimmer,
-            BaseAvatar,
             TablerInputIcon
         },
         name: "the-global-search",
@@ -88,13 +84,11 @@
                             data {
                                 id
                                 name
-                                avatar {
-                                    image
-                                    letters
-                                }
+                                ...PersonAvatar
                             }
                         }
                     }
+                    ${PersonAvatar.fragment}
                 `,
                 variables() {
                     return {

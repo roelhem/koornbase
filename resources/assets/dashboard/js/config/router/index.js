@@ -111,6 +111,11 @@ export const routes = [
         component: require('../../views/groups/index'),
     },
     {
+        path:'/db/groups/create',
+        name:'db.groups.create',
+        component: require('../../views/groups/create'),
+    },
+    {
         path:'/db/groups/:id',
         name:'db.groups.view',
         component: require('../../views/groups/view'),
@@ -127,7 +132,13 @@ export const routes = [
         path:'/users/create',
         name:'users.create',
         component: require('../../views/users/create'),
-    }
+    },
+    {
+        path:'/users/:id',
+        name:'users.view',
+        component: require('../../views/users/view'),
+        props:true,
+    },
 ];
 
 export const router = new VueRouter({

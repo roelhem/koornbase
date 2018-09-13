@@ -33,7 +33,7 @@ class CreateGroupMutation extends Mutation
             'category_id' => [
                 'description' => 'The `ID` of the GroupCategory to which this new Group should belong.',
                 'type' => Type::nonNull(Type::id()),
-                'rules' => ['required','exists:group_categories'],
+                'rules' => ['required','exists:group_categories,id'],
             ],
             'name' => [
                 'description' => 'The name for the new Group',

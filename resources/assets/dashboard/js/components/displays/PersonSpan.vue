@@ -2,12 +2,10 @@
 
     <span>
         <template v-if="person">
-            <base-avatar v-if="person.avatar"
-                         :letters="person.avatar.letters"
-                         :image="person.avatar.image"
-                         size="sm"
-                         class="mr-1"
-                         default-style="person-default"
+            <person-avatar v-if="person.avatar"
+                           :person="person"
+                           size="sm"
+                           class="mr-1"
             />
             <span-person-name :person="person"
                               :formal="formal"
@@ -22,7 +20,7 @@
 
 <script>
     import gql from "graphql-tag";
-    import BaseAvatar from "./BaseAvatar";
+    import PersonAvatar from "./PersonAvatar";
     import SpanPersonName from "./spans/SpanPersonName";
 
     export default {
@@ -30,18 +28,16 @@
 
         components: {
             SpanPersonName,
-            BaseAvatar
+            PersonAvatar
         },
 
         fragment:gql`
             fragment PersonSpan on Person {
-                avatar {
-                    letters
-                    image
-                }
+                ...PersonAvatar
                 ...SpanPersonName
             }
             ${SpanPersonName.fragment}
+            ${PersonAvatar.fragment}
         `,
 
         props: {

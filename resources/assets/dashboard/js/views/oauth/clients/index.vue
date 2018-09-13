@@ -39,23 +39,7 @@
                         <b-table v-bind="bTableProps" v-on="bTableListeners">
 
                             <template slot="revoked" slot-scope="{ item }">
-                                <span v-b-tooltip.hover :title="item.revoked ? 'Contact met server ingetrokken.' : 'In contact met server.' " class="fa-stack">
-                                    <base-icon :class="item.revoked ? 'text-yellow' : 'text-cyan'"
-                                               class="fa-stack-2x"
-                                               icon="circle"
-                                               from="fa"
-                                    />
-                                    <base-icon v-if="item.revoked"
-                                               class="fa-stack-1x fa-inverse fa-rotate-270"
-                                               icon="hand-stop-o"
-                                               from="fa"
-                                    />
-                                    <base-icon v-else
-                                               class="fa-stack-1x fa-inverse"
-                                               icon="handshake-o"
-                                               from="fa"
-                                    />
-                                </span>
+                                <revoked-status-icon :revoked="item.revoked" />
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
@@ -63,7 +47,7 @@
                             </template>
 
                             <template slot="type" slot-scope="{ item }">
-                                <display-o-auth-client-type :type="item.type" :revoked="item.revoked" />
+                                <o-auth-client-type-tag :type="item.type" :revoked="item.revoked" />
                             </template>
 
                             <template slot="redirect" slot-scope="{ item }">
@@ -72,7 +56,9 @@
                             </template>
 
                             <template slot="user" slot-scope="{ item }">
-                                <template v-if="item.user">{{ item.user.name_display }}</template>
+                                <template v-if="item.user">
+                                    <user-span :user="item.user" />
+                                </template>
                                 <span v-else class="text-muted font-italic">(Geen)</span>
                             </template>
 
@@ -122,7 +108,7 @@
     import SearchColumnSelectCard from "../../../components/features/table-search/SearchColumnSelectCard";
     import CreateOAuthClientForm from "../../../components/features/crud/CreateOAuthClientForm";
     import BaseIcon from "../../../components/displays/BaseIcon";
-    import DisplayOAuthClientType from "../../../components/displays/DisplayOAuthClientType";
+    import OAuthClientTypeTag from "../../../components/displays/OAuthClientTypeTag";
     import TablerInputIcon from "../../../components/layouts/forms/TablerInputIcon";
     import SearchSortInput from "../../../components/features/table-search/SearchSortInput";
     import SearchPerPageInput from "../../../components/features/table-search/SearchPerPageInput";
@@ -130,9 +116,11 @@
     import DisplayTimestamp from "../../../components/displays/DisplayTimestamp";
     import SearchFilterClientTypeCard from "../../../components/features/table-search/SearchFilterClientTypeCard";
     import TablerPageHeader from "../../../components/layouts/title/TablerPageHeader";
+    import RevokedStatusIcon from "../../../components/displays/RevokedStatusIcon";
+    import UserSpan from "../../../components/displays/UserSpan";
 
     export default {
-        name: "page-o-auth-clients",
+        name: "view-o-auth-clients-index",
 
         mixins:[searchTableMixin],
 
@@ -144,7 +132,9 @@
                     return {
                         perPage: this.perPage,
                         page: this.page,
-                        anyType: this.anyType,
+                        filter: {
+                            anyType: this.anyType,
+                        },
                         search: this.search,
                         orderBy: this.sortBy,
                         orderDir: this.sortDir,
@@ -245,13 +235,15 @@
         },
 
         components: {
+            UserSpan,
+            RevokedStatusIcon,
             TablerPageHeader,
             SearchFilterClientTypeCard,
             DisplayTimestamp,
             SearchPerPageInput,
             SearchSortInput,
             TablerInputIcon,
-            DisplayOAuthClientType,
+            OAuthClientTypeTag,
             BaseIcon,
             CreateOAuthClientForm,
             SearchColumnSelectCard,

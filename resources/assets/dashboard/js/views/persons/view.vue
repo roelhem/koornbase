@@ -9,9 +9,7 @@
             <div class="d-flex">
                 <div class="px-2">
                     <tabler-dimmer :active="$apollo.queries.person.loading">
-                    <base-avatar v-bind="person.avatar"
-                                 size="xxl"
-                                 default-style="person-default" />
+                        <person-avatar :person="person" size="xxl" />
                     </tabler-dimmer>
                 </div>
 
@@ -64,22 +62,22 @@
     import { PERSONS_VIEW } from "../../apis/graphql/queries";
 
     import TablerBanner from "../../components/layouts/title/TablerBanner";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
     import DataDisplay from "../../components/displays/DataDisplay";
     import GroupTag from "../../components/displays/GroupTag";
     import BaseIcon from "../../components/displays/BaseIcon";
     import TablerDimmer from "../../components/layouts/cards/TablerDimmer";
     import SpanPersonName from "../../components/displays/spans/SpanPersonName";
     import GroupTagList from "../../components/displays/GroupTagList";
+    import PersonAvatar from "../../components/displays/PersonAvatar";
 
     export default {
         components: {
+            PersonAvatar,
             GroupTagList,
             SpanPersonName,
             TablerDimmer,
             BaseIcon,
             DataDisplay,
-            BaseAvatar,
             TablerBanner,
             GroupTag
         },

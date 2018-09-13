@@ -2,7 +2,7 @@
 
     <span>
         <template v-if="!formActive">
-            {{ value }} <subtile-form-button icon="edit-3" color="blue" @click="activateForm" />
+            <slot>{{ value }}</slot> <subtile-form-button v-if="!disabled" icon="edit-3" color="blue" @click="activateForm" />
         </template>
         <template v-if="formActive">
 

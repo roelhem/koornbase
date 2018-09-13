@@ -59,11 +59,8 @@
                         <b-table v-bind="bTableProps" v-on="bTableListeners">
 
                             <template slot="avatar" slot-scope="{ item }">
-                                <base-avatar :image="item.avatar.image"
-                                             :letters="item.avatar.letters"
-                                             size="md"
-                                             :default-style="item.person === null ? 'user-default' : 'person-default'"
-                                />
+                                <user-avatar :user="item" size="md" />
+
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
@@ -93,6 +90,12 @@
 
                             <template slot="updated_at" slot-scope="{ value }">
                                 <display-timestamp :timestamp="value" />
+                            </template>
+
+                            <template slot="links" slot-scope="{ item }">
+                                <router-link class="icon" :to="{name:'users.view', params: {id: item.id} }">
+                                    <base-icon icon="more-vertical" from="fe" />
+                                </router-link>
                             </template>
 
                         </b-table>
@@ -135,7 +138,6 @@
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
     import SearchColumnSelectCard from "../../components/features/table-search/SearchColumnSelectCard";
     import SearchSortInput from "../../components/features/table-search/SearchSortInput";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
     import SpanMembershipStatus from "../../components/displays/spans/SpanMembershipStatus";
     import searchTableMixin from "../../mixins/searchTableMixin";
     import DisplayTimestamp from "../../components/displays/DisplayTimestamp";
@@ -143,6 +145,8 @@
     import SearchStatusDisplay from "../../components/features/table-search/SearchStatusDisplay";
     import SearchSimplePager from "../../components/features/table-search/SearchSimplePager";
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
+    import BaseIcon from "../../components/displays/BaseIcon";
+    import UserAvatar from "../../components/displays/UserAvatar";
 
     export default {
         name: 'page-users',
@@ -169,6 +173,7 @@
                 { key:"person", label:"Persoon", visible: true, sortable:true },
                 { key:'created_at', label:'Aangemaakt op', sortable:true },
                 { key:'updated_at', label:'Bewerkt op', name:'Laatst bewerkt op', sortable:true },
+                { key:'links', label:'', name:'Actieknoppen', visible:true, thStyle:{'width':'1px'}, },
             ]
         },
 
@@ -186,13 +191,14 @@
         },
 
         components: {
+            UserAvatar,
+            BaseIcon,
             TablerInputIcon,
             SearchSimplePager,
             SearchStatusDisplay,
             TablerPageHeader,
             DisplayTimestamp,
             SpanMembershipStatus,
-            BaseAvatar,
             SearchPerPageInput,
             SearchHeaderContainer,
             SearchSortInput,

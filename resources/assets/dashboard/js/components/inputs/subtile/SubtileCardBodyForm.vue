@@ -33,7 +33,7 @@
         <div class="subtile-card-body-form--toolbar" :class="toolbarClass">
 
 
-            <subtile-form-button v-if="!formActive"
+            <subtile-form-button v-if="!disabled && !formActive"
                                  class="subtile-card-body-form--edit-button"
                                  icon="edit-3"
                                  color="blue"

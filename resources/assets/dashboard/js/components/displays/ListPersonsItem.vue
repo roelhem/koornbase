@@ -4,11 +4,7 @@
 
         <b-row>
             <div class="col-auto">
-                <base-avatar :image="person.avatar.image"
-                             :letters="person.avatar.letters"
-                             default-style="person-default"
-                             size="md"
-                />
+                <person-avatar :person="person" size="md" />
             </div>
 
 
@@ -40,7 +36,7 @@
 <script>
     import gql from "graphql-tag";
     import fragments from "../../apis/graphql/queries/fragments";
-    import BaseAvatar from "./BaseAvatar";
+    import PersonAvatar from "./PersonAvatar";
     import SpanMembershipStatus from "./spans/SpanMembershipStatus";
     import BaseIcon from "./BaseIcon";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
@@ -52,7 +48,7 @@
             SubtileFormButton,
             BaseIcon,
             SpanMembershipStatus,
-            BaseAvatar
+            PersonAvatar
         },
         name: "list-persons-item",
 

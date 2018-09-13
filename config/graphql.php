@@ -60,8 +60,8 @@ return [
                 'apps' => \App\Http\GraphQL\Queries\AppsQuery::class,
                 'app' => \App\Http\GraphQL\Queries\AppQuery::class,
 
-                'oauthClients' => \App\Http\GraphQL\Queries\OAuthClientsQuery::class,
-                'oauthClient' => \App\Http\GraphQL\Queries\OAuthClientQuery::class,
+                'oAuthClients' => \App\Http\GraphQL\Queries\OAuthClientsQuery::class,
+                'oAuthClient' => \App\Http\GraphQL\Queries\OAuthClientQuery::class,
 
                 'rbacGraph' => \Roelhem\RbacGraph\Http\GraphQL\Queries\RbacGraphQuery::class,
 
@@ -214,6 +214,7 @@ return [
         \App\Http\GraphQL\Types\Inputs\Filters\PersonPhoneNumberFilterType::class,
         \App\Http\GraphQL\Types\Inputs\Filters\UserAccountFilterType::class,
         \App\Http\GraphQL\Types\Inputs\Filters\UserFilterType::class,
+        \App\Http\GraphQL\Types\Inputs\Filters\OAuthClientFilterType::class
 
         //'RbacNode' => \Roelhem\RbacGraph\Http\GraphQL\Types\RbacNodeType::class
     ],

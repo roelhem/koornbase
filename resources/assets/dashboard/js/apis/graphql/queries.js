@@ -64,6 +64,7 @@ export const PERSONS_VIEW = gql`
             ...PersonMembershipStatus
             ...PersonAvatar
             groups(limit:10) {
+                total
                 data {
                     id
                     ...GroupTag
@@ -242,9 +243,10 @@ export const OAUTH_CLIENTS_INDEX = gql`
         $page:Int = 1,
         $limit:Int = 10,
         $orderBy:OAuthClient_orderField = name,
-        $orderDir:SortOrderDirection = ASC
+        $filter:OAuthClient_filter,
+        $orderDir:SortOrderDirection = ASC,
     ) {
-        clients: oAuthClients(page:$page, limit:$limit, orderBy:[{by:$orderBy, dir:$orderDir}]) {
+        clients: oAuthClients(page:$page, limit:$limit, filter:$filter, orderBy:[{by:$orderBy, dir:$orderDir}]) {
             ...SearchTablePagination
             data {
                 id
@@ -256,14 +258,18 @@ export const OAUTH_CLIENTS_INDEX = gql`
                 revoked
                 user {
                     id
-                    name_display
+                    name
+                    email
+                    ...UserAvatar
                     person {
                         id
-                        name
+                        ...PersonNameSpan
                     }
                 }
             }
         }
     }
     ${fragments.SearchTablePagination}
+    ${fragments.PersonNameSpan}
+    ${fragments.UserAvatar}
 `;

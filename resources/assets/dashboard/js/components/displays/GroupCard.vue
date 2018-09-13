@@ -26,9 +26,19 @@
             <subtile-detail-entry-form label="Korte naam" :value="group.name_short" @submit="updateNameShortHandler" />
             <subtile-detail-entry-form label="Persoons-titel" :value="group.member_name" @submit="updateMemberNameHandler" />
 
-            <detail-entry label="Categorie">
+            <subtile-detail-entry-form label="Categorie"
+                                       :value="group.category"
+                                       @submit="updateCategoryHandler"
+            >
                 <span-group-category :category="group.category" />
-            </detail-entry>
+
+                <group-category-select slot="input"
+                                       slot-scope="{inputValue, inputCallback}"
+                                       :value="inputValue"
+                                       @input="inputCallback"
+                                       size="sm"
+                />
+            </subtile-detail-entry-form>
 
             <detail-entry label="Tag">
                 <group-tag :group="group" label="name" />
@@ -51,11 +61,13 @@
     import DetailEntry from "../layouts/cards/DetailEntry";
     import DetailView from "../layouts/cards/DetailView";
     import GroupTag from "./GroupTag";
+    import GroupCategorySelect from "../inputs/select/GroupCategorySelect";
 
     export default {
         name: "group-card",
 
         components: {
+            GroupCategorySelect,
             GroupTag,
             DetailView,
             DetailEntry,
@@ -196,6 +208,40 @@
                     }
                 }).then(data => console.log(data)).catch(error => console.log(error))
             },
+
+            updateCategoryHandler(newValue) {
+                const id = this.group.id;
+                const category = Object.assign({__typename:"GroupCategory"}, newValue);
+                const category_id = category.id;
+
+                this.$apollo.mutate({
+                    mutation: gql`
+                        mutation updateGroupGroupCategory($id:ID!, $category_id:ID!) {
+                            updateGroup(id:$id, category_id:$category_id) {
+                                id
+                                category {
+                                    id
+                                    name
+                                    name_short
+                                    description
+                                    style
+                                }
+                            }
+                        }
+                    `,
+                    variables:{id, category_id},
+
+                    optimisticResponse: {
+                        __typename:'Mutation',
+                        updateGroup: {
+                            __typename:'Group',
+                            id,
+                            category,
+                        }
+                    }
+
+                }).then(data => console.log(data));
+            }
 
         }
     }

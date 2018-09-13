@@ -11,7 +11,7 @@
 
         <!-- START: Search Header -->
         <search-header-container v-bind="searchHeaderProps" v-on="searchHeaderListeners">
-            <b-button variant="success" href="#">
+            <b-button variant="success" :to="{name:'db.groups.create'}">
                 <base-icon :icon="{fa:'plus',fe:'plus'}"
                            :from="['fe','fa']"
                            class="mr-2" />
@@ -81,10 +81,9 @@
                             <template slot="persons" slot-scope="{ item }">
                                 <base-avatar-list :count="item.persons.total" :items="item.persons.data" :max="personLimit" stacked :key="`avatar-list-${item.id}`">
                                     <template slot="avatar" slot-scope="a">
-                                        <base-avatar v-bind="a.item.avatar"
-                                                     default-style="person-default"
-                                                     v-b-tooltip.hover="a.item.name_short"
-                                                     :key="`list-${item.id}-avatar-${a.item.id}`"
+                                        <person-avatar :person="a.item"
+                                                       v-b-tooltip.hover="a.item.name_short"
+                                                       :key="`list-${item.id}-avatar-${a.item.id}`"
                                         />
                                     </template>
                                 </base-avatar-list>
@@ -130,15 +129,15 @@
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
     import BaseIcon from "../../components/displays/BaseIcon";
     import BaseStamp from "../../components/displays/BaseStamp";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
     import BaseAvatarList from "../../components/displays/BaseAvatarList";
     import ShowGroupCategoryListCard from "../../components/displays/ShowGroupCategoryListCard";
+    import PersonAvatar from "../../components/displays/PersonAvatar";
 
     export default {
         components: {
+            PersonAvatar,
             ShowGroupCategoryListCard,
             BaseAvatarList,
-            BaseAvatar,
             BaseStamp,
             BaseIcon,
             SearchHeaderContainer,

@@ -60,6 +60,11 @@ class UpdateGroupMutation extends Mutation
                 'description' => 'The new description for the Group.',
                 'type' => Type::string(),
                 'rules' => ['nullable','string'],
+            ],
+            'category_id' => [
+                'description' => 'The `ID` of the new `GroupCategory` for this Group.',
+                'type' => Type::id(),
+                'rules' => ['sometimes','required','exists:group_categories,id']
             ]
         ];
     }
@@ -86,7 +91,7 @@ class UpdateGroupMutation extends Mutation
 
         // Update the values of the group
         $group->fill(array_only($args, [
-            'name','name_short','member_name','description'
+            'name','name_short','member_name','description','category_id'
         ]));
 
         $group->saveOrFail();

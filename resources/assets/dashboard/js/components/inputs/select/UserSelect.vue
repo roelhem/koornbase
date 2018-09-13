@@ -2,22 +2,35 @@
     <vue-multiselect v-bind="multiselectProps" v-on="multiselectListeners">
 
         <template slot="option" slot-scope="{ option }">
-            <base-avatar v-bind="option.avatar" :default-style="option.person ? 'person-default': 'user-default'" size="sm" style="vertical-align: middle" />
-            <span class="ml-1">{{ option.name_display }}</span>
-            <span v-if="option.person !== null" class="font-italic" style="opacity: 0.4">[{{ option.name }}]</span>
+            <user-avatar :user="option" size="sm" />
+
+            <span class="ml-1">
+                <em>{{ option.name }}</em>
+            </span>
+
             <small class="ml-2 option__description">
                 {{ option.email }}
             </small>
+
+            <span v-if="option.person" class="ml-2 option__description">
+                <strong><span-person-name :person="option.person" with-nickname /></strong>
+            </span>
         </template>
 
         <template slot="singleLabel" slot-scope="{ option }">
-            <div style="width:100%; white-space:nowrap;">
-                <base-avatar v-bind="option.avatar" :default-style="option.person ? 'person-default': 'user-default'" size="sm" style="margin-bottom:-2px" />
-                <span class="ml-1">{{ option.name_display }}</span>
-                <span v-if="option.person !== null" class="font-italic" style="opacity: 0.4">[{{ option.name }}]</span>
-                <small class="ml-2 text-muted">
-                    {{ option.email }}
-                </small>
+            <div class="multiselect-flex-label">
+                <div class="multiselect-flex-label-image">
+                    <user-avatar :user="option" size="sm" />
+                </div>
+                <div class="multiselect-flex-label-name">
+                    {{ option.name }}
+                </div>
+                <div class="multiselect-flex-label-extra" style="font-size: 100%; padding-top:0px">
+                    <template v-if="option.person">
+                    <strong>Van:</strong> <span-person-name :person="option.person" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                    </template>
+                    <strong>E-mail:</strong> {{ option.email }}
+                </div>
             </div>
         </template>
 
@@ -41,24 +54,42 @@
 
 <script>
 
-
+    import gql from "graphql-tag";
     import VueMultiselect from "vue-multiselect/src/Multiselect";
-    import {selectUserQuery} from "../../../apis/graphql/queries/select.graphql";
     import modelSelectMixin from "../../../mixins/modelSelectMixin";
-    import BaseAvatar from "../../displays/BaseAvatar";
     import BaseTag from "../../displays/BaseTag";
+    import UserAvatar from "../../displays/UserAvatar";
+    import SpanPersonName from "../../displays/spans/SpanPersonName";
 
     export default {
         components: {
+            SpanPersonName,
+            UserAvatar,
             BaseTag,
-            BaseAvatar,
             VueMultiselect},
         name: "user-select",
 
         modelSelect: {
             queryKey:'users',
             query:{
-                query:selectUserQuery
+                query:gql`
+                    query getUserOptions($limit:Int = 25, $search:String) {
+                        users(limit:$limit, search:$search) {
+                            data {
+                                id
+                                name
+                                email
+                                ...UserAvatar
+                                person {
+                                    id
+                                    ...SpanPersonName
+                                }
+                            }
+                        }
+                    }
+                    ${UserAvatar.fragment}
+                    ${SpanPersonName.fragment}
+                `,
             },
         },
 

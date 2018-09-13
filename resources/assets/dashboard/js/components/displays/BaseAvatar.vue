@@ -14,6 +14,8 @@
 </template>
 
 <script>
+
+    import gql from "graphql-tag";
     import BaseIcon from './BaseIcon';
     import useDefaultStyle from '../../mixins/useDefaultStyle';
     import { AVATAR_COLORS, BACKGROUND_COLORS, AVATAR_SIZES } from '../../constants/style';
@@ -23,6 +25,13 @@
 
         components: {BaseIcon},
         mixins: [useDefaultStyle],
+
+        fragment:gql`
+            fragment BaseAvatar on Avatar {
+                image
+                letters
+            }
+        `,
 
         props: {
             image:String,

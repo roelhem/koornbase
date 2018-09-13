@@ -57,8 +57,8 @@ export default {
             }
         },
 
-        /** The value (most commonly an ID) of this modal that can be send to the database. */
-        value:[String,Number, Array],
+        /** The value (most commonly an Object) of this modal that can be send to the database. */
+        value:null,
 
         disabled:Boolean,
         multiple:Boolean,
@@ -166,6 +166,8 @@ export default {
 
         multiselectClasses() {
             let res = [];
+
+            res.push('tabler-multiselect');
 
             if(this.noBorder) {
                 res.push('multiselect-no-border');

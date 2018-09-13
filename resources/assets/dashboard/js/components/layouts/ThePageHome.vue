@@ -4,33 +4,96 @@
 
         <b-container class="mb-8">
 
-            <tabler-form-group title="Groep">
-                <group-select v-model="group" multiple />
-            </tabler-form-group>
+            <b-row>
+                <b-col>
+                    <tabler-form-group label="Groepen">
+                        <group-select v-model="groups" multiple />
+                    </tabler-form-group>
 
-            <tabler-form-group title="Person">
-                <person-select v-model="person" multiple />
-            </tabler-form-group>
+                    <tabler-form-group label="Groepscategoriëen">
+                        <group-category-select v-model="groupCategories" multiple />
+                    </tabler-form-group>
 
-            <tabler-form-group title="User">
-                <user-select v-model="user" multiple />
-            </tabler-form-group>
+                    <tabler-form-group label="Personen">
+                        <person-select v-model="persons" multiple />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Users">
+                        <user-select v-model="users" multiple />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Groep">
+                        <group-select v-model="group" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Groepscategorie">
+                        <group-category-select v-model="groupCategory" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Persoon">
+                        <person-select v-model="person" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Gebruiker">
+                        <user-select v-model="user" />
+                    </tabler-form-group>
+
+
+                        <b-form-input placeholder="Kies een Gebruiker..." />
+                        <b-form-input placeholder="test..." />
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col lg="4">
+                    <tabler-form-group label="Enkele Groep">
+                        <group-select v-model="group" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Persoon">
+                        <person-select v-model="person" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Gebruiker">
+                        <user-select v-model="user" />
+                    </tabler-form-group>
+                </b-col>
+                <b-col lg="2">
+                    <tabler-form-group label="Enkele Groep">
+                        <group-select v-model="group" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Persoon">
+                        <person-select v-model="person" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Gebruiker">
+                        <user-select v-model="user" />
+                    </tabler-form-group>
+                </b-col>
+                <b-col lg="6">
+                    <tabler-form-group label="Enkele Groep">
+                        <group-select v-model="group" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Persoon">
+                        <person-select v-model="person" />
+                    </tabler-form-group>
+
+                    <tabler-form-group label="Enkele Gebruiker">
+                        <user-select v-model="user" />
+                    </tabler-form-group>
+                </b-col>
+            </b-row>
 
 
 
 
-
-
-            <pre>
-                {{ group }}
-                {{ person }}
-                {{ user }}
-            </pre>
 
         </b-container>
 
         <b-container>
-
+            <!--
             <b-row>
 
                 <b-col v-for="styleCard in styleCards" :key="'style-card-'+styleCard.style.name" lg="4">
@@ -40,6 +103,7 @@
                 </b-col>
 
             </b-row>
+            -->
 
         </b-container>
     </div>
@@ -56,9 +120,13 @@
     import PersonSelect from "../inputs/select/PersonSelect";
     import GroupSelect from "../inputs/select/GroupSelect";
     import TablerFormGroup from "./forms/TablerFormGroup";
+    import TablerDimmer from "./cards/TablerDimmer";
+    import GroupCategorySelect from "../inputs/select/GroupCategorySelect";
 
     export default {
         components: {
+            GroupCategorySelect,
+            TablerDimmer,
             TablerFormGroup,
             GroupSelect,
             PersonSelect,
@@ -70,9 +138,14 @@
 
         data:function() {
             return {
-                user:["4"],
+                users:null,
+                user:null,
+                persons:null,
                 person:null,
+                groups:null,
                 group:null,
+                groupCategories:null,
+                groupCategory:null,
                 styleCards: ALL_STYLES.map(el => {
                     return {
                         style: el,

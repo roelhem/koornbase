@@ -2,7 +2,7 @@
     <vue-multiselect v-bind="multiselectProps" v-on="multiselectListeners">
 
         <template slot="option" slot-scope="{ option }">
-            <base-avatar v-bind="option.avatar" default-style="person-default" size="sm" style="vertical-align: middle" />
+            <person-avatar :person="option" size="sm" />
             <span class="ml-1">
                 {{ option.name_first }}
                 <span v-if="option.name_nickname" style="opacity: 0.6">
@@ -15,12 +15,13 @@
         </template>
 
         <template slot="singleLabel" slot-scope="{ option }">
-            <div style="width:100%; white-space:nowrap;">
-                <base-avatar v-bind="option.avatar" default-style="person-default" size="sm" style="margin-bottom:-2px" />
-                <span class="ml-1">{{ option.name }}</span>
-                <small class="ml-2 text-muted">
-                    {{ option.name_formal }}
-                </small>
+
+            <div class="multiselect-flex-label">
+                <div class="multiselect-flex-label-image">
+                    <person-avatar :person="option" size="sm" />
+                </div>
+                <div class="multiselect-flex-label-name">{{ option.name }}</div>
+                <div class="multiselect-flex-label-extra">{{ option.name_formal }}</div>
             </div>
         </template>
 
@@ -46,13 +47,13 @@
     import VueMultiselect from "vue-multiselect/src/Multiselect";
     import modelSelectMixin from "../../../mixins/modelSelectMixin";
     import {selectPersonQuery} from "../../../apis/graphql/queries/select.graphql";
-    import BaseAvatar from "../../displays/BaseAvatar";
     import BaseTag from "../../displays/BaseTag";
+    import PersonAvatar from "../../displays/PersonAvatar";
 
     export default {
         components: {
+            PersonAvatar,
             BaseTag,
-            BaseAvatar,
             VueMultiselect},
         name: "person-select",
 

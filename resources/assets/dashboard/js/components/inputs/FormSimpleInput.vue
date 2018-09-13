@@ -16,13 +16,11 @@
 
 <script>
     import TablerFormGroup from "../layouts/forms/TablerFormGroup";
-    import ValidationFeedback from "../layouts/forms/ValidationFeedback";
     import formGroupMixin from "../../mixins/formGroupMixin";
     import withValidationMixin from "../../mixins/withValidationMixin";
 
     export default {
         components: {
-            ValidationFeedback,
             TablerFormGroup
         },
         name: "form-simple-input",

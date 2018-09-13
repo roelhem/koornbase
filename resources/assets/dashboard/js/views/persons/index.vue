@@ -54,10 +54,7 @@
                         <b-table v-bind="bTableProps" v-on="bTableListeners">
 
                             <template slot="avatar" slot-scope="{ item }">
-                                <base-avatar v-bind="item.avatar"
-                                             size="md"
-                                             default-style="person-default"
-                                />
+                                <person-avatar :person="item" size="md" />
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
@@ -157,7 +154,6 @@
     import SearchPerPageInput from "../../components/features/table-search/SearchPerPageInput";
     import SearchSortInput from "../../components/features/table-search/SearchSortInput";
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
     import BaseIcon from "../../components/displays/BaseIcon";
     import searchTableMixin from "../../mixins/searchTableMixin";
 
@@ -170,6 +166,7 @@
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import BaseField from "../../components/displays/BaseField";
     import SpanPersonName from "../../components/displays/spans/SpanPersonName";
+    import PersonAvatar from "../../components/displays/PersonAvatar";
 
 
 
@@ -247,6 +244,7 @@
 
     export default {
         components: {
+            PersonAvatar,
             SpanPersonName,
             BaseField,
             TablerPageHeader,
@@ -259,7 +257,6 @@
             SearchPerPageInput,
             SearchSortInput,
             TablerInputIcon,
-            BaseAvatar,
             BaseIcon
         },
 

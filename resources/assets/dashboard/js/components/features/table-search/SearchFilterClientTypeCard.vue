@@ -29,12 +29,10 @@
 <script>
     import TablerCard from "../../layouts/cards/TablerCard";
     import FormSwitch from "../../inputs/FormSwitch";
-    import DisplayOAuthClientType from "../../displays/DisplayOAuthClientType";
     import displayFilters from '../../../utils/filters/display';
 
     export default {
         components: {
-            DisplayOAuthClientType,
             FormSwitch,
             TablerCard
         },

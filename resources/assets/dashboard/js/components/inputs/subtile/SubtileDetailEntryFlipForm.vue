@@ -11,7 +11,7 @@
                     <slot>{{ value }}</slot>
                 </td>
                 <td class="px-0 py-1" style="width: 1px">
-                    <subtile-form-button icon="edit-3" color="blue" @click="activateForm" />
+                    <subtile-form-button  v-if="!disabled" icon="edit-3" color="blue" @click="activateForm" />
                 </td>
         </template>
 

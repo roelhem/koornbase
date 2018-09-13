@@ -18,12 +18,12 @@
 
     export default {
         components: {BaseTag},
-        name: "display-o-auth-client-type",
+        name: "o-auth-client-type-tag",
 
         props: {
             type:{
                 type:String,
-                required:true
+                default:AUTH_CODE,
             },
 
             large:{

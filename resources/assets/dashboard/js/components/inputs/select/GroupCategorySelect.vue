@@ -2,7 +2,7 @@
     <vue-multiselect v-bind="multiselectProps" v-on="multiselectListeners">
 
         <template slot="option" slot-scope="{ option }">
-            <base-stamp :default-style="option.category.style" size="xs" class="mr-2" />
+            <base-stamp :default-style="option.style" size="xs" class="mr-2" />
             {{ option.name }}
             <small class="ml-2 option__description" v-if="size !== 'sm'">
                 {{ option.description }}
@@ -12,61 +12,58 @@
         <template slot="singleLabel" slot-scope="{ option }">
             <div class="multiselect-flex-label">
                 <div class="multiselect-flex-label-image">
-                    <base-stamp :default-style="option.category.style" size="xs" />
+                    <base-stamp :default-style="option.style" size="xs" />
                 </div>
                 <div class="multiselect-flex-label-name">{{ option.name }}</div>
-                <div class="multiselect-flex-label-extra">{{ option.description }}</div>
+                <div v-if="size !== 'sm'" class="multiselect-flex-label-extra">{{ option.description }}</div>
             </div>
-
-        </template>
-
-        <template slot="tag" slot-scope="{ option, search, remove }">
-            <group-tag class="mr-2 mb-2" :group="option"
-                       @mousedown.prevent
-                       remove-button
-                       @remove-click="remove(option)"
-                       :label="tagLabel"
-            />
         </template>
 
         <span class="multiselect__single multiselect__single_placeholder" slot="placeholder">
-            Kies een Groep...
+            Kies een Groepscategorie...
         </span>
 
     </vue-multiselect>
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import VueMultiselect from "vue-multiselect/src/Multiselect";
     import modelSelectMixin from "../../../mixins/modelSelectMixin";
-    import {selectGroupQuery} from "../../../apis/graphql/queries/select.graphql";
-    import BaseAvatar from "../../displays/BaseAvatar";
-    import GroupTag from "../../displays/GroupTag";
     import BaseStamp from "../../displays/BaseStamp";
 
+
     export default {
+        name: "group-category-select",
+
         components: {
             BaseStamp,
-            GroupTag,
-            BaseAvatar,
-            VueMultiselect},
-        name: "group-select",
+            VueMultiselect
+        },
+
+        mixins:[modelSelectMixin],
 
         modelSelect: {
-            queryKey:'groups',
+            label:'name',
+            queryKey:'groupCategories',
             query:{
-                query:selectGroupQuery
+                query:gql`
+                    query getGroupCategoryOptions($limit:Int = 25, $search:String) {
+                        groupCategories(limit:$limit, search:$search) {
+                            data {
+                                id
+                                name
+                                name_short
+                                slug
+                                description
+                                style
+                                is_required
+                            }
+                        }
+                    }
+                `,
             },
         },
-
-        props: {
-            tagLabel:{
-                type:String,
-                default:"name_short"
-            }
-        },
-
-        mixins: [modelSelectMixin]
     }
 </script>
 

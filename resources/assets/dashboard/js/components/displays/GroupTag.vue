@@ -4,14 +4,30 @@
         :label="labelValue"
         :defaultStyle="defaultStyle"
         v-b-tooltip.hover.html="tooltip"
+        v-bind="$attrs"
+        v-on="$listeners"
     />
 
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import BaseTag from "./BaseTag";
 
     export default {
+
+        fragment:gql`
+            fragment GroupTag on Group {
+                name
+                name_short
+                member_name
+                description
+                category {
+                    id
+                    style
+                }
+            }
+        `,
 
         props:{
 

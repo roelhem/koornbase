@@ -42,24 +42,14 @@
 
 <script>
     import { CURRENT_USER } from "../../apis/graphql/queries";
-    import DataDisplay from "../../components/displays/DataDisplay";
-    import BaseAvatar from "../../components/displays/BaseAvatar";
-    import PageMePersonalData from "./overview.personal";
-    import TablerDimmer from "../../components/layouts/cards/TablerDimmer";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
-    import BaseField from "../../components/displays/BaseField";
     import UserMediaCard from "../../components/displays/UserMediaCard";
 
     export default {
 
         components: {
             UserMediaCard,
-            BaseField,
             TablerPageHeader,
-            TablerDimmer,
-            PageMePersonalData,
-            BaseAvatar,
-            DataDisplay
         },
 
         data: function() {

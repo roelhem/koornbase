@@ -295,15 +295,15 @@ fieldset[disabled] .multiselect {
   padding-left: 20px;
   font-size: $font-size-base;
 }
-.multiselect__option--highlight {
-  background: $primary;
+.tabler-multiselect .multiselect__option--highlight {
+  background: $gray-300;
   outline: none;
-  color: white;
+  color: black;
 }
 .multiselect__option--highlight:after {
   content: attr(data-select);
   background: $primary;
-  color: white;
+  color: black;
 }
 .multiselect__option--selected {
   background: #F3F3F3;
