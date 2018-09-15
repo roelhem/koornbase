@@ -28,8 +28,6 @@ Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/apps', 'HomeController@apps')->name('apps');
 Route::get('/developers','HomeController@developers')->name('developers');
 
-Route::get('/test', function() {
-    \App\User::first()->notify(new \App\Notifications\TestSlackNotification());
-});
-
 Route::any('/dashboard','DashboardController@index')->name('dashboard');
+
+Route::any('/graphql-ui', 'GraphQLController@graphiql')->middleware(['auth'])->name('graphiql');

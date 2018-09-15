@@ -94,4 +94,15 @@ class GraphQLController extends Controller
         }
     }
 
+    /**
+     * Action that returns the graphiql view.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graphiql()
+    {
+        $this->middleware('auth');
+        return view('vendor.graphiql.index');
+    }
+
 }
