@@ -8,6 +8,8 @@ use App\Traits\HasRemarks;
 use App\Traits\BelongsToPerson;
 use App\Traits\PersonContactEntry\HasContactOptions;
 use App\Traits\PersonContactEntry\OrderableWithIndex;
+use App\Types\EmailAddress;
+use App\Types\Name;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
@@ -70,6 +72,11 @@ class PersonEmailAddress extends Model implements OwnedByPerson
     public function __toString()
     {
         return $this->email_address ?? '(onbekend)';
+    }
+
+    public function getEmailAddress()
+    {
+        return new EmailAddress($this->email_address, new Name($this->person));
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

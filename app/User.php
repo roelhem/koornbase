@@ -17,6 +17,7 @@ use Laravel\Scout\Searchable;
 use Roelhem\RbacGraph\Contracts\Models\RbacDatabaseAssignable;
 use Roelhem\RbacGraph\Database\Traits\HasMorphedRbacAssignments;
 use App\Traits\Userstamps;
+use App\Enums\AvatarType as AvatarTypeEnum;
 
 /**
  * Class User
@@ -145,7 +146,13 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     public function getAvatarAttribute() {
 
         $res = new AvatarType;
+        if($this->person) {
+            $res->type = AvatarTypeEnum::PERSON();
+        } else {
+            $res->type = AvatarTypeEnum::USER();
+        }
         $res->letters = $this->avatar_letters;
+
 
         $account = $this->accounts()->whereNotNull('avatar')->get()
             ->sortByDesc(function(UserAccount $userAccount) {

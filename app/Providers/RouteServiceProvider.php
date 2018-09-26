@@ -95,7 +95,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapGraphQLRoutes()
     {
         Route::prefix('graphql')
-            ->middleware('api')
+            /*->middleware('api')*/
             ->namespace($this->namespace)
             ->group(base_path('routes/graphql.php'));
     }

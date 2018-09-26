@@ -1,0 +1,9 @@
+
+
+# A Directive that indicates that a certain type is coupled to a Eloquent-model.
+directive @model(
+
+# The name of the class that the type represents
+class:String!
+
+) on OBJECT | INTERFACE

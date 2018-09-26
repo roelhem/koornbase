@@ -1,0 +1,15 @@
+type Group implements Model @model(class:"App\\Group") {
+    id:ID!
+
+    slug:String!
+    name:String!
+    shortName:String
+    memberName:String
+    description:String
+
+    category:GroupCategory!
+
+    emailAddresses:[GroupEmailAddress]
+
+    modelInfo:ModelInfo!
+}

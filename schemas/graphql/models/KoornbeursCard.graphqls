@@ -1,0 +1,16 @@
+type KoornbeursCard implements Model @model(class:"App\\KoornbeursCard") {
+    id:ID!
+
+    person:Person
+
+    ref:String!
+    version:String
+
+    activatedAt:DateTime
+    deactivatedAt:DateTime
+    isActive(at:DateTime):Boolean
+
+    remarks:String
+
+    modelInfo:ModelInfo!
+}

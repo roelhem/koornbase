@@ -1,0 +1,21 @@
+type Certificate implements Model @model(class:"App\\Certificate") {
+    id:ID!
+
+    person:Person!
+    category:CertificateCategory!
+
+    examinationPassed:Boolean
+    examinationDate:Date
+
+    validDate:Date
+    isValid(at:Date):Boolean!
+    validSince:Date
+    validTill:Date
+
+    expireDate:Date
+    expiresIn:Duration
+
+    remarks:String
+
+    modelInfo:ModelInfo!
+}

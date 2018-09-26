@@ -1,0 +1,14 @@
+
+
+
+scalar Date
+
+scalar DateTime
+
+scalar Duration
+
+
+scalar Email
+
+
+scalar CountryCode

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Enums\MembershipStatus;
+use App\Membership;
 use App\Person;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read integer $person_id
  * @property-read integer $membership_id
  * @property-read \App\Person $person
+ * @property-read \App\Membership $membership
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Helpers\MembershipStatusChange past()
  * @mixin \Eloquent
  */
@@ -80,6 +82,15 @@ class MembershipStatusChange extends Model
      */
     public function person() {
         return $this->belongsTo(Person::class, 'person_id');
+    }
+
+    /**
+     * The Membership that triggered this change
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function membership() {
+        return $this->belongsTo(Membership::class, 'membership_id');
     }
 
 

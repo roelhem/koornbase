@@ -4,6 +4,7 @@ namespace App;
 
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\HasRemarks;
+use App\Types\EmailAddress;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Userstamps;
@@ -41,6 +42,14 @@ class GroupEmailAddress extends Model
     protected $table = 'group_email_addresses';
 
     protected $fillable = ['email_address','remarks'];
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- CUSTOM ACCESSORS ----------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    public function getEmailAddress() {
+        return new EmailAddress($this->email_address, $this->group->name);
+    }
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- RELATIONAL DEFINITIONS ----------------------------------------------------------------------------- //

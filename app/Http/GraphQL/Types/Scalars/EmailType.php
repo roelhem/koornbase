@@ -16,6 +16,7 @@ use GraphQL\Language\AST\StringValueNode;
 class EmailType extends ScalarType
 {
 
+
     protected $attributes = [
         'name' => 'Email',
         'description' => 'The `Email` scalar type represents an e-mail address only (without names, brackets, etc.) It\'s JSON-value is a string that can directly be used to send e-mails.',

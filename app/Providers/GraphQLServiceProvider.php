@@ -26,7 +26,7 @@ class GraphQLServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->bootTypes();
-        $this->bootEnumTypes();
+        //$this->bootEnumTypes();
 
         /** @var GraphQL $gql */
         $gql = $this->app['graphql'];

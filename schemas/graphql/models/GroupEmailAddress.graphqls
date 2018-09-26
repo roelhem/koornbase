@@ -1,0 +1,9 @@
+type GroupEmailAddress implements Model @model(class:"App\\GroupEmailAddress") {
+    id:ID!
+
+    group:Group!
+
+    emailAddress:EmailAddress
+
+    modelInfo:ModelInfo!
+}

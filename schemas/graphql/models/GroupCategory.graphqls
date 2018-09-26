@@ -1,0 +1,13 @@
+type GroupCategory implements Model @model(class:"App\\Group") {
+    id:ID!
+
+    slug:String!
+    name:String!
+    shortName:String
+    memberName:String
+    description:String
+
+    style:String
+
+    modelInfo:ModelInfo!
+}

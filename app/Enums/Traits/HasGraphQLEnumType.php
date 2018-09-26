@@ -14,6 +14,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 trait HasGraphQLEnumType
 {
 
+
     /**
      * The instance of the GraphQLType that belongs to this GraphQL Enum.
      *

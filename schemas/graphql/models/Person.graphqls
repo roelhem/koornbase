@@ -1,0 +1,37 @@
+
+
+type Person implements Model @model(class:"App\\Person") {
+
+    id:ID!
+
+    name:PersonName!
+
+    birthDate:Date
+    age(at:Date):Int
+
+    membershipStatus(at:Date):MembershipStatus!
+
+    avatar:PersonAvatar
+
+    modelInfo:ModelInfo!
+}
+
+
+enum PersonNameFormat {
+    DEFAULT
+    SHORT
+    FULL
+    FORMAL
+    LAST_NAME
+}
+
+
+type PersonName {
+    format(format:PersonNameFormat = DEFAULT):String
+    initials:String
+    first:String!
+    middle:String
+    prefix:String
+    last:String!
+    nickname:String
+}

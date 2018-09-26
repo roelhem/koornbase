@@ -1,0 +1,30 @@
+{
+    "name": "roelhem/graphql",
+    "description": "Adds GraphQL to Laravel using generated code",
+    "type": "laravel-plugin",
+    "authors": [
+        {
+            "name": "roelhem",
+            "email": "ik@roelweb.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4" : {
+            "Roelhem\\GraphQL\\" : "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4" : {
+            "Roelhem\\GraphQL\\Tests\\" : "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers":[
+                "Roelhem\\GraphQL\\GraphQLServiceProvider"
+            ]
+        }
+    }
+}

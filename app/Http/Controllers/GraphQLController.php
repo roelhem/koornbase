@@ -23,6 +23,7 @@ use Rebing\GraphQL\GraphQLUploadMiddleware;
 class GraphQLController extends Controller
 {
 
+
     /**
      * Action that handles the incomming GraphQL-queries.
      *

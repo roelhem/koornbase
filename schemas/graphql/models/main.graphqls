@@ -1,0 +1,22 @@
+
+
+
+
+interface Model {
+    id:ID!
+    modelInfo:ModelInfo!
+}
+
+
+type ModelInfo {
+    createdAt:DateTime
+    createdBy:User
+
+    updatedAt:DateTime
+    updatedBy:User
+
+    deletedAt:DateTime
+    deletedBy:User
+
+    deleted:Boolean!
+}

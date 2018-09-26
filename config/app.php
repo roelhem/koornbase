@@ -167,7 +167,9 @@ return [
         App\Providers\AttributeServiceProvider::class,
         App\Providers\AddressingProvider::class,
         App\Providers\ModelFinderServiceProvider::class,
-        App\Providers\GraphQLServiceProvider::class
+        App\Providers\GraphQLServiceProvider::class,
+
+        \Roelhem\GraphQL\GraphQLServiceProvider::class,
 
     ],
 

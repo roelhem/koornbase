@@ -1,0 +1,14 @@
+type CertificateCategory implements Model @model(class:"App\\CertificateCategory") {
+    id:ID!
+
+    slug:String!
+    name:String!
+    shortName:String
+    description:String
+
+    defaultExpireYears:Int
+
+    style:String
+
+    modelInfo:ModelInfo!
+}

@@ -2,6 +2,75 @@
 
 return [
 
+
+    'use' => [
+        'enums' => [
+            'MembershipStatusType' => \App\Enums\MembershipStatus::class,
+            \App\Enums\PhoneNumberFormat::class,
+            \App\Enums\PhoneNumberType::class,
+            \App\Enums\PersonNameFormat::class,
+            \App\Enums\AvatarType::class,
+        ],
+        'interfaces' => [
+            'PersonContactEntry' => \App\Http\GraphQLNew\Interfaces\PersonContactEntryInterface::class,
+            'Category'           => \App\Http\GraphQLNew\Interfaces\CategoryInterface::class,
+            'Avatar'             => \App\Http\GraphQLNew\Interfaces\AvatarInterface::class,
+        ],
+        'scalars' => [
+            'CountryCode' => \App\Http\GraphQLNew\Scalars\CountryCodeType::class,
+            'Locale'      => \App\Http\GraphQLNew\Scalars\LocaleType::class,
+
+            'Email'       => \App\Http\GraphQLNew\Scalars\EmailType::class,
+            'URL'         => \App\Http\GraphQLNew\Scalars\URLType::class,
+
+            'Date'        => \App\Http\GraphQLNew\Scalars\DateType::class,
+            'DateTime'    => \App\Http\GraphQLNew\Scalars\DateTimeType::class,
+        ],
+        'modelTypes' => [
+            \App\Http\GraphQLNew\Types\Models\UserType::class,
+            \App\Http\GraphQLNew\Types\Models\PersonType::class,
+            \App\Http\GraphQLNew\Types\Models\PersonAddressType::class,
+            \App\Http\GraphQLNew\Types\Models\PersonPhoneNumberType::class,
+            \App\Http\GraphQLNew\Types\Models\PersonEmailAddressType::class,
+            \App\Http\GraphQLNew\Types\Models\MembershipType::class,
+            \App\Http\GraphQLNew\Types\Models\KoornbeursCardType::class,
+            \App\Http\GraphQLNew\Types\Models\CertificateType::class,
+            \App\Http\GraphQLNew\Types\Models\CertificateCategoryType::class,
+            \App\Http\GraphQLNew\Types\Models\GroupType::class,
+            \App\Http\GraphQLNew\Types\Models\GroupCategoryType::class,
+            \App\Http\GraphQLNew\Types\Models\GroupEmailAddressType::class,
+        ],
+        'otherTypes' => [
+            // Avatars
+            'UserAvatar'   => \App\Http\GraphQLNew\Types\Avatars\UserAvatarType::class,
+            'PersonAvatar' => \App\Http\GraphQLNew\Types\Avatars\PersonAvatarType::class,
+
+            // Contact information
+            'PostalAddress' => \App\Http\GraphQLNew\Types\PostalAddressType::class,
+            'PhoneNumber'   => \App\Http\GraphQLNew\Types\PhoneNumberType::class,
+            'Country'       => \App\Http\GraphQLNew\Types\CountryType::class,
+            'EmailAddress'  => \App\Http\GraphQLNew\Types\EmailAddressType::class,
+
+            // Person helpers
+            'MembershipStatus' => \App\Http\GraphQLNew\Types\MembershipStatusType::class,
+            'PersonName'       => \App\Http\GraphQLNew\Types\PersonNameType::class,
+        ],
+    ],
+
+
+
+
+    'server' => [
+        'queryBatching' => true
+    ],
+
+
+
+
+
+
+
+
     // Any middleware for the graphql route group
     'middleware' => ['auth:api'],
 

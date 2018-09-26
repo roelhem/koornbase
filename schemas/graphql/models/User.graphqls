@@ -1,0 +1,9 @@
+type User implements Model @model(class:"App\\User") {
+    id:ID!
+    name:String!
+    email:Email!
+    person:Person
+    externalAccounts(provider:ExternalAccountProvider):[ExternalAccounts]
+    avatar:Avatar
+    modelInfo:ModelInfo!
+}

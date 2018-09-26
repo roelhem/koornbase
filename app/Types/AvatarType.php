@@ -20,6 +20,8 @@ use Illuminate\Contracts\Support\Jsonable;
 class AvatarType implements Arrayable, Jsonable
 {
 
+    public $type;
+
     public $image;
 
     public $letters;
@@ -40,6 +42,10 @@ class AvatarType implements Arrayable, Jsonable
     public function toArray()
     {
         $res = [];
+
+        if($this->type !== null) {
+            $res['type'] = \App\Enums\AvatarType::get($this->type);
+        }
 
         if($this->image !== null) {
             $res['image'] = strval($this->image);
@@ -73,7 +79,7 @@ class AvatarType implements Arrayable, Jsonable
      */
     public function toJson($options = 0)
     {
-        return json_encode($this->getArray(), $options);
+        return json_encode($this->toArray(), $options);
     }
 
 
