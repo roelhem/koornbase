@@ -11,10 +11,9 @@ namespace Roelhem\GraphQL\Repositories;
 
 
 use GraphQL\Type\Definition\Type;
-use Roelhem\GraphQL\Exceptions\TypeNotFoundException;
 use Roelhem\GraphQL\Repositories\Traits\GetAllFromGetNames;
-use Roelhem\GraphQL\Types\ModelInterfaceType;
 use Roelhem\GraphQL\Types\ModelType;
+use Roelhem\GraphQL\Types\OrderBy\OrderByInputType;
 
 class ModelTypeRepository extends TypeRepository
 {
@@ -50,6 +49,12 @@ class ModelTypeRepository extends TypeRepository
         }
     }
 
+    /**
+     * Returns the default type-name, based on a classname.
+     *
+     * @param string $className
+     * @return string
+     */
     protected function typeNameFromClassName($className)
     {
         try {
@@ -64,21 +69,17 @@ class ModelTypeRepository extends TypeRepository
         }
     }
 
+    /**
+     * @param $type
+     * @return Type
+     */
     protected function resolveType($type)
     {
         $type = parent::resolveType($type);
         if(!($type instanceof ModelType)) {
             throw new \InvalidArgumentException("Can't resolve to a valid " . ModelType::class . " instance...");
         }
-        $this->registerModelTypeSubRepositories($type);
         return $type;
-    }
-
-    protected function registerModelTypeSubRepositories($modelType)
-    {
-        if($modelType instanceof ModelType) {
-            $this->addRepository(new ConnectionTypeRepository($modelType->getConnectionTypes()));
-        }
     }
 
     public function get($typeName)
@@ -87,12 +88,22 @@ class ModelTypeRepository extends TypeRepository
             return parent::get($typeName);
         }
 
-        if(ends_with($typeName,'_orderByType')) {
-            $modelTypeName = str_before($typeName, '_orderByType');
-            if(parent::has($modelTypeName)) {
-                $modelType = parent::get($modelTypeName);
-                if($modelType instanceof ModelType) {
+        // Get derived types.
+        $pieces = explode('_',$typeName);
+        if(count($pieces) > 1 && parent::has($pieces[0])) {
+            // Get the modelType on which the typeName was derived
+            $modelType = parent::get($pieces[0]);
+            if($modelType instanceof ModelType) {
+
+                // Check the OrderByInputType.
+                if(ends_with($typeName,OrderByInputType::SUFFIX)) {
                     return $modelType->getOrderByInputType();
+                }
+
+                // Check the connections
+                $connectionTypeRepository = $modelType->getConnectionTypeRepository();
+                if($connectionTypeRepository->has($typeName)) {
+                    return $connectionTypeRepository->get($typeName);
                 }
             }
         }
@@ -106,11 +117,21 @@ class ModelTypeRepository extends TypeRepository
             return true;
         }
 
-        if(ends_with($typeName,'_orderByType')) {
-            $modelTypeName = str_before($typeName, '_orderByType');
-            if(parent::has($modelTypeName)) {
-                $modelType = parent::get($modelTypeName);
-                if($modelType instanceof ModelType) {
+        // Get derived types.
+        $pieces = explode('_',$typeName);
+        if(count($pieces) > 1 && parent::has($pieces[0])) {
+            // Get the modelType on which the typeName was derived
+            $modelType = parent::get($pieces[0]);
+            if($modelType instanceof ModelType) {
+
+                // Check the OrderByInputType.
+                if(ends_with($typeName,OrderByInputType::SUFFIX)) {
+                    return true;
+                }
+
+                // Check the connections
+                $connectionTypeRepository = $modelType->getConnectionTypeRepository();
+                if($connectionTypeRepository->has($typeName)) {
                     return true;
                 }
             }
@@ -124,7 +145,7 @@ class ModelTypeRepository extends TypeRepository
         $res = [];
         foreach ($this->types as $typeName => $type) {
             $res[] = $typeName;
-            $res[] = $typeName.'_orderByType';
+            $res[] = $typeName.OrderByInputType::SUFFIX;
         }
 
         foreach ($this->subRepositories as $subRepository) {

@@ -9,7 +9,9 @@
 namespace Roelhem\GraphQL\Repositories;
 
 
+use GraphQL\Type\Definition\Type;
 use GraphQL\Utils\Utils;
+use Roelhem\GraphQL\Fields\ConnectionField;
 use Roelhem\GraphQL\Types\Connections\ConnectionType;
 
 class ConnectionTypeRepository extends TypeRepository
@@ -20,6 +22,8 @@ class ConnectionTypeRepository extends TypeRepository
     {
         if(is_string($type)) {
             $res = resolve($type);
+        } elseif($type instanceof ConnectionField) {
+            $res = $type->type();
         } else {
             $res = new ConnectionType($type);
         }
@@ -28,6 +32,28 @@ class ConnectionTypeRepository extends TypeRepository
             return $res;
         }
         throw new \InvalidArgumentException("Can't resolve a ConnectionType based on the input ".Utils::printSafe($type));
+    }
+
+    /**
+     * @param ConnectionField $field
+     * @return Type
+     */
+    public function addField(ConnectionField $field)
+    {
+        return $this->addType($field, $field->typeName());
+    }
+
+    /**
+     * @param ConnectionField[] $fields
+     * @return Type[]
+     */
+    public function addFields($fields)
+    {
+        $res = [];
+        foreach ($fields as $field) {
+            $res[] = $this->addField($field);
+        }
+        return $res;
     }
 
     /** @inheritdoc */

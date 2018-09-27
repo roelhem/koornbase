@@ -51,7 +51,9 @@ class ConnectionType extends ObjectType
 
         $this->name = $this->fromType.'_'.$connectionName.'Connection';
 
-        parent::__construct($config);
+        parent::__construct(array_merge([
+            'description' => "This `Connection`-type manages the paginated list of `{$this->toType}`-items that are connected to a `{$this->fromType}`. (name of the connection: `{$connectionName}`)"
+        ],$config));
     }
 
 
@@ -95,24 +97,6 @@ class ConnectionType extends ObjectType
                 }
             ]
         ];
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- GETTERS FOR DEFAULT NAMES -------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * The default name of this connection, based on the 'from', and 'to'-types.
-     *
-     * @return string
-     */
-    protected function getDefaultName()
-    {
-        $res = $this->fromType;
-        $res .= ucfirst(array_get($this->config,'connectionName', $this->toType));
-        $res .= "Connection";
-
-        return $res;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

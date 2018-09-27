@@ -83,12 +83,8 @@ class PersonType extends ModelType
     public function connections()
     {
         return [
-            'groups' => [
-                'to' => 'Group'
-            ],
-            'certificates' => [
-                'to' => 'Certificate'
-            ]
+            'groups' => 'Group',
+            'certificates' => 'Certificate'
         ];
     }
 

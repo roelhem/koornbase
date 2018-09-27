@@ -12,6 +12,7 @@ namespace Roelhem\GraphQL\Resolvers\Middleware;
 use GraphQL\Error\Error;
 use GraphQL\Error\UserError;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 use Roelhem\GraphQL\Enums\PaginationType;
@@ -59,7 +60,7 @@ class QueryResultToPagination
         $result = $next($source, $args, $context, $store);
 
 
-        if($result instanceof Builder || $result instanceof \Illuminate\Database\Query\Builder) {
+        if($result instanceof Builder || $result instanceof \Illuminate\Database\Query\Builder || $result instanceof Relation) {
             return $paginationType->fromQuery($result, $args);
         } else {
             return null;

@@ -12,7 +12,7 @@ namespace Roelhem\GraphQL\Resolvers;
 use Roelhem\GraphQL\Resolvers\Middleware\Validate\EnsureModelTypeReturn;
 use Roelhem\GraphQL\Types\ModelType;
 
-class ModelByIdResolver extends AbstractResolver
+class QueryModelByIdResolver extends AbstractResolver
 {
 
 

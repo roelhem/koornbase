@@ -26,7 +26,7 @@ class QueryTypeRepository extends TypeRepository
 
         parent::__construct([
             $queryType,
-            $queryType->getModelListFieldsConnectionTypeRepository()
+            $queryType->getConnectionTypeRepository(),
         ]);
     }
 }

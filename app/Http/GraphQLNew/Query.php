@@ -11,41 +11,30 @@ namespace App\Http\GraphQLNew;
 
 
 use Roelhem\GraphQL\Facades\GraphQL;
-use Roelhem\GraphQL\Resolvers\ModelByIdResolver;
-use Roelhem\GraphQL\Resolvers\ModelListResolver;
+use Roelhem\GraphQL\Fields\ModelByIdField;
+use Roelhem\GraphQL\Resolvers\QueryModelByIdResolver;
+use Roelhem\GraphQL\Resolvers\QueryModelListResolver;
 use Roelhem\GraphQL\Types\QueryType;
 
 class Query extends QueryType
 {
 
-    protected $modelByIdResolver;
-    protected $modelListResolver;
-
     public function __construct(array $config = [])
     {
         parent::__construct($config);
-
-        $this->modelByIdResolver = new ModelByIdResolver();
-        $this->modelListResolver = new ModelListResolver();
     }
 
-    protected $modelByIdFields = [
-        'Person',
-        'KoornbeursCard',
-        'CertificateCategory',
-        'Group',
-        'GroupCategory',
-        'User'
-    ];
-
-    protected $modelListFields = [
-        'persons' => 'Person',
-        'KoornbeursCard',
-        'CertificateCategory',
-        'Group',
-        'GroupCategory',
-        'User'
-    ];
+    public function connections()
+    {
+        return [
+            'persons' => 'Person',
+            'KoornbeursCard',
+            'CertificateCategory',
+            'Group',
+            'GroupCategory',
+            'User'
+        ];
+    }
 
 
     public function fields()
@@ -60,6 +49,13 @@ class Query extends QueryType
                 'type' => GraphQL::type('[String]'),
                 'resolve' => function() { return GraphQL::typeLoader()->repository()->getNames(); },
             ],
+
+            new ModelByIdField(['type' => GraphQL::type('Person')]),
+            new ModelByIdField(['type' => GraphQL::type('KoornbeursCard')]),
+            new ModelByIdField(['type' => GraphQL::type('CertificateCategory')]),
+            new ModelByIdField(['type' => GraphQL::type('Group')]),
+            new ModelByIdField(['type' => GraphQL::type('GroupCategory')]),
+            new ModelByIdField(['type' => GraphQL::type('User')]),
         ];
     }
 

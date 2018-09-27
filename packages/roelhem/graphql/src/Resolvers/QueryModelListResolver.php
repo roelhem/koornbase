@@ -16,7 +16,7 @@ use Roelhem\GraphQL\Resolvers\Middleware\Validate\EnsureConnectionTypeReturn;
 use Roelhem\GraphQL\Types\Connections\ConnectionType;
 use Roelhem\GraphQL\Types\ModelType;
 
-class ModelListResolver extends AbstractResolver
+class QueryModelListResolver extends AbstractResolver
 {
 
     public function __construct(array $middleware = [])

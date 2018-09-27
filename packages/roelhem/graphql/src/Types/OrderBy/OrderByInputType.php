@@ -17,7 +17,7 @@ use Roelhem\GraphQL\Types\ModelType;
 class OrderByInputType extends EnumType
 {
 
-
+    public const SUFFIX = '_orderByInput';
 
     public function __construct($config)
     {
@@ -25,7 +25,7 @@ class OrderByInputType extends EnumType
         $modelType = array_get($config,'modelType');
         if($modelType !== null) {
             $defaultConfig = [
-                'name' => $modelType.'_orderByInput',
+                'name' => $modelType.self::SUFFIX,
                 'description' => "This `Enum`-type contains all the possible ways that you can order a list of `{$modelType}`-typed objects.",
             ];
         } else {

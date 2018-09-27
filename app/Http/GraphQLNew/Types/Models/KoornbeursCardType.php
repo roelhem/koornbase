@@ -29,6 +29,7 @@ class KoornbeursCardType extends ModelType
             'person' => [
                 'description' => 'The `Person` that is the current owner of this `KoornbeursCard`.',
                 'type' => GraphQL::type('Person'),
+                'alias' => 'owner',
             ],
             'ref' => [
                 'description' => 'The (unique) reference of the card, printed on the card itself.',
