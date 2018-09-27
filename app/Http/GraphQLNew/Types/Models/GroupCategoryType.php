@@ -55,14 +55,24 @@ class GroupCategoryType extends ModelType
             'name' => [
                 'description' => 'Orders the categories by the name.',
                 'query' => ['name','name_short','id'],
-                'cursorPattern' => ['name' => 'a','name_short' => 'a','id' => 'n'],
+                'cursorPattern' => ['name' => 'a*','name_short' => 'a*','id' => 'n'],
             ],
             'shortName' => [
                 'description' => 'Orders the categories by the short name.',
                 'query' => ['name_short','name','id'],
-                'cursorPattern' => ['name_short' => 'a','name' => 'a','id' => 'n'],
+                'cursorPattern' => ['name_short' => 'a*','name' => 'a*','id' => 'n'],
             ],
         ]);
+    }
+
+    public function filters()
+    {
+        return [
+            'style' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Filters all the GroupCategories with the provided style.'
+            ]
+        ];
     }
 
 }

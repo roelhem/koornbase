@@ -9,10 +9,14 @@
 namespace Roelhem\GraphQL\Fields;
 
 
+use GraphQL\Error\InvariantViolation;
+use Roelhem\GraphQL\Contracts\ModelTypeContract;
 use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Resolvers\ModelConnectionResolver;
 use Roelhem\GraphQL\Resolvers\QueryModelListResolver;
 use Roelhem\GraphQL\Types\Connections\ConnectionType;
+use Roelhem\GraphQL\Types\Filters\FilterInputType;
+use Roelhem\GraphQL\Types\ModelType;
 use Roelhem\GraphQL\Types\OrderBy\OrderByInputType;
 use Roelhem\GraphQL\Types\QueryType;
 
@@ -34,6 +38,8 @@ class ConnectionField extends Field
 
         // Getting the fromType.
         $this->fromType = array_get($config, 'fromType', array_get($config,'from'));
+
+
 
         parent::__construct($config);
     }
@@ -60,13 +66,13 @@ class ConnectionField extends Field
                 $this->type = resolve($type);
             } elseif(is_array($type)) {
                 $this->type = new ConnectionType(array_merge([
-                    'connectionName' => $this->baseName(),
+                    'connectionName' => $this->name(),
                     'toType' => $this->toType,
                     'fromType' => $this->fromType,
                 ],$type));
             } else {
                 $this->type = new ConnectionType([
-                    'connectionName' => $this->baseName(),
+                    'connectionName' => $this->name(),
                     'toType' => $this->toType,
                     'fromType' => $this->fromType,
                 ]);
@@ -102,28 +108,19 @@ class ConnectionField extends Field
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Returns the base-name of the field.
-     *
-     * @return string
-     */
-    public function baseName()
-    {
-        $baseName = array_get($this->config,'baseName', array_get($this->config,'name'));
-        if(empty($baseName)) {
-            $baseName = camel_case(str_plural($this->toType));
-        }
-        return $baseName;
-    }
-
-    /**
      * Returns the name of the field.
      *
      * @return string
      */
     public function name()
     {
-        return $this->baseName().($this->fromQueryType() ? '' : 'Connection');
+        $name = array_get($this->config,'name');
+        if(empty($name)) {
+            $name = camel_case(str_plural($this->toType));
+        }
+        return $name;
     }
+
 
     /**
      * Returns a string description
@@ -149,7 +146,12 @@ class ConnectionField extends Field
 
     public function args()
     {
-        return [
+        $toType = GraphQL::type($this->toType);
+        if(!($toType instanceof ModelTypeContract)) {
+            throw new InvariantViolation("The toType has to point to a ModelTypeContract.");
+        }
+
+        $args = [
 
             // ARGUMENTS FOR THE PAGINATION
             'first' => [
@@ -171,13 +173,32 @@ class ConnectionField extends Field
                 'description' => '**[Pagination]** The number of the page that you want to display.',
                 'default' => 1
             ],
-
-            // ARGUMENTS FOR ORDERING
-            'orderBy' => [
-                'type' => GraphQL::type($this->toType.OrderByInputType::SUFFIX),
-                'description' => '**[Ordering]** Specifies how the items should be ordered in the resulting list.'
-            ]
         ];
+
+        // ARGUMENTS FOR ORDERING
+        if($toType->orderable()) {
+            $args['orderBy'] = [
+                'type' => $toType->getOrderByInputType(),
+                'description' => '**[Ordering]** Specifies how the items should be ordered in the resulting list.'
+            ];
+        }
+
+
+        if($toType->filterable()) {
+            $args['filter'] = [
+                'type' => $toType->getFilterInputType(),
+                'description' => '**[Filtering]** Configure the filters on this list.',
+            ];
+        }
+
+        if($toType->searchable()) {
+            $args['search'] = [
+                'type' => GraphQL::type('String'),
+                'description' => '**[Searching]** Searches trough the list using the provided string.'
+            ];
+        }
+
+        return $args;
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

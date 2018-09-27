@@ -9,12 +9,14 @@ return [
             \App\Enums\PhoneNumberFormat::class,
             \App\Enums\PhoneNumberType::class,
             \App\Enums\PersonNameFormat::class,
+            \App\Enums\OAuthClientType::class,
             \App\Enums\AvatarType::class,
         ],
         'interfaces' => [
             'PersonContactEntry' => \App\Http\GraphQLNew\Interfaces\PersonContactEntryInterface::class,
             'Category'           => \App\Http\GraphQLNew\Interfaces\CategoryInterface::class,
             'Avatar'             => \App\Http\GraphQLNew\Interfaces\AvatarInterface::class,
+            'OAuthClient'        => \App\Http\GraphQLNew\Interfaces\OAuthClientInterface::class,
         ],
         'scalars' => [
             'CountryCode' => \App\Http\GraphQLNew\Scalars\CountryCodeType::class,
@@ -39,6 +41,11 @@ return [
             \App\Http\GraphQLNew\Types\Models\GroupType::class,
             \App\Http\GraphQLNew\Types\Models\GroupCategoryType::class,
             \App\Http\GraphQLNew\Types\Models\GroupEmailAddressType::class,
+            // OAuth
+            \App\Http\GraphQLNew\Types\Models\OAuth\OAuthPersonalClientType::class,
+            \App\Http\GraphQLNew\Types\Models\OAuth\OAuthPasswordClientType::class,
+            \App\Http\GraphQLNew\Types\Models\OAuth\OAuthCredentialsClientType::class,
+            \App\Http\GraphQLNew\Types\Models\OAuth\OAuthAuthCodeClientType::class,
         ],
         'otherTypes' => [
             // Avatars

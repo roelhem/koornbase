@@ -14,6 +14,7 @@ use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Fields\ModelByIdField;
 use Roelhem\GraphQL\Resolvers\QueryModelByIdResolver;
 use Roelhem\GraphQL\Resolvers\QueryModelListResolver;
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Types\QueryType;
 
 class Query extends QueryType
@@ -32,23 +33,24 @@ class Query extends QueryType
             'CertificateCategory',
             'Group',
             'GroupCategory',
-            'User'
+            'User',
+            'oauthClients' => 'OAuthClient'
         ];
     }
-
 
     public function fields()
     {
         return [
-            'hello' => [
-                'type' => GraphQL::type('String!'),
-                'resolve' => function() { return 'Hello World!'; },
+
+            'me' => [
+                'description' => "Returns the `User` of the current session. Will return `null` if there is no logged user.",
+                'type' => GraphQL::type('User'),
+                'resolve' => function($source, $args, ResolveContext $context) {
+                    return $context->user();
+                },
+                'importance' => 250
             ],
 
-            'names' => [
-                'type' => GraphQL::type('[String]'),
-                'resolve' => function() { return GraphQL::typeLoader()->repository()->getNames(); },
-            ],
 
             new ModelByIdField(['type' => GraphQL::type('Person')]),
             new ModelByIdField(['type' => GraphQL::type('KoornbeursCard')]),
@@ -56,6 +58,11 @@ class Query extends QueryType
             new ModelByIdField(['type' => GraphQL::type('Group')]),
             new ModelByIdField(['type' => GraphQL::type('GroupCategory')]),
             new ModelByIdField(['type' => GraphQL::type('User')]),
+
+            new ModelByIdField([
+                'name' => 'oauthClient',
+                'type' => GraphQL::type('OAuthClient')
+            ]),
         ];
     }
 

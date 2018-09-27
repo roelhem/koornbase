@@ -14,6 +14,10 @@ use EloquentFilter\ModelFilter as Filter;
 abstract class ModelFilter extends Filter
 {
 
+    public function anyId($ids) {
+        $this->whereIn('id', $ids);
+    }
+
     public function createdBefore($timestamp) {
         $this->where('created_at', '<', \Parse::date($timestamp));
     }

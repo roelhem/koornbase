@@ -9,16 +9,36 @@
 namespace Roelhem\GraphQL\Types;
 
 
+use EloquentFilter\Filterable;
+use Laravel\Scout\Searchable;
+use Roelhem\GraphQL\Contracts\ModelTypeContract;
 use Roelhem\GraphQL\Facades\GraphQL;
+use Roelhem\GraphQL\Resolvers\ModelTypeResolver;
+use Roelhem\GraphQL\Types\Filters\FilterInputType;
 use Roelhem\GraphQL\Types\OrderBy\OrderByInputType;
 use Roelhem\GraphQL\Types\Traits\HasConnectionFields;
 
-abstract class ModelType extends ObjectType
+abstract class ModelType extends ObjectType implements ModelTypeContract
 {
 
     use HasConnectionFields;
 
+
+    public function __construct(array $config = [])
+    {
+        parent::__construct(array_merge([
+            'resolveField' => new ModelTypeResolver(),
+        ], $config));
+    }
+
+
     public $modelClass;
+
+    public function getModelClass()
+    {
+        return $this->modelClass;
+    }
+
 
     /** @inheritdoc */
     protected function interfaces()
@@ -30,6 +50,12 @@ abstract class ModelType extends ObjectType
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- ORDER-ABLES ---------------------------------------------------------------------------------------- //
     // ---------------------------------------------------------------------------------------------------------- //
+
+    protected $orderable = true;
+
+    public function orderable() {
+        return $this->orderable;
+    }
 
     /**
      * Defines all the things where you can order this model by.
@@ -71,6 +97,52 @@ abstract class ModelType extends ObjectType
             ]);
         }
         return $this->orderByInputType;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- //
+    // ----- FILTERS -------------------------------------------------------------------------------------------- //
+    // ---------------------------------------------------------------------------------------------------------- //
+
+    /**
+     * The definition of the filter-object
+     *
+     * @return array
+     */
+    public function filters() {
+        return [];
+    }
+
+    protected $filterInputType;
+
+    public function getFilterInputType()
+    {
+        if ($this->filterInputType === null) {
+            $this->filterInputType = new FilterInputType([
+                'filters' => $this->filters(),
+                'modelType' => $this,
+            ]);
+        }
+        return $this->filterInputType;
+    }
+
+    protected $filterable = true;
+
+    public function filterable()
+    {
+        if(in_array(Filterable::class, class_uses($this->modelClass))) {
+            return $this->filterable;
+        }
+        return false;
+    }
+
+    protected $searchable = false;
+
+    public function searchable()
+    {
+        if(in_array(Searchable::class, class_uses($this->modelClass))) {
+            return $this->searchable;
+        }
+        return false;
     }
 
 }

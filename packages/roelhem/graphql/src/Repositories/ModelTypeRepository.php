@@ -12,6 +12,7 @@ namespace Roelhem\GraphQL\Repositories;
 
 use GraphQL\Type\Definition\Type;
 use Roelhem\GraphQL\Repositories\Traits\GetAllFromGetNames;
+use Roelhem\GraphQL\Types\Filters\FilterInputType;
 use Roelhem\GraphQL\Types\ModelType;
 use Roelhem\GraphQL\Types\OrderBy\OrderByInputType;
 
@@ -96,9 +97,16 @@ class ModelTypeRepository extends TypeRepository
             if($modelType instanceof ModelType) {
 
                 // Check the OrderByInputType.
-                if(ends_with($typeName,OrderByInputType::SUFFIX)) {
+                if(ends_with($typeName,OrderByInputType::SUFFIX) && $modelType->orderable()) {
                     return $modelType->getOrderByInputType();
                 }
+
+
+                // Check the filterInput-type.
+                if(ends_with($typeName, FilterInputType::SUFFIX) && $modelType->filterable()) {
+                    return $modelType->getFilterInputType();
+                }
+
 
                 // Check the connections
                 $connectionTypeRepository = $modelType->getConnectionTypeRepository();
@@ -126,7 +134,12 @@ class ModelTypeRepository extends TypeRepository
 
                 // Check the OrderByInputType.
                 if(ends_with($typeName,OrderByInputType::SUFFIX)) {
-                    return true;
+                    return $modelType->orderable();
+                }
+
+                 // Check the filterInput-type.
+                if(ends_with($typeName, FilterInputType::SUFFIX)) {
+                    return $modelType->filterable();
                 }
 
                 // Check the connections
@@ -144,8 +157,18 @@ class ModelTypeRepository extends TypeRepository
     {
         $res = [];
         foreach ($this->types as $typeName => $type) {
+            if(!($type instanceof ModelType)) {
+                /** @var ModelType $type */
+                $type = $this->resolveType($type);
+                $this->types[$typeName] = $type;
+            }
             $res[] = $typeName;
-            $res[] = $typeName.OrderByInputType::SUFFIX;
+            if($type->orderable()) {
+                $res[] = $typeName.OrderByInputType::SUFFIX;
+            }
+            if($type->filterable()) {
+                $res[] = $typeName.FilterInputType::SUFFIX;
+            }
         }
 
         foreach ($this->subRepositories as $subRepository) {

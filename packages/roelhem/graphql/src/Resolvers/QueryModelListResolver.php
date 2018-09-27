@@ -11,6 +11,9 @@ namespace Roelhem\GraphQL\Resolvers;
 
 use App\Person;
 use Illuminate\Support\Fluent;
+use Roelhem\GraphQL\Contracts\ModelTypeContract;
+use Roelhem\GraphQL\Resolvers\Middleware\EagerLoadRelations;
+use Roelhem\GraphQL\Resolvers\Middleware\QueryApplyUserFilters;
 use Roelhem\GraphQL\Resolvers\Middleware\QueryResultToPagination;
 use Roelhem\GraphQL\Resolvers\Middleware\Validate\EnsureConnectionTypeReturn;
 use Roelhem\GraphQL\Types\Connections\ConnectionType;
@@ -24,6 +27,8 @@ class QueryModelListResolver extends AbstractResolver
         parent::__construct(array_merge([
             EnsureConnectionTypeReturn::class,
             QueryResultToPagination::class,
+            EagerLoadRelations::class,
+            QueryApplyUserFilters::class,
         ], $middleware));
     }
 
@@ -33,19 +38,19 @@ class QueryModelListResolver extends AbstractResolver
      *
      * @param mixed $source
      * @param Fluent $args
-     * @param mixed $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @return mixed
      * @throws
      */
-    public function handle($source, $args, $context, ResolveStore $store)
+    public function handle($source, $args, ResolveContext $context, ResolveStore $store)
     {
         /** @var ConnectionType $returnType */
         $returnType = $store->returnType;
-        /** @var ModelType $targetType */
+        /** @var ModelTypeContract $targetType */
         $targetType = $returnType->getEdgeType()->getField('node')->getType();
 
-        $modelClass = $targetType->modelClass;
+        $modelClass = $targetType->getModelClass();
 
         return call_user_func([$modelClass, 'query']);
     }

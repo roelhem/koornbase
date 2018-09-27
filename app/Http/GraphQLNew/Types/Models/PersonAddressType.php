@@ -39,4 +39,36 @@ class PersonAddressType extends ModelType
     {
         return array_merge(parent::interfaces(), [GraphQL::type('PersonContactEntry')]);
     }
+
+    public function filters()
+    {
+        return [
+            'personId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters the contact entries that belong to the Person with the provided `ID`.'
+            ],
+
+            'index' => [
+                'type' => GraphQL::type('Int'),
+                'description' => 'Filters the contact entries with the provided index value.',
+            ],
+
+            'label' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Filters the contact entries with a label that is like the provided string.'
+            ],
+
+
+            'locality' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Filters the addresses that have a similar locality as the provided string.'
+            ],
+
+
+            'countryCode' => [
+                'type' => GraphQL::type('CountryCode'),
+                'description' => 'Filters the addresses that have the provided country_code.'
+            ]
+        ];
+    }
 }

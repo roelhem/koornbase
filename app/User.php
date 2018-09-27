@@ -7,6 +7,7 @@ use App\Contracts\OwnedByPerson;
 use App\Notifications\ResetPasswordNotification;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
+use App\Types\Avatar;
 use App\Types\AvatarType;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
@@ -126,43 +127,13 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     }
 
     /**
-     * Returns two letters that can be used as a placeholder avatar of this user.
-     *
-     * @return string
-     */
-    public function getAvatarLettersAttribute() {
-        if($this->person) {
-            return $this->person->avatar_letters;
-        } else {
-            return mb_strtolower(substr(trim($this->name), 0, 2)).'.';
-        }
-    }
-
-    /**
      * Returns an AvatarType that gives an avatar that can represent this user.
      *
-     * @return AvatarType
+     * @return Avatar
      */
-    public function getAvatarAttribute() {
-
-        $res = new AvatarType;
-        if($this->person) {
-            $res->type = AvatarTypeEnum::PERSON();
-        } else {
-            $res->type = AvatarTypeEnum::USER();
-        }
-        $res->letters = $this->avatar_letters;
-
-
-        $account = $this->accounts()->whereNotNull('avatar')->get()
-            ->sortByDesc(function(UserAccount $userAccount) {
-                return $userAccount->provider->conf('ranking.avatar', 0);
-            })->first();
-
-        if($account) {
-            $res->image = $account->avatar;
-        }
-        return $res;
+    public function getAvatarAttribute()
+    {
+        return Avatar::createForUser($this);
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

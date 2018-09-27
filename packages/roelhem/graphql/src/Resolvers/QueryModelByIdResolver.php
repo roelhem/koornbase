@@ -25,7 +25,7 @@ class QueryModelByIdResolver extends AbstractResolver
     }
 
 
-    public function handle($source, $args, $context, ResolveStore $store)
+    public function handle($source, $args, ResolveContext $context, ResolveStore $store)
     {
         /** @var ModelType $returnType */
         $returnType = $store->returnType;

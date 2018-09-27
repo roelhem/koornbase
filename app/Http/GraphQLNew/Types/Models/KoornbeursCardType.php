@@ -67,4 +67,49 @@ class KoornbeursCardType extends ModelType
             ],
         ];
     }
+
+    public function filters()
+    {
+        return [
+            'version' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Filters the KoornbeursCards with the (identical) provided version.'
+            ],
+
+            'active' => [
+                'type' => GraphQL::type('Boolean'),
+                'description' => 'Filters the KoornbeursCards that are active if the value is `true`, or inactive if the value is `false`.',
+            ],
+
+            'activeAt' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCards that were/are active at the given moment.',
+            ],
+
+            'inactiveAt' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCards that were/are inactive at the given moment.'
+            ],
+
+            'activatedBefore' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCarts that were activated before the provided moment.'
+            ],
+
+            'activatedAfter' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCards that were activated after the provided moment.'
+            ],
+
+            'deactivatedBefore' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCards that were deactivated before the provided moment.'
+            ],
+
+            'deactivatedAfter' => [
+                'type' => GraphQL::type('DateTime'),
+                'description' => 'Filters the KoornbeursCards that were deactivated after the provided moment.'
+            ]
+        ];
+    }
 }

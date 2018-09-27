@@ -13,6 +13,7 @@ use App\Person;
 use App\User;
 use App\UserAccount;
 use MabeEnum\Enum;
+use Roelhem\GraphQL\Facades\GraphQL;
 
 /**
  * Class AvatarType
@@ -28,4 +29,14 @@ final class AvatarType extends Enum
     const USER = User::class;
     const PERSON = Person::class;
     const EXTERNAL = UserAccount::class;
+
+    public function getGraphQLTypeName()
+    {
+        switch ($this->getValue()) {
+            case self::USER: return 'UserAvatar';
+            case self::PERSON: return 'PersonAvatar';
+            case self::EXTERNAL: return 'ExternalAvatar';
+            default: return 'Avatar';
+        }
+    }
 }

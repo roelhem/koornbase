@@ -66,19 +66,34 @@ class GroupType extends ModelType
             'name' => [
                 'description' => 'Orders the groups by the name.',
                 'query' => ['name','name_short','id'],
-                'cursorPattern' => ['name' => 'a','name_short' => 'a','id' => 'n'],
+                'cursorPattern' => ['name' => 'a*','name_short' => 'a*','id' => 'n'],
             ],
             'shortName' => [
                 'description' => 'Orders the groups by the short name.',
                 'query' => ['name_short','name','id'],
-                'cursorPattern' => ['name_short' => 'a','name' => 'a','id' => 'n'],
+                'cursorPattern' => ['name_short' => 'a*','name' => 'a*','id' => 'n'],
             ],
             'category' => [
                 'description' => 'Orders the groups by the `GroupCategory` where they belong to.',
                 'query' => ['category_id','name','name_short','id'],
-                'cursorPattern' => ['category_id' => 'n','name' => 'a','name_short' => 'a','id' => 'n'],
+                'cursorPattern' => ['category_id' => 'n','name' => 'a*','name_short' => 'a*','id' => 'n'],
             ]
         ]);
+    }
+
+    public function filters()
+    {
+        return [
+            'categoryId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters all the Groups that belong to the GroupCategory with the provided id.'
+            ],
+
+            'anyCategoryId' => [
+                'type' => GraphQL::type('[ID!]'),
+                'description' => 'Filtes all the Groups that belong to a category that has an `ID` in the provided list.'
+            ]
+        ];
     }
 
 }

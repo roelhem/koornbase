@@ -106,7 +106,7 @@ class ClientFilter extends ModelFilter
      *
      * @param string $searchString
      */
-    public function search($searchString)
+    public function name($searchString)
     {
         if(!empty($searchString)) {
             $this->where('name','ILIKE','%'.$searchString.'%');

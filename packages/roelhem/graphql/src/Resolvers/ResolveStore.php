@@ -9,9 +9,16 @@
 namespace Roelhem\GraphQL\Resolvers;
 
 
+use GraphQL\Language\AST\FragmentDefinitionNode;
+use GraphQL\Language\AST\FragmentSpread;
+use GraphQL\Language\AST\FragmentSpreadNode;
 use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Fluent;
+use Roelhem\GraphQL\Resolvers\Helpers\FieldNodeBFIterator;
+use Roelhem\GraphQL\Resolvers\Helpers\FieldNodeDFIterator;
+use Roelhem\GraphQL\Resolvers\Helpers\FieldNodeHelper;
+use Roelhem\GraphQL\Resolvers\Helpers\FieldNodeIterator;
 
 /**
  * Class ResolveStore
@@ -41,5 +48,37 @@ class ResolveStore extends Fluent
             $this->field = $this->parentType->getField($this->info->fieldName);
         } catch (\Exception $exception) {};
 
+    }
+
+
+    public function getFieldSelection($depth = 0) {
+        return $this->info->getFieldSelection($depth);
+    }
+
+    /**
+     * @param bool $depthFirst
+     * @param null|integer $maxDepth
+     * @return FieldNodeIterator|FieldNodeHelper[]
+     */
+    public function fieldNodeIterator($depthFirst = false, $maxDepth = null)
+    {
+        if($depthFirst) {
+            return new FieldNodeDFIterator($this, $maxDepth);
+        } else {
+            return new FieldNodeBFIterator($this, $maxDepth);
+        }
+    }
+
+    /**
+     * Returns the fragment with the provided name.
+     *
+     * @param FragmentSpreadNode|string $name
+     * @return FragmentDefinitionNode|null
+     */
+    public function getFragment($name) {
+        if($name instanceof FragmentSpreadNode) {
+            $name = $name->name->value;
+        }
+        return array_get($this->fragments, $name);
     }
 }

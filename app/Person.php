@@ -11,6 +11,7 @@ use App\Traits\Person\HasGroups;
 use App\Traits\Person\HasMemberships;
 use App\Traits\Person\HasName;
 use App\Traits\Person\HasPhoneNumbers;
+use App\Types\Avatar;
 use App\Types\AvatarType;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
@@ -157,31 +158,12 @@ class Person extends Model implements RbacDatabaseAssignable, AuthorizableGroup,
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
-     * Returns two letters that can be used as a placeholder avatar of this person.
+     * Returns an Avatar object for this Person
      *
-     * @return string
-     */
-    public function getAvatarLettersAttribute() {
-        $firstLetter = substr(trim($this->name_first), 0,1);
-        $lastLetter = substr(trim($this->name_last), 0,1);
-        return mb_strtoupper($firstLetter.$lastLetter);
-    }
-
-    /**
-     * Returns a AvatarType that describes an Avatar that can be used in a front-end application to represent this
-     * Person.
-     *
-     * @return AvatarType
+     * @return Avatar
      */
     public function getAvatarAttribute() {
-        foreach ($this->users()->get() as $user) {
-            if($user->avatar !== null) {
-                return $user->avatar;
-            }
-        }
-        $res = new AvatarType;
-        $res->letters = $this->avatar_letters;
-        return $res;
+        return Avatar::createForPerson($this);
     }
 
     /**

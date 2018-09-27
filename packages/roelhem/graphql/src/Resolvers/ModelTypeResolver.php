@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: roel
  * Date: 27-09-18
- * Time: 05:58
+ * Time: 22:55
  */
 
 namespace Roelhem\GraphQL\Resolvers;
@@ -12,22 +12,22 @@ namespace Roelhem\GraphQL\Resolvers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Fluent;
 use Roelhem\GraphQL\Resolvers\Middleware\FieldNameAlias;
-use Roelhem\GraphQL\Resolvers\Middleware\QueryApplyUserFilters;
-use Roelhem\GraphQL\Resolvers\Middleware\QueryResultToPagination;
-use Roelhem\GraphQL\Resolvers\Middleware\Validate\EnsureConnectionTypeReturn;
+use Roelhem\GraphQL\Resolvers\Middleware\HandleClosureResult;
 use Roelhem\GraphQL\Resolvers\Middleware\Validate\EnsureSourceInstanceOf;
 
-class ModelConnectionResolver extends AbstractResolver
+class ModelTypeResolver extends AbstractResolver
 {
 
-    public function __construct(array $middleware = [])
+    /**
+     * ModelTypeResolver constructor.
+     * @param array $middleware
+     */
+    public function __construct($middleware = [])
     {
         parent::__construct(array_merge([
-            new EnsureSourceInstanceOf(Model::class),
-            EnsureConnectionTypeReturn::class,
+            HandleClosureResult::class,
             FieldNameAlias::class,
-            QueryResultToPagination::class,
-            QueryApplyUserFilters::class,
+            new EnsureSourceInstanceOf(Model::class),
         ], $middleware));
     }
 
@@ -40,10 +40,9 @@ class ModelConnectionResolver extends AbstractResolver
      * @param ResolveContext $context
      * @param ResolveStore $store
      * @return mixed
-     * @throws
      */
     public function handle($source, $args, ResolveContext $context, ResolveStore $store)
     {
-        return call_user_func([$source, $store->fieldName]);
+        return $source->getAttribute($store->fieldName);
     }
 }

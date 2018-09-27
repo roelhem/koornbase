@@ -38,4 +38,24 @@ class PersonEmailAddressType extends ModelType
     {
         return array_merge(parent::interfaces(), [GraphQL::type('PersonContactEntry')]);
     }
+
+    public function filters()
+    {
+        return [
+            'personId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters the contact entries that belong to the Person with the provided `ID`.'
+            ],
+
+            'index' => [
+                'type' => GraphQL::type('Int'),
+                'description' => 'Filters the contact entries with the provided index value.',
+            ],
+
+            'label' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Filters the contact entries with a label that is like the provided string.'
+            ],
+        ];
+    }
 }

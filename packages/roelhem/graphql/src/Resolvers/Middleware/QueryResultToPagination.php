@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 use Roelhem\GraphQL\Enums\PaginationType;
 use Roelhem\GraphQL\Paginators\OffsetPaginator;
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Resolvers\ResolveStore;
 
 class QueryResultToPagination
@@ -25,13 +26,13 @@ class QueryResultToPagination
     /**
      * @param mixed $source
      * @param Fluent $args
-     * @param $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @param \Closure $next
      * @return mixed
      * @throws Error
      */
-    public function __invoke($source, $args, $context, ResolveStore $store, \Closure $next)
+    public function __invoke($source, $args, ResolveContext $context, ResolveStore $store, \Closure $next)
     {
         // Check if there aren't any extra pagination parameters.
         $countArgs = 0;

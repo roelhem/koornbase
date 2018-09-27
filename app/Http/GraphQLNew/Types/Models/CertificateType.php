@@ -75,4 +75,34 @@ class CertificateType extends ModelType
         ];
     }
 
+    public function filters()
+    {
+        return [
+            'isValid' => [
+                'type' => GraphQL::type('Boolean'),
+                'description' => 'Filters all the certificates that are valid if the value is true. If the value is false, only the invalid certificates are shown.'
+            ],
+
+            'validAt' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Filters all the certificates that are valid at the given date.',
+            ],
+
+            'invalidAt' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Filters all the certificates that are invalid at the given date.',
+            ],
+
+            'categoryId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters all the certificates that belong to the CertificateCategory with the given id.'
+            ],
+
+            'personId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters all the certificates that belong to the Person with the given id.'
+            ],
+        ];
+    }
+
 }

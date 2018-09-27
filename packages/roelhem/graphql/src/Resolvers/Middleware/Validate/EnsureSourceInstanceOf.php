@@ -13,6 +13,7 @@ use App\Http\GraphQL\Interfaces\PaginationInterface;
 use GraphQL\Error\Error;
 use GraphQL\Utils\Utils;
 use Illuminate\Support\Fluent;
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Resolvers\ResolveStore;
 
 class EnsureSourceInstanceOf
@@ -28,13 +29,13 @@ class EnsureSourceInstanceOf
     /**
      * @param mixed $source
      * @param Fluent $args
-     * @param $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @param \Closure $next
      * @return mixed
      * @throws Error
      */
-    public function __invoke($source, $args, $context, ResolveStore $store, \Closure $next)
+    public function __invoke($source, $args, ResolveContext $context, ResolveStore $store, \Closure $next)
     {
 
         if(!is_a($source, $this->className)) {

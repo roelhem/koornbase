@@ -44,14 +44,14 @@ abstract class AbstractResolver
     protected function createClosures($middleware) {
 
         // The last closure, that will call the handle function to generate the response.
-        $closure = function($source, $args, $context, ResolveStore $store) {
+        $closure = function($source, $args, ResolveContext $context, ResolveStore $store) {
             return $this->handle($source, $args, $context, $store);
         };
 
         // Create a new closure for every middleware function
         foreach (array_reverse($middleware) as $middlewareItem) {
             $callable = $this->getMiddlewareCallable($middlewareItem);
-            $closure = function($source, $args, $context, ResolveStore $store) use ($callable, $closure) {
+            $closure = function($source, $args, ResolveContext $context, ResolveStore $store) use ($callable, $closure) {
                 return call_user_func($callable, $source, $args, $context, $store, $closure);
             };
         }
@@ -92,11 +92,11 @@ abstract class AbstractResolver
      *
      * @param mixed $source
      * @param array $args
-     * @param mixed $context
+     * @param ResolveContext $context
      * @param ResolveInfo $resolveInfo
      * @return mixed
      */
-    public function __invoke($source, $args, $context, ResolveInfo $resolveInfo)
+    public function __invoke($source, $args, ResolveContext $context, ResolveInfo $resolveInfo)
     {
         return $this->start($source, new Fluent($args), $context, new ResolveStore($resolveInfo));
     }
@@ -108,11 +108,11 @@ abstract class AbstractResolver
      *
      * @param mixed $source
      * @param Fluent $args
-     * @param mixed $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @return mixed
      */
-    protected function start($source, $args, $context, ResolveStore $store)
+    protected function start($source, $args, ResolveContext $context, ResolveStore $store)
     {
         return ($this->callback)($source, $args, $context, $store);
     }
@@ -125,10 +125,10 @@ abstract class AbstractResolver
      *
      * @param mixed $source
      * @param Fluent $args
-     * @param mixed $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @return mixed
      */
-    abstract public function handle($source, $args, $context, ResolveStore $store);
+    abstract public function handle($source, $args, ResolveContext $context, ResolveStore $store);
 
 }

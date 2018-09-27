@@ -14,11 +14,13 @@ use GraphQL\Error\Debug;
 use GraphQL\Server\StandardServer;
 use GraphQL\Type\Schema;
 use Illuminate\Routing\Controller;
+use Laravel\Passport\Passport;
 use Psr\Http\Message\ServerRequestInterface;
 use Roelhem\GraphQL\GraphQL as GraphQLHelper;
 use Roelhem\GraphQL\GraphQL;
 use Roelhem\GraphQL\Resolvers\DefaultResolver;
 use Roelhem\GraphQL\Resolvers\MiddlewareResolver;
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 
 class GraphQLController extends Controller
 {
@@ -35,16 +37,20 @@ class GraphQLController extends Controller
             'types' => $gql->types(),
         ]);
 
-
+        $context = new ResolveContext(\Auth::guard('api'));
 
         $server = new StandardServer([
             'schema' => $schema,
+            'context' => $context,
             'queryBatching' => true,
             'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
             'fieldResolver' => new DefaultResolver(),
         ]);
 
-        return $server->executePsrRequest($request)->toArray();
+        $response = $server->executePsrRequest($request)->toArray();
+
+        return $response;
+
     }
 
 }

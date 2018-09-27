@@ -11,6 +11,7 @@ namespace App\Http\GraphQLNew\Types\Models;
 
 use App\Person;
 use App\Types\Name;
+use GraphQL\Type\Definition\Type;
 use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Types\ModelType;
 
@@ -68,6 +69,7 @@ class PersonType extends ModelType
             'memberships' => [
                 'description' => "The memberships at 'O.J.V. de Koornbeurs' for this `Person`.",
                 'type' => GraphQL::type('[Membership]'),
+                'eagerLoad' => 'memberships',
                 'importance' => 90,
             ],
 
@@ -75,24 +77,34 @@ class PersonType extends ModelType
             'addresses' => [
                 'type' => GraphQL::type('[PersonAddress]'),
                 'description' => 'The (postal-)addresses of this person.',
+                'eagerLoad' => 'addresses',
                 'importance' => 80,
             ],
             'emailAddresses' => [
                 'type' => GraphQL::type('[PersonEmailAddress]'),
                 'description' => 'The E-mail addresses of this person.',
+                'eagerLoad' => 'emailAddresses',
                 'importance' => 80,
             ],
             'phoneNumbers' => [
                 'type' => GraphQL::type('[PersonPhoneNumber]'),
                 'description' => 'The Phone-numbers of this person.',
+                'eagerLoad' => 'phoneNumbers',
                 'importance' => 80,
             ],
 
             'koornbeursCards' => [
                 'description' => "The Koornbeurs-cards that this `Person` currently owns.",
                 'type' => GraphQL::type('[KoornbeursCard]'),
+                'eagerLoad' => 'cards',
                 'importance' => 50,
             ],
+
+            'remarks' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Some (optional) remarks about this person.',
+                'importance' => -200,
+            ]
 
         ];
     }
@@ -102,10 +114,12 @@ class PersonType extends ModelType
         return [
             'groups' => [
                 'to' => 'Group',
+                'eagerLoad' => 'groups',
                 'importance' => 10,
             ],
             'certificates' => [
                 'to' => 'Certificate',
+                'eagerLoad' => 'certificates',
                 'importance' => 9,
             ]
         ];
@@ -117,12 +131,12 @@ class PersonType extends ModelType
             'firstName' => [
                 'description' => 'Orders a list of persons by their first name.',
                 'query' => ['name_first','name_last','id'],
-                'cursorPattern' => ['name_first' => 'a','name_last' => 'a','id' => 'n'],
+                'cursorPattern' => ['name_first' => 'a*','name_last' => 'a*','id' => 'n'],
             ],
             'lastName' => [
                 'description' => 'Orders a list of persons by their last name.',
                 'query' => ['name_last','name_first','id'],
-                'cursorPattern' => ['name_last' => 'a','name_first' => 'a','id' => 'n'],
+                'cursorPattern' => ['name_last' => 'a*','name_first' => 'a*','id' => 'n'],
             ],
             'birthDate' => [
                 'description' => 'Orders a list of persons using the date on which they were born.',
@@ -133,6 +147,41 @@ class PersonType extends ModelType
                 'description' => 'Orders a list of persons based on the status of the current membership-status.'
             ]
         ]);
+    }
+
+    public function filters()
+    {
+        return [
+            'membershipStatus' => [
+                'type' => GraphQL::type('MembershipStatusType'),
+                'description' => 'Filters the Persons that currently have the provided membership status.'
+            ],
+
+            'anyMembershipStatus' => [
+                'type' => GraphQL::type('[MembershipStatusType!]'),
+                'description' => 'Filters the Persons that have one of the provided membership statuses.'
+            ],
+
+            'birthDateBefore' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Filters the persons who were born before the provided date.',
+            ],
+
+            'birthDateAfter' => [
+                'type' => GraphQL::type('Date'),
+                'description' => 'Filters the persons who were born after the provided date.',
+            ],
+
+            'inAnyGroup' => [
+                'type' => GraphQL::type('[ID!]'),
+                'description' => 'Filters the persons that are in at least one of the provided groups.'
+            ],
+
+            'notInGroup' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters the persons that are not in the group with the provided `ID`.'
+            ]
+        ];
     }
 
 }

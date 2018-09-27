@@ -12,6 +12,7 @@ namespace Roelhem\GraphQL\Resolvers\Middleware\Validate;
 use GraphQL\Error\Error;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Fluent;
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Resolvers\ResolveStore;
 use Roelhem\GraphQL\Types\ModelType;
 
@@ -20,13 +21,13 @@ class EnsureModelTypeReturn
     /**
      * @param mixed $source
      * @param Fluent $args
-     * @param $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @param \Closure $next
      * @return mixed
      * @throws Error
      */
-    public function __invoke($source, $args, $context, ResolveStore $store, \Closure $next)
+    public function __invoke($source, $args, ResolveContext $context, ResolveStore $store, \Closure $next)
     {
 
         if(!($store->returnType instanceof ModelType)) {

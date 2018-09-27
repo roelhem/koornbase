@@ -42,4 +42,14 @@ class GroupEmailAddressType extends ModelType
         ];
     }
 
+    public function filters()
+    {
+        return [
+            'groupId' => [
+                'type' => GraphQL::type('ID'),
+                'description' => 'Filters all the emailAddresses that belong to the group with the provided id.'
+            ]
+        ];
+    }
+
 }

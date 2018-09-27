@@ -9,12 +9,13 @@
 namespace Roelhem\GraphQL\Resolvers\Middleware;
 
 
+use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Resolvers\ResolveStore;
 
 class FieldNameAlias
 {
 
-    public function __invoke($source, $args, $context, ResolveStore $store, \Closure $next)
+    public function __invoke($source, $args, ResolveContext $context, ResolveStore $store, \Closure $next)
     {
 
         $field = $store->field;

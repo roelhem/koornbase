@@ -93,6 +93,17 @@ final class OAuthClientType extends Enum
 
     }
 
+    public function getGraphQLTypeName()
+    {
+        switch ($this->getValue()) {
+            case self::PERSONAL: return 'OAuthPersonalClient';
+            case self::PASSWORD: return 'OAuthPasswordClient';
+            case self::CREDENTIALS: return 'OAuthCredentialsClient';
+            case self::AUTH_CODE: return 'OAuthAuthCodeClient';
+            default: return 'OAuthClient';
+        }
+    }
+
 
 
 }

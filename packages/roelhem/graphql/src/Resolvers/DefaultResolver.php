@@ -33,11 +33,11 @@ class DefaultResolver extends AbstractResolver
     /**
      * @param mixed $source
      * @param Fluent $args
-     * @param mixed $context
+     * @param ResolveContext $context
      * @param ResolveStore $store
      * @return mixed
      */
-    public function handle($source, $args, $context, ResolveStore $store)
+    public function handle($source, $args, ResolveContext $context, ResolveStore $store)
     {
         if(is_array($source) || $source instanceof \ArrayAccess) {
             return array_get($source, $store->fieldName);

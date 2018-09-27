@@ -9,7 +9,8 @@
 namespace App\Http\GraphQLNew\Interfaces;
 
 
-use App\Types\AvatarType;
+use App\Types\Avatar;
+use GraphQL\Error\InvariantViolation;
 use GraphQL\Type\Definition\ResolveInfo;
 use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Types\InterfaceType;
@@ -28,6 +29,9 @@ class AvatarInterface extends InterfaceType
                 'description' => 'The type of the `Avatar`, which indicates the kind of model that the `Avatar` is
                                   based on, and the style in which the `Avatar` should be presented in the UI.',
                 'type' => GraphQL::type('AvatarType'),
+                'resolve' => function(Avatar $avatar) {
+                    return $avatar->getType();
+                },
                 'importance' => -10,
             ],
             'image' => [
@@ -45,10 +49,13 @@ class AvatarInterface extends InterfaceType
         ];
     }
 
+    /** @inheritdoc */
     public function resolveType($objectValue, $context, ResolveInfo $info)
     {
-        if($objectValue instanceof AvatarType) {
-            return GraphQL::type('PersonAvatar');
+        if($objectValue instanceof Avatar) {
+            return GraphQL::type($objectValue->getType()->getGraphQLTypeName());
         }
+
+        throw new InvariantViolation("Unknown Avatar Type.");
     }
 }
