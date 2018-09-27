@@ -29,6 +29,7 @@ class PersonEmailAddressType extends ModelType
                 'resolve' => function(PersonEmailAddress $personEmailAddress) {
                     return $personEmailAddress->getEmailAddress();
                 },
+                'importance' => 230,
             ],
         ];
     }

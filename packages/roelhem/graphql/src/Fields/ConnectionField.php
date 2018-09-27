@@ -60,13 +60,13 @@ class ConnectionField extends Field
                 $this->type = resolve($type);
             } elseif(is_array($type)) {
                 $this->type = new ConnectionType(array_merge([
-                    'connectionName' => $this->name(),
+                    'connectionName' => $this->baseName(),
                     'toType' => $this->toType,
                     'fromType' => $this->fromType,
                 ],$type));
             } else {
                 $this->type = new ConnectionType([
-                    'connectionName' => $this->name(),
+                    'connectionName' => $this->baseName(),
                     'toType' => $this->toType,
                     'fromType' => $this->fromType,
                 ]);
@@ -102,17 +102,27 @@ class ConnectionField extends Field
     // ---------------------------------------------------------------------------------------------------------- //
 
     /**
+     * Returns the base-name of the field.
+     *
+     * @return string
+     */
+    public function baseName()
+    {
+        $baseName = array_get($this->config,'baseName', array_get($this->config,'name'));
+        if(empty($baseName)) {
+            $baseName = camel_case(str_plural($this->toType));
+        }
+        return $baseName;
+    }
+
+    /**
      * Returns the name of the field.
      *
      * @return string
      */
     public function name()
     {
-        $name = array_get($this->config,'name');
-        if(empty($name)) {
-            return camel_case(str_plural($this->toType));
-        }
-        return $name;
+        return $this->baseName().($this->fromQueryType() ? '' : 'Connection');
     }
 
     /**

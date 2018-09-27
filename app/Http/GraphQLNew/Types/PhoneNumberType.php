@@ -45,7 +45,8 @@ class PhoneNumberType extends ObjectType
                 'description' => 'The type of this `PhoneNumber`. This value is determined based on the patterns in the phone-number itself.',
                 'resolve' => function(PhoneNumber $phoneNumber) {
                     return \App\Enums\PhoneNumberType::get($this->util->getNumberType($phoneNumber));
-                }
+                },
+                'importance' => 10,
             ],
             'number' => [
                 'description' => 'A `String`-representation of the `PhoneNumber` in this field.',
@@ -66,7 +67,8 @@ class PhoneNumberType extends ObjectType
                     /** @var PhoneNumberFormat $format */
                     $format = array_get($args, 'format', PhoneNumberFormat::default());
                     return $format->format($phoneNumber, array_get($args, 'from','NL'));
-                }
+                },
+                'importance' => 240,
             ],
             'location' => [
                 'description' => 'An approximation for where the `PhoneNumber` is located. This value will be determined based on the patterns in the phone-number itself.',
@@ -89,7 +91,8 @@ class PhoneNumberType extends ObjectType
                     /** @var CountryRepositoryInterface $repository */
                     $repository = resolve(CountryRepositoryInterface::class);
                     return $repository->get($this->util->getRegionCodeForNumber($phoneNumber));
-                }
+                },
+                'importance' => 230,
             ],
             'link' => [
                 'description' => 'Returns a string that can be used as a link on mobile phones. When clicked on this linked, the phone-number of the current object will be called by the user.',
@@ -97,7 +100,8 @@ class PhoneNumberType extends ObjectType
                 'resolve' => function(PhoneNumber $phoneNumber) {
                     $res = $this->util->format($phoneNumber,PhoneNumberFormat::RFC3966);
                     return str_replace('tel:','tel://',$res);
-                }
+                },
+                'importance' => -1,
             ],
         ];
     }

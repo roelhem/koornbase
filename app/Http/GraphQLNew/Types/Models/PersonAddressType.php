@@ -26,10 +26,11 @@ class PersonAddressType extends ModelType
             'postalAddress' => [
                 'description' => "The `PostalAddress` that is coupled via this model to the `Person`. It can be used
                                   to send mail to the `Person`.",
-                'type' => GraphQL::type('PostalAddress!'),
+                'type' => GraphQL::type('PostalAddress'),
                 'resolve' => function(PersonAddress $personAddress) {
                     return $personAddress;
-                }
+                },
+                'importance' => 230,
             ]
         ];
     }

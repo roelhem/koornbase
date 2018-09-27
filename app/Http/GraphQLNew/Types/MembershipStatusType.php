@@ -34,7 +34,8 @@ class MembershipStatusType extends ObjectType
                         return $status->status;
                     }
                     return MembershipStatus::OUTSIDER();
-                }
+                },
+                'importance' => 250,
             ],
             'since' => [
                 'description' => 'The first `Date` on which the status of this `Person` changed to this 
@@ -45,11 +46,12 @@ class MembershipStatusType extends ObjectType
                         return $status->date;
                     }
                     return null;
-                }
+                },
+                'importance' => 249,
             ],
             'person' => [
                 'description' => 'The `Person` to which this `MembershipStatus` applies',
-                'type' => GraphQL::type('Person!'),
+                'type' => GraphQL::type('Person'),
                 'resolve' => function($status) {
                     if($status instanceof MembershipStatusChange) {
                         return $status->person;
@@ -58,7 +60,8 @@ class MembershipStatusType extends ObjectType
                     } else {
                         return $status->person;
                     }
-                }
+                },
+                'importance' => 200,
             ],
             'membership' => [
                 'description' => 'The `Membership` that caused the change to this `MembershipStatus`.',
@@ -71,7 +74,8 @@ class MembershipStatusType extends ObjectType
                     } else {
                         return null;
                     }
-                }
+                },
+                'importance' => 190,
             ]
         ];
     }

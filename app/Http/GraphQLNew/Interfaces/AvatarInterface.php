@@ -28,16 +28,19 @@ class AvatarInterface extends InterfaceType
                 'description' => 'The type of the `Avatar`, which indicates the kind of model that the `Avatar` is
                                   based on, and the style in which the `Avatar` should be presented in the UI.',
                 'type' => GraphQL::type('AvatarType'),
+                'importance' => -10,
             ],
             'image' => [
                 'description' => 'Gives a link to an image that can be used in the Avatar. Returns `null` of no image
                                   was specified for this avatar.',
                 'type' => GraphQL::type('URL'),
+                'importance' => 100,
             ],
             'letters' => [
                 'description' => 'Gives a short string that can be shown in the UI to the user as a placeholder if 
                                   no image was found for this avatar.',
                 'type' => GraphQL::type('String'),
+                'importance' => 90
             ],
         ];
     }

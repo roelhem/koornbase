@@ -28,12 +28,14 @@ class MembershipType extends ModelType
         return [
             'person' => [
                 'description' => 'The `Person` of this `Membership`.',
-                'type' => GraphQL::type('Person!'),
+                'type' => GraphQL::type('Person'),
+                'importance' => 200,
             ],
 
             'application' => [
                 'description' => 'The date of the application for the membership.',
                 'type' => GraphQL::type('Date'),
+                'importance' => 5,
             ],
             'hasApplied' => [
                 'description' => 'Whether or not the *application* has been taken place at a certain date.',
@@ -45,12 +47,14 @@ class MembershipType extends ModelType
                                           date will be used instead.',
                         'type' => GraphQL::type('Date'),
                     ]
-                ]
+                ],
+                'importance' => 15,
             ],
 
             'start' => [
                 'description' => 'The date on which this `Membership` was (fully) started.',
                 'type' => GraphQL::type('Date'),
+                'importance' => 4,
             ],
             'hasStarted' => [
                 'description' => 'Whether or not the `Membership` has been *started* at a certain date.',
@@ -62,12 +66,14 @@ class MembershipType extends ModelType
                                           instead.',
                         'type' => GraphQL::type('Date'),
                     ]
-                ]
+                ],
+                'importance' => 14,
             ],
 
             'end' => [
                 'description' => 'The date on which this `Membership` had been ended.',
                 'type' => GraphQL::type('Date'),
+                'importance' => 3,
             ],
             'hasEnded' => [
                 'description' => 'Whether or not the `Membership` has *ended* at a certain date.',
@@ -79,7 +85,8 @@ class MembershipType extends ModelType
                                           instead.',
                         'type' => GraphQL::type('Date'),
                     ]
-                ]
+                ],
+                'importance' => 13,
             ],
 
             'status' => [
@@ -93,7 +100,8 @@ class MembershipType extends ModelType
                                           instead.',
                         'type' => GraphQL::type('Date'),
                     ]
-                ]
+                ],
+                'importance' => 100,
             ]
         ];
     }

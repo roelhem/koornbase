@@ -26,6 +26,7 @@ class UserAvatarType extends ObjectType
             'user' => [
                 'description' => 'The `User` from which this `UserAvatar` was derived.',
                 'type' => GraphQL::type('User'),
+                'importance' => -8,
             ]
         ];
     }

@@ -30,22 +30,27 @@ class KoornbeursCardType extends ModelType
                 'description' => 'The `Person` that is the current owner of this `KoornbeursCard`.',
                 'type' => GraphQL::type('Person'),
                 'alias' => 'owner',
+                'importance' => 200,
             ],
             'ref' => [
                 'description' => 'The (unique) reference of the card, printed on the card itself.',
-                'type' => GraphQL::type('String!'),
+                'type' => GraphQL::type('String'),
+                'importance' => 250,
             ],
             'version' => [
                 'description' => 'The version of the card.',
                 'type' => GraphQL::type('String'),
+                'importance' => 249
             ],
             'activatedAt' => [
                 'description' => 'The moment on which this `KoornbeursCard` was activated.',
                 'type' => GraphQL::type('DateTime'),
+                'importance' => 5,
             ],
             'deactivatedAt' => [
                 'description' => 'The moment on which this `KoornbeursCard` was deactivated.',
                 'type' => GraphQL::type('DateTime'),
+                'importance' => 4,
             ],
             'isActive' => [
                 'description' => 'Whether or not this `KoornbeursCard` is/was/will be active at a given moment.',
@@ -57,7 +62,8 @@ class KoornbeursCardType extends ModelType
                                           used.',
                         'type' => GraphQL::type('DateTime')
                     ]
-                ]
+                ],
+                'importance' => 10,
             ],
         ];
     }

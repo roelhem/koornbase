@@ -29,11 +29,8 @@ class GroupCategoryType extends ModelType
             'style' => [
                 'description' => "The name of the (visual) style of a `Group` in this `GroupCategory`.",
                 'type' => GraphQL::type('String'),
+                'importance' => 200,
             ],
-            'groups' => [
-                'description' => "A list of all the groups that belong to this `GroupCategory`.",
-                'type' => GraphQL::type('[Group]'),
-            ]
         ];
     }
 

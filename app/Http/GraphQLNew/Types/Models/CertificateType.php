@@ -30,24 +30,14 @@ class CertificateType extends ModelType
             'person' => [
                 'description' => 'The `Person` where this `Certificate` belongs to. (e.a. The `Person` that this 
                                  `Certificate` qualifies, if the `Certificate` is valid.)',
-                'type' => GraphQL::type('Person!'),
+                'type' => GraphQL::type('Person'),
+                'importance' => 249,
             ],
             'category' => [
                 'description' => 'The `CertificateCategory` of the `Certificate`. This object stores what it means to
                                   have this `Certificate`.',
-                'type' => GraphQL::type('CertificateCategory!'),
-            ],
-            'examinationDate' => [
-                'description' => 'The date on which the examination for this `Certificate` *took/will take* place.',
-                'type' => GraphQL::type('Date'),
-            ],
-            'examinationPassed' => [
-                'description' => 'Whether or not the exam for this `Certificate` was passed.',
-                'type' => GraphQL::type('Boolean'),
-            ],
-            'validDate' => [
-                'description' => 'The date on which `Certificate` will start to be valid. ',
-                'type' => GraphQL::type('Date'),
+                'type' => GraphQL::type('CertificateCategory'),
+                'importance' => 248
             ],
             'isValid' => [
                 'description' => 'Checks whether or not this `Certificate` is valid at a certain `Date`.',
@@ -59,11 +49,28 @@ class CertificateType extends ModelType
                                           used instead.',
                         'type' => GraphQL::type('Date'),
                     ]
-                ]
+                ],
+                'importance' => 20,
+            ],
+            'examinationDate' => [
+                'description' => 'The date on which the examination for this `Certificate` *took/will take* place.',
+                'type' => GraphQL::type('Date'),
+                'importance' => 3,
+            ],
+            'examinationPassed' => [
+                'description' => 'Whether or not the exam for this `Certificate` was passed.',
+                'type' => GraphQL::type('Boolean'),
+                'importance' => 10,
+            ],
+            'validDate' => [
+                'description' => 'The date on which `Certificate` will start to be valid. ',
+                'type' => GraphQL::type('Date'),
+                'importance' => 2,
             ],
             'expireDate' => [
                 'description' => 'The date on the which `Certificate` expires.',
                 'type' => GraphQL::type('Date'),
+                'importance' => 1,
             ]
         ];
     }

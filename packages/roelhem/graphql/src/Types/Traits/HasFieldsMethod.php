@@ -66,6 +66,20 @@ trait HasFieldsMethod
                     }
                 }
             }
+
+            // Sort the fields
+            uasort($this->fields, function(FieldDefinition $a, FieldDefinition $b) {
+                $importance_a = array_get($a->config, 'importance', 0);
+                $importance_b = array_get($b->config, 'importance', 0);
+                if($importance_a > $importance_b) {
+                    return -1;
+                } elseif($importance_a < $importance_b) {
+                    return 1;
+                } else {
+                    return strcmp($a->name, $b->name);
+                }
+
+            });
         }
         return $this->fields;
     }

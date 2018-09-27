@@ -37,7 +37,8 @@ class PostalAddressType extends ObjectType
                     /** @var CountryRepositoryInterface $repository */
                     $repository = resolve(CountryRepositoryInterface::class);
                     return $repository->get($address->getCountryCode());
-                }
+                },
+                'importance' => 100,
             ],
             'administrativeArea' => [
                 'description' => "The name of the 'Administrative Subdivision-Area' where this address is located.
@@ -51,7 +52,7 @@ class PostalAddressType extends ObjectType
                 'type' => GraphQL::type('String'),
                 'resolve' => function(AddressInterface $address) {
                     return $address->getAdministrativeArea();
-                }
+                },
             ],
             'locality' => [
                 'description' => "Field for the 'locality' of the address, which will contain the **Name of the City** 
@@ -112,7 +113,8 @@ class PostalAddressType extends ObjectType
                 'type' => GraphQL::type('String'),
                 'resolve' => function(AddressInterface $address) {
                     return $address->getOrganization();
-                }
+                },
+                'importance' => -1,
             ],
             'name' => [
                 'description' => "The name of the recipient at this address.",
@@ -127,7 +129,8 @@ class PostalAddressType extends ObjectType
                             'name_last' => $address->getFamilyName(),
                         ]);
                     }
-                }
+                },
+                'importance' => -2,
             ],
             'format' => [
                 'description' => 'Gives a `String` that displays the address according to the proper rules of the region of the address.',
@@ -151,7 +154,8 @@ class PostalAddressType extends ObjectType
                         'html' => array_get($args,'html',false),
                         'locale' => array_get($args, 'locale','nl'),
                     ]);
-                }
+                },
+                'importance' => 200,
             ]
         ];
     }

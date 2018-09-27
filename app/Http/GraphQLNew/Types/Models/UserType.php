@@ -28,7 +28,8 @@ class UserType extends ModelType
         return [
             'name' => [
                 'description' => "The username of the `User` that can be used to identify the user.",
-                'type' => GraphQL::type('String!')
+                'type' => GraphQL::type('String'),
+                'importance' => 245,
             ],
             'email' => [
                 'description' => "The E-mailadres of the `User` that is used to log-in and send server-related
@@ -36,16 +37,19 @@ class UserType extends ModelType
                                   \n\n E-mails that have no connection the the KoornBase-system itself, shouldn't
                                   be send to this address, but to one of the `PersonEmailAddress`-typed models
                                   connected to the `Person` of this `User`.",
-                'type' => GraphQL::type('Email!'),
+                'type' => GraphQL::type('Email'),
+                'importance' => 244,
             ],
             'person' => [
                 'description' => "The `Person` that is coupled with this `User`. All data of this user that has nothing
                                   to do with the KoornBase-system is stored at this model.",
                 'type' => GraphQL::type('Person'),
+                'importance' => 200
             ],
             'avatar' => [
                 'description' => "The `Avatar` that can be used to represent this `User`.",
                 'type' => GraphQL::type('Avatar'),
+                'importance' => -40
             ]
         ];
     }

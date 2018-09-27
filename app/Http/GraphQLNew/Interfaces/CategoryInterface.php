@@ -38,21 +38,25 @@ class CategoryInterface extends InterfaceType
                                   \n\n - **Safe for URL's:** Means that the value of this field only contains
                                   characters that are allowed to exist in URL's without changing the behaviour of
                                   this URL. Therefore, it's safe to use it anywhere within the URL.",
-                'type' => GraphQL::type('String!'),
+                'type' => GraphQL::type('String'),
+                'importance' => 254,
             ],
             'name' => [
                 'description' => 'This field contains the full name of the category/group.',
-                'type' => GraphQL::type('String!'),
+                'type' => GraphQL::type('String'),
+                'importance' => 250,
             ],
             'shortName' => [
                 'description' => "This field (may) contain a shorter version of the name of this category/group than
                                   the 'name'-field. It can be used at places in the UI where there is little space.",
                 'type' => GraphQL::type('String'),
                 'alias' => 'name_short',
+                'importance' => 240,
             ],
             'description' => [
                 'description' => "This field gives a description of the category/group. It may contain multi-line text.",
                 'type' => GraphQL::type('String'),
+                'importance' => 230,
             ]
         ];
     }

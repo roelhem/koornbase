@@ -35,14 +35,16 @@ class CountryType extends ObjectType
                 ],
                 'resolve' => function(Country $country) {
                     return $country->getName();
-                }
+                },
+                'importance' => 250,
             ],
             'code' => [
                 'description' => 'The `CountryCode` of this country, which uniquely identifies this `Country`.',
                 'type' => GraphQL::type('CountryCode!'),
                 'resolve' => function(Country $country) {
                     return $country->getCountryCode();
-                }
+                },
+                'importance' => 255,
             ],
             'threeLetterCode' => [
                 'type' => GraphQL::type('String'),
@@ -67,7 +69,8 @@ class CountryType extends ObjectType
                 'type' => GraphQL::type('Locale'),
                 'resolve' => function(Country $country) {
                     return $country->getLocale();
-                }
+                },
+                'importance' => -2,
             ]
         ];
     }

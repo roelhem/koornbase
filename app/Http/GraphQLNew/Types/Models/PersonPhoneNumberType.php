@@ -30,7 +30,8 @@ class PersonPhoneNumberType extends ModelType
                 'type' => GraphQL::type('PhoneNumber'),
                 'resolve' => function(PersonPhoneNumber $personPhoneNumber) {
                     return $personPhoneNumber->phone_number;
-                }
+                },
+                'importance' => 230,
             ],
         ];
     }

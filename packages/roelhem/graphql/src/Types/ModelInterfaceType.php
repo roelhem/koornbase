@@ -29,7 +29,14 @@ class ModelInterfaceType extends InterfaceType
             'id' => [
                 'type' => GraphQL::type('ID!'),
                 'description' => 'The primary-key of this `Model`. This value in combination with the type uniquely Identifies the object.',
+                'importance' => 255,
             ],
+            'modelInfo' => [
+                'type' => GraphQL::type('ModelInfo'),
+                'description' => "Provides some (server-side) information about the model.",
+                'resolve' => function($source) { return $source; },
+                'importance' => -255,
+            ]
         ];
     }
 

@@ -30,14 +30,17 @@ class GroupType extends ModelType
             'memberName' => [
                 'description' => 'Gives how you should call a `Person` that is a member of this `Group`.',
                 'type' => GraphQL::type('String'),
+                'importance' => 180,
             ],
             'category' => [
                 'description' => 'Gives the `GroupCategory` where this `Group` belongs to.',
-                'type' => GraphQL::type('GroupCategory!'),
+                'type' => GraphQL::type('GroupCategory'),
+                'importance' => 210,
             ],
             'emailAddresses' => [
                 'description' => 'Gives a list of all the `GroupEmailAddresses` that are attached to this `Group`.',
                 'type' => GraphQL::type('[GroupEmailAddress]'),
+                'importance' => -1,
             ]
         ];
     }

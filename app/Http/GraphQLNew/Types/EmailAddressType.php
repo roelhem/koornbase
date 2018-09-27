@@ -26,10 +26,12 @@ class EmailAddressType extends ObjectType
             'email' => [
                 'description' => 'The e-mailadres itself. This is the only field that is strictly required when sending an E-mail.',
                 'type' => GraphQL::type('Email!'),
+                'importance' => 255,
             ],
             'name' => [
                 'description' => 'The name of the recipient. (This is the string that is places at the start of the `<...>` part of a full E-mail address.)',
                 'type' => GraphQL::type('String'),
+                'importance' => 240,
             ],
             'combined' => [
                 'description' => 'The name and email in one string combined, such that it is recognised by most E-mail applications',
@@ -54,7 +56,8 @@ class EmailAddressType extends ObjectType
                     } else {
                         return $emailAddress->link();
                     }
-                }
+                },
+                'importance' => -1,
             ],
         ];
     }

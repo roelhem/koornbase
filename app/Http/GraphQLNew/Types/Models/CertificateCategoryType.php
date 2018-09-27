@@ -31,6 +31,7 @@ class CertificateCategoryType extends ModelType
                                   value is `null`, it means that certificates of this category never expire by
                                   default.",
                 'type' => GraphQL::type('Int'),
+                'importance' => -1,
             ],
 
         ];

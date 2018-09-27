@@ -15,6 +15,7 @@ use Roelhem\GraphQL\Types\Connections\ConnectionInterfaceType;
 use Roelhem\GraphQL\Types\Connections\CursorType;
 use Roelhem\GraphQL\Types\Connections\PageInfoType;
 use Roelhem\GraphQL\Types\MabeEnumType;
+use Roelhem\GraphQL\Types\ModelInfoType;
 use Roelhem\GraphQL\Types\ModelInterfaceType;
 
 class RequiredTypeRepository extends TypeRepository
@@ -27,6 +28,7 @@ class RequiredTypeRepository extends TypeRepository
             new InternalTypeRepository(),
 
             'Model' => ModelInterfaceType::class,
+            'ModelInfo' => ModelInfoType::class,
 
             'Cursor' => CursorType::class,
             'PageInfo' => PageInfoType::class,

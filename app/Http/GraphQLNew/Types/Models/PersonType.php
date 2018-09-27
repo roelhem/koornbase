@@ -31,31 +31,26 @@ class PersonType extends ModelType
                 'type' => GraphQL::type('PersonName!'),
                 'resolve' => function(Person $person) {
                     return new Name($person);
-                }
+                },
+                'importance' => 200,
+            ],
+            'avatar' => [
+                'description' => 'An `Avatar` that can be used to represent this `Person` in the UI.',
+                'type' => GraphQL::type('Avatar'),
+                'importance' => -40,
             ],
 
             'birthDate' => [
                 'description' => 'The `Date` on which this Person was born.',
                 'type' => GraphQL::type('Date'),
-                'alias' => 'birth_date'
+                'alias' => 'birth_date',
+                'importance' => 180,
             ],
-            'addresses' => [
-                'type' => GraphQL::type('[PersonAddress]'),
-            ],
-            'emailAddresses' => [
-                'type' => GraphQL::type('[PersonEmailAddress]'),
-            ],
-            'phoneNumbers' => [
-                'type' => GraphQL::type('[PersonPhoneNumber]'),
-            ],
-            'memberships' => [
-                'description' => "The memberships at 'O.J.V. de Koornbeurs' for this `Person`.",
-                'type' => GraphQL::type('[Membership]'),
-            ],
+
             'membershipStatus' => [
                 'description' => "The status of the membership at 'O.J.V. de Koornbeurs' for this person at a certain
                                   date.",
-                'type' => GraphQL::type('MembershipStatus!'),
+                'type' => GraphQL::type('MembershipStatus'),
                 'args' => [
                     'at' => [
                         'description' => 'The `Date` for which you want to get the `MembershipStatus` of this `Person`. 
@@ -66,15 +61,37 @@ class PersonType extends ModelType
                 ],
                 'resolve' => function(Person $person, $args) {
                     return $person->getLastMembershipStatusChange(array_get($args, 'at',null)) ?? $person;
-                }
+                },
+                'importance' => 100,
             ],
+
+            'memberships' => [
+                'description' => "The memberships at 'O.J.V. de Koornbeurs' for this `Person`.",
+                'type' => GraphQL::type('[Membership]'),
+                'importance' => 90,
+            ],
+
+
+            'addresses' => [
+                'type' => GraphQL::type('[PersonAddress]'),
+                'description' => 'The (postal-)addresses of this person.',
+                'importance' => 80,
+            ],
+            'emailAddresses' => [
+                'type' => GraphQL::type('[PersonEmailAddress]'),
+                'description' => 'The E-mail addresses of this person.',
+                'importance' => 80,
+            ],
+            'phoneNumbers' => [
+                'type' => GraphQL::type('[PersonPhoneNumber]'),
+                'description' => 'The Phone-numbers of this person.',
+                'importance' => 80,
+            ],
+
             'koornbeursCards' => [
                 'description' => "The Koornbeurs-cards that this `Person` currently owns.",
                 'type' => GraphQL::type('[KoornbeursCard]'),
-            ],
-            'avatar' => [
-                'description' => 'An `Avatar` that can be used to represent this `Person` in the UI.',
-                'type' => GraphQL::type('Avatar'),
+                'importance' => 50,
             ],
 
         ];
@@ -83,8 +100,14 @@ class PersonType extends ModelType
     public function connections()
     {
         return [
-            'groups' => 'Group',
-            'certificates' => 'Certificate'
+            'groups' => [
+                'to' => 'Group',
+                'importance' => 10,
+            ],
+            'certificates' => [
+                'to' => 'Certificate',
+                'importance' => 9,
+            ]
         ];
     }
 

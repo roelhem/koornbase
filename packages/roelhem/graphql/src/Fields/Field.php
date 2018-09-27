@@ -34,20 +34,13 @@ abstract class Field
      */
     public function getConfig()
     {
-        return [
+        return array_merge($this->config, [
             'name' => $this->name(),
             'type' => $this->type(),
             'description' => $this->description(),
-
             'resolve' => $this->resolver(),
-            'map' => array_get($this->config, 'map'),
-
             'args' => $this->args(),
-
-            'deprecationReason' => array_get($this->config, 'deprecationReason'),
-            'astNode' => array_get($this->config,'astNode'),
-            'complexity' => array_get($this->config, 'complexity')
-        ];
+        ]);
     }
 
     /**

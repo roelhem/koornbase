@@ -28,14 +28,16 @@ class GroupEmailAddressType extends ModelType
         return [
             'group' => [
                 'description' => 'The `Group` to which this `GroupEmailAddress` is attached.',
-                'type' => GraphQL::type('Group!'),
+                'type' => GraphQL::type('Group'),
+                'importance' => 200,
             ],
             'emailAddress' => [
                 'description' => 'The `EmailAddress` that was attached using this `GroupEmailAddress`.',
                 'type' => GraphQL::type('EmailAddress'),
                 'resolve' => function(GroupEmailAddress $groupEmailAddress) {
                     return $groupEmailAddress->getEmailAddress();
-                }
+                },
+                'importance' => 190,
             ]
         ];
     }
