@@ -1,11 +1,11 @@
 <template>
-    <table class="table table-sm" :class="{'card-table':inCard}">
+    <table class="table table-sm table-hover" :class="{'card-table':inCard}">
 
         <tbody>
             <certificate-table-small-row
-                    v-for="row in rows"
-                    :key="row.id"
-                    :certificate="row"
+                    v-for="certificate in certificates"
+                    :key="certificate.id"
+                    :certificate="certificate"
             />
         </tbody>
 
@@ -13,30 +13,17 @@
 </template>
 
 <script>
-    import gql from "graphql-tag";
     import CertificateTableSmallRow from "./CertificateTableSmallRow";
 
     export default {
         components: {CertificateTableSmallRow},
         name: "certificate-table-small",
 
-        fragment:gql`
-            fragment CertificateTableSmall on Certificate_pagination {
-                data {
-                    id
-                    ...CertificateTableSmallRow
-                }
-            }
-            ${CertificateTableSmallRow.fragment}
-        `,
-
         props: {
             certificates:{
-                type:Object,
+                type:Array,
                 default:function() {
-                    return {
-                        data:[],
-                    }
+                    return [];
                 }
             },
 
@@ -45,12 +32,6 @@
                 default:false
             }
         },
-
-        computed: {
-            rows() {
-                return this.certificates.data;
-            }
-        }
     }
 </script>
 

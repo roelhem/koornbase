@@ -16,12 +16,23 @@
 
             <detail-entry label="Gebruikersnaam">{{ user.name }}</detail-entry>
             <detail-entry label="E-mailadres">{{ user.email }}</detail-entry>
-            <detail-entry label="Gekoppelde Persoon">
+            <subtile-detail-entry-form label="Gekoppeld Persoon"
+                                       :value="user.person"
+            >
+
                 <person-span v-if="user.person" :person="user.person" />
                 <span v-else class="text-muted font-italic">
                     (Geen persoon gekoppeld)
                 </span>
-            </detail-entry>
+
+                <person-select slot="input"
+                               slot-scope="{inputValue, inputCallback}"
+                               :value="inputValue"
+                               @input="inputCallback"
+                               size="sm"
+                />
+
+            </subtile-detail-entry-form>
 
         </detail-view>
 
@@ -35,12 +46,16 @@
     import DetailView from "../layouts/cards/DetailView";
     import DetailEntry from "../layouts/cards/DetailEntry";
     import PersonSpan from "./PersonSpan";
+    import SubtileDetailEntryForm from "../inputs/subtile/SubtileDetailEntryForm";
+    import PersonSelect from "../inputs/select/PersonSelect";
 
     export default {
 
         name: "user-detail-card",
 
         components: {
+            PersonSelect,
+            SubtileDetailEntryForm,
             PersonSpan,
             DetailEntry,
             DetailView,

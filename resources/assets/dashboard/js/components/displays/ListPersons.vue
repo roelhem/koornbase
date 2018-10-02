@@ -1,7 +1,7 @@
 <template>
 
     <ul class="list-unstyled list-seperated">
-        <list-persons-item v-for="(person, index) in persons.data"
+        <list-persons-item v-for="(person, index) in persons"
                            :key="person.id"
                            :person="person"
                            :removable="removable"
@@ -12,29 +12,17 @@
 </template>
 
 <script>
-    import gql from "graphql-tag";
     import ListPersonsItem from "./ListPersonsItem";
 
     export default {
         components: {ListPersonsItem},
         name: "list-persons",
 
-        fragment:gql`
-            fragment ListPersons on Person_pagination {
-                data {
-                    ...ListPersonsItem
-                }
-            }
-            ${ListPersonsItem.fragment}
-        `,
-
         props: {
             persons: {
-                type:Object,
+                type:Array,
                 default() {
-                    return {
-                        data:[]
-                    };
+                    return [];
                 }
             },
 

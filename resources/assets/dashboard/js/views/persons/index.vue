@@ -51,40 +51,35 @@
 
                     <!-- START: The Search Table -->
                     <b-card no-body>
-                        <b-table v-bind="bTableProps" v-on="bTableListeners">
+                        <b-table class="card-table" :fields="tableFields" :items="rows">
 
                             <template slot="avatar" slot-scope="{ item }">
                                 <person-avatar :person="item" size="md" />
                             </template>
 
                             <template slot="name" slot-scope="{ item }">
-                                <div><span-person-name :person="item" with-nickname /></div>
+                                <div><span-person-name :person-name="item.name" with-nickname /></div>
                                 <div class="small text-muted">
-                                    <span-person-name :person="item" formal />
+                                    <span-person-name :person-name="item.name" formal />
                                 </div>
                             </template>
 
-                            <template slot="birth_date" slot-scope="{ item }">
-                                <div>{{ item.birth_date | date('bday') }}</div>
-                                <div class="small text-muted">( {{item.age }} jaar )</div>
-                            </template>
-
-                            <template slot="membership_status" slot-scope="{ item }">
+                            <template slot="birthDate" slot-scope="{ item }">
                                 <div>
-                                    <span class="status-icon" :class="item.membership_status | membershipStatusColor "></span>
-                                    {{ item.membership_status | membershipStatusName }}
+                                    <base-field title="Geboortedatum" name="birthDate">{{ item.birthDate | date('bday') }}</base-field>
+                                </div>
+                                <div class="small text-muted">(
+                                    <base-field title="Leeftijd" name="age">{{item.age }} jaar</base-field>  )</div>
+                            </template>
+
+                            <template slot="membershipStatus" slot-scope="{ item }">
+                                <div>
+                                    <span class="status-icon" :class="item.membershipStatus.type | membershipStatusColor "></span>
+                                    <base-field title="Status Lidmaatschap" name="membershipStatus.type">{{ item.membershipStatus.type | membershipStatusName }}</base-field>
                                 </div>
                                 <div class="small text-muted">
-                                    {{ item.membership_status_since | date('lg') }}
+                                    <base-field title="Status Lidmaatschap Sinds" name="membershipStatus.since">{{ item.membershipStatus.since | date('lg') }}</base-field>
                                 </div>
-                            </template>
-
-                            <template slot="created_at" slot-scope="{ value }">
-                                <display-timestamp :timestamp="value" />
-                            </template>
-
-                            <template slot="updated_at" slot-scope="{ value }">
-                                <display-timestamp :timestamp="value" />
                             </template>
 
                             <template slot="links" slot-scope="{ item }">
@@ -116,21 +111,6 @@
                 <b-col lg="3">
                     <search-column-select-card v-model="columns" :collapsed.sync="sidebarCards.columns.collapsed" />
 
-                    <search-filter-membership-status-card
-                            :active.sync="filters.membershipStatus.active"
-                            v-model="filters.membershipStatus.value"
-                    />
-
-                    <search-filter-group-card
-                            :active.sync="filters.groups.active"
-                            v-model="filters.groups.value"
-                    />
-
-                    <search-filter-timestamp-card
-                            :active.sync="filters.timestamps.active"
-                            v-model="filters.timestamps.value"
-                    />
-
                     <pre>
                         {{ filterValues }}
                     </pre>
@@ -148,6 +128,8 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
+
     import SearchColumnSelectCard from "../../components/features/table-search/SearchColumnSelectCard";
     import SearchFilterMembershipStatusCard from "../../components/features/table-search/SearchFilterMembershipStatusCard";
     import SearchFilterGroupCard from "../../components/features/table-search/SearchFilterGroupCard";
@@ -156,8 +138,6 @@
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
     import BaseIcon from "../../components/displays/BaseIcon";
     import searchTableMixin from "../../mixins/searchTableMixin";
-
-    import { PERSONS_INDEX } from "../../apis/graphql/queries";
 
     import displayFilters from '../../utils/filters/display';
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
@@ -196,41 +176,30 @@
             }
         },
         {
-            key:'name_short',
+            key:'shortName',
             label: 'Naam',
             name:'Korte Naam',
             visible:false
         },
         {
-            key:'name_nickname',
+            key:'nickname',
             label:'Bijnaam',
             name:'Bijnaam',
             visible:false,
             sortable:true,
         },
         {
-            key:'birth_date',
+            key:'birthDate',
             label:'Geboortedatum',
             name:'Geboortedatum',
             visible:true,
             sortable:true,
         },
         {
-            key:'membership_status',
+            key:'membershipStatus',
             label:'Status Lidmaatschap',
             name:'Lidstatus',
             visible:true,
-            sortable:true,
-        },
-        {
-            key:'created_at',
-            label:'Aangemaakt op',
-            sortable:true,
-        },
-        {
-            key:'updated_at',
-            label:'Bewerkt op',
-            name:'Laatst bewerkt op',
             sortable:true,
         },
         {
@@ -269,7 +238,24 @@
         searchTable: {
             queryKey:'persons',
             query: {
-                query: PERSONS_INDEX,
+                query: gql`
+                    query personsIndex {
+                        persons {
+                            edges {
+                                node {
+                                    id
+                                    name { ...SpanPersonName }
+                                    ...PersonAvatar
+                                    membershipStatus { type since }
+                                    birthDate
+                                    age
+                                }
+                            }
+                        }
+                    }
+                    ${SpanPersonName.fragment}
+                    ${PersonAvatar.fragment}
+                `,
                 variables() {
                     return {
                         page:this.page,
@@ -285,6 +271,10 @@
             columns: peopleSearchColumns,
 
             recordsName: 'personen',
+        },
+
+        computed: {
+            rows() { return this.persons.edges.map(edge => edge.node); }
         },
 
         data: function() {
@@ -316,17 +306,6 @@
                 }
             }
         },
-
-        computed: {
-
-            filterValues: function () {
-                const res = {};
-                if (this.filters.membershipStatus.active) res.anyMembershipStatus = this.filters.membershipStatus.value;
-                if (this.filters.groups.active) res.inAnyGroup = this.filters.groups.value.map(group => group.id);
-                return res;
-            },
-
-        }
     }
 </script>
 

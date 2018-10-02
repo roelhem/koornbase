@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import BaseStamp from "../BaseStamp";
     import BaseField from "../BaseField";
 
@@ -23,13 +24,23 @@
         },
         name: "span-group-category",
 
+        fragment: gql`
+            fragment SpanGroupCategory on GroupCategory {
+                id
+                name
+                shortName
+                description
+                style
+            }
+        `,
+
         props: {
             category: {
                 type:Object,
                 default: function () {
                     return {
                         name:null,
-                        name_short:null,
+                        shortName:null,
                         description:null,
                         style:null
                     }

@@ -183,7 +183,6 @@
             application
             start
             end
-            status
             remarks
         }
     `;
@@ -224,7 +223,7 @@
                     return {
                         application:null,
                         start:null,
-                        end:null
+                        end:null,
                     }
                 }
             },
@@ -330,10 +329,6 @@
             },
 
             status() {
-                if(this.membership.status) {
-                    return this.membership.status;
-                }
-
                 const now = moment();
 
                 if(this.hasEnd && this.endMoment.isBefore(now)) {

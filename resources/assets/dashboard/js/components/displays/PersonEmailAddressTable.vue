@@ -12,7 +12,6 @@
 </template>
 
 <script>
-    import gql from 'graphql-tag';
 
     import PersonEmailAddressTableRow from "./PersonEmailAddressTableRow";
     import PersonContactEntryTable from "./PersonContactEntryTable";
@@ -21,23 +20,12 @@
 
         name:'person-email-address-table',
 
-        fragment:gql`
-            fragment PersonEmailAddressTable on PersonEmailAddress_pagination {
-                data {
-                    ...PersonEmailAddressTableRow
-                }
-            }
-            ${PersonEmailAddressTableRow.fragment}
-        `,
-
         props: {
             emailAddresses: {
-                type:Object,
+                type:Array,
                 required:true,
                 default() {
-                    return {
-                        data:[]
-                    }
+                    return [];
                 }
             }
         },

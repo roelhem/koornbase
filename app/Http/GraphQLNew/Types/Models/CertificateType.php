@@ -55,6 +55,7 @@ class CertificateType extends ModelType
             'examinationDate' => [
                 'description' => 'The date on which the examination for this `Certificate` *took/will take* place.',
                 'type' => GraphQL::type('Date'),
+                'alias' => 'examination_at',
                 'importance' => 3,
             ],
             'examinationPassed' => [
@@ -65,11 +66,13 @@ class CertificateType extends ModelType
             'validDate' => [
                 'description' => 'The date on which `Certificate` will start to be valid. ',
                 'type' => GraphQL::type('Date'),
+                'alias' => 'valid_at',
                 'importance' => 2,
             ],
             'expireDate' => [
                 'description' => 'The date on the which `Certificate` expires.',
                 'type' => GraphQL::type('Date'),
+                'alias' => 'expired_at',
                 'importance' => 1,
             ]
         ];

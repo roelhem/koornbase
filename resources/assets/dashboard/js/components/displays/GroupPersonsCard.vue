@@ -18,7 +18,7 @@
             </b-button>
         </template>
 
-        <list-persons :persons="persons"
+        <list-persons :persons="persons.edges ? persons.edges.map(edge => edge.node) : []"
                       removable
                       @remove="removeHandler"
         />
@@ -56,13 +56,10 @@
                 </div>
                 <div class="p-2">
                     <div>
-                        <span-person-name :person="deletingPerson" with-nickname />
+                        <span-person-name :person-name="deletingPerson.name" with-nickname />
                     </div>
                     <div class="small">
-                        <span-membership-status
-                                :status="deletingPerson.membership_status"
-                                :since="deletingPerson.membership_status_since"
-                        />
+                        <span-membership-status :membership-status="deletingPerson.SpanMembershipStatus" />
                     </div>
                 </div>
             </div>
@@ -79,6 +76,7 @@
     import gql from "graphql-tag";
     import TablerCard from "../layouts/cards/TablerCard";
     import ListPersons from "./ListPersons";
+    import ListPersonsItem from "./ListPersonsItem";
     import { removePersonFromGroup, addPersonToGroup } from "../../apis/graphql/mutations/groups.graphql";
     import PersonSelect from "../inputs/select/PersonSelect";
     import TablerModal from "../layouts/modals/TablerModal";
@@ -104,12 +102,21 @@
 
         fragment: gql`
             fragment GroupPersonsCard on Group {
+                name
                 persons {
-                    total
-                    ...ListPersons
+                    totalCount
+                    edges {
+                        node {
+                            id
+                            name { ...SpanPersonName }
+                            ...ListPersonsItem
+                        }
+                    }
                 }
             }
-            ${ListPersons.fragment}
+            ${SpanPersonName.fragment}
+            ${SpanMembershipStatus.fragment}
+            ${ListPersonsItem.fragment}
         `,
 
         props: {
@@ -117,10 +124,9 @@
                 type:Object,
                 default() {
                     return {
-                        id:null,
                         persons:{
-                            total:0,
-                            data:[]
+                            totalCount:0,
+                            edges: []
                         },
                     }
                 }
@@ -140,8 +146,8 @@
             },
 
             total() {
-                if(this.persons && typeof this.persons.total === 'number') {
-                    return this.persons.total;
+                if(this.persons && typeof this.persons.totalCount === 'number') {
+                    return this.persons.totalCount;
                 }
                 return 0;
             }

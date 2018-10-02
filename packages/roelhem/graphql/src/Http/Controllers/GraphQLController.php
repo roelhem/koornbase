@@ -29,25 +29,7 @@ class GraphQLController extends Controller
     public function endpoint(ServerRequestInterface $request, GraphQLHelper $gql)
     {
 
-        $tl = $gql->typeLoader();
-
-        $schema = new Schema([
-            'query' => $gql->type('Query'),
-            'typeLoader' => $tl,
-            'types' => $gql->types(),
-        ]);
-
-        $context = new ResolveContext(\Auth::guard('api'));
-
-        $server = new StandardServer([
-            'schema' => $schema,
-            'context' => $context,
-            'queryBatching' => true,
-            'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
-            'fieldResolver' => new DefaultResolver(),
-        ]);
-
-        $response = $server->executePsrRequest($request)->toArray();
+        $response = $gql->server()->executePsrRequest($request)->toArray();
 
         return $response;
 

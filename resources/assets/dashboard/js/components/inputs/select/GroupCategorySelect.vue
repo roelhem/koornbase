@@ -19,6 +19,17 @@
             </div>
         </template>
 
+        <template slot="tag" slot-scope="{ option, search, remove }">
+            <base-tag class="mr-2 mb-2"
+                      :default-style="option.style"
+                      @mousedown.prevent
+                      remove-button
+                      @remove-click="remove(option)"
+                      :label="option.shortName"
+                      rounded
+            />
+        </template>
+
         <span class="multiselect__single multiselect__single_placeholder" slot="placeholder">
             Kies een Groepscategorie...
         </span>
@@ -31,12 +42,14 @@
     import VueMultiselect from "vue-multiselect/src/Multiselect";
     import modelSelectMixin from "../../../mixins/modelSelectMixin";
     import BaseStamp from "../../displays/BaseStamp";
+    import BaseTag from "../../displays/BaseTag";
 
 
     export default {
         name: "group-category-select",
 
         components: {
+            BaseTag,
             BaseStamp,
             VueMultiselect
         },
@@ -48,16 +61,16 @@
             queryKey:'groupCategories',
             query:{
                 query:gql`
-                    query getGroupCategoryOptions($limit:Int = 25, $search:String) {
-                        groupCategories(limit:$limit, search:$search) {
-                            data {
-                                id
-                                name
-                                name_short
-                                slug
-                                description
-                                style
-                                is_required
+                    query getGroupCategoryOptions {
+                        groupCategories(first:50) {
+                            edges {
+                                node {
+                                    id
+                                    name
+                                    shortName
+                                    description
+                                    style
+                                }
                             }
                         }
                     }

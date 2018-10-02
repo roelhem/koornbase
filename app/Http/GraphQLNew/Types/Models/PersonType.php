@@ -48,6 +48,12 @@ class PersonType extends ModelType
                 'importance' => 180,
             ],
 
+            'age' => [
+                'description' => 'The current age of the person.',
+                'type' => GraphQL::type('Int'),
+                'importance' => 179
+            ],
+
             'membershipStatus' => [
                 'description' => "The status of the membership at 'O.J.V. de Koornbeurs' for this person at a certain
                                   date.",

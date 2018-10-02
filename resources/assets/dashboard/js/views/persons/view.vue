@@ -15,9 +15,9 @@
 
                 <div class="p-1 pt-3">
                     <h1 class="m-1">
-                        <span-person-name :person="person" with-nickname />
+                        <span-person-name :person-name="person.name" with-nickname />
                     </h1>
-                    <group-tag-list :groups="person.groups" label="member_name" />
+                    <group-tag-list :groups="person.groups.edges.map(edge => edge.node)" label="member_name" />
                 </div>
             </div>
         </b-container>
@@ -59,7 +59,7 @@
 
 <script>
 
-    import { PERSONS_VIEW } from "../../apis/graphql/queries";
+    import gql from "graphql-tag";
 
     import TablerBanner from "../../components/layouts/title/TablerBanner";
     import DataDisplay from "../../components/displays/DataDisplay";
@@ -89,7 +89,26 @@
 
         apollo: {
             person: {
-                query: PERSONS_VIEW,
+                query: gql`
+                    query viewPerson($id:ID!) {
+                        person(id:$id) {
+                            id
+                            ...PersonAvatar
+                            name {...SpanPersonName}
+                            groups(first:20) {
+                                edges {
+                                    node {
+                                        id
+                                        ...GroupTag
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ${PersonAvatar.fragment}
+                    ${SpanPersonName.fragment}
+                    ${GroupTag.fragment}
+                `,
                 variables() {
                     return {
                         id:this.id
@@ -101,7 +120,9 @@
 
         data: function() {
             return {
-                person: {}
+                person: {
+                    groups:{edges:[]}
+                }
             }
         },
     }

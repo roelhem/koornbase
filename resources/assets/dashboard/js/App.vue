@@ -2,7 +2,7 @@
 
     <div class="page">
 
-        <template v-if="$apollo.queries.currentUser.loading">
+        <template v-if="$apollo.queries.me.loading">
             <the-startup-page />
         </template>
 
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import { CURRENT_USER } from "./apis/graphql/queries";
+    import gql from "graphql-tag";
 
     import TheMainPage from "./components/layouts/TheMainPage";
     import TheFooter from "./components/layouts/footer/TheFooter";
@@ -31,11 +31,24 @@
     export default {
         name: "app",
 
-        apollo: { currentUser:CURRENT_USER },
+        apollo: { me: gql`
+            query getCurrentUser {
+                me {
+                    id
+                    name
+                    email
+                    avatar {
+                        image
+                        letters
+                        type
+                    }
+                }
+            }
+        `},
 
         data() {
             return {
-                currentUser:{},
+                me:{},
                 locked:false
             }
         },

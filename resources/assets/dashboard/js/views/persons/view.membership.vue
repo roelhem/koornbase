@@ -44,9 +44,7 @@
                         person(id:$id) {
                             id
                             memberships {
-                                data {
-                                    ...DisplayMembershipCard
-                                }
+                                ...DisplayMembershipCard
                             }
                         }
                     }
@@ -64,9 +62,7 @@
             return {
                 person: {
                     id:"-1",
-                    memberships:{
-                        data:[]
-                    }
+                    memberships:[],
                 },
 
             }
@@ -82,7 +78,7 @@
         computed: {
             memberships() {
                 if(this.person && this.person.memberships) {
-                    return this.person.memberships.data;
+                    return this.person.memberships;
                 }
                 return [];
             },

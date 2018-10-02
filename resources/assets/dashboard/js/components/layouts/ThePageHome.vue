@@ -22,6 +22,10 @@
                         <user-select v-model="users" multiple />
                     </tabler-form-group>
 
+                    <tabler-form-group label="Certificaatcategoriëen">
+                        <certificate-category-select v-model="certificateCategories" multiple />
+                    </tabler-form-group>
+
                     <tabler-form-group label="Enkele Groep">
                         <group-select v-model="group" />
                     </tabler-form-group>
@@ -38,9 +42,13 @@
                         <user-select v-model="user" />
                     </tabler-form-group>
 
+                    <tabler-form-group label="Enkele Certificaatcategorie">
+                        <certificate-category-select v-model="certificateCategory" />
+                    </tabler-form-group>
 
-                        <b-form-input placeholder="Kies een Gebruiker..." />
-                        <b-form-input placeholder="test..." />
+
+                    <b-form-input placeholder="Kies een Gebruiker..." />
+                    <b-form-input placeholder="test..." />
                 </b-col>
             </b-row>
 
@@ -95,13 +103,9 @@
         <b-container>
             <!--
             <b-row>
-
                 <b-col v-for="styleCard in styleCards" :key="'style-card-'+styleCard.style.name" lg="4">
-
                     <show-style-card :subject-style="styleCard.style" :collapsed.sync="styleCard.collapsed" />
-
                 </b-col>
-
             </b-row>
             -->
 
@@ -112,7 +116,6 @@
 </template>
 
 <script>
-
     import ALL_STYLES from "../../constants/styles";
     import ShowStyleCard from "../displays/ShowStyleCard";
     import DatePickerInput from "../inputs/DatePickerInput";
@@ -122,9 +125,10 @@
     import TablerFormGroup from "./forms/TablerFormGroup";
     import TablerDimmer from "./cards/TablerDimmer";
     import GroupCategorySelect from "../inputs/select/GroupCategorySelect";
-
+    import CertificateCategorySelect from "../inputs/select/CertificateCategorySelect";
     export default {
         components: {
+            CertificateCategorySelect,
             GroupCategorySelect,
             TablerDimmer,
             TablerFormGroup,
@@ -135,7 +139,6 @@
             ShowStyleCard,
         },
         name: "the-page-home",
-
         data:function() {
             return {
                 users:null,
@@ -146,6 +149,8 @@
                 group:null,
                 groupCategories:null,
                 groupCategory:null,
+                certificateCategories:null,
+                certificateCategory:null,
                 styleCards: ALL_STYLES.map(el => {
                     return {
                         style: el,
@@ -154,10 +159,8 @@
                 }),
             }
         },
-
     }
 </script>
 
 <style scoped>
-
 </style>

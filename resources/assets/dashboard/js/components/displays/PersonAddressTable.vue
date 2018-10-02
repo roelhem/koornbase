@@ -12,7 +12,6 @@
 </template>
 
 <script>
-    import gql from 'graphql-tag';
     import PersonContactEntryTable from "./PersonContactEntryTable";
     import PersonAddressTableRow from "./PersonAddressTableRow";
 
@@ -21,17 +20,12 @@
         name: "person-address-table",
 
         props: {
-            addresses:Object,
+            addresses:{
+                type:Array,
+                required:true,
+                default() { return []; }
+            },
         },
-
-        fragment:gql`
-            fragment PersonAddressTable on PersonAddress_pagination {
-                data {
-                    ...PersonAddressTableRow
-                }
-            }
-            ${PersonAddressTableRow.fragment}
-        `,
 
         components: {
             PersonAddressTableRow,

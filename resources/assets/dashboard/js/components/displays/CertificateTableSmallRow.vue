@@ -13,8 +13,8 @@
         <td>
             <span class="small">
                 <span class="text-muted">sinds</span>
-                <base-field title="Certificaat geldig sinds" name="valid_since" v-if="certificate.valid_since" class="text-muted-dark">
-                    {{ certificate.valid_since | date('sm') }}
+                <base-field title="Certificaat geldig sinds" name="certificate.validDate" v-if="certificate.validDate" class="text-muted-dark">
+                    {{ certificate.validDate | date('sm') }}
                 </base-field>
                 <span v-else class="text-muted font-italic">(onbekend)</span>
             </span>
@@ -22,10 +22,10 @@
 
 
         <td>
-            <span v-if="certificate.valid_till" class="small">
+            <span v-if="certificate.expireDate" class="small">
                 <span class="text-muted">tot</span>
-                <base-field title="Certificaat vervalt op" name="valid_till" class="text-muted-dark">
-                    {{ certificate.valid_till | date('sm') }}
+                <base-field title="Certificaat vervalt op" name="expireDate" class="text-muted-dark">
+                    {{ certificate.expireDate | date('sm') }}
                 </base-field>
             </span>
             <span v-else class="small text-muted font-italic">(verloopt niet)</span>
@@ -51,15 +51,15 @@
 
         fragment:gql`
             fragment CertificateTableSmallRow on Certificate {
+                id
                 category {
                     id
-                    name
-                    name_short
-                    description
+                    ...SpanCertificateCategory
                 }
-                valid_since
-                valid_till
+                validDate
+                expireDate
             }
+            ${SpanCertificateCategory.fragment}
         `,
 
         filters:DisplayFilters,

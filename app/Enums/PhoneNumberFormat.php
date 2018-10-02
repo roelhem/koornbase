@@ -39,7 +39,7 @@ final class PhoneNumberFormat extends Enum
 
     public static function default()
     {
-        return self::E164();
+        return self::FOR_MOBILE();
     }
 
     /** @var PhoneNumberUtil */
@@ -61,9 +61,9 @@ final class PhoneNumberFormat extends Enum
             case self::FOR_FIXED: return self::utils()->formatOutOfCountryCallingNumber($phoneNumber, $countryCode);
             case self::FOR_MOBILE: return self::utils()->formatNumberForMobileDialing($phoneNumber, $countryCode, true);
             case self::FOR_MOBILE_COMPACT: return self::utils()->formatNumberForMobileDialing($phoneNumber, $countryCode, false);
-            case self::E164:
-            case self::INTERNATIONAL:
-            case self::NATIONAL:
+            case self::E164: return self::utils()->format($phoneNumber, $this->getValue());
+            case self::INTERNATIONAL: return self::utils()->format($phoneNumber, $this->getValue());
+            case self::NATIONAL: return self::utils()->format($phoneNumber, $this->getValue());
             case self::RFC3966: return self::utils()->format($phoneNumber, $this->getValue());
         }
     }

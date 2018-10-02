@@ -7,7 +7,7 @@
                          class="mr-1"
             />
 
-            <span-person-name v-if="hasPerson" :person="user.person" />
+            <span-person-name v-if="hasPerson" :person-name="user.person.name" />
             <base-field v-else title="Gebruikersnaam" name="name">{{ user.name }}</base-field>
 
             <span v-if="withEmail" class="text-muted">
@@ -34,17 +34,16 @@
 
         fragment:gql`
             fragment UserSpan on User {
+                id
                 name
                 email
                 person {
                     id
-                    ...SpanPersonName
+                    name { ...SpanPersonName }
                 }
-                avatar {
-                    image
-                    letters
-                }
+                ...UserAvatar
             }
+            ${UserAvatar.fragment}
             ${SpanPersonName.fragment}
         `,
 

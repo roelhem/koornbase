@@ -3,7 +3,7 @@
         <h1>Mijn Accountgegevens</h1>
 
         <user-detail-card
-                :user="currentUser"
+                :user="me"
                 status="gray"
                 status-left
         />
@@ -23,10 +23,10 @@
         },
 
         apollo: {
-            currentUser:{
+            me:{
                 query:gql`
                     query viewMeOverviewUser {
-                        currentUser:me {
+                        me {
                             ...UserDetailCard
                         }
                     }
@@ -37,7 +37,7 @@
 
         data() {
             return {
-                currentUser:{}
+                me:{}
             }
         }
     }

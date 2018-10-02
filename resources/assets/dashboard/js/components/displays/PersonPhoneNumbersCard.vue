@@ -4,18 +4,18 @@
             :icon="icon"
             v-bind="$attrs"
             v-on="$listeners"
-            :entries="phoneNumbers"
+            :entries="person.phoneNumbers"
             placeholder-text="Geen Telefoonnummers bekend voor deze persoon..."
     >
         <template slot="preview" slot-scope="{item}">
             <base-field title="Label" name="label">{{ item.label }}</base-field>:
-            <base-field title="Primair Telefoonnummer" name="phone_number" class="text-muted-dark">
-                {{ item.phone_number }}
+            <base-field title="Primair Telefoonnummer" name="phoneNumber.number" class="text-muted-dark">
+                {{ item.phoneNumber.number }}
             </base-field>
             , ...
         </template>
 
-        <person-phone-number-table :phone-numbers="phoneNumbers" class="card-table" />
+        <person-phone-number-table :phone-numbers="person.phoneNumbers" class="card-table" />
 
     </person-contact-entries-card>
 </template>
@@ -23,6 +23,7 @@
 <script>
     import gql from "graphql-tag";
     import PersonContactEntriesCard from "./PersonContactEntriesCard";
+    import PersonPhoneNumberTableRow from "./PersonPhoneNumberTableRow";
     import PersonPhoneNumberTable from "./PersonPhoneNumberTable";
     import BaseField from "./BaseField";
 
@@ -37,17 +38,21 @@
 
         fragment: gql`
             fragment PersonPhoneNumbersCard on Person {
-                phoneNumbers(orderBy:[{by:index,dir:ASC}]) {
-                    total
-                    ...PersonPhoneNumberTable
+                phoneNumbers {
+                    id
+                    label
+                    ...PersonPhoneNumberTableRow
+                    phoneNumber { number }
                 }
             }
-            ${PersonPhoneNumberTable.fragment}
+            ${PersonPhoneNumberTableRow.fragment}
         `,
 
         props: {
             person:{
-                type:Object
+                type:Object,
+                required:true,
+                default() { return {phoneNumbers:[]} }
             },
 
             title:{
@@ -59,15 +64,6 @@
                 default:"phone"
             }
         },
-
-        computed: {
-            phoneNumbers() {
-                if(this.person && this.person.phoneNumbers) {
-                    return this.person.phoneNumbers;
-                }
-                return {data:[]};
-            }
-        }
     }
 </script>
 

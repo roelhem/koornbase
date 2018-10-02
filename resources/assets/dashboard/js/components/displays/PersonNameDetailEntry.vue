@@ -5,7 +5,7 @@
                                     v-bind="$attrs"
                                     v-on="$listeners"
     >
-        <span-person-name :person="person" full />
+        <span-person-name :person-name="person.name" full />
 
         <template slot="form" slot-scope="{ inputValue, inputCallback }">
 
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
+
     import DetailEntry from "../layouts/cards/DetailEntry";
     import SpanPersonName from "./spans/SpanPersonName";
     import SubtileDetailEntryFlipForm from "../inputs/subtile/SubtileDetailEntryFlipForm";
@@ -29,6 +31,14 @@
 
     export default {
         name: "person-name-detail-entry",
+
+        fragment: gql`
+            fragment PersonNameDetailEntry on Person {
+                id
+                name { ...SpanPersonName }
+            }
+            ${SpanPersonName.fragment}
+        `,
 
         components: {
             InputGroupPersonName,
@@ -48,12 +58,7 @@
                 required:true,
                 default() {
                     return {
-                        name_first:null,
-                        name_middle:null,
-                        name_prefix:null,
-                        name_last:null,
-                        name_initials:null,
-                        name_nickname:null,
+                        name: {}
                     }
                 }
             }
@@ -61,12 +66,14 @@
 
         computed: {
             value() {
-                return {
-                    name_first: this.person.name_first || null,
-                    name_middle: this.person.name_middle || null,
-                    name_prefix: this.person.name_prefix || null,
-                    name_last: this.person.name_last || null,
-                    name_initials: this.person.name_initials || null
+                if(this.person.name) {
+                    return {
+                        name_first: this.person.name.first || null,
+                        name_middle: this.person.name.middle || null,
+                        name_prefix: this.person.name.prefix || null,
+                        name_last: this.person.name.last || null,
+                        name_initials: this.person.name.initials || null
+                    }
                 }
             }
         }

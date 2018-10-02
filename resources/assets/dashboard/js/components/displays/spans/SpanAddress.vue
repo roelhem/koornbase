@@ -1,10 +1,10 @@
 <template>
 
     <span>
-        <base-field title="Adres" name="address_line_1">{{ address.address_line_1 }}</base-field><span class="text-muted">,</span>
+        <base-field title="Adres" name="addressLine1">{{ address.addressLine1 }}</base-field><span class="text-muted">,</span>
         <base-field title="Plaats" name="locality" class="font-italic">{{ address.locality }}</base-field>
         <span class="text-muted small" v-if="showCountry">
-            (<base-field title="Land" name="country">{{ address.country }}</base-field>)
+            (<base-field title="Land" name="country">{{ address.country.name }}</base-field>)
         </span>
     </span>
 
@@ -21,11 +21,13 @@
         name: "span-address",
 
         fragment:gql`
-            fragment SpanAddress on PersonAddress {
-                address_line_1
+            fragment SpanAddress on PostalAddress {
+                addressLine1
                 locality
-                country
-                country_code
+                country {
+                    name
+                    code
+                }
             }
         `,
 
@@ -34,10 +36,9 @@
                 type:Object,
                 default:function() {
                     return {
-                        country_code:null,
-                        country:null,
+                        country:{},
                         locality:null,
-                        address_line_1:null
+                        addressLine1:null
                     }
                 }
             },
@@ -50,7 +51,7 @@
 
         computed: {
             showCountry() {
-                return this.address.country_code !== this.defaultCountryCode;
+                return this.address.country.code !== this.defaultCountryCode;
             }
         }
     }

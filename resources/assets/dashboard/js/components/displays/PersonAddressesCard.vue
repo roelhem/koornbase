@@ -4,16 +4,16 @@
             :icon="icon"
             v-bind="$attrs"
             v-on="$listeners"
-            :entries="addresses"
+            :entries="person.addresses"
             placeholder-text="Geen Addressen bekend voor deze persoon..."
     >
         <template slot="preview" slot-scope="{item}">
             <base-field title="Label" name="label">{{ item.label }}</base-field>:
-            <span-address class="text-muted-dark" :address="item" />
+            <span-address class="text-muted-dark" :address="item.postalAddress" />
             , ...
         </template>
 
-        <person-address-table :addresses="addresses" class="card-table" />
+        <person-address-table :addresses="person.addresses" class="card-table" />
     </person-contact-entries-card>
 </template>
 
@@ -21,6 +21,7 @@
     import gql from "graphql-tag";
     import PersonContactEntriesCard from "./PersonContactEntriesCard";
     import PersonAddressTable from "./PersonAddressTable";
+    import PersonAddressTableRow from "./PersonAddressTableRow";
     import BaseField from "./BaseField";
     import SpanAddress from "./spans/SpanAddress";
 
@@ -37,22 +38,27 @@
 
         fragment: gql`
             fragment PersonAddressesCard on Person {
-                addresses(orderBy:[{by:index,dir:ASC}]) {
-                    total
-                    ...PersonAddressTable
-                    data {
-                        ...SpanAddress
-                    }
+                addresses {
+                    id
+                    label
+                    ...PersonAddressTableRow
+                    postalAddress { ...SpanAddress }
                 }
             }
-            ${PersonAddressTable.fragment}
+            ${PersonAddressTableRow.fragment}
             ${SpanAddress.fragment}
         `,
 
 
         props: {
             person:{
-                type:Object
+                type:Object,
+                required:true,
+                default() {
+                    return {
+                        addresses:[]
+                    };
+                }
             },
 
             title:{
@@ -64,15 +70,6 @@
                 default:"map-pin",
             },
         },
-
-        computed: {
-            addresses() {
-                if(this.person && this.person.addresses) {
-                    return this.person.addresses;
-                }
-                return {data:[]};
-            }
-        }
 
 
     }

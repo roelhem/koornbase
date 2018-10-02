@@ -23,8 +23,8 @@
         <detail-view in-card>
 
 
-            <subtile-detail-entry-form label="Korte naam" :value="group.name_short" @submit="updateNameShortHandler" />
-            <subtile-detail-entry-form label="Persoons-titel" :value="group.member_name" @submit="updateMemberNameHandler" />
+            <subtile-detail-entry-form label="Korte naam" :value="group.shortName" @submit="updateNameShortHandler" />
+            <subtile-detail-entry-form label="Persoons-titel" :value="group.memberName" @submit="updateMemberNameHandler" />
 
             <subtile-detail-entry-form label="Categorie"
                                        :value="group.category"
@@ -84,17 +84,15 @@
                 id
                 slug
                 name
-                name_short
-                member_name
+                shortName
+                memberName
                 description
                 category {
                     id
-                    name
-                    name_short
-                    description
-                    style
+                    ...SpanGroupCategory
                 }
             }
+            ${SpanGroupCategory.fragment}
         `,
 
         props: {
@@ -102,6 +100,9 @@
                 type:Object,
                 default:function() {
                     return {
+                        name:null,
+                        shortName:null,
+                        memberName:null,
                         category:{}
                     }
                 }

@@ -30,14 +30,12 @@ export const CURRENT_USER = gql`
 
 export const PERSONS_INDEX = gql`
     query personsIndex(
-        $page:Int = 1,
-        $limit:Int = 10,
-        $orderBy:Person_orderField = name,
-        $orderDir:SortOrderDirection = ASC,
-        $filter:Person_filter,
-        $search:String
+        $first:Int = 20,
+        $offset:Int = 0,
+        $orderBy:Person_orderByInput = id_ASC,
+        $filter:Person_filterInput
     ) {
-        persons(page:$page, limit:$limit, orderBy:[{by:$orderBy, dir:$orderDir}], filter:$filter, search:$search) {
+        persons(first:$first offset:$offset orderBy:$orderBy filter:$filter) {
             ...SearchTablePagination
             data {
                 id

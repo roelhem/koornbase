@@ -23,6 +23,7 @@
 
     import TablerCard from "../layouts/cards/TablerCard";
     import CertificateTableSmall from "./CertificateTableSmall";
+    import CertificateTableSmallRow from  "./CertificateTableSmallRow";
 
     export default {
         components: {
@@ -32,12 +33,16 @@
 
         fragment: gql`
             fragment PersonValidCertificatesCard on Person {
-                validCertificates: certificates(filter:{isValid:true}) {
-                   total
-                   ...CertificateTableSmall
+                validCertificates: certificates(filter:{isValid:true} first:20 orderBy:createdAt_DESC) {
+                    totalCount
+                    edges {
+                        node {
+                            ...CertificateTableSmallRow
+                        }
+                    }
                 }
             }
-            ${CertificateTableSmall.fragment}
+            ${CertificateTableSmallRow.fragment}
         `,
 
         props: {
@@ -46,8 +51,8 @@
                 default:function() {
                     return {
                         validCertificates:{
-                            total:0,
-                            data:[]
+                            totalCount:0,
+                            edges:[],
                         }
                     }
                 }
@@ -58,14 +63,14 @@
 
             certificateCount() {
                 if(this.person.validCertificates) {
-                    return this.person.validCertificates.total;
+                    return this.person.validCertificates.totalCount;
                 }
                 return 0;
             },
 
 
             certificates() {
-                return this.person.validCertificates;
+                return this.person.validCertificates.edges.map(edge => edge.node);
             }
         },
 

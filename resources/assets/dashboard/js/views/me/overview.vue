@@ -9,7 +9,7 @@
 
             <b-col lg="4">
 
-                <user-media-card :user="currentUser" />
+                <user-media-card :user="me" />
 
                 <b-list-group>
                     <b-list-group-item
@@ -17,11 +17,11 @@
                     >Mijn Accountgegevens</b-list-group-item>
                     <b-list-group-item
                             :to="{ name:'me.overview.personal' }"
-                            :disabled="!currentUser.person"
+                            :disabled="!me.person"
                     >Mijn Persoonsgegevens</b-list-group-item>
                     <b-list-group-item
                             :to="{ name:'me.overview.koornbeurs' }"
-                            :disabled="!currentUser.person"
+                            :disabled="!me.person"
                     >Mijn Koornbeurs</b-list-group-item>
                 </b-list-group>
 
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import { CURRENT_USER } from "../../apis/graphql/queries";
+    import gql from "graphql-tag";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import UserMediaCard from "../../components/displays/UserMediaCard";
 
@@ -54,12 +54,23 @@
 
         data: function() {
             return {
-                currentUser:{}
+                me:{}
             }
         },
 
         apollo: {
-            currentUser:CURRENT_USER
+            me:gql`
+                query meOverview {
+                    me {
+                        id
+                        ...UserMediaCard
+                        person {
+                            id
+                        }
+                    }
+                }
+                ${UserMediaCard.fragment}
+            `,
         },
 
         name: "view-me-overview",

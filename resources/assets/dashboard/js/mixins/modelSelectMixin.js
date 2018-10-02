@@ -154,7 +154,11 @@ export default {
         // COMPUTED VARIABLES FOR SETTING THE MULTISELECT COMPONENT
 
         selectOptions() {
-            return this.results.data;
+            const edges =this.results.edges;
+            if(edges) {
+                return edges.map(edge => edge.node)
+            }
+            return [];
         },
 
         optionsLimit() {

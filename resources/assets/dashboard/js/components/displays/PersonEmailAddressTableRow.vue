@@ -1,10 +1,7 @@
 <template>
     <person-contact-entry-table-row :entry="emailAddress">
         <td>
-            <base-field class="tracking-wide"
-                        title="E-mail adres"
-                        name="email_address"
-            >{{ emailAddress.email_address }}</base-field>
+            <email-address-span :email-address="emailAddress.emailAddress" with-button />
         </td>
     </person-contact-entry-table-row>
 </template>
@@ -13,6 +10,7 @@
     import gql from "graphql-tag";
     import PersonContactEntryTableRow from "./PersonContactEntryTableRow";
     import BaseField from "./BaseField";
+    import EmailAddressSpan from "./EmailAddressSpan";
 
     export default {
 
@@ -23,9 +21,13 @@
             fragment PersonEmailAddressTableRow on PersonEmailAddress {
                 id
                 ...PersonContactEntryTableRow
-                email_address
+                emailAddress {
+                    email
+                    ...EmailAddressSpan
+                }
             }
             ${PersonContactEntryTableRow.fragment}
+            ${EmailAddressSpan.fragment}
         `,
 
 
@@ -37,13 +39,14 @@
                     return {
                         index:null,
                         label:null,
-                        email_address:null,
+                        emailAddress:{email:null},
                     }
                 }
             }
         },
 
         components: {
+            EmailAddressSpan,
             BaseField,
             PersonContactEntryTableRow
         },

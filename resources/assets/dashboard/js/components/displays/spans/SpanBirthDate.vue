@@ -1,7 +1,7 @@
 <template>
 
     <span>
-        <base-field title="Geboortedatum">{{ birth_date | date('bday') }}</base-field>
+        <base-field title="Geboortedatum">{{ birthDate | date('bday') }}</base-field>
         <small class="font-italic" :class="{'text-muted': !underAged, 'text-danger': underAged}">
             (
             <base-field title="Leeftijd">{{ age }} jaar</base-field>
@@ -27,12 +27,12 @@
         name: "span-birth-date",
 
         props:{
-            birth_date:null
+            birthDate:null
         },
 
         computed: {
             age:function() {
-                return moment().diff(this.birth_date, 'years');
+                return moment().diff(this.birthDate, 'years');
             },
             underAged:function() {
                 return this.age < 18;

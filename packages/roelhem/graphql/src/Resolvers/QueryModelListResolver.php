@@ -27,7 +27,6 @@ class QueryModelListResolver extends AbstractResolver
         parent::__construct(array_merge([
             EnsureConnectionTypeReturn::class,
             QueryResultToPagination::class,
-            EagerLoadRelations::class,
             QueryApplyUserFilters::class,
         ], $middleware));
     }

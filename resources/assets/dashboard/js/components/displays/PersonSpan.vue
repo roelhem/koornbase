@@ -7,7 +7,7 @@
                            size="sm"
                            class="mr-1"
             />
-            <span-person-name :person="person"
+            <span-person-name :person-name="person.name"
                               :formal="formal"
                               :short="short"
                               :full="full"
@@ -34,7 +34,7 @@
         fragment:gql`
             fragment PersonSpan on Person {
                 ...PersonAvatar
-                ...SpanPersonName
+                name { ...SpanPersonName }
             }
             ${SpanPersonName.fragment}
             ${PersonAvatar.fragment}

@@ -16,9 +16,9 @@
             </template>
 
             <template slot="email_address" slot-scope="{ item, index }">
-                <subtile-single-input-form :value="item.email_address"
+                <subtile-single-input-form :value="item.emailAddress.email"
                                            @submit="newValue => updateEmailAddress(index, item.id, newValue)"
-                />
+                ><email-address-span :email-address="item.emailAddress" with-name with-button /></subtile-single-input-form>
             </template>
 
             <template slot="actions" slot-scope="{ item }">
@@ -63,9 +63,11 @@
     import SubtileSingleInputForm from "../inputs/subtile/SubtileSingleInputForm";
     import SubtileFormButton from "../inputs/subtile/SubtileFormButton";
     import gql from "graphql-tag";
+    import EmailAddressSpan from "./EmailAddressSpan";
 
     export default {
         components: {
+            EmailAddressSpan,
             SubtileFormButton,
             SubtileSingleInputForm,
             BaseIcon,
@@ -76,13 +78,14 @@
         fragment: gql`
             fragment GroupEmailAddressesCard on Group {
                 emailAddresses {
-                    data {
-                        id
-                        email_address
-                        remarks
+                    id
+                    emailAddress {
+                        email
+                        ...EmailAddressSpan
                     }
                 }
             }
+            ${EmailAddressSpan.fragment}
         `,
 
         props: {
@@ -144,12 +147,12 @@
                 if(this.group && this.group.emailAddresses) {
                     return this.group.emailAddresses;
                 }
-                return {data:[]};
+                return [];
             },
 
             items() {
 
-                const emailAddresses = this.emailAddresses.data;
+                const emailAddresses = this.emailAddresses;
 
                 if(emailAddresses) {
                     return emailAddresses.map(emailAddress => {

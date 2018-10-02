@@ -64,7 +64,11 @@
 
         data:function() {
             return {
-                person:{},
+                person:{
+                    phoneNumbers:[],
+                    emailAddresses:[],
+                    addresses:[],
+                },
 
                 cards:{
                     personEmailAddressesCard:{collapsed:false},

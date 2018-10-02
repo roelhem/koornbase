@@ -102,6 +102,11 @@ class MembershipType extends ModelType
                     ]
                 ],
                 'importance' => 100,
+            ],
+            'remarks' => [
+                'description' => 'Some optional remarks about this membership.',
+                'type' => GraphQL::type('String'),
+                'importance' => -200,
             ]
         ];
     }

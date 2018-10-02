@@ -3,7 +3,7 @@
         <b-media>
             <user-avatar slot="aside" :user="user" size="xxl" class="mr-5" />
             <h4 class="m-0">
-                <span-person-name v-if="user.person" :person="user.person" />
+                <span-person-name v-if="user.person" :person-name="user.person.name" />
                 <base-field v-else title="Gebruikersnaam" name="name" :value="user.name" />
             </h4>
             <p class="text-muted mb-0">
@@ -17,12 +17,29 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
+
     import TablerCard from "../layouts/cards/TablerCard";
     import BaseField from "./BaseField";
     import SpanPersonName from "./spans/SpanPersonName";
     import UserAvatar from "./UserAvatar";
 
     export default {
+
+        fragment: gql`
+            fragment UserMediaCard on User {
+                id
+                name
+                email
+                ...UserAvatar
+                person {
+                    id
+                    name { ...SpanPersonName }
+                }
+            }
+            ${UserAvatar.fragment}
+            ${SpanPersonName.fragment}
+        `,
 
         props: {
             user:{

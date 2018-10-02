@@ -1,7 +1,7 @@
 <template>
     <person-contact-entry-table-row :entry="address">
 
-        <td v-html="address.html"></td>
+        <td v-if="address.postalAddress" v-html="address.postalAddress.html"></td>
 
     </person-contact-entry-table-row>
 </template>
@@ -21,7 +21,9 @@
             fragment PersonAddressTableRow on PersonAddress {
                 id
                 ...PersonContactEntryTableRow
-                html:format(html:true)
+                postalAddress {
+                    html:format(html:true)
+                }
             }
             ${PersonContactEntryTableRow.fragment}
         `,
@@ -34,7 +36,7 @@
                     return {
                         index:null,
                         label:null,
-                        html:null,
+                        postalAddress:{html:null},
                     }
                 }
             }

@@ -2,14 +2,14 @@
     <b-list-group-item :class="listItemClass"
                        @click="toggleActive"
                        style="cursor:pointer;user-select:none"
-                       @mouseover="e => $emit('mouseover', e)"
-                       @mouseleave="e => $emit('mouseleave', e)"
+                       v-on="$listeners"
+                       v-bind="$attrs"
     >
         <base-stamp :default-style="defaultStyle" size="md" :inverted="active" />
         <div class="flex-column w-100 pl-3">
             <div class="d-flex justify-content-between">
                 <h4 :class="{'font-weight-bold':active}">{{ category.name }}</h4>
-                <small class="ml-auto" :class="{'font-weight-bold':active}">( {{ category.groups.total }} )</small>
+                <small class="ml-auto" :class="{'font-weight-bold':active}">( {{ category.groups.totalCount }} )</small>
             </div>
             <div v-if="active" class="small" :class="{'font-weight-bold':active}">{{ category.description }}</div>
         </div>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+    import gql from "graphql-tag";
     import BaseStamp from "./BaseStamp";
     import useDefaultStyle from "../../mixins/useDefaultStyle";
 
@@ -27,6 +28,18 @@
         name: "show-group-category-list-card-item",
 
         mixins:[useDefaultStyle],
+
+
+        fragment: gql`
+            fragment ShowGroupCategoryListCardItem on GroupCategory {
+                id
+                name
+                groups {
+                    totalCount
+                }
+                description
+            }
+        `,
 
         props: {
             category:{
@@ -42,7 +55,7 @@
             active:{
                 type:Boolean,
                 default:false,
-            }
+            },
         },
 
         computed: {

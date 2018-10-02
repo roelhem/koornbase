@@ -98,8 +98,8 @@
             return {
                 group: {
                     category: {},
-                    persons:{data:[],total:0},
-                    emailAddresses:{data:[],total:0}
+                    persons:{totalCount:0, edges:[]},
+                    emailAddresses:[]
                 }
             };
         },
@@ -109,8 +109,8 @@
                 return {
                     id: this.group.id,
                     name: this.group.name,
-                    name_short: this.group.name_short,
-                    member_name: this.group.member_name,
+                    name_short: this.group.shortName,
+                    member_name: this.group.memberName,
                 }
             }
         },

@@ -3,13 +3,13 @@
     <div class="dropdown">
 
         <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-            <user-avatar :user="currentUser" />
+            <user-avatar :user="me" />
             <span class="ml-2 d-none d-lg-block">
                 <span class="text-default">
-                    <span-person-name v-if="currentUser.person" :person="currentUser.person" />
-                    <span v-else>{{ currentUser.name }}</span>
+                    <span-person-name v-if="me.person" :person-name="me.person.name" />
+                    <span v-else>{{ me.name }}</span>
                 </span>
-                <span class="text-muted d-block mt-1 small">{{ currentUser.email }}</span>
+                <span class="text-muted d-block mt-1 small">{{ me.email }}</span>
             </span>
         </a>
 
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    import { CURRENT_USER } from "../../../apis/graphql/queries";
+    import gql from "graphql-tag";
     import BaseIcon from "../../displays/BaseIcon";
     import SpanPersonName from "../../displays/spans/SpanPersonName";
     import UserAvatar from "../../displays/UserAvatar";
@@ -58,12 +58,27 @@
         name: "user-menu",
 
         apollo: {
-            currentUser:CURRENT_USER
+            me: gql`
+                query GetUserDropdown {
+                    me {
+                        id
+                        name
+                        email
+                        person {
+                            id
+                            name { ...SpanPersonName }
+                        }
+                        ...UserAvatar
+                    }
+                }
+                ${SpanPersonName.fragment}
+                ${UserAvatar.fragment}
+            `,
         },
 
         data() {
             return {
-                currentUser:{}
+                me:{}
             }
         },
 

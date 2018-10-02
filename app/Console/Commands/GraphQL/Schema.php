@@ -4,6 +4,7 @@ namespace App\Console\Commands\GraphQL;
 
 use GraphQL\Utils\SchemaPrinter;
 use Illuminate\Console\Command;
+use Roelhem\GraphQL\Facades\GraphQL;
 
 class Schema extends Command
 {
@@ -42,7 +43,7 @@ class Schema extends Command
         $this->comment('Retrieving the Schema...');
 
         // Get the schema
-        $schema = \GraphQL::schema();
+        $schema = GraphQL::schema();
 
         // Get the schema as a (GraphQL-schema formatted) string.
         $this->comment('Computing the GraphQL-schema string in the right format...');

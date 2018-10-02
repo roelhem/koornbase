@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import gql from 'graphql-tag';
     import PersonContactEntryTable from "./PersonContactEntryTable";
     import PersonPhoneNumberTableRow from "./PersonPhoneNumberTableRow";
 
@@ -22,17 +21,12 @@
 
         name: "person-phone-number-table",
 
-        fragment:gql`
-            fragment PersonPhoneNumberTable on PersonPhoneNumber_pagination {
-                data {
-                    ...PersonPhoneNumberTableRow
-                }
-            }
-            ${PersonPhoneNumberTableRow.fragment}
-        `,
-
         props: {
-            phoneNumbers:Object
+            phoneNumbers:{
+                type:Array,
+                required:true,
+                default() { return []; }
+            }
         }
     }
 </script>

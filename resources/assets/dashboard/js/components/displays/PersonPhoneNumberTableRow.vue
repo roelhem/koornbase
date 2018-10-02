@@ -3,18 +3,18 @@
     <person-contact-entry-table-row :entry="phoneNumber">
 
         <td class=" p-2" style="font-size: 1.18rem; letter-spacing: 1.8px; word-spacing: 4px;">
-            <base-field title="Telefoonnummer" name="phone_number">{{ phoneNumber.phone_number }}</base-field>
+            <phone-number-span :phone-number="phoneNumber.phoneNumber" with-button />
         </td>
 
         <td class="text-muted font-weight-bold small">
-            <base-field title="Type Telefoonnummer" name="number_type">{{ phoneNumber.number_type }}</base-field>
+            <base-field title="Type Telefoonnummer" name="phoneNumber.type" v-if="phoneNumber.phoneNumber">{{ phoneNumber.phoneNumber.type }}</base-field>
         </td>
 
         <td class="text-muted-dark">
-            <base-field title="Land" name="country">{{ phoneNumber.country }}</base-field>
-            <span v-if="phoneNumber.location && phoneNumber.location !== phoneNumber.country"
+            <base-field title="Land" name="country" v-if="phoneNumber.phoneNumber && phoneNumber.phoneNumber.country">{{ phoneNumber.phoneNumber.country.name }}</base-field>
+            <span v-if="phoneNumber.phoneNumber && phoneNumber.phoneNumber.location && phoneNumber.phoneNumber.location !== phoneNumber.phoneNumber.country.name"
                   class="text-muted font-italic">
-                (<base-field title="Globale locatie" name="location">{{ phoneNumber.location }}</base-field>)
+                (<base-field title="Globale locatie" name="location" v-if="phoneNumber.phoneNumber">{{ phoneNumber.phoneNumber.location }}</base-field>)
             </span>
         </td>
 
@@ -27,11 +27,13 @@
 
     import PersonContactEntryTableRow from "./PersonContactEntryTableRow";
     import BaseField from "./BaseField";
+    import PhoneNumberSpan from "./PhoneNumberSpan";
 
     export default {
         name: "person-phone-number-table-row",
 
         components: {
+            PhoneNumberSpan,
             BaseField,
             PersonContactEntryTableRow
         },
@@ -40,12 +42,16 @@
             fragment PersonPhoneNumberTableRow on PersonPhoneNumber {
                 id
                 ...PersonContactEntryTableRow
-                phone_number
-                number_type
-                country
-                location
+                phoneNumber {
+                    number
+                    type
+                    country { name }
+                    location
+                    ...PhoneNumberSpan
+                }
             }
             ${PersonContactEntryTableRow.fragment}
+            ${PhoneNumberSpan.fragment}
         `,
 
         props: {
@@ -56,10 +62,14 @@
                     return {
                         index:null,
                         label:null,
-                        phone_number:null,
-                        number_type:null,
-                        country:null,
-                        location:null
+                        phoneNumber:{
+                            number:null,
+                            type:null,
+                            country:{
+                                name:null
+                            },
+                            location:null
+                        },
                     };
                 }
             }

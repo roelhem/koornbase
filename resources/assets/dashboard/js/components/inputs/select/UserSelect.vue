@@ -13,7 +13,7 @@
             </small>
 
             <span v-if="option.person" class="ml-2 option__description">
-                <strong><span-person-name :person="option.person" with-nickname /></strong>
+                <strong><span-person-name :person-name="option.person.name" with-nickname /></strong>
             </span>
         </template>
 
@@ -27,7 +27,7 @@
                 </div>
                 <div class="multiselect-flex-label-extra" style="font-size: 100%; padding-top:0px">
                     <template v-if="option.person">
-                    <strong>Van:</strong> <span-person-name :person="option.person" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <strong>Van:</strong> <span-person-name :person-name="option.person.name" /> &nbsp;&nbsp;&nbsp;&nbsp;
                     </template>
                     <strong>E-mail:</strong> {{ option.email }}
                 </div>
@@ -73,16 +73,18 @@
             queryKey:'users',
             query:{
                 query:gql`
-                    query getUserOptions($limit:Int = 25, $search:String) {
-                        users(limit:$limit, search:$search) {
-                            data {
-                                id
-                                name
-                                email
-                                ...UserAvatar
-                                person {
+                    query getUserOptions {
+                        users(first:50) {
+                            edges {
+                                node {
                                     id
-                                    ...SpanPersonName
+                                    name
+                                    email
+                                    ...UserAvatar
+                                    person {
+                                        id
+                                        name{ ...SpanPersonName }
+                                    }
                                 }
                             }
                         }

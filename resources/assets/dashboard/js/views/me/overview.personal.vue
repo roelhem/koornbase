@@ -2,6 +2,7 @@
 
     <div>
 
+
         <h1>Mijn Persoonsgegevens</h1>
 
         <person-detail-card
@@ -29,6 +30,7 @@
                 collapsibleWithHeader
                 :collapsed.sync="cards.personEmailAddressesCard.collapsed"
         />
+
         <person-phone-numbers-card
                 :person="person"
                 status="orange"
@@ -69,10 +71,10 @@
 
         apollo: {
 
-            currentUser: {
+            me: {
                 query:gql`
                     query viewMeOverviewPersonal {
-                        currentUser:me {
+                        me {
                             id
                             person {
                                 ...PersonDetailCard
@@ -93,7 +95,14 @@
 
         data: function() {
             return {
-                currentUser: {},
+                me: {
+                    id:null,
+                    person: {
+                        addresses:[],
+                        emailAddresses:[],
+                        phoneNumbers:[]
+                    }
+                },
 
                 cards: {
                     personDetailCard:{collapsed:false},
@@ -106,13 +115,13 @@
 
         computed: {
             person() {
-                if(this.currentUser && this.currentUser.person) {
-                    return this.currentUser.person;
+                if(this.me && this.me.person) {
+                    return this.me.person;
                 }
                 return {
-                    addresses:{data:[],total:0},
-                    phoneNumbers:{data:[],total:0},
-                    emailAddresses:{data:[],total:0},
+                    addresses:[],
+                    phoneNumbers:[],
+                    emailAddresses:[],
                 };
             }
         },

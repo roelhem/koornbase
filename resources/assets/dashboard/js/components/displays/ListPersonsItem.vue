@@ -11,11 +11,10 @@
 
             <b-col>
                 <div>
-                    <span-person-name :person="person" with-nickname />
+                    <span-person-name :person-name="person.name" with-nickname />
                 </div>
                 <div class="small text-muted-dark">
-                    <span-membership-status :status="person.membership_status"
-                                            :since="person.membership_status_since"
+                    <span-membership-status :membership-status="person.membershipStatus"
                                             date-size="sm"
                     />
                 </div>
@@ -56,12 +55,12 @@
             fragment ListPersonsItem on Person {
                 id
                 ...PersonAvatar
-                ...PersonNameSpan
-                ...PersonMembershipStatus
+                name {...SpanPersonName}
+                membershipStatus {...SpanMembershipStatus}
             }
-            ${fragments.PersonAvatar}
-            ${fragments.PersonNameSpan}
-            ${fragments.PersonMembershipStatus}
+            ${PersonAvatar.fragment}
+            ${SpanPersonName.fragment}
+            ${SpanMembershipStatus.fragment}
         `,
 
         props: {

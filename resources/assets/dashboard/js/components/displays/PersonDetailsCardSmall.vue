@@ -6,17 +6,17 @@
             <detail-view in-card sm class="table-hover">
 
                 <detail-entry icon="user" title="Naam">
-                    <span-person-name :person="person" full />
+                    <span-person-name :person-name="person.name" full />
                 </detail-entry>
 
                 <detail-entry icon="birthday-cake" title="Geboortedatum">
-                    <span-birth-date v-bind="person" />
+                    <span-birth-date :birth-date="person.birthDate" />
                 </detail-entry>
 
                 <detail-entry icon="book" title="Lid-status">
-                    <span-membership-status :status="person.membership_status" :since="person.membership_status_since" />
+                    <span-membership-status :membership-status="person.membershipStatus" />
                 </detail-entry>
-
+                <!--
                 <detail-entry icon="credit-card"
                               title="Koornbeurs-kaart"
                               v-for="activeCard in person.activeCards"
@@ -29,22 +29,18 @@
                                 >{{ activeCard.version }}</data-display>
                                 )
                             </span>
+                </detail-entry>-->
+
+                <detail-entry v-if="emailAddress" icon="at" title="E-mailadres">
+                    <email-address-span :email-address="emailAddress.emailAddress" with-button />
                 </detail-entry>
 
-                <detail-entry v-if="person.emailAddress" icon="at" title="E-mailadres">
-                    <data-display title="E-mailadres">
-                        {{ person.emailAddress.email_address }}
-                    </data-display>
+                <detail-entry v-if="phoneNumber" icon="phone" title="Telefoonnummer">
+                    <phone-number-span :phone-number="phoneNumber.phoneNumber" with-location with-button />
                 </detail-entry>
 
-                <detail-entry v-if="person.phoneNumber" icon="phone" title="Telefoonnummer">
-                    <data-display title="Telefoonnummer">
-                        {{ person.phoneNumber.phone_number }}
-                    </data-display>
-                </detail-entry>
-
-                <detail-entry v-if="person.address" icon="map-marker" title="Adres">
-                    <span-address :address="person.address" />
+                <detail-entry v-if="address" icon="map-marker" title="Adres">
+                    <span-address v-if="address.postalAddress" :address="address.postalAddress" />
                 </detail-entry>
             </detail-view>
         </tabler-dimmer>
@@ -54,7 +50,6 @@
 
 <script>
     import gql from "graphql-tag";
-    import fragments from "../../apis/graphql/queries/fragments";
 
     import DetailView from "../layouts/cards/DetailView";
     import DetailEntry from "../layouts/cards/DetailEntry";
@@ -65,6 +60,9 @@
     import SpanAddress from "./spans/SpanAddress";
 
     import TablerDimmer from "../layouts/cards/TablerDimmer";
+    import BaseField from "./BaseField";
+    import PhoneNumberSpan from "./PhoneNumberSpan";
+    import EmailAddressSpan from "./EmailAddressSpan";
 
 
 
@@ -73,34 +71,32 @@
 
         fragment:gql`
             fragment PersonDetailsCardSmall on Person {
-                ...PersonNameSpan
-                ...PersonBirthDate
-                ...PersonMembershipStatus
-                activeCards: cards(active:true) {
+                id
+                name { ...SpanPersonName }
+                birthDate
+                membershipStatus { ...SpanMembershipStatus }
+                emailAddresses {
                     id
-                    ref
-                    version
+                    emailAddress {
+                        ...EmailAddressSpan
+                    }
                 }
-                emailAddress {
+                phoneNumbers {
                     id
-                    email_address
+                    phoneNumber {
+                        ...PhoneNumberSpan
+                    }
                 }
-                phoneNumber {
+                addresses {
                     id
-                    phone_number
-                }
-                address {
-                    id
-                    label
-                    country_code
-                    country
-                    locality
-                    address_line_1
+                    postalAddress { ...SpanAddress }
                 }
             }
-            ${fragments.PersonNameSpan}
-            ${fragments.PersonBirthDate}
-            ${fragments.PersonMembershipStatus}
+            ${EmailAddressSpan.fragment}
+            ${PhoneNumberSpan.fragment}
+            ${SpanPersonName.fragment}
+            ${SpanMembershipStatus.fragment}
+            ${SpanAddress.fragment}
         `,
 
         props: {
@@ -108,15 +104,43 @@
                 type:Object,
                 default:function() {
                     return {
-                        person:{
-                            activeCards:[]
-                        }
+                        name:{},
+                        membershipStatus:{}
                     };
                 }
             }
         },
 
+        computed: {
+            emailAddress() {
+                if(this.person.emailAddresses && this.person.emailAddresses.length > 0) {
+                    return this.person.emailAddresses[0];
+                } else {
+                    return null;
+                }
+            },
+
+            phoneNumber() {
+                if(this.person.phoneNumbers && this.person.phoneNumbers.length > 0) {
+                    return this.person.phoneNumbers[0];
+                } else {
+                    return null;
+                }
+            },
+
+            address() {
+                if(this.person.addresses && this.person.addresses.length > 0) {
+                    return this.person.addresses[0];
+                } else {
+                    return null;
+                }
+            }
+        },
+
         components: {
+            EmailAddressSpan,
+            PhoneNumberSpan,
+            BaseField,
             TablerDimmer,
             DetailView,
             DetailEntry,

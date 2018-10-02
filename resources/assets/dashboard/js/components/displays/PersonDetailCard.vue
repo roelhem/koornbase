@@ -6,8 +6,8 @@
         <template slot="title">
             <slot name="title">{{ title }}</slot>
 
-            <span v-if="person.name_first" class="text-muted mx-2">
-                (<span-person-name :person="person" />)
+            <span v-if="person.name && person.name.first" class="text-muted mx-2">
+                (<span-person-name :person-name="person.name" />)
             </span>
 
         </template>
@@ -18,14 +18,14 @@
             <person-name-detail-entry :person="person" @submit="handleSubmitName" />
 
             <subtile-detail-entry-form label="Bijnaam"
-                                       :value="person.name_nickname"
+                                       :value="person.name ? person.name.nickname : null"
                                        @submit="handleSubmitNickname"
             >
-                <template v-if="person.name_nickname">
-                    <base-field title="Bijnaam" name="name_nickname">{{ person.name_nickname }}</base-field>
+                <template v-if="person.name && person.name.nickname">
+                    <base-field title="Bijnaam" name="nickname" v-if="person.name">{{ person.name.nickname }}</base-field>
                 </template>
                 <template v-else>
-                    <base-field title="Korte naam" name="name_short" class="text-muted-dark">{{ person.name_short }}</base-field>
+                    <base-field title="Korte naam" name="shortName" class="text-muted-dark" v-if="person.name">{{ person.name.first }}</base-field>
                     <small class="text-muted font-italic">(Geen bijnaam)</small>
                 </template>
             </subtile-detail-entry-form>
@@ -33,11 +33,11 @@
 
 
             <subtile-detail-entry-date-form label="Geboortedatum"
-                                            :value="person.birth_date"
+                                            :value="person.birthDate"
                                             :max-date="maxBirthDate"
                                             @submit="handleSubmitBirthDate"
             >
-                <span-birth-date v-if="person.birth_date" :birth_date="person.birth_date" />
+                <span-birth-date v-if="person.birthDate" :birth-date="person.birthDate" />
                 <small class="text-muted font-italic" v-else>(Onbekend)</small>
             </subtile-detail-entry-date-form>
 
@@ -89,9 +89,8 @@
         fragment: gql`
             fragment PersonDetailCard on Person {
                 id
-                name_short
-                birth_date
-                ...SpanPersonName
+                name { ...SpanPersonName }
+                birthDate
                 remarks
             }
             ${SpanPersonName.fragment}
@@ -101,6 +100,14 @@
             person: {
                 type:Object,
                 required:true,
+                default() {
+                    return {
+                        id:null,
+                        name:{},
+                        birthDate:null,
+                        remarks:null
+                    }
+                }
             },
 
             icon: {

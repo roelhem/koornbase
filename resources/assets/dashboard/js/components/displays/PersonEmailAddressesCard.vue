@@ -4,17 +4,18 @@
             :icon="icon"
             v-bind="$attrs"
             v-on="$listeners"
-            :entries="emailAddresses"
+            :entries="person.emailAddresses"
             placeholder-text="Geen E-mailadressen bekend voor deze persoon..."
     >
+
         <template slot="preview" slot-scope="{item}">
             <base-field title="Label" name="label">{{ item.label }}</base-field>:
-            <base-field title="Primair E-mailadres" name="email_address" class="text-muted-dark">{{ item.email_address }}</base-field>
+            <base-field title="Primair E-mailadres" name="emailAddress.email" class="text-muted-dark">{{ item.emailAddress.email }}</base-field>
             , ...
         </template>
 
 
-        <person-email-address-table :email-addresses="emailAddresses" class="card-table" />
+        <person-email-address-table :email-addresses="person.emailAddresses" class="card-table" />
 
     </person-contact-entries-card>
 </template>
@@ -22,6 +23,7 @@
 <script>
     import gql from "graphql-tag";
     import PersonContactEntriesCard from "./PersonContactEntriesCard";
+    import PersonEmailAddressTableRow from "./PersonEmailAddressTableRow";
     import PersonEmailAddressTable from "./PersonEmailAddressTable";
     import BaseField from "./BaseField";
 
@@ -37,18 +39,24 @@
 
         fragment: gql`
             fragment PersonEmailAddressesCard on Person {
-                emailAddresses(orderBy:[{by:index,dir:ASC}]) {
-                    total
-                    ...PersonEmailAddressTable
+                emailAddresses {
+                    ...PersonEmailAddressTableRow
+                    label
+                    emailAddress { email }
                 }
             }
-            ${PersonEmailAddressTable.fragment}
+            ${PersonEmailAddressTableRow.fragment}
         `,
 
 
         props: {
             person:{
-                type:Object
+                type:Object,
+                default() {
+                    return {
+                        emailAddresses:[],
+                    }
+                }
             },
 
             title:{
@@ -60,15 +68,6 @@
                 default:"at-sign"
             }
         },
-
-        computed: {
-            emailAddresses() {
-                if(this.person && this.person.emailAddresses) {
-                    return this.person.emailAddresses;
-                }
-                return {data:[]};
-            }
-        }
 
     }
 </script>

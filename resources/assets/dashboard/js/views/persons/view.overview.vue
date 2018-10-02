@@ -42,12 +42,13 @@
                     query viewPersonOverview($id:ID!) {
                         person(id:$id) {
                             id
-                            remarks
-                            name_short
+                            ...PersonDetailCard
                             ...PersonDetailsCardSmall
                             ...PersonValidCertificatesCard
+
                         }
                     }
+                    ${PersonDetailCard.fragment}
                     ${PersonDetailsCardSmall.fragment}
                     ${PersonValidCertificatesCard.fragment}
                 `,
@@ -62,9 +63,9 @@
         data() {
             return {
                 person:{
-                    emailAddresses:{data:[]},
-                    addresses:{data:[]},
-                    phoneNumbers:{data:[]},
+                    emailAddresses:[],
+                    addresses:[],
+                    phoneNumbers:[],
                 }
             }
         },

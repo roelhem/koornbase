@@ -19,8 +19,8 @@
         fragment:gql`
             fragment GroupTag on Group {
                 name
-                name_short
-                member_name
+                shortName
+                memberName
                 description
                 category {
                     id
@@ -40,9 +40,9 @@
 
             label:{
                 type:String,
-                default: "name_short",
+                default: "shortName",
                 validate:function(val) {
-                    return ['name','name_short','member_name'].indexOf(val) !== -1;
+                    return ['name','shortName','memberName'].indexOf(val) !== -1;
                 }
             },
 
@@ -75,10 +75,10 @@
 
             labelValue:function() {
                 switch(this.label) {
-                    case 'member_name': return this.group.member_name;
+                    case 'memberName': return this.group.memberName;
                     case 'name': return this.group.name;
-                    case 'name_short':
-                    default: return this.group.name_short;
+                    case 'nameShort':
+                    default: return this.group.shortName;
                 }
             },
 

@@ -126,7 +126,7 @@ export const routes = [
     {
         path:'/users',
         name:'users.index',
-        component: require('../../views/users/index'),
+        component: require('../../views/users/index2'),
     },
     {
         path:'/users/create',

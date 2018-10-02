@@ -97,7 +97,12 @@
             fragment OAuthClientCard on OAuthClient {
                 id
                 name
-                redirect
+                ...on OAuthAuthCodeClient {
+                    redirect
+                }
+                ...on OAuthPasswordClient {
+                    redirect
+                }
                 secret
                 type
                 revoked

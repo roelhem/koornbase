@@ -51,7 +51,10 @@
 
         props: {
 
-            entries:Object,
+            entries:{
+                type:Array,
+                default() { return []; }
+            },
 
             previewEntry:Object,
 
@@ -96,13 +99,7 @@
 
 
             total() {
-                if(this.entries && typeof this.entries.total === 'number') {
-                    return this.entries.total;
-                }
-                if (this.entries && this.entries.data) {
-                    return this.entries.data.length;
-                }
-                return 0;
+                return this.entries.length;
             },
 
             // COUNTER
@@ -121,8 +118,8 @@
             previewItem() {
                 if(this.previewEntry) {
                     return this.previewEntry;
-                } else if(this.entries && this.entries.data && this.entries.data.length > 0) {
-                    return this.entries.data[0];
+                } else if(this.entries.length > 0) {
+                    return this.entries[0];
                 } else {
                     return null;
                 }

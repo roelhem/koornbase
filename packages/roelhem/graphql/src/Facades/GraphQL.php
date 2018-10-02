@@ -11,6 +11,7 @@ namespace Roelhem\GraphQL\Facades;
 
 use Roelhem\GraphQL\Contracts\TypeLoaderContract;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Schema;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Facade;
  *
  * @method static Type type(string $def)
  * @method static TypeLoaderContract typeLoader()
+ * @method static Schema schema()
  */
 class GraphQL extends Facade
 {

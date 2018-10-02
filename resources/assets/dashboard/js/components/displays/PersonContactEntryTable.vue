@@ -23,12 +23,10 @@
 
         props: {
             entries: {
-                type:Object,
+                type:Array,
                 required:true,
                 default:function() {
-                    return {
-                        data:[]
-                    };
+                    return [];
                 }
             }
         },
@@ -36,7 +34,7 @@
         computed: {
             rows() {
                 if(this.entries) {
-                    return this.entries.data;
+                    return this.entries;
                 }
                 return [];
             }

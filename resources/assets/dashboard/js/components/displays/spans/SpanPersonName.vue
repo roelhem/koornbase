@@ -2,36 +2,36 @@
 
     <span>
         <template v-if="format === 'full'">
-            <base-field title="Initialen" name="name_initials">{{ name_initials }}</base-field>
+            <base-field title="Initialen" name="initials">{{ initials }}</base-field>
             <span class="text-muted font-italic">
                 (
-                <base-field title="Voornaam" name="name_first" class="text-muted-dark">{{ name_first }}</base-field>
-                <span v-if="withNickname && name_nickname" class="font-italic">
-                    [ <base-field title="Bijnaam" name="name_nickname" :value="name_nickname" /> ]
+                <base-field title="Voornaam" name="first" class="text-muted-dark">{{ first }}</base-field>
+                <span v-if="withNickname && nickname" class="font-italic">
+                    [ <base-field title="Bijnaam" name="nickname" :value="nickname" /> ]
                 </span>
-                <base-field title="Extra Namen" name="name_middle">{{ name_middle }}</base-field>
+                <base-field title="Extra Namen" name="middle">{{ middle }}</base-field>
                 )
             </span>
-            <base-field title="Tussenvoegsel" name="name_prefix">{{ name_prefix }}</base-field>
-            <base-field title="Achternaam" name="name_last">{{ name_last }}</base-field>
+            <base-field title="Tussenvoegsel" name="prefix">{{ prefix }}</base-field>
+            <base-field title="Achternaam" name="last">{{ last }}</base-field>
         </template>
         <template v-else-if="format === 'formal'">
-            <base-field v-if="name_initials" title="Initialen" name="name_initials">{{ name_initials }}</base-field>
-            <base-field v-else title="Voornaam" name="name_first" class="text-muted-dark">{{ name_first }}</base-field>
-            <base-field title="Tussenvoegsel" name="name_prefix">{{ name_prefix }}</base-field>
-            <base-field title="Achternaam" name="name_last">{{ name_last }}</base-field>
+            <base-field v-if="initials" title="Initialen" name="initials">{{ initials }}</base-field>
+            <base-field v-else title="Voornaam" name="first" class="text-muted-dark">{{ first }}</base-field>
+            <base-field title="Tussenvoegsel" name="prefix">{{ prefix }}</base-field>
+            <base-field title="Achternaam" name="last">{{ last }}</base-field>
         </template>
         <template v-else-if="format === 'normal'">
-            <base-field title="Voornaam" name="name_first">{{ name_first }}</base-field>
-            <span v-if="withNickname && name_nickname" class="font-italic text-muted">
-                [ <base-field class="text-muted-dark" title="Bijnaam" name="name_nickname" :value="name_nickname" /> ]
+            <base-field title="Voornaam" name="first">{{ first }}</base-field>
+            <span v-if="withNickname && nickname" class="font-italic text-muted">
+                [ <base-field class="text-muted-dark" title="Bijnaam" name="nickname" :value="nickname" /> ]
             </span>
-            <base-field title="Tussenvoegsel" name="name_prefix">{{ name_prefix }}</base-field>
-            <base-field title="Achternaam" name="name_last">{{ name_last }}</base-field>
+            <base-field title="Tussenvoegsel" name="prefix">{{ prefix }}</base-field>
+            <base-field title="Achternaam" name="last">{{ last }}</base-field>
         </template>
         <template v-else-if="format === 'short'">
-            <base-field v-if="name_nickname" title="Bijnaam" name="name_nickname" :value="name_nickname" />
-            <base-field v-else title="Voornaam" name="name_first" :value="name_first" />
+            <base-field v-if="nickname" title="Bijnaam" name="nickname" :value="nickname" />
+            <base-field v-else title="Voornaam" name="first" :value="first" />
         </template>
 
     </span>
@@ -49,29 +49,29 @@
         name: "span-person-name",
 
         fragment:gql`
-            fragment SpanPersonName on Person {
-                name_initials
-                name_first
-                name_middle
-                name_prefix
-                name_last
-                name_nickname
+            fragment SpanPersonName on PersonName {
+                initials
+                first
+                middle
+                prefix
+                last
+                nickname
             }
         `,
 
 
         props: {
 
-            person:{
+            personName:{
                 type:Object,
                 default:function() {
                     return {
-                        name_initials:null,
-                        name_first:null,
-                        name_middle:null,
-                        name_prefix:null,
-                        name_last:null,
-                        name_nickname:null
+                        initials:null,
+                        first:null,
+                        middle:null,
+                        prefix:null,
+                        last:null,
+                        nickname:null
                     }
                 },
                 required:true
@@ -100,12 +100,12 @@
 
         computed: {
 
-            name_initials() { return this.person.name_initials; },
-            name_first() { return this.person.name_first; },
-            name_middle() { return this.person.name_middle; },
-            name_prefix() { return this.person.name_prefix; },
-            name_last() { return this.person.name_last; },
-            name_nickname() { return this.person.name_nickname; },
+            initials() { return this.personName.initials; },
+            first() { return this.personName.first; },
+            middle() { return this.personName.middle; },
+            prefix() { return this.personName.prefix; },
+            last() { return this.personName.last; },
+            nickname() { return this.personName.nickname; },
 
             format() {
                 if(this.short) { return 'short'; }
