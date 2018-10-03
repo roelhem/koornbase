@@ -6,6 +6,8 @@
                      show-empty
                      :items="items"
                      :fields="tableFields"
+                     :per-page="pageSize"
+                     :current-page="currentPage"
             >
                 <template slot="avatar" slot-scope="{item}">
                     <user-avatar :user="item" size="md" />
@@ -29,7 +31,10 @@
 
 
             </b-table>
+
         </b-card>
+
+        <b-pagination :total-rows="totalCount" :per-page="pageSize" v-model="currentPage"></b-pagination>
 
         <b-button @click="showMore()">Meer...</b-button>
     </b-container>
@@ -66,6 +71,7 @@
                 query:gql`
                     query indexUsers($cursor:Cursor $pageSize:Int!) {
                         users(first:$pageSize after:$cursor orderBy:id_ASC) {
+                            totalCount
                             pageInfo {
                                 hasNextPage
                                 endCursor
@@ -101,7 +107,11 @@
         data() {
             return {
                 tableFields,
+                pageSize,
+                currentPage:1,
+
                 users:{
+                    totalCount:0,
                     pageInfo: {
                         hasNextPage:null,
                         endCursor:null
@@ -114,6 +124,10 @@
         computed: {
             items() {
                 return this.users.edges.map(edge => edge.node);
+            },
+
+            totalCount() {
+                return this.users.totalCount || 0;
             }
         },
 
@@ -127,6 +141,7 @@
                         return {
                             users: {
                                 __typename: previousResult.users.__typename,
+                                totalCount: fetchMoreResult.users.totalCount,
                                 edges: [...previousResult.users.edges, ...fetchMoreResult.users.edges],
                                 pageInfo: fetchMoreResult.users.pageInfo
                             },

@@ -1,6 +1,4 @@
-
-const ASC = 'ASC';
-const DESC = 'DESC';
+import OrderBy from "../utils/OrderBy";
 
 export default {
 
@@ -17,9 +15,7 @@ export default {
         /** The default (or initial) values of the sorting parameters. */
         defaults: {
             page:1,
-            perPage:10,
-            sortBy:null,
-            sortDir:ASC
+            perPage:10
         },
 
         /** Option for the `id` of the table. */
@@ -45,8 +41,7 @@ export default {
         let res = {
             page   :defaults.page    || 1,
             perPage:defaults.perPage || 10,
-            sortBy :defaults.sortBy  || null,
-            sortDir:defaults.sortDir || ASC,
+            orderBy:defaults.orderBy ? OrderBy.parse(defaults.orderBy) : null,
 
             columns:this.getInitColumns(),
         };
@@ -65,14 +60,17 @@ export default {
 
         // SOME SIMPLE SHORTCUTS
 
-        from()      { return this.results.from; },
-        to()        { return this.results.to; },
-        total()     { return this.results.total; },
+        from()      { return this.pageInfo.startIndex; },
+        to()        { return this.pageInfo.endIndex; },
+        total()     { return this.results.totalCount || 0; },
+
+        pageInfo() { return this.results.pageInfo || {startIndex:0,endIndex:0}; },
+        edges() { return this.results.edges || [] },
 
         isLoading() { return this.query.loading; },
 
         /** Should return a list of objects that are ready to be shown in the table. */
-        rows()      { return this.results.data; },
+        rows()      { return this.edges.map(edge => edge.node); },
 
 
 
@@ -83,7 +81,7 @@ export default {
 
         /** The contents of the query. */
         results: {
-            get() { return this[this.queryKey]; },
+            get() { return this[this.queryKey] || {}; },
             set(newValue) { this[this.queryKey] = newValue; }
         },
 
@@ -97,73 +95,21 @@ export default {
 
         // VARIABLES TO CONTROL A `<b-table>` ELEMENT
 
-        /** Converts the values of sortDir to a `Boolean` value that determines if the sort direction is DESC. */
-        sortDesc: {
-            get() { return this.sortDir === DESC; },
-            set( newValue ) { return this.sortDir = (!!newValue) ? DESC : ASC; }
-        },
 
-        /** Returns the id of the b-table. */
-        tableId() {
-            if(this.$options.searchTable && this.$options.searchTable.tableId) {
-                return this.$options.searchTable.tableId;
-            }
-            return this.$options.name+'_table';
-        },
-
-        /** Returns the classes of the b-table. */
-        tableClass() {
-            let res = [];
-            if(this.$options.searchTable) {
-                if(this.$options.searchTable.tableClass) {
-                    const optClass = this.$options.searchTable.tableClass;
-                    if(typeof optClass === 'string') {
-                        res.push(optClass);
-                    } else {
-                        res.concat(optClass);
-                    }
-                }
-
-                const cardTable = this.$options.searchTable.cardTable;
-                if(cardTable || cardTable === undefined) {
-                    res.push('card-table');
-                }
-
-            } else {
-                res.push('card-table');
-            }
-            return res;
-        },
-
-        /** Returns a list that can be used at the `fields` prop of the b-table. */
-        tableFields() { return this.columns.filter(column => this.columnVisibleInTable(column)); },
-
-        /** Returns the props for the search table. Can be binded to a b-table with `v-bind`. */
-        bTableProps() {
+        dataTableProps() {
             return {
-                ref:'resultsTable',
-                id:this.tableId,
-                class:this.tableClass,
                 items:this.rows,
                 busy:this.isLoading,
-                fields:this.tableFields,
-                sortBy:this.sortBy,
-                sortDesc:this.sortDesc,
+                orderBy:this.orderBy,
                 noLocalSorting:true
             };
         },
 
         /** Returns the event listenters for the search table. Can be binded to a b-table with `v-on`. */
-        bTableListeners() {
+        dataTableListeners() {
             return {
-                'update:sortBy': val => this.sortBy = val,
-                'update:sortDesc': val => this.sortDesc = val,
+                'update:orderBy':val => this.orderBy = val,
             };
-        },
-
-        /** Returns a reference to the table instance. */
-        tableRef() {
-            return this.$refs.resultsTable;
         },
 
 
@@ -179,8 +125,8 @@ export default {
         /** Returns the props for the sort-by selector. */
         sortInputProps() {
             return {
-                sort:this.sortBy,
-                sortOrder:this.sortDir,
+                sort:this.orderBy ? this.orderBy.field : null,
+                sortOrder:this.orderBy ? this.orderBy.dir : OrderBy.ASC,
                 options:this.sortSelectOptions,
             }
         },
@@ -188,8 +134,7 @@ export default {
         /** Returns the listeners for the sort-by selector. */
         sortInputListeners() {
             return {
-                input:val => this.sortBy = val,
-                'update:sortOrder':val => this.sortDir = val
+
             }
         },
 

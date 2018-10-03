@@ -1,10 +1,10 @@
 <template>
 
-    <span>
+    <span :class="{'d-inline-block':stacked}">
         <span class="status-icon" :class="membershipStatus.type | membershipStatusColor"></span>
         <base-field v-if="title" title="Lid-status titel">{{ title }}</base-field>
         <base-field v-else title="Lid-status">{{ membershipStatus.type | membershipStatusName }}</base-field>
-        <span v-if="membershipStatus.since" class="small text-muted">
+        <span v-if="membershipStatus.since" class="small text-muted" :class="{'d-block':stacked}">
             (sinds
             <base-field title="Lid-status"
                           class="text-muted-dark"
@@ -51,6 +51,11 @@
             dateSize:{
                 type:String,
                 default:'lg',
+            },
+
+            stacked:{
+                type:Boolean,
+                default:false,
             }
         },
 

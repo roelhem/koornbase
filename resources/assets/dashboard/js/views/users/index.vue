@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="px-1 flex-grow-1">
-                            <search-sort-input v-bind="sortInputProps" v-on="sortInputListeners" />
+                            <order-by-input v-model="orderBy" :options="['id','name']" />
                         </div>
 
                         <div class="pl-1">
@@ -54,54 +54,8 @@
                     </div>
                     <!-- END: Parameters Bar -->
 
-                    <!-- START: The Search Table -->
-                    <b-card no-body>
-                        <b-table v-bind="bTableProps" v-on="bTableListeners">
 
-                            <template slot="avatar" slot-scope="{ item }">
-                                <user-avatar :user="item" size="md" />
-
-                            </template>
-
-                            <template slot="name" slot-scope="{ item }">
-                                <div>{{ item.name }}</div>
-                                <div class="small text-muted">{{ item.email }}</div>
-                            </template>
-
-                            <template slot="person" slot-scope="{ item }">
-                                <template v-if="item.person !== null">
-                                    <div>{{ item.person.name }}</div>
-                                    <div class="small text-muted-dark">
-                                        <span-membership-status
-                                                :status="item.person.membership_status"
-                                                :since="item.person.membership_status_since"
-                                                date-size="sm"
-                                        />
-                                    </div>
-                                </template>
-                                <template v-else>
-                                    <div class="text-muted font-italic">( Geen gekoppeld persoon. )</div>
-                                </template>
-                            </template>
-
-                            <template slot="created_at" slot-scope="{ value }">
-                                <display-timestamp :timestamp="value" />
-                            </template>
-
-                            <template slot="updated_at" slot-scope="{ value }">
-                                <display-timestamp :timestamp="value" />
-                            </template>
-
-                            <template slot="links" slot-scope="{ item }">
-                                <router-link class="icon" :to="{name:'users.view', params: {id: item.id} }">
-                                    <base-icon icon="more-vertical" from="fe" />
-                                </router-link>
-                            </template>
-
-                        </b-table>
-                    </b-card>
-                    <!-- END: The Search Table -->
-
+                    <user-data-table v-bind="dataTableProps" v-on="dataTableListeners" />
 
 
 
@@ -133,20 +87,19 @@
 </template>
 
 <script>
-    import { USERS_INDEX } from '../../apis/graphql/queries';
+    import gql from "graphql-tag";
     import SearchPerPageInput from "../../components/features/table-search/SearchPerPageInput";
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
     import SearchColumnSelectCard from "../../components/features/table-search/SearchColumnSelectCard";
     import SearchSortInput from "../../components/features/table-search/SearchSortInput";
-    import SpanMembershipStatus from "../../components/displays/spans/SpanMembershipStatus";
     import searchTableMixin from "../../mixins/searchTableMixin";
-    import DisplayTimestamp from "../../components/displays/DisplayTimestamp";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import SearchStatusDisplay from "../../components/features/table-search/SearchStatusDisplay";
     import SearchSimplePager from "../../components/features/table-search/SearchSimplePager";
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
     import BaseIcon from "../../components/displays/BaseIcon";
-    import UserAvatar from "../../components/displays/UserAvatar";
+    import UserDataTable from "../../components/displays/UserDataTable";
+    import OrderByInput from "../../components/inputs/OrderByInput";
 
     export default {
         name: 'page-users',
@@ -154,27 +107,34 @@
         searchTable: {
             queryKey: 'users',
             query: {
-                query:USERS_INDEX,
+                query:gql`
+                    query indexUsers($pageSize:Int = 10, $page:Int = 1 $orderBy:User_orderByInput) {
+                        users(first:$pageSize page:$page orderBy:$orderBy) {
+                            totalCount
+                            pageInfo {
+                                startIndex
+                                endIndex
+                            }
+                            edges {
+                                cursor
+                                node {
+                                    ...UserDataTableRow
+                                }
+                            }
+                        }
+                    }
+                    ${UserDataTable.rowFragment}
+                `,
                 variables() {
                     return {
                         page: this.page,
-                        limit: this.perPage,
-                        orderBy: this.sortBy,
+                        pageSize: this.perPage,
+                        orderBy: this.orderBy ? this.orderBy.string : null,
                         orderDir: this.sortDir,
                         search: this.search,
                     };
                 }
             },
-            columns: [
-                { key:"avatar", label:"", name:"Avatar", visible:true, thStyle:{'width':'1px'} },
-                { key:"id", label:"ID", visible:false, sortable:true },
-                { key:"name", label:"Gebruiker", sortName: 'Gebruikersnaam', visible:true, sortable:true },
-                { key:"email", label:"E-mail", visible:false, sortable:true },
-                { key:"person", label:"Persoon", visible: true, sortable:true },
-                { key:'created_at', label:'Aangemaakt op', sortable:true },
-                { key:'updated_at', label:'Bewerkt op', name:'Laatst bewerkt op', sortable:true },
-                { key:'links', label:'', name:'Actieknoppen', visible:true, thStyle:{'width':'1px'}, },
-            ]
         },
 
         mixins:[searchTableMixin],
@@ -191,14 +151,13 @@
         },
 
         components: {
-            UserAvatar,
+            OrderByInput,
+            UserDataTable,
             BaseIcon,
             TablerInputIcon,
             SearchSimplePager,
             SearchStatusDisplay,
             TablerPageHeader,
-            DisplayTimestamp,
-            SpanMembershipStatus,
             SearchPerPageInput,
             SearchHeaderContainer,
             SearchSortInput,

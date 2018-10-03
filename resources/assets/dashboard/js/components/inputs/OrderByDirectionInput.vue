@@ -10,19 +10,22 @@
 </template>
 
 <script>
-    import baseIcon from '../../displays/BaseIcon';
-
-    const ASC = 'ASC';
-    const DESC = 'DESC';
+    import baseIcon from '../displays/BaseIcon';
+    import OrderBy from '../../utils/OrderBy';
 
     export default {
-        name: "search-sort-order-input",
+        name: "order-by-direction-input",
+
+        model:{
+            prop:'value',
+            event:'input'
+        },
 
         props: {
 
             value: {
                 type:String,
-                default:ASC,
+                default:OrderBy.ASC,
             },
 
             iconsFrom: {
@@ -36,8 +39,20 @@
 
         computed: {
             sortOrder: {
-                get() { return this.value; },
-                set(newValue) { this.$emit('input', newValue === DESC ? DESC : ASC ); }
+                get() {
+                    if(this.value === OrderBy.DESC || this.value === false) {
+                        return OrderBy.DESC;
+                    } else {
+                        return OrderBy.ASC;
+                    }
+                },
+                set(newValue) {
+                    if(newValue === OrderBy.DESC || newValue === false) {
+                        this.$emit('input', OrderBy.DESC );
+                    } else {
+                        this.$emit('input', OrderBy.ASC );
+                    }
+                }
             }
         },
 

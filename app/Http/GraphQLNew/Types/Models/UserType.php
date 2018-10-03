@@ -53,4 +53,20 @@ class UserType extends ModelType
             ]
         ];
     }
+
+    public function orderables()
+    {
+        return array_merge(parent::orderables(), [
+            'name' => [
+                'description' => 'Orders a user by the name.',
+                'query' => ['name','id'],
+                'cursorPattern' => ['name' => 'a*','id' => 'n'],
+            ],
+            'email' => [
+                'description' => 'Orders a user by the email.',
+                'query' => ['email','id'],
+                'cursorPattern' => ['email' => 'a*','id' => 'n'],
+            ],
+        ]);
+    }
 }

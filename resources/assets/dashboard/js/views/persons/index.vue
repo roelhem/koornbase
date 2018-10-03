@@ -39,7 +39,7 @@
                         </b-col>
 
                         <b-col lg="4">
-                            <search-sort-input v-bind="sortInputProps" v-on="sortInputListeners" />
+                            <order-by-input v-model="orderBy" :options="['id','firstName','lastName','createdAt','birthDate']" />
                         </b-col>
 
                         <b-col>
@@ -50,46 +50,7 @@
                     <!-- END: Parameters Bar -->
 
                     <!-- START: The Search Table -->
-                    <b-card no-body>
-                        <b-table class="card-table" :fields="tableFields" :items="rows">
-
-                            <template slot="avatar" slot-scope="{ item }">
-                                <person-avatar :person="item" size="md" />
-                            </template>
-
-                            <template slot="name" slot-scope="{ item }">
-                                <div><span-person-name :person-name="item.name" with-nickname /></div>
-                                <div class="small text-muted">
-                                    <span-person-name :person-name="item.name" formal />
-                                </div>
-                            </template>
-
-                            <template slot="birthDate" slot-scope="{ item }">
-                                <div>
-                                    <base-field title="Geboortedatum" name="birthDate">{{ item.birthDate | date('bday') }}</base-field>
-                                </div>
-                                <div class="small text-muted">(
-                                    <base-field title="Leeftijd" name="age">{{item.age }} jaar</base-field>  )</div>
-                            </template>
-
-                            <template slot="membershipStatus" slot-scope="{ item }">
-                                <div>
-                                    <span class="status-icon" :class="item.membershipStatus.type | membershipStatusColor "></span>
-                                    <base-field title="Status Lidmaatschap" name="membershipStatus.type">{{ item.membershipStatus.type | membershipStatusName }}</base-field>
-                                </div>
-                                <div class="small text-muted">
-                                    <base-field title="Status Lidmaatschap Sinds" name="membershipStatus.since">{{ item.membershipStatus.since | date('lg') }}</base-field>
-                                </div>
-                            </template>
-
-                            <template slot="links" slot-scope="{ item }">
-                                <router-link class="icon" :to="{name:'db.persons.view', params: {id: item.id} }">
-                                    <base-icon icon="more-vertical" from="fe" />
-                                </router-link>
-                            </template>
-
-                        </b-table>
-                    </b-card>
+                    <person-data-table v-bind="dataTableProps" v-on="dataTableListeners" />
                     <!-- END: The Search Table -->
 
 
@@ -110,11 +71,6 @@
                 <!-- START: The Sidebar Column -->
                 <b-col lg="3">
                     <search-column-select-card v-model="columns" :collapsed.sync="sidebarCards.columns.collapsed" />
-
-                    <pre>
-                        {{ filterValues }}
-                    </pre>
-
                 </b-col>
                 <!-- END: The Sidebar Column -->
 
@@ -142,82 +98,15 @@
     import displayFilters from '../../utils/filters/display';
     import SearchHeaderContainer from "../../components/features/table-search/SearchHeaderContainer";
     import SearchFilterTimestampCard from "../../components/features/table-search/SearchFilterTimestampCard";
-    import DisplayTimestamp from "../../components/displays/DisplayTimestamp";
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
-    import BaseField from "../../components/displays/BaseField";
-    import SpanPersonName from "../../components/displays/spans/SpanPersonName";
-    import PersonAvatar from "../../components/displays/PersonAvatar";
-
-
-
-    const peopleSearchColumns = [
-        {
-            key:'avatar',
-            label: '',
-            name:'Avatar',
-            visible:true,
-            thStyle:{'width':'1px'},
-            tdClass:'p-3'
-        },
-        {
-            key:'id',
-            label:'ID',
-            visible:false,
-            sortable:true,
-        },
-        {
-            key:'name',
-            label:'Hele Naam',
-            name:'Volledige Naam',
-            sortable:true,
-            visible:true,
-            formatter:function(value, key, item) {
-                return item.name;
-            }
-        },
-        {
-            key:'shortName',
-            label: 'Naam',
-            name:'Korte Naam',
-            visible:false
-        },
-        {
-            key:'nickname',
-            label:'Bijnaam',
-            name:'Bijnaam',
-            visible:false,
-            sortable:true,
-        },
-        {
-            key:'birthDate',
-            label:'Geboortedatum',
-            name:'Geboortedatum',
-            visible:true,
-            sortable:true,
-        },
-        {
-            key:'membershipStatus',
-            label:'Status Lidmaatschap',
-            name:'Lidstatus',
-            visible:true,
-            sortable:true,
-        },
-        {
-            key:'links',
-            label:'',
-            name:'Actieknoppen',
-            thStyle:{'width':'1px'},
-            visible:true,
-        },
-    ];
+    import PersonDataTable from "../../components/displays/PersonDataTable";
+    import OrderByInput from "../../components/inputs/OrderByInput";
 
     export default {
         components: {
-            PersonAvatar,
-            SpanPersonName,
-            BaseField,
+            OrderByInput,
+            PersonDataTable,
             TablerPageHeader,
-            DisplayTimestamp,
             SearchFilterTimestampCard,
             SearchHeaderContainer,
             SearchColumnSelectCard,
@@ -239,42 +128,32 @@
             queryKey:'persons',
             query: {
                 query: gql`
-                    query personsIndex {
-                        persons {
+                    query personsIndex($pageSize:Int = 10 $page:Int = 1 $orderBy:Person_orderByInput = id_ASC) {
+                        persons(first:$pageSize page:$page orderBy:$orderBy) {
+                            totalCount
+                            pageInfo {
+                                startIndex
+                                endIndex
+                            }
                             edges {
                                 node {
-                                    id
-                                    name { ...SpanPersonName }
-                                    ...PersonAvatar
-                                    membershipStatus { type since }
-                                    birthDate
-                                    age
+                                    ...PersonDataTableRow
                                 }
                             }
                         }
                     }
-                    ${SpanPersonName.fragment}
-                    ${PersonAvatar.fragment}
+                    ${PersonDataTable.rowFragment}
                 `,
                 variables() {
                     return {
                         page:this.page,
-                        limit:this.perPage,
-                        orderBy:this.sortBy,
-                        orderDir:this.sortDir,
-                        filter:this.filterValues,
-                        search:this.search
+                        pageSize:this.perPage,
+                        orderBy:this.orderBy ? this.orderBy.string : null,
                     }
                 }
             },
 
-            columns: peopleSearchColumns,
-
             recordsName: 'personen',
-        },
-
-        computed: {
-            rows() { return this.persons.edges.map(edge => edge.node); }
         },
 
         data: function() {
