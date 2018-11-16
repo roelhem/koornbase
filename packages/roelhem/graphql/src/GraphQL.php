@@ -13,6 +13,7 @@ use GraphQL\Error\Debug;
 use GraphQL\Server\StandardServer;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
+use Roelhem\GraphQL\Contracts\ErrorFormatterContract;
 use Roelhem\GraphQL\Contracts\TypeLoaderContract;
 use Roelhem\GraphQL\Resolvers\DefaultResolver;
 use Roelhem\GraphQL\Resolvers\ResolveContext;
@@ -22,6 +23,9 @@ class GraphQL
 
     /** @var TypeLoaderContract */
     protected $typeLoader;
+
+    /** @var ErrorFormatterContract */
+    protected $errorFormatter;
 
     /** @var Schema */
     protected $schema;
@@ -35,10 +39,12 @@ class GraphQL
     /**
      * GraphQL constructor.
      * @param TypeLoaderContract $typeLoader
+     * @param ErrorFormatterContract $errorFormatter
      */
-    public function __construct(TypeLoaderContract $typeLoader)
+    public function __construct(TypeLoaderContract $typeLoader, ErrorFormatterContract $errorFormatter)
     {
         $this->typeLoader = $typeLoader;
+        $this->errorFormatter = $errorFormatter;
     }
 
     /**
@@ -85,7 +91,8 @@ class GraphQL
                 'context' => $this->context(),
                 'queryBatching' => true,
                 'debug' => Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
-                'fieldResolver' => new DefaultResolver()
+                'fieldResolver' => new DefaultResolver(),
+                'errorFormatter' => $this->errorFormatter,
             ]);
         }
         return $this->server;

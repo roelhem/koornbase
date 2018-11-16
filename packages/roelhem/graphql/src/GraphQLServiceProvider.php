@@ -3,8 +3,10 @@
 namespace Roelhem\GraphQL;
 
 use Illuminate\Support\ServiceProvider;
+use Roelhem\GraphQL\Contracts\ErrorFormatterContract;
 use Roelhem\GraphQL\Contracts\TypeLoaderContract;
 use Roelhem\GraphQL\Contracts\TypeRepositoryContract;
+use Roelhem\GraphQL\Exceptions\ErrorFormatter;
 use Roelhem\GraphQL\Repositories\ConnectionTypeRepository;
 use Roelhem\GraphQL\Repositories\EnumTypeRepository;
 use Roelhem\GraphQL\Repositories\ModelTypeRepository;
@@ -28,6 +30,7 @@ class GraphQLServiceProvider extends ServiceProvider
         $this->registerHelper();
         $this->registerTypeRepository();
         $this->registerTypeLoader();
+        $this->registerErrorFormatter();
     }
 
     protected function registerHelper()
@@ -58,13 +61,20 @@ class GraphQLServiceProvider extends ServiceProvider
         $this->app->singleton(TypeLoader::class);
     }
 
+    protected function registerErrorFormatter()
+    {
+        $this->app->bind(ErrorFormatterContract::class, ErrorFormatter::class);
+        $this->app->singleton(ErrorFormatter::class);
+    }
+
 
     public function provides()
     {
         return [
             GraphQL::class,
             TypeRepositoryContract::class,
-            TypeLoaderContract::class
+            TypeLoaderContract::class,
+            ErrorFormatterContract::class,
         ];
     }
 

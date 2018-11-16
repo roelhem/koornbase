@@ -9,7 +9,7 @@
 namespace Roelhem\GraphQL\Fields;
 
 
-use Roelhem\Actions\Contracts\ActionContract;
+use Roelhem\GraphQL\Contracts\ActionContract;
 use Roelhem\GraphQL\Resolvers\ActionResolver;
 
 class ActionField extends MutationField
@@ -46,16 +46,13 @@ class ActionField extends MutationField
         return new ActionResolver($this->action);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- FIELD META-INFO ------------------------------------------------------------------------------------ //
-    // ---------------------------------------------------------------------------------------------------------- //
 
     /** @inheritdoc */
     public function name()
     {
         $name = parent::name();
         if(empty($name)) {
-            $name = camel_case($this->action->getName());
+            $name = camel_case($this->action->name());
         }
         return $name;
     }
@@ -65,9 +62,29 @@ class ActionField extends MutationField
     {
         $description = parent::description();
         if(empty($description)) {
-            $description = $this->action->getDescription();
+            $description = $this->action->description();
         }
         return $description;
+    }
+
+    /** @inheritdoc */
+    public function args()
+    {
+        $args = parent::args();
+        if($args === null) {
+            $args = $this->action->args();
+        }
+        return $args;
+    }
+
+    /** @inheritdoc */
+    public function type()
+    {
+        $type = parent::type();
+        if($type === null) {
+            $type = $this->action->type();
+        }
+        return $type;
     }
 
 }

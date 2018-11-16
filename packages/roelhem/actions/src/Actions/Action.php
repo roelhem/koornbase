@@ -12,7 +12,7 @@ namespace Roelhem\Actions\Actions;
 use Roelhem\Actions\Contracts\ActionContextContract;
 use Roelhem\Actions\Contracts\ActionContract;
 
-abstract class AbstractAction implements ActionContract
+abstract class Action implements ActionContract
 {
 
     /** @var string|null */
@@ -33,7 +33,7 @@ abstract class AbstractAction implements ActionContract
     public function run($args = [], ?ActionContextContract $context = null)
     {
         // Validate the arguments
-        $validator = $this->getValidator();
+        $validator = $this->getValidator($args);
         $validArgs = $validator->validate();
 
         // Handle the action.
@@ -45,7 +45,7 @@ abstract class AbstractAction implements ActionContract
     // ---------------------------------------------------------------------------------------------------------- //
 
     /** @inheritdoc */
-    public function getName()
+    public function name()
     {
         $name = $this->name;
         if($name === null) {
@@ -59,7 +59,7 @@ abstract class AbstractAction implements ActionContract
     }
 
     /** @inheritdoc */
-    public function getDescription()
+    public function description()
     {
         return $this->description;
     }
@@ -73,7 +73,12 @@ abstract class AbstractAction implements ActionContract
      *
      * @return array
      */
-    abstract public function rules();
+    public function rules() {
+        $args = collect($this->args());
+        return $args->map(function($value) {
+            return array_get($value, 'rules');
+        })->toArray();
+    }
 
 
     /**
@@ -83,7 +88,16 @@ abstract class AbstractAction implements ActionContract
      * @return \Illuminate\Validation\Validator
      */
     public function getValidator($args = []) {
-        return \Validator::make($args, $this->rules());
+        return \Validator::make($args, $this->rules())->after([$this, 'afterValidation']);
+    }
+
+    /**
+     * Some extra validation, after the standard validation from the rules.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     */
+    public function afterValidation($validator) {
+
     }
 
     // ---------------------------------------------------------------------------------------------------------- //

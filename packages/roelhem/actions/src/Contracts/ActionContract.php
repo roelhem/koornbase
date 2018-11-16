@@ -33,7 +33,7 @@ interface ActionContract
      *
      * @return string
      */
-    public function getName();
+    public function name();
 
     /**
      * Method that returns the description of the action. If there is no description available, this method will return
@@ -41,6 +41,13 @@ interface ActionContract
      *
      * @return string|null
      */
-    public function getDescription();
+    public function description();
+
+    /**
+     * Method that returns the definition of the available arguments of this action.
+     *
+     * @return array
+     */
+    public function args();
 
 }

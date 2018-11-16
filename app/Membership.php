@@ -65,7 +65,7 @@ class Membership extends Model implements OwnedByPerson
     protected $table = 'memberships';
 
     protected $dates = ['application','start','end','created_at','updated_at'];
-    protected $fillable = ['application','start','end','remarks'];
+    protected $fillable = ['person_id','application','start','end','remarks'];
 
     // ---------------------------------------------------------------------------------------------------------- //
     // ----- GETTER METHODS ------------------------------------------------------------------------------------- //

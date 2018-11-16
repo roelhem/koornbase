@@ -11,6 +11,8 @@ namespace Roelhem\GraphQL\Resolvers;
 
 use Illuminate\Support\Fluent;
 use Roelhem\Actions\Contracts\ActionContract;
+use Roelhem\GraphQL\Exceptions\ValidationException;
+use Roelhem\GraphQL\Resolvers\Middleware\WrapExceptions;
 
 class ActionResolver extends AbstractResolver
 {
@@ -22,7 +24,9 @@ class ActionResolver extends AbstractResolver
     {
         $this->action = $action;
 
-        parent::__construct($middleware);
+        parent::__construct(array_merge([
+            WrapExceptions::class
+        ],$middleware));
     }
 
     /**
@@ -37,6 +41,6 @@ class ActionResolver extends AbstractResolver
      */
     public function handle($source, $args, ResolveContext $context, ResolveStore $store)
     {
-        return $this->action->run($args, $context);
+        return $this->action->run($args->toArray(), $context);
     }
 }

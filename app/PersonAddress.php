@@ -75,7 +75,7 @@ class PersonAddress extends Model implements AddressInterface, OwnedByPerson
 
     protected $table = 'person_addresses';
 
-    protected $fillable = ['label',
+    protected $fillable = ['person_id','label',
                            'country_code','administrative_area','locality','dependent_locality','postal_code',
                            'sorting_code','address_line_1','address_line_2','organisation','locale',
                            'options','remarks'];

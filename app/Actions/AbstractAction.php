@@ -9,110 +9,24 @@
 namespace App\Actions;
 
 
-use App\Contracts\ActionContextContract;
-use App\Contracts\ActionContract;
+use Roelhem\Actions\Actions\Action;
+use Roelhem\GraphQL\Contracts\ActionContract as GraphQLActionContract;
+use Roelhem\GraphQL\Facades\GraphQL;
 
-abstract class AbstractAction implements ActionContract
+abstract class AbstractAction extends Action implements GraphQLActionContract
 {
-    /** @var string|null */
-    protected $name;
 
-    /** @var string|null */
-    protected $description;
-
-    /** @var ActionContextContract */
-    protected $context;
-
-    /** @var array */
-    protected $args;
-
-    /** @var array */
-    protected $validArgs;
-
-
-    protected $validator;
+    /** @var string The return type of the action */
+    protected $type;
 
     /**
-     * AbstractAction constructor.
-     * @param array $args
-     * @param ActionContextContract|null $context
-     */
-    public function __construct(array $args = [], ?ActionContextContract $context = null)
-    {
-        $this->context = $context;
-        $this->args = $args;
-
-        $this->validator = \Validator::make($args,$this->rules());
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- ACTION META-INFO ----------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /** @inheritdoc */
-    public function name()
-    {
-        $name = $this->name;
-        if($name === null) {
-            $reflection = new \ReflectionClass($this);
-            $name = $reflection->getShortName();
-            if(ends_with($name,'Action')) {
-                $name = str_before($name, 'Action');
-            }
-        }
-        return $name;
-    }
-
-    /** @inheritdoc */
-    public function description()
-    {
-        return $this->description;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- AUTHORIZATION -------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- VALIDATION ----------------------------------------------------------------------------------------- //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    /**
-     * @return \Illuminate\Validation\Validator
-     */
-    public function getValidator()
-    {
-        return $this->validator;
-    }
-
-    /** @inheritdoc */
-    public function validate()
-    {
-        $this->validArgs = $this->validator->validate();
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- //
-    // ----- EXECUTION ------------------------------------------------------------------------------------------ //
-    // ---------------------------------------------------------------------------------------------------------- //
-
-    public function execute()
-    {
-        $this->authorize();
-        $this->validate();
-        return $this->handle($this->validator->getData());
-    }
-
-    /**
-     * Method that handles the execution of the action after authorization and validation.
+     * Returns the type of this action, based on the value of the `$type` property.
      *
-     * @param array $args
-     * @return mixed
+     * @return \GraphQL\Type\Definition\Type
      */
-    abstract public function handle($args);
+    public function type()
+    {
+        return GraphQL::type($this->type);
+    }
 
 }

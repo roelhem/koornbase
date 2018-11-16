@@ -2,101 +2,102 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 17-08-18
- * Time: 04:36
+ * Date: 16/11/2018
+ * Time: 17:45
  */
 
-namespace App\Http\GraphQL\Mutations\Crud\Create;
+namespace App\Actions\Models\Create;
 
 
 use App\Person;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Error\ValidationError;
-use Rebing\GraphQL\Support\Mutation;
+use Roelhem\GraphQL\Facades\GraphQL;
 
-class CreatePersonAddressMutation extends Mutation
+class CreatePersonAddressAction extends AbstractCreateAction
 {
 
-    protected $attributes = [
-        'name' => 'createPersonAddress',
-        'description' => 'Adds a new (postal) address for a Person.'
-    ];
+    protected $description = 'Creates a new `Address` entry for a `Person`.';
 
-    public function type()
+
+    /** @inheritdoc */
+    public function afterValidation($validator)
     {
-        return \GraphQL::type('PersonAddress');
+        $data = $validator->getData();
+
+        // Get the person instance to who the membership will be created.
+        $person_id = array_get($data, 'person_id');
+        $person = Person::find($person_id);
+        if(!($person instanceof Person)) {
+            $validator->errors()->add('person_id','Can\'t find a person with person_id: '.$person_id.'.');
+            return;
+        }
+
+        // Checking if the label is unique for this person.
+        $label = array_get($data, 'label');
+        if($person->addresses()->where('label','=',$label)->exists()) {
+            $validator->errors()->add('label','There already exists an address for this person with this label.');
+        }
     }
 
+    /**
+     * Method that returns the definition of the available arguments of this action.
+     *
+     * @return array
+     */
     public function args()
     {
         return [
             'person_id' => [
                 'description' => 'The `ID` of the Person where this address belongs to.',
-                'type' => Type::nonNull(Type::id()),
+                'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons'],
             ],
             'label' => [
                 'description' => 'A short label for the new address that is unique of the Person.',
-                'type' => Type::nonNull(Type::string()),
+                'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255'],
             ],
             'remarks' => [
                 'description' => 'Some remarks associated with the newly added address',
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
             'country_code' => [
                 'description' => 'The Country-code of the country where the address is located',
-                'type' => \GraphQL::type('CountryCode'),
+                'type' => GraphQL::type('CountryCode'),
                 'rules' => ['country_code']
             ],
             'adminstative_area' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'locality' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'dependent_locality' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'postal_code' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','postal_code','nullable','string','max:255'],
             ],
             'sorting_code' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'address_line_1' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'address_line_2' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'organisation' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
         ];
     }
-
-    public function resolve($root, $args)
-    {
-        $person_id = array_get($args, 'person_id');
-        /** @var Person $person */
-        $person = Person::findOrFail($person_id);
-
-        $label = array_get($args, 'label');
-        if($person->addresses()->where('label','=',$label)->exists()) {
-            throw new ValidationError('There already exists a PersonAddress of this Person with the same label.');
-        }
-
-        return $person->addresses()->create(array_except($args, ['person_id']));
-    }
-
 }

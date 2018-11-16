@@ -2,59 +2,47 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 17-08-18
- * Time: 02:48
+ * Date: 16/11/2018
+ * Time: 17:42
  */
 
-namespace App\Http\GraphQL\Mutations\Crud\Create;
+namespace App\Actions\Models\Create;
 
+use Roelhem\GraphQL\Facades\GraphQL;
 
-use App\CertificateCategory;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
-
-class CreateCertificateCategoryMutation extends Mutation
+class CreateCertificateCategoryAction extends AbstractCreateAction
 {
 
-    protected $attributes = [
-        'name' => 'createCertificateCategory',
-        'description' => 'Creates a new CertificateCategory.'
-    ];
+    protected $description = 'Creates a new `CertificateCategory`.';
 
-    public function type()
-    {
-        return \GraphQL::type('CertificateCategory');
-    }
-
+    /**
+     * Method that returns the definition of the available arguments of this action.
+     *
+     * @return array
+     */
     public function args()
     {
         return [
             'name' => [
                 'description' => 'The name for the new CertificateCategory',
-                'type' => Type::nonNull(Type::string()),
+                'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255','unique:certificate_categories'],
             ],
             'name_short' => [
                 'description' => 'A short version of the name.',
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
             'description' => [
                 'description' => 'A description of the category.',
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
             'default_expire_years' => [
                 'description' => 'The default amount of years that a certificate of this category is valid.',
-                'type' => Type::int(),
+                'type' => GraphQL::type('Int'),
                 'rules' => ['nullable','integer'],
             ]
         ];
     }
-
-    public function resolve($root, $args)
-    {
-        return CertificateCategory::create($args);
-    }
-
 }
