@@ -12,8 +12,6 @@ namespace App\Http\GraphQLNew;
 
 use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Fields\ModelByIdField;
-use Roelhem\GraphQL\Resolvers\QueryModelByIdResolver;
-use Roelhem\GraphQL\Resolvers\QueryModelListResolver;
 use Roelhem\GraphQL\Resolvers\ResolveContext;
 use Roelhem\GraphQL\Types\QueryType;
 

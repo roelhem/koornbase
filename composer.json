@@ -54,7 +54,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Roelhem\\GraphQL\\" : "packages/roelhem/graphql/src"
+            "Roelhem\\GraphQL\\" : "packages/roelhem/graphql/src",
+            "Roelhem\\Actions\\" : "packages/roelhem/actions/src"
         }
     },
     "autoload-dev": {

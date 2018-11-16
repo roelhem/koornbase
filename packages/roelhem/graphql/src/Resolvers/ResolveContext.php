@@ -10,8 +10,9 @@ namespace Roelhem\GraphQL\Resolvers;
 
 
 use Illuminate\Contracts\Auth\Guard;
+use Roelhem\Actions\Contracts\ActionContextContract;
 
-class ResolveContext
+class ResolveContext implements ActionContextContract
 {
 
     /** @var Guard */
@@ -39,4 +40,15 @@ class ResolveContext
         return $user;
     }
 
+    /**
+     * Checks if this action context has the provided ability.
+     *
+     * @param string $ability
+     * @param array $attributes
+     * @return boolean
+     */
+    public function can($ability, $attributes = [])
+    {
+        return $this->user()->can($ability,$attributes);
+    }
 }

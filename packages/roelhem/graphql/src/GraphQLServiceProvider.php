@@ -2,14 +2,13 @@
 
 namespace Roelhem\GraphQL;
 
-use App\Http\GraphQLNew\Query;
 use Illuminate\Support\ServiceProvider;
 use Roelhem\GraphQL\Contracts\TypeLoaderContract;
 use Roelhem\GraphQL\Contracts\TypeRepositoryContract;
 use Roelhem\GraphQL\Repositories\ConnectionTypeRepository;
 use Roelhem\GraphQL\Repositories\EnumTypeRepository;
 use Roelhem\GraphQL\Repositories\ModelTypeRepository;
-use Roelhem\GraphQL\Repositories\QueryTypeRepository;
+use Roelhem\GraphQL\Repositories\EntryTypeRepository;
 use Roelhem\GraphQL\Repositories\RequiredTypeRepository;
 use Roelhem\GraphQL\Repositories\TypeLoader;
 use Roelhem\GraphQL\Repositories\TypeRepository;
@@ -43,12 +42,12 @@ class GraphQLServiceProvider extends ServiceProvider
         $this->app->singleton(TypeRepository::class, function() {
             return new TypeRepository([
                 new RequiredTypeRepository(),
+                new EntryTypeRepository( config('graphql.query'), config('graphql.mutation', null) ),
                 new EnumTypeRepository(  config('graphql.use.enums')      ),
                 new TypeRepository(      config('graphql.use.interfaces') ),
                 new TypeRepository(      config('graphql.use.scalars')    ),
                 new ModelTypeRepository( config('graphql.use.modelTypes') ),
                 new TypeRepository(      config('graphql.use.otherTypes') ),
-                new QueryTypeRepository( Query::class ),
             ]);
         });
     }

@@ -2,6 +2,8 @@
 
 return [
 
+    'query' => \App\Http\GraphQLNew\Query::class,
+    'mutation' => \App\Http\GraphQLNew\Mutation::class,
 
     'use' => [
         'enums' => [

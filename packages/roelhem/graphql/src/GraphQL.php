@@ -51,6 +51,7 @@ class GraphQL
         if($this->schema === null) {
             $this->schema = new Schema([
                 'query' => $this->type('Query'),
+                'mutation' => $this->type('Mutation'),
                 'typeLoader' => $this->typeLoader,
                 'types' => $this->types(),
             ]);
