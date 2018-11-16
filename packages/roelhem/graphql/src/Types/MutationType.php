@@ -18,7 +18,9 @@ abstract class MutationType extends ObjectType
 
     public $description = 'The entry point for the queries that change the state of the main database.';
 
-    protected $actions = [];
+    protected function actions() {
+        return [];
+    }
 
     protected function fields()
     {
@@ -26,6 +28,6 @@ abstract class MutationType extends ObjectType
 
             return new ActionField($value);
 
-        }, $this->actions);
+        }, $this->actions());
     }
 }

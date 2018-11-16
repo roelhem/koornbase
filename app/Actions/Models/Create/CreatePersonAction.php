@@ -20,7 +20,7 @@ class CreatePersonAction extends AbstractCreateAction
         return [
             'name_first' => [
                 'description' => 'The first name (Dutch:"voornaam") of the new `Person`.',
-                'type' => GraphQL::type('String'),
+                'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255']
             ],
             'name_middle' => [
@@ -58,20 +58,6 @@ class CreatePersonAction extends AbstractCreateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ]
-        ];
-    }
-
-    public function rules()
-    {
-        return [
-            'name_first'    => ['required','string','max:255'],
-            'name_middle'   => ['nullable','string','max:255'],
-            'name_prefix'   => ['nullable','string','max:63'],
-            'name_last'     => ['required','string','max:255'],
-            'name_initials' => ['nullable','string','max:63'],
-            'name_nickname' => ['nullable','string','max:63'],
-            'birth_date'    => ['nullable','date','before:now'],
-            'remarks'       => ['nullable','string'],
         ];
     }
 

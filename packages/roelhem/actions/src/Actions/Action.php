@@ -76,7 +76,7 @@ abstract class Action implements ActionContract
     public function rules() {
         $args = collect($this->args());
         return $args->map(function($value) {
-            return array_get($value, 'rules');
+            return array_get($value, 'rules', []);
         })->toArray();
     }
 
