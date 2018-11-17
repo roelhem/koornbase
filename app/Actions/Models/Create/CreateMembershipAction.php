@@ -62,8 +62,9 @@ class CreateMembershipAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the Person to which the newly created Membership belongs.',
+                'alias' => 'person_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons,id']
             ],

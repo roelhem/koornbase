@@ -28,8 +28,9 @@ class CreateCertificateCategoryAction extends AbstractCreateAction
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255','unique:certificate_categories'],
             ],
-            'name_short' => [
+            'shortName' => [
                 'description' => 'A short version of the name.',
+                'alias' => 'name_short',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
@@ -38,8 +39,9 @@ class CreateCertificateCategoryAction extends AbstractCreateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
-            'default_expire_years' => [
+            'defaultExpireYears' => [
                 'description' => 'The default amount of years that a certificate of this category is valid.',
+                'alias' => 'default_expire_years',
                 'type' => GraphQL::type('Int'),
                 'rules' => ['nullable','integer'],
             ]

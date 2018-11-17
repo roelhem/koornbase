@@ -20,8 +20,17 @@ use App\Actions\Models\Create\CreatePersonAddressAction;
 use App\Actions\Models\Create\CreatePersonEmailAddressAction;
 use App\Actions\Models\Create\CreatePersonPhoneNumberAction;
 use App\Actions\Models\Delete\DeleteAction;
+use App\Actions\Models\Restore\RestoreAction;
+use App\Actions\Models\Update\UpdateCertificateAction;
 use App\Actions\Models\Update\UpdateCertificateCategoryAction;
+use App\Actions\Models\Update\UpdateGroupAction;
+use App\Actions\Models\Update\UpdateGroupCategoryAction;
+use App\Actions\Models\Update\UpdateGroupEmailAddressAction;
+use App\Actions\Models\Update\UpdateMembershipAction;
+use App\Actions\Models\Update\UpdateOAuthClientAction;
 use App\Actions\Models\Update\UpdatePersonAction;
+use App\Actions\Models\Update\UpdatePersonEmailAddressAction;
+use App\Actions\Models\Update\UpdatePersonPhoneNumberAction;
 use Roelhem\GraphQL\Types\MutationType;
 
 class Mutation extends MutationType
@@ -56,8 +65,23 @@ class Mutation extends MutationType
             new DeleteAction('PersonPhoneNumber'),
 
             // UPDATE MODEL ACTIONS
-            UpdatePersonAction::class,
+            UpdateCertificateAction::class,
             UpdateCertificateCategoryAction::class,
+            UpdateGroupAction::class,
+            UpdateGroupCategoryAction::class,
+            UpdateGroupEmailAddressAction::class,
+            UpdateMembershipAction::class,
+            UpdateOAuthClientAction::class,
+            UpdatePersonAction::class,
+            UpdatePersonEmailAddressAction::class,
+            UpdatePersonPhoneNumberAction::class,
+
+
+            // RESTORE MODEL ACTIONS
+            new RestoreAction('CertificateCategory'),
+            new RestoreAction('GroupCategory'),
+            new RestoreAction('Group'),
+            new RestoreAction('Person'),
         ];
     }
 }

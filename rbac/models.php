@@ -1,5 +1,11 @@
 <?php
 
+/** @var \App\Http\GraphQLNew\Mutation $mutations */
+$mutations = resolve(\App\Http\GraphQLNew\Mutation::class);
+
+foreach($mutations->actions() as $action) {
+    Rbac::actionPermission($action);
+}
 
 
 function createTrashedAbilities($modelClass) {

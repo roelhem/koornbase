@@ -42,8 +42,9 @@ class CreatePersonPhoneNumberAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the Person where this new phone number belongs to.',
+                'alias' => 'person_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons'],
             ],
@@ -57,13 +58,15 @@ class CreatePersonPhoneNumberAction extends AbstractCreateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
-            'phone_number' => [
+            'phoneNumber' => [
                 'description' => 'The phone number to add.',
+                'alias' => 'phone_number',
                 'type' =>GraphQL::type('String!'),
                 'rules' => ['required','phone'],
             ],
-            'country_code' => [
+            'countryCode' => [
                 'description' => 'The country code of the country where the phone number is registered.',
+                'alias' => 'country_code',
                 'type' => GraphQL::type('CountryCode'),
                 'rules' => ['country_code'],
             ]

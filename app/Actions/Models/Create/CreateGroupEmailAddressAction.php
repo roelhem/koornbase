@@ -10,7 +10,7 @@ namespace App\Actions\Models\Create;
 
 
 use App\Group;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class CreateGroupEmailAddressAction extends AbstractCreateAction
@@ -20,10 +20,10 @@ class CreateGroupEmailAddressAction extends AbstractCreateAction
      * Handles the action with all the validated arguments.
      *
      * @param array $validArgs
-     * @param null|ActionContextContract $context
+     * @param null|ActionContext $context
      * @return mixed
      */
-    protected function handle($validArgs = [], ?ActionContextContract $context = null)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         $group_id = array_get($validArgs, 'group_id');
         /** @var Group $group */
@@ -40,13 +40,15 @@ class CreateGroupEmailAddressAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'group_id' => [
+            'groupId' => [
                 'description' => 'The `ID` of the Group that should be associated with this new email-address.',
+                'alias' => 'group_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:groups,id'],
             ],
-            'email_address' => [
+            'emailAddress' => [
                 'description' => 'The new email-address itself.',
+                'alias' => 'email_address',
                 'type' => GraphQL::type('Email!'),
                 'rules' => ['required','email','max:255','unique:group_email_addresses'],
             ],

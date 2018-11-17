@@ -10,7 +10,7 @@ namespace App\Actions\Models\Create;
 
 
 use App\GroupCategory;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class CreateGroupAction extends AbstractCreateAction
@@ -19,7 +19,7 @@ class CreateGroupAction extends AbstractCreateAction
     protected $description = "Creates a new `Group` in the database.";
 
     /** @inheritdoc */
-    protected function handle($validArgs = [], ?ActionContextContract $context = null)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         $category_id = array_get($validArgs, 'category_id');
         /** @var GroupCategory $category */
@@ -32,8 +32,9 @@ class CreateGroupAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'category_id' => [
+            'categoryId' => [
                 'description' => 'The `ID` of the GroupCategory to which this new Group should belong.',
+                'alias' => 'category_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:group_categories,id'],
             ],
@@ -42,13 +43,15 @@ class CreateGroupAction extends AbstractCreateAction
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255','unique:groups'],
             ],
-            'name_short' => [
+            'shortName' => [
                 'description' => 'A short version of the name.',
+                'alias' => 'name_short',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'member_name' => [
+            'memberName' => [
                 'description' => 'The name that you should call a person that is a member of this new Group.',
+                'alias' => 'member_name',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:255'],
             ],

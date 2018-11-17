@@ -18,38 +18,45 @@ class CreatePersonAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'name_first' => [
+            'firstName' => [
                 'description' => 'The first name (Dutch:"voornaam") of the new `Person`.',
+                'alias' => 'name_first',
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255']
             ],
-            'name_middle' => [
+            'middleName' => [
                 'description' => 'The additional names (Dutch:"tussennamen") of the new `Person`.',
+                'alias' => 'name_middle',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:255'],
             ],
-            'name_prefix' => [
+            'prefixName' => [
                 'description' => 'The prefix of the last name (Dutch:"tussenvoegsel") of the new `Person`.',
+                'alias' => 'name_prefix',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'name_last' => [
+            'lastName' => [
                 'description' => 'The last name (Dutch:"achternaam") of the new `Person`. This should NOT include the prefix that is common in Dutch last names (like "van", "de", "der", etc. )',
+                'alias' => 'name_last',
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255']
             ],
-            'name_initials' => [
+            'initials' => [
                 'description' => 'The initials (Dutch:"voorletters") of the new `Person`.',
+                'alias' => 'name_initials',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'name_nickname' => [
+            'nickname' => [
                 'description' => 'The nickname (Dutch:"bijnaam") of the new `Person`. This should be the nickname of this `Person` that is commonly used by the members of the Koornbeurs.',
+                'alias' => 'name_nickname',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'birth_date' => [
+            'birthDate' => [
                 'description' => 'The date on which the new `Person` was born.',
+                'alias' => 'birth_date',
                 'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date','before:now']
             ],

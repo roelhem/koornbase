@@ -3,6 +3,7 @@
 namespace Roelhem\RbacGraph\Services\Builders\Traits;
 
 use Illuminate\Routing\Route;
+use Roelhem\Actions\Contracts\ActionContract;
 use Roelhem\RbacGraph\Contracts\Services\Builder;
 use Roelhem\RbacGraph\Contracts\Services\NodeBuilder;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
@@ -90,6 +91,43 @@ trait ImplementBuilderShortcuts
         return $this->node(NodeType::ROUTE_PERMISSION, $name, [
             'route' => $route
         ]);
+    }
+
+    public function actionPermission($action, ?string $name = null ) {
+        $type = NodeType::ACTION_PERMISSION;
+
+        if(is_string($action)) {
+            if(class_exists($action)) {
+                $action = resolve($action);
+            }
+        }
+
+        if(!($action instanceof ActionContract)) {
+            throw new \InvalidArgumentException("Can't find an action for this actionPermission.");
+        }
+
+        if($name === null) {
+            $type = NodeType::get($type);
+            $name = $type->conf('default-values.name-prefix').$action->name();
+        }
+
+        $config = [
+            'actionClass' => get_class($action),
+            'actionName' => $action->name(),
+            'actionDescription' => $action->description(),
+        ];
+
+        if($action instanceof \Roelhem\GraphQL\Contracts\ActionContract) {
+            $config['actionType'] = $action->type()->name;
+        }
+
+        if(method_exists($action,'getModelClass')) {
+            $config['modelClass'] = $action->getModelClass();
+        }
+
+        return $this->node(NodeType::ACTION_PERMISSION, $name, $config)
+            ->title("Allow the `{$action->name()}` action")
+            ->description("ACTION DESCRIPTION:\n".$action->description());
     }
 
     /**

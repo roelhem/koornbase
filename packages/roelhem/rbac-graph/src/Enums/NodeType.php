@@ -59,6 +59,7 @@ final class NodeType extends Enum implements Arrayable
     // PERMISSIONS
     public const PERMISSION = 30;
     public const ROUTE_PERMISSION = 31;
+    public const ACTION_PERMISSION = 32;
 
 
     public const ABILITY = 40;

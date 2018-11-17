@@ -43,8 +43,9 @@ class CreatePersonEmailAddressAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the Person where this new email address belongs to.',
+                'alias' => 'person_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons'],
             ],
@@ -58,8 +59,9 @@ class CreatePersonEmailAddressAction extends AbstractCreateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
-            'email_address' => [
+            'emailAddress' => [
                 'description' => 'The E-mail address to add.',
+                'alias' => 'emailAddress',
                 'type' => GraphQL::type('Email'),
                 'rules' => ['required','email','max:255'],
             ]

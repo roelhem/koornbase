@@ -28,8 +28,9 @@ class CreateGroupCategoryAction extends AbstractCreateAction
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255','unique:group_categories'],
             ],
-            'name_short' => [
+            'shortName' => [
                 'description' => 'A short version of the name.',
+                'alias' => 'shortName',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],

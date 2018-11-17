@@ -147,6 +147,20 @@ ROUTE_PERMISSION:
     name-prefix: 'ROUTE:'
 
 
+ACTION_PERMISSION:
+  description:
+    A permission that is needed to run a certain action.
+  style:
+    console:
+      fg-color: green
+    bootstrap:
+      bg-color: green
+      fg-color: white
+  edges: !like PERMISSION
+  options:
+    action: !required string
+  default-values:
+    name-prefix: 'ACTION:'
 
 
 ABILITY:

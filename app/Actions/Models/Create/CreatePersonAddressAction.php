@@ -46,8 +46,9 @@ class CreatePersonAddressAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the Person where this address belongs to.',
+                'alias' => 'person_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons'],
             ],
@@ -61,37 +62,44 @@ class CreatePersonAddressAction extends AbstractCreateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
-            'country_code' => [
+            'countryCode' => [
                 'description' => 'The Country-code of the country where the address is located',
+                'alias' => 'country_code',
                 'type' => GraphQL::type('CountryCode'),
                 'rules' => ['country_code']
             ],
-            'adminstative_area' => [
+            'administrativeArea' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'administrative_area',
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'locality' => [
                 'type' => GraphQL::type('String'),
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
-            'dependent_locality' => [
+            'dependentLocality' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'dependent_locality',
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
-            'postal_code' => [
+            'postalCode' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'postal_code',
                 'rules' => ['address_field','postal_code','nullable','string','max:255'],
             ],
-            'sorting_code' => [
+            'sortingCode' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'sorting_code',
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
-            'address_line_1' => [
+            'addressLine1' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'address_line_1',
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
-            'address_line_2' => [
+            'addressLine2' => [
                 'type' => GraphQL::type('String'),
+                'alias' => 'address_line_2',
                 'rules' => ['address_field','nullable','string','max:255'],
             ],
             'organisation' => [

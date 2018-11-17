@@ -10,7 +10,7 @@ namespace App\Actions\Models\Create;
 
 
 use App\Enums\OAuthClientType;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class CreateOAuthClientAction extends AbstractCreateAction
@@ -20,10 +20,10 @@ class CreateOAuthClientAction extends AbstractCreateAction
      * Handles the action with all the validated arguments.
      *
      * @param array $validArgs
-     * @param null|ActionContextContract $context
+     * @param null|ActionContext $context
      * @return mixed
      */
-    protected function handle($validArgs = [], ?ActionContextContract $context = null)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         /** @var OAuthClientType $type */
         $type = array_get($validArgs, 'type', OAuthClientType::AUTH_CODE());
@@ -52,8 +52,9 @@ class CreateOAuthClientAction extends AbstractCreateAction
                 'description' => 'The URL to which an User is redirected after it authorized the client.',
                 'rules' => ['nullable','url']
             ],
-            'user_id' => [
+            'userId' => [
                 'type' => GraphQL::type('ID'),
+                'alias' => 'user_id',
                 'description' => 'The `ID` of the User that should manage this client. If this value is ommitted or set to `null`, the `ID` of the current User will be used.',
                 'rules' => ['nullable','exists:users,id']
             ],

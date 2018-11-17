@@ -10,9 +10,11 @@ namespace Roelhem\GraphQL\Resolvers;
 
 
 use Illuminate\Contracts\Auth\Guard;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
+use Roelhem\Actions\Contracts\ActionGraphContext;
+use Roelhem\RbacGraph\Contracts\Graphs\AuthorizableGraph;
 
-class ResolveContext implements ActionContextContract
+class ResolveContext implements ActionContext
 {
 
     /** @var Guard */

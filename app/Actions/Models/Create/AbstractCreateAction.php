@@ -10,8 +10,9 @@ namespace App\Actions\Models\Create;
 
 
 use App\Actions\Models\AbstractModelAction;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
 
 abstract class AbstractCreateAction extends AbstractModelAction
 {
@@ -20,12 +21,23 @@ abstract class AbstractCreateAction extends AbstractModelAction
      * Default create action, by calling the create-method on the modelClass, with the validated arguments as parameter.
      *
      * @param array $validArgs
-     * @param null|ActionContextContract $context
+     * @param null|ActionContext $context
      * @return Model
      */
-    protected function handle($validArgs = [], ?ActionContextContract $context = null)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         return call_user_func([$this->getModelClass(), 'create'],$validArgs);
+    }
+
+    /** @inheritdoc */
+    public function authorizeArguments($validArgs = [], ?ActionContext $context = null)
+    {
+        parent::authorizeArguments($validArgs, $context);
+
+        // Check if the update ability for this model is allowed in this context.
+        if(!$context->can('create', $this->getModelClass())) {
+            throw new AuthorizationException("Not allowed to create a `{$this->type()->name}`.");
+        };
     }
 
     /** @inheritdoc */

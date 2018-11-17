@@ -23,33 +23,39 @@ class CreateCertificateAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'category_id' => [
+            'categoryId' => [
                 'description' => 'The CertificateCategory of the new Certificate',
+                'alias' => 'category_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:certificate_categories,id'],
             ],
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the Person for whom this Certificate is valid.',
+                'alias' => 'person_id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons,id'],
             ],
-            'examination_at' => [
+            'examinationDate' => [
                 'description' => 'The date on which the examination of the new Certificate took/will take place.',
+                'alias' => 'examination_at',
                 'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date'],
             ],
-            'passed' => [
+            'examinationPassed' => [
                 'description' => 'If the person passed the exam for the Certificate.',
+                'alias' => 'passed',
                 'type' => GraphQL::type('Boolean'),
                 'rules' => ['boolean'],
             ],
-            'valid_at' => [
+            'validDate' => [
                 'description' => 'The first date on which this Certificate is/will be valid.',
+                'alias' => 'valid_at',
                 'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date','after_or_equal_fields:examination_at'],
             ],
-            'expired_at' => [
+            'expireDate' => [
                 'description' => 'The first date on which this Certificate is/will be expired.',
+                'alias' => 'expire_at',
                 'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date','after_or_equal_fields:valid_at,examination_at'],
             ],

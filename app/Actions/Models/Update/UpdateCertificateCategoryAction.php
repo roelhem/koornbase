@@ -27,8 +27,9 @@ class UpdateCertificateCategoryAction extends AbstractUpdateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['sometimes','required','string','max:255'],
             ],
-            'name_short' => [
+            'shortName' => [
                 'description' => 'A new short version of the name of the CertificateCategory.',
+                'alias' => 'name_short',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
@@ -37,8 +38,9 @@ class UpdateCertificateCategoryAction extends AbstractUpdateAction
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
-            'default_expire_years' => [
+            'defaultExpireYears' => [
                 'description' => 'The mew default amount of years that a certificate of this category is valid.',
+                'alias' => 'default_expire_years',
                 'type' => GraphQL::type('Int'),
                 'rules' => ['nullable','integer'],
             ]

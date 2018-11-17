@@ -22,11 +22,11 @@ interface ActionContract
      * the action was successful. Otherwise, it will throw an exception.
      *
      * @param array $args
-     * @param null|ActionContextContract $context
+     * @param null|ActionContext $context
      * @return mixed
      * @throws
      */
-    public function run($args = [], ?ActionContextContract $context = null);
+    public function run($args = [], ?ActionContext $context = null);
 
     /**
      * Method that returns the name of the action.

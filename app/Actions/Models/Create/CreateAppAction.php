@@ -24,7 +24,8 @@ class CreateAppAction extends AbstractCreateAction
                 'type' => GraphQL::type('String!'),
                 'rules' => ['required','string','max:255'],
             ],
-            'name_short' => [
+            'shortName' => [
+                'alias' => 'name_short',
                 'description' => 'A shorter name to describe the App.',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63']
@@ -38,3 +39,19 @@ class CreateAppAction extends AbstractCreateAction
     }
 
 }
+
+/*
+
+[
+				"__schema",
+				"types",
+				95,
+				"fields",
+				20,
+				"args",
+				6,
+				"type"
+			]
+
+
+ */

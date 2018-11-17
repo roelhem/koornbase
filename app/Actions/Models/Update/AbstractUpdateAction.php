@@ -10,8 +10,9 @@ namespace App\Actions\Models\Update;
 
 
 use App\Actions\Models\AbstractModelAction;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
-use Roelhem\Actions\Contracts\ActionContextContract;
+use Roelhem\Actions\Contracts\ActionContext;
 
 abstract class AbstractUpdateAction extends AbstractModelAction
 {
@@ -46,15 +47,20 @@ abstract class AbstractUpdateAction extends AbstractModelAction
      * Default update action, by calling the update-method on the model instance.
      *
      * @param array $validArgs
-     * @param null|ActionContextContract $context
+     * @param null|ActionContext $context
      * @return Model
      * @throws
      */
-    protected function handle($validArgs = [], ?ActionContextContract $context = null)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         $id = array_get($validArgs,'id');
         /** @var Model $model */
         $model = call_user_func([$this->getModelClass(), 'findOrFail'], $id);
+
+        // Check if the update ability for this model is allowed in this context.
+        if(!$context->can('update', $model)) {
+            throw new AuthorizationException("Not allowed to update this model.");
+        };
 
         // Fill the values of the model
         $model->fill(array_except($validArgs,'id'));

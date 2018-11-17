@@ -10,6 +10,7 @@ namespace Roelhem\RbacGraph\Contracts\Services;
 
 
 use Illuminate\Routing\Route;
+use Roelhem\Actions\Contracts\ActionContract;
 use Roelhem\RbacGraph\Contracts\Rules\DynamicRole;
 use Roelhem\RbacGraph\Contracts\Rules\GateRule;
 
@@ -65,6 +66,13 @@ interface BuilderShortcuts
      * @return NodeBuilder
      */
     public function routePermission( $route, ?string $name = null );
+
+    /**
+     * @param string|ActionContract $action
+     * @param null|string $name
+     * @return mixed
+     */
+    public function actionPermission( $action, ?string $name = null );
 
     /**
      * @param string $ability

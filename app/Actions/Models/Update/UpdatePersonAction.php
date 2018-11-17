@@ -19,46 +19,45 @@ class UpdatePersonAction extends AbstractUpdateAction
     {
         return [
             'id' => [
-                'name' => 'id',
                 'type' => GraphQL::type('ID!'),
                 'rules' => ['required']
             ],
-            'name_first' => [
-                'name' => 'name_first',
+            'firstName' => [
+                'alias' => 'name_first',
                 'type' => GraphQL::type('String'),
                 'rules' => ['sometimes','required','string','max:255']
             ],
-            'name_middle' => [
-                'name' => 'name_middle',
+            'middleName' => [
+                'alias' => 'name_middle',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:255'],
             ],
-            'name_prefix' => [
-                'name' => 'name_prefix',
+            'prefixName' => [
+                'alias' => 'name_prefix',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'name_last' => [
-                'name' => 'name_last',
+            'lastName' => [
+                'alias' => 'name_last',
                 'type' => GraphQL::type('String'),
                 'rules' => ['sometimes','required','string','max:255']
             ],
-            'name_initials' => [
-                'name' => 'name_initials',
+            'initials' => [
+                'alias' => 'name_initials',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:63'],
             ],
-            'name_nickname' => [
+            'nickname' => [
+                'alias' => GraphQL::type('String'),
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:255'],
             ],
-            'birth_date' => [
-                'name' => 'birth_date',
+            'birthDate' => [
+                'alias' => 'birth_date',
                 'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date','before:now']
             ],
             'remarks' => [
-                'name' => 'remarks',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ]

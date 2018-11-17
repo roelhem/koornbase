@@ -47,6 +47,10 @@ trait BuilderShortcutsImplementation
         return $this->builder()->routePermission($route, $name);
     }
 
+    public function actionPermission( $action, ?string $name = null ) {
+        return $this->builder()->actionPermission($action, $name);
+    }
+
     public function ability( string $ability, ?string $name = null ) {
         return $this->builder()->ability($ability, $name);
     }
