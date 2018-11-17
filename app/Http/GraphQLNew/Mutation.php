@@ -15,12 +15,16 @@ use App\Actions\Models\Create\CreateCertificateCategoryAction;
 use App\Actions\Models\Create\CreateGroupAction;
 use App\Actions\Models\Create\CreateGroupEmailAddressAction;
 use App\Actions\Models\Create\CreateMembershipAction;
+use App\Actions\Models\Create\CreateOAuthClientAction;
 use App\Actions\Models\Create\CreatePersonAction;
 use App\Actions\Models\Create\CreatePersonAddressAction;
 use App\Actions\Models\Create\CreatePersonEmailAddressAction;
 use App\Actions\Models\Create\CreatePersonPhoneNumberAction;
 use App\Actions\Models\Delete\DeleteAction;
+use App\Actions\Models\NewMembershipApplicationAction;
 use App\Actions\Models\Restore\RestoreAction;
+use App\Actions\Models\StartMembershipAction;
+use App\Actions\Models\StopMembershipAction;
 use App\Actions\Models\Update\UpdateCertificateAction;
 use App\Actions\Models\Update\UpdateCertificateCategoryAction;
 use App\Actions\Models\Update\UpdateGroupAction;
@@ -46,6 +50,7 @@ class Mutation extends MutationType
             CreateCertificateAction::class,
             CreateCertificateCategoryAction::class,
             CreateGroupEmailAddressAction::class,
+            CreateOAuthClientAction::class,
             CreateMembershipAction::class,
             CreatePersonAddressAction::class,
             CreatePersonEmailAddressAction::class,
@@ -82,6 +87,12 @@ class Mutation extends MutationType
             new RestoreAction('GroupCategory'),
             new RestoreAction('Group'),
             new RestoreAction('Person'),
+
+
+            // OTHER MODEL ACTIONS
+            NewMembershipApplicationAction::class,
+            StartMembershipAction::class,
+            StopMembershipAction::class,
         ];
     }
 }

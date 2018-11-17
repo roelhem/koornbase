@@ -68,11 +68,11 @@
             value() {
                 if(this.person.name) {
                     return {
-                        name_first: this.person.name.first || null,
-                        name_middle: this.person.name.middle || null,
-                        name_prefix: this.person.name.prefix || null,
-                        name_last: this.person.name.last || null,
-                        name_initials: this.person.name.initials || null
+                        firstName: this.person.name.first || null,
+                        middleName: this.person.name.middle || null,
+                        prefixName: this.person.name.prefix || null,
+                        lastName: this.person.name.last || null,
+                        initials: this.person.name.initials || null
                     }
                 }
             }

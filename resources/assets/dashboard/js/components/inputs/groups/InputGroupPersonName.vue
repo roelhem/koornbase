@@ -8,11 +8,11 @@
             <!-- start NAME_FIRST COLUMN -->
             <b-col lg="4">
                 <tabler-form-group label="Voornaam"
-                                   :label-for="getId('name_first')"
+                                   :label-for="getId('firstName')"
                                    required
                 >
-                    <b-form-input :id="getId('name_first')"
-                                  v-model="name_first"
+                    <b-form-input :id="getId('firstName')"
+                                  v-model="firstName"
                                   :size="size"
                                   placeholder="Voornaam/roepnaam..."
                     ></b-form-input>
@@ -25,10 +25,10 @@
             <!-- start NAME_MIDDLE COLUMN -->
             <b-col lg="8">
                 <tabler-form-group label="Overige namen"
-                                   :label-for="getId('name_middle')"
+                                   :label-for="getId('middleName')"
                 >
-                    <b-form-input :id="getId('name_middle')"
-                                  v-model="name_middle"
+                    <b-form-input :id="getId('middleName')"
+                                  v-model="middleName"
                                   :size="size"
                                   placeholder="Overige voornamen, tweede naam, ..."
                     ></b-form-input>
@@ -48,10 +48,10 @@
             <!-- start NAME_INITIALS COLUMN -->
             <b-col lg="3">
                 <tabler-form-group label="Voorletters"
-                                   :label-for="getId('name_initials')"
+                                   :label-for="getId('initials')"
                 >
-                    <b-form-input :id="getId('name_initials')"
-                                  v-model="name_initials"
+                    <b-form-input :id="getId('initials')"
+                                  v-model="initials"
                                   :size="size"
                                   placeholder="Voorletters/initialen..."
                     ></b-form-input>
@@ -64,10 +64,10 @@
             <!-- start NAME_PREFIX COLUMN -->
             <b-col lg="2">
                 <tabler-form-group label="Tussenvoegsel"
-                                   :label-for="getId('name_prefix')"
+                                   :label-for="getId('prefixName')"
                 >
-                    <b-form-input :id="getId('name_prefix')"
-                                  v-model="name_prefix"
+                    <b-form-input :id="getId('prefixName')"
+                                  v-model="prefixName"
                                   :size="size"
                                   placeholder="de, van der, ..."
                     ></b-form-input>
@@ -79,11 +79,11 @@
             <!-- start NAME_LAST COLUMN -->
             <b-col lg="7">
                 <tabler-form-group label="Achternaam"
-                                   :label-for="getId('name_last')"
+                                   :label-for="getId('lastName')"
                                    required
                 >
-                    <b-form-input :id="getId('name_last')"
-                                  v-model="name_last"
+                    <b-form-input :id="getId('lastName')"
+                                  v-model="lastName"
                                   :size="size"
                                   placeholder="Achternaam/familienaam..."
                     ></b-form-input>
@@ -127,11 +127,11 @@
                 type:Object,
                 default() {
                     return {
-                        name_first:null,
-                        name_middle:null,
-                        name_prefix:null,
-                        name_last:null,
-                        name_initials:null,
+                        firstName:null,
+                        middleName:null,
+                        prefixName:null,
+                        lastName:null,
+                        initials:null,
                     };
                 }
             },
@@ -141,29 +141,29 @@
 
 
         computed:{
-            name_first: {
-                get() { return this.getValue('name_first'); },
-                set(newValue) { this.setValue('name_first', newValue); },
+            firstName: {
+                get() { return this.getValue('firstName'); },
+                set(newValue) { this.setValue('firstName', newValue); },
             },
 
-            name_middle: {
-                get() { return this.getValue('name_middle'); },
-                set(newValue) { this.setValue('name_middle', newValue); },
+            middleName: {
+                get() { return this.getValue('middleName'); },
+                set(newValue) { this.setValue('middleName', newValue); },
             },
 
-            name_prefix: {
-                get() { return this.getValue('name_prefix'); },
-                set(newValue) { this.setValue('name_prefix', newValue); },
+            prefixName: {
+                get() { return this.getValue('prefixName'); },
+                set(newValue) { this.setValue('prefixName', newValue); },
             },
 
-            name_last: {
-                get() { return this.getValue('name_last'); },
-                set(newValue) { this.setValue('name_last', newValue); },
+            lastName: {
+                get() { return this.getValue('lastName'); },
+                set(newValue) { this.setValue('lastName', newValue); },
             },
 
-            name_initials: {
-                get() { return this.getValue('name_initials'); },
-                set(newValue) { this.setValue('name_initials', newValue); },
+            initials: {
+                get() { return this.getValue('initials'); },
+                set(newValue) { this.setValue('initials', newValue); },
             },
         },
 

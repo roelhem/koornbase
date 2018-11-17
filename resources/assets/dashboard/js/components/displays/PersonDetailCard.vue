@@ -152,31 +152,35 @@
 
             handleSubmitName(newValue) {
                 const id = this.person.id;
-                const name_first = newValue.name_first;
-                const name_middle = newValue.name_middle;
-                const name_initials = newValue.name_initials;
-                const name_prefix = newValue.name_prefix;
-                const name_last = newValue.name_last;
-
-                const name_nickname = this.person.name_nickname;
-                const name_short = name_nickname ? name_nickname : name_first;
-
                 this.$apollo.mutate({
                     mutation:gql`
-                        mutation updatePersonName($id:ID!, $name_first:String, $name_middle:String, $name_initials:String, $name_prefix:String, $name_last:String) {
-                            updatePerson(id:$id, name_first:$name_first, name_middle:$name_middle, name_initials:$name_initials, name_prefix:$name_prefix, name_last:$name_last) {
-                                id name_first name_middle name_initials name_prefix name_last
-                                name_short
+                        mutation updatePersonName($id:ID!, $firstName:String, $middleName:String, $initials:String, $prefixName:String, $lastName:String) {
+                            updatePerson(id:$id, firstName:$firstName, middleName:$middleName, initials:$initials, prefixName:$prefixName, lastName:$lastName) {
+                                id
+                                name {
+                                    first
+                                    middle
+                                    initials
+                                    prefix
+                                    last
+                                }
                             }
                         }
                     `,
-                    variables: { id, name_first, name_middle, name_initials, name_prefix, name_last },
+                    variables: { id, ...newValue },
                     optimisticResponse: {
                         __typename:'Mutation',
                         updatePerson: {
                             __typename:'Person',
-                            id, name_first, name_middle, name_initials, name_prefix, name_last,
-                            name_short
+                            id,
+                            name: {
+                                __typename:'PersonName',
+                                first: newValue.firstName,
+                                middle: newValue.middleName,
+                                initials: newValue.initials,
+                                prefix: newValue.prefixName,
+                                last: newValue.lastName,
+                            }
                         }
                     }
                 }).then(data => console.log(data));
@@ -184,24 +188,26 @@
 
             handleSubmitNickname(newValue) {
                 const id = this.person.id;
-                const name_nickname = newValue;
-
-                const name_short = name_nickname ? name_nickname : this.person.name_first;
+                const nickname = newValue;
 
                 this.$apollo.mutate({
                     mutation:gql`
-                        mutation updatePersonNickname($id:ID!, $name_nickname:String) {
-                            updatePerson(id:$id, name_nickname:$name_nickname) {
-                                id name_nickname name_short
+                        mutation updatePersonNickname($id:ID!, $nickname:String) {
+                            updatePerson(id:$id, nickname:$nickname) {
+                                id name { nickname }
                             }
                         }
                     `,
-                    variables: { id, name_nickname },
+                    variables: { id, nickname },
                     optimisticResponse: {
                         __typename:'Mutation',
                         updatePerson: {
                             __typename:'Person',
-                            id, name_nickname, name_short
+                            id,
+                            name: {
+                                nickname,
+                                __typename:'PersonName',
+                            }
                         }
                     }
                 }).then(data => console.log(data));
@@ -209,23 +215,23 @@
 
             handleSubmitBirthDate(newValue) {
                 const id = this.person.id;
-                const birth_date = newValue;
+                const birthDate = newValue;
 
                 this.$apollo.mutate({
                     mutation:gql`
-                        mutation updatePersonBirthDate($id:ID!, $birth_date:Date) {
-                            updatePerson(id:$id, birth_date:$birth_date) {
+                        mutation updatePersonBirthDate($id:ID!, $birthDate:Date) {
+                            updatePerson(id:$id, birthDate:$birthDate) {
                                 id
-                                birth_date
+                                birthDate
                             }
                         }
                     `,
-                    variables: {id, birth_date},
+                    variables: {id, birthDate},
                     optimisticResponse: {
                         __typename:'Mutation',
                         updatePerson: {
                             __typename:'Person',
-                            id, birth_date
+                            id, birthDate
                         }
                     }
                 }).then(data => console.log(data));

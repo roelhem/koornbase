@@ -2,73 +2,68 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 26-08-18
- * Time: 13:47
+ * Date: 17/11/2018
+ * Time: 02:49
  */
 
-namespace App\Http\GraphQL\Mutations;
+namespace App\Actions\Models;
 
 
 use App\Membership;
 use App\Person;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Error\ValidationError;
-use Rebing\GraphQL\Support\Mutation;
+use Roelhem\Actions\Contracts\ActionContext;
+use Roelhem\GraphQL\Facades\GraphQL;
 
-class NewMembershipApplicationMutation extends Mutation
+class NewMembershipApplicationAction extends AbstractModelAction
 {
+    protected $description = 'Adds a new `Membership` to a `Person` and initializes it such that the person will directly have the `NOVICE` membership status.';
 
-    protected $attributes = [
-        'name' => 'newMembershipApplication',
-        'description' => 'Adds a new `Membership` to a `Person` and initializes it such that the person will directly have the `NOVICE` membership status.'
-    ];
-
-    public function type()
-    {
-        return \GraphQL::type("Membership");
-    }
+    protected $type = 'Membership';
 
     public function args()
     {
         return [
-            'person_id' => [
+            'personId' => [
                 'description' => 'The `ID` of the `Person` to which the new membership should belong.',
-                'type' => Type::nonNull(Type::id()),
+                'alias' => 'person_id',
+                'type' => GraphQL::type('ID!'),
                 'rules' => ['required','exists:persons,id'],
             ],
             'date' => [
                 'description' => 'The date on which the application should be registered. If this argument is ommitted, the current date will be used.',
-                'type' => \GraphQL::type('Date'),
+                'type' => GraphQL::type('Date'),
                 'rules' => ['nullable','date'],
             ],
             'remarks' => [
                 'description' => 'Some optional remarks about the new membership.',
-                'type' => Type::string(),
+                'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string'],
             ],
         ];
     }
 
     /**
-     * @param $root
-     * @param array $args
-     * @throws ValidationError
-     * @return Membership
+     * Handles the action with all the validated arguments.
+     *
+     * @param array $validArgs
+     * @param null|ActionContext $context
+     * @return mixed
+     * @throws
      */
-    public function resolve($root, $args)
+    protected function handle($validArgs = [], ?ActionContext $context = null)
     {
         // Get the person
-        $person_id = array_get($args, 'person_id');
+        $person_id = array_get($validArgs, 'person_id');
         /** @var Person $person */
         $person = Person::findOrFail($person_id);
 
         // Get the ID.
-        $date = \Parse::date(array_get($args, 'date'),true);
+        $date = \Parse::date(array_get($validArgs, 'date'),true);
 
         // Check if there is no overlap with existing memberships of this person.
         foreach($person->memberships as $membership) {
             if($membership->upper_bound === null || $membership->upper_bound >= $date) {
-                throw new ValidationError("There already exists a Membership of this Person that overlaps with the application date of the new membership.");
+                throw new \Exception("There already exists a Membership of this Person that overlaps with the application date of the new membership.");
             }
         }
 
@@ -76,11 +71,10 @@ class NewMembershipApplicationMutation extends Mutation
         /** @var Membership $membership */
         $membership = $person->memberships()->create([
             'application' => $date,
-            'remarks' => array_get($args, 'remarks'),
+            'remarks' => array_get($validArgs, 'remarks'),
         ]);
 
         // Return the new membership
         return $membership;
     }
-
 }

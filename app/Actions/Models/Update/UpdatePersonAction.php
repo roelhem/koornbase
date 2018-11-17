@@ -48,7 +48,7 @@ class UpdatePersonAction extends AbstractUpdateAction
                 'rules' => ['nullable','string','max:63'],
             ],
             'nickname' => [
-                'alias' => GraphQL::type('String'),
+                'alias' => 'name_nickname',
                 'type' => GraphQL::type('String'),
                 'rules' => ['nullable','string','max:255'],
             ],

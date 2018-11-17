@@ -396,11 +396,13 @@
                     mutation: gql`mutation updateMembershipDates($id:ID!, $application:Date, $start:Date, $end:Date) {
                                 membership:updateMembership(id:$id, application:$application, start:$start, end:$end) {
                                     id,
-                                    person_id,
                                     application,
                                     start,
                                     end,
-                                    status,
+                                    status {
+                                        type
+                                        since
+                                    }
                                 }
                     }`,
                     variables: {id, application, start, end},
@@ -409,7 +411,12 @@
                         __typename:'Mutation',
                         membership: {
                             __typename:'Membership',
-                            id, person_id, application, start, end, status
+                            id, application, start, end,
+                            status: {
+                                __typename:'MembershipStatusType',
+                                type:status,
+                                since:end,
+                            }
                         }
                     }
                 }).then(data => console.log(data));
@@ -487,7 +494,6 @@
                         mutation deleteMembership($id:ID!) {
                             deleteMembership(id:$id) {
                                 id
-                                person_id
                             }
                         }
                     `,
@@ -497,10 +503,8 @@
                         const fragment = gql`
                             fragment PersonMemberships on Person {
                                 id
-                                certificates {
-                                    data {
-                                        ...DisplayMembershipCard
-                                    }
+                                memberships {
+                                    ...DisplayMembershipCard
                                 }
                             }
                             ${FRAGMENT}
@@ -514,7 +518,7 @@
 
                         console.log(person);
 
-                        person.certificates.data = person.certificates.data.filter(certificate => certificate.id !== id);
+                        person.memberships.data = person.memberships.data.filter(membership => membership.id !== id);
 
                         store.writeFragment({
                             id:person_id,
@@ -528,7 +532,7 @@
                         __typename:'Mutation',
                         deleteMembership: {
                             __typename:'Membership',
-                            id, person_id
+                            id
                         }
                     }
 
