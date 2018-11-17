@@ -9,6 +9,7 @@
 namespace App\Actions\Models\Update;
 
 
+use App\PersonEmailAddress;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class UpdatePersonEmailAddressAction extends AbstractUpdateAction
@@ -38,5 +39,22 @@ class UpdatePersonEmailAddressAction extends AbstractUpdateAction
                 'rules' => ['sometimes','required','email','max:255'],
             ],
         ];
+    }
+
+    public function afterValidation($validator)
+    {
+        parent::afterValidation($validator);
+
+        $data = $validator->getData();
+        $id = array_get($data,'id');
+        /** @var PersonEmailAddress $model */
+        $model = PersonEmailAddress::findOrFail($id);
+
+        $label = array_get($data,'id');
+        if($label !== null && $model->label !== $label) {
+            if($model->person->emailAddresses()->where('label','=', $label)->exists()) {
+                $validator->errors()->add('label','This label is not unique for this person.');
+            }
+        }
     }
 }

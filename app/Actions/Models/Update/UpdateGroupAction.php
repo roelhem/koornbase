@@ -24,7 +24,7 @@ class UpdateGroupAction extends AbstractUpdateAction
             'name' => [
                 'description' => 'The new name for the updated Group.',
                 'type' => GraphQL::type('String'),
-                'rules' => ['sometimes','required','string','max:255'],
+                'rules' => ['sometimes','required','string','max:255','unique_or_same:groups'],
             ],
             'shortName' => [
                 'description' => 'The new shorter version of the name for the Group.',

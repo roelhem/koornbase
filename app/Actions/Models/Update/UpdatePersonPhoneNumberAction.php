@@ -9,6 +9,7 @@
 namespace App\Actions\Models\Update;
 
 
+use App\PersonPhoneNumber;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class UpdatePersonPhoneNumberAction extends AbstractUpdateAction
@@ -43,5 +44,22 @@ class UpdatePersonPhoneNumberAction extends AbstractUpdateAction
                 'type' => GraphQL::type('CountryCode'),
             ]
         ];
+    }
+
+    public function afterValidation($validator)
+    {
+        parent::afterValidation($validator);
+
+        $data = $validator->getData();
+        $id = array_get($data,'id');
+        /** @var PersonPhoneNumber $model */
+        $model = PersonPhoneNumber::findOrFail($id);
+
+        $label = array_get($data,'id');
+        if($label !== null && $model->label !== $label) {
+            if($model->person->phoneNumbers()->where('label','=', $label)->exists()) {
+                $validator->errors()->add('label','This label is not unique for this person.');
+            }
+        }
     }
 }

@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
 
         Client::observe(ClientObserver::class);
 
+        \Validator::extend('unique_or_same','App\Services\Validators\DatabaseValidator@validateUniqueOrSame');
+
     }
 
     /**

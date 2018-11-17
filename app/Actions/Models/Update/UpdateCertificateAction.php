@@ -9,6 +9,8 @@
 namespace App\Actions\Models\Update;
 
 
+use App\Certificate;
+use App\Services\Validators\AfterValidation;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class UpdateCertificateAction extends AbstractUpdateAction
@@ -50,5 +52,16 @@ class UpdateCertificateAction extends AbstractUpdateAction
                 'rules' => ['nullable','string'],
             ]
         ];
+    }
+
+    public function afterValidation($validator)
+    {
+        parent::afterValidation($validator);
+
+        $after = new AfterValidation($validator);
+        $id = $after->getValue('id');
+        $certificate = Certificate::findOrFail($id);
+        $after->setDefaults($certificate->only(['examination_at','valid_at','expired_at']));
+        $after->ensureChronology(['examination_at','valid_at','expired_at']);
     }
 }

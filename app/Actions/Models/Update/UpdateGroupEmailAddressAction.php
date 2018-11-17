@@ -25,7 +25,7 @@ class UpdateGroupEmailAddressAction extends AbstractUpdateAction
                 'description' => 'The new email address for the GroupEmailAddress that is updated.',
                 'alias' => 'email_address',
                 'type' => GraphQL::type('Email'),
-                'rules' => ['sometimes','required','email','max:255'],
+                'rules' => ['sometimes','required','email','max:255','unique_or_same:group_email_addresses'],
             ],
             'remarks' => [
                 'description' => 'The updated remarks about the email address.',

@@ -24,7 +24,7 @@ class UpdateGroupCategoryAction extends AbstractUpdateAction
             'name' => [
                 'description' => 'A new name for the GroupCategory.',
                 'type' => GraphQL::type('String'),
-                'rules' => ['sometimes','required','string','max:255'],
+                'rules' => ['sometimes','required','string','max:255','unique_or_same:group_categories'],
             ],
             'shortName' => [
                 'description' => 'A new short version of the name of the GroupCategory.',
