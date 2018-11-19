@@ -33,10 +33,9 @@ class OAuthTokenType extends ModelType
     {
         return [
             'id' => [
-                'description' => 'The primary key of the `OAuthToken`, used to identify this token.
-                                  
-                                  IMPORTANT REMARK: The id is not a normal `ID`, but a string representation of a 
-                                  hexadecimal number.',
+                'description' => "The primary key of the `OAuthToken`, used to identify this token.
+                                  \n\nIMPORTANT REMARK: The id is not a normal `ID`, but a string representation of a 
+                                  hexadecimal number.",
                 'type' => GraphQL::type('String!'),
             ],
             'user' => [
@@ -53,7 +52,8 @@ class OAuthTokenType extends ModelType
             ],
             'scopes' => [
                 'description' => 'The scopes that are granted when this access token is used for authorization.',
-                'type' => GraphQL::type('[String]'),
+                'alias' => 'scope_objects',
+                'type' => GraphQL::type('[OAuthScope]'),
             ],
             'revoked' => [
                 'description' => 'Shows if this access token was revoked. When revoked, it will always be rejected by the server.',

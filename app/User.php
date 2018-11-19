@@ -5,6 +5,7 @@ namespace App;
 
 use App\Contracts\OwnedByPerson;
 use App\Notifications\ResetPasswordNotification;
+use App\OAuth\Token;
 use App\Services\Sorters\Traits\Sortable;
 use App\Traits\BelongsToPerson;
 use App\Types\Avatar;
@@ -161,6 +162,16 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
     public function accounts()
     {
         return $this->hasMany(UserAccount::class, 'user_id');
+    }
+
+    /**
+     * Gives the Tokens (OAuth) that were issued to this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tokens()
+    {
+        return $this->hasMany(Token::class, 'user_id');
     }
 
     /**

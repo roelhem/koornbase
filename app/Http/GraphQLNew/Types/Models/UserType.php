@@ -54,6 +54,16 @@ class UserType extends ModelType
         ];
     }
 
+    public function connections()
+    {
+        return [
+            'tokens' => [
+                'to'=> 'OAuthToken',
+                'description' => 'The access tokens that are issued to this user.',
+            ]
+        ];
+    }
+
     public function orderables()
     {
         return array_merge(parent::orderables(), [

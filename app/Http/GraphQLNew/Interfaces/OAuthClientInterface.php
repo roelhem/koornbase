@@ -17,9 +17,12 @@ use Roelhem\GraphQL\Facades\GraphQL;
 use Roelhem\GraphQL\Types\Filters\FilterInputType;
 use Roelhem\GraphQL\Types\InterfaceType;
 use Roelhem\GraphQL\Types\OrderBy\OrderByInputType;
+use Roelhem\GraphQL\Types\Traits\HasConnectionFields;
 
 class OAuthClientInterface extends InterfaceType implements ModelTypeContract
 {
+
+    use HasConnectionFields;
 
     public $name = 'OAuthClient';
 
@@ -68,6 +71,19 @@ class OAuthClientInterface extends InterfaceType implements ModelTypeContract
                                   clients that are revoked.',
                 'type' => GraphQL::type('Boolean'),
                 'importance' => 100,
+            ]
+        ];
+    }
+
+    /**
+     * Returns the definitions of the connections
+     */
+    protected function connections()
+    {
+        return [
+            'tokens' => [
+                'to' => 'OAuthToken',
+                'description' => 'A list of all the access tokens of this client.'
             ]
         ];
     }

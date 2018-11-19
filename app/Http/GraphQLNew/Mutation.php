@@ -37,6 +37,8 @@ use App\Actions\Models\Update\UpdatePersonAction;
 use App\Actions\Models\Update\UpdatePersonEmailAddressAction;
 use App\Actions\Models\Update\UpdatePersonPhoneNumberAction;
 use App\Actions\Models\Update\UpdateUserAction;
+use App\Actions\Relations\Attach\AttachPersonToGroupAction;
+use App\Actions\Relations\Detach\DetachPersonFromGroupAction;
 use App\Actions\RequestPersonalAccessTokenAction;
 use Roelhem\GraphQL\Types\MutationType;
 
@@ -99,6 +101,9 @@ class Mutation extends MutationType
             StopMembershipAction::class,
             RevokeOAuthClientAction::class,
 
+            // RELATION ATTACH ACTIONS
+            AttachPersonToGroupAction::class,
+            DetachPersonFromGroupAction::class,
 
             // OAUTH ACTIONS
             RequestPersonalAccessTokenAction::class,

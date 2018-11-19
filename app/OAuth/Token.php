@@ -8,6 +8,7 @@
 
 namespace App\OAuth;
 
+use App\Enums\OAuthScope;
 use Carbon\Carbon;
 use Laravel\Passport\Token as PassportToken;
 
@@ -20,6 +21,8 @@ use Laravel\Passport\Token as PassportToken;
  * @property int $client_id
  * @property string $name
  * @property boolean $revoked
+ * @property array $scopes
+ * @property-read OAuthScope[] $scope_objects
  * @property-read Carbon|null $created_at
  * @property-read Carbon|null $updated_at
  * @property-read Carbon|null $expires_at
@@ -31,6 +34,17 @@ use Laravel\Passport\Token as PassportToken;
  */
 class Token extends PassportToken
 {
+
+    /**
+     * Attribute that contains the OAuthScope objects of this token.
+     *
+     * @return OAuthScope[]
+     */
+    public function getScopeObjectsAttribute() {
+        return array_map(function($scope) {
+            return OAuthScope::byName($scope);
+        }, $this->scopes);
+    }
 
 
     public function expired($at = null) {

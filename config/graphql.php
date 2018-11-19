@@ -68,6 +68,8 @@ return [
 
             // OAuth
             'OAuthTokenIssue' => \App\Http\GraphQLNew\Types\OAuthTokenIssueType::class,
+
+            'AttachPersonToGroupResult' => \App\Http\GraphQLNew\Types\Results\AttachPersonToGroupResultType::class,
         ],
     ],
 
