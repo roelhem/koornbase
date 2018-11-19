@@ -12,6 +12,7 @@ return [
             \App\Enums\PhoneNumberType::class,
             \App\Enums\PersonNameFormat::class,
             \App\Enums\OAuthClientType::class,
+            \App\Enums\OAuthScope::class,
             \App\Enums\AvatarType::class,
         ],
         'interfaces' => [
@@ -48,6 +49,7 @@ return [
             \App\Http\GraphQLNew\Types\Models\OAuth\OAuthPasswordClientType::class,
             \App\Http\GraphQLNew\Types\Models\OAuth\OAuthCredentialsClientType::class,
             \App\Http\GraphQLNew\Types\Models\OAuth\OAuthAuthCodeClientType::class,
+            \App\Http\GraphQLNew\Types\Models\OAuth\OAuthTokenType::class,
         ],
         'otherTypes' => [
             // Avatars
@@ -63,6 +65,9 @@ return [
             // Person helpers
             'MembershipStatus' => \App\Http\GraphQLNew\Types\MembershipStatusType::class,
             'PersonName'       => \App\Http\GraphQLNew\Types\PersonNameType::class,
+
+            // OAuth
+            'OAuthTokenIssue' => \App\Http\GraphQLNew\Types\OAuthTokenIssueType::class,
         ],
     ],
 

@@ -62,7 +62,7 @@
 
 
 
-                    <b-card no-body>
+                    <!--<b-card no-body>
                         <b-table v-bind="bTableProps" v-on="bTableListeners" hover>
 
                             <template slot="category_id" slot-scope="{ item }">
@@ -96,9 +96,9 @@
                             </template>
 
                         </b-table>
-                    </b-card>
+                    </b-card>-->
 
-
+                    <group-data-table v-bind="dataTableProps" v-on="dataTableListeners"></group-data-table>
 
 
 
@@ -132,9 +132,11 @@
     import BaseAvatarList from "../../components/displays/BaseAvatarList";
     import ShowGroupCategoryListCard from "../../components/displays/ShowGroupCategoryListCard";
     import PersonAvatar from "../../components/displays/PersonAvatar";
+    import GroupDataTable from "../../components/displays/GroupDataTable";
 
     export default {
         components: {
+            GroupDataTable,
             PersonAvatar,
             ShowGroupCategoryListCard,
             BaseAvatarList,
@@ -173,54 +175,6 @@
                 perPage:25,
                 sortBy:'category_id',
             },
-            columns:[
-                {
-                    key:'category_id',
-                    label:'',
-                    name:'Categorie',
-                    visible:true,
-                    sortable:true,
-                    tdClass:'p-2',
-                    thStyle:{'width':'1px'},
-                },
-                {
-                    key:'id',
-                    label:'ID',
-                    visible:false,
-                    sortable:true,
-                },
-                {
-                    key:'name',
-                    label:'Naam',
-                    sortable:true,
-                    visible:true
-                },
-                {
-                    key:'name_short',
-                    label:'Korte naam',
-                    sortable:true,
-                    visible:false
-                },
-                {
-                    key:'member_name',
-                    label:'Titel',
-                    sortable:true,
-                    visible:false
-                },
-                {
-                    key:'persons',
-                    label:'Groepsleden',
-                    tdClass:'p-2',
-                    sortable:false,
-                    visible:true,
-                },
-                {
-                    key:'actions',
-                    label:'',
-                    visible:true,
-                    thStyle:{'width':'1px'}
-                },
-            ],
             recordsName:'groepen',
         },
 

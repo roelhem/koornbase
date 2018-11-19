@@ -23,6 +23,7 @@ use App\Actions\Models\Create\CreatePersonPhoneNumberAction;
 use App\Actions\Models\Delete\DeleteAction;
 use App\Actions\Models\NewMembershipApplicationAction;
 use App\Actions\Models\Restore\RestoreAction;
+use App\Actions\Models\RevokeOAuthClientAction;
 use App\Actions\Models\StartMembershipAction;
 use App\Actions\Models\StopMembershipAction;
 use App\Actions\Models\Update\UpdateCertificateAction;
@@ -35,6 +36,8 @@ use App\Actions\Models\Update\UpdateOAuthClientAction;
 use App\Actions\Models\Update\UpdatePersonAction;
 use App\Actions\Models\Update\UpdatePersonEmailAddressAction;
 use App\Actions\Models\Update\UpdatePersonPhoneNumberAction;
+use App\Actions\Models\Update\UpdateUserAction;
+use App\Actions\RequestPersonalAccessTokenAction;
 use Roelhem\GraphQL\Types\MutationType;
 
 class Mutation extends MutationType
@@ -80,6 +83,7 @@ class Mutation extends MutationType
             UpdatePersonAction::class,
             UpdatePersonEmailAddressAction::class,
             UpdatePersonPhoneNumberAction::class,
+            UpdateUserAction::class,
 
 
             // RESTORE MODEL ACTIONS
@@ -93,6 +97,11 @@ class Mutation extends MutationType
             NewMembershipApplicationAction::class,
             StartMembershipAction::class,
             StopMembershipAction::class,
+            RevokeOAuthClientAction::class,
+
+
+            // OAUTH ACTIONS
+            RequestPersonalAccessTokenAction::class,
         ];
     }
 }

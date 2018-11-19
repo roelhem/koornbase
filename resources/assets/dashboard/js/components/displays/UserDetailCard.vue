@@ -97,7 +97,8 @@
                 type:String,
                 default:"user"
             }
-        }
+        },
+
 
     }
 </script>

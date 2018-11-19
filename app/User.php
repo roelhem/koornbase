@@ -81,7 +81,7 @@ class User extends Authenticatable implements RbacDatabaseAssignable, OwnedByPer
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','person_id'
     ];
 
     /**

@@ -438,7 +438,10 @@
                                 application,
                                 start,
                                 end,
-                                status
+                                status {
+                                    type
+                                    since
+                                }
                             }
                         }
                     `,
@@ -447,7 +450,12 @@
                         __typename:'Mutation',
                         membership: {
                             __typename:'Membership',
-                            id, application, start, end, status
+                            id, application, start, end,
+                            status: {
+                                __typename:'MembershipStatusType',
+                                type:status,
+                                since:start
+                            }
                         }
                     },
                 });
@@ -468,7 +476,10 @@
                                 application,
                                 start,
                                 end,
-                                status
+                                status {
+                                    type
+                                    since
+                                }
                             }
                         }
                     `,
@@ -477,7 +488,12 @@
                         __typename:'Mutation',
                         membership: {
                             __typename:'Membership',
-                            id, application, start, end, status
+                            id, application, start, end,
+                            status: {
+                                __typename:'MembershipStatusType',
+                                type:status,
+                                since:end
+                            }
                         }
                     },
                 });
@@ -512,6 +528,7 @@
 
                         const person = store.readFragment({
                             id:person_id,
+                            __typename:'Person',
                             fragment:fragment,
                             fragmentName:'PersonMemberships'
                         });
@@ -522,6 +539,7 @@
 
                         store.writeFragment({
                             id:person_id,
+                            __typename:'Person',
                             fragment:fragment,
                             fragmentName:'PersonMemberships',
                             data:person
