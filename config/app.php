@@ -167,7 +167,6 @@ return [
         App\Providers\AttributeServiceProvider::class,
         App\Providers\AddressingProvider::class,
         App\Providers\ModelFinderServiceProvider::class,
-        App\Providers\GraphQLServiceProvider::class,
 
         \Roelhem\GraphQL\GraphQLServiceProvider::class,
 
@@ -221,7 +220,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'EloquentView' => Jwz104\EloquentView\Facades\EloquentView::class,
-        'GraphQL' => \Rebing\GraphQL\Support\Facades\GraphQL::class,
 
         'Parse' => \App\Services\Parsers\Parse::class,
     ],

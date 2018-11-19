@@ -2,48 +2,44 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 20-09-18
- * Time: 22:12
+ * Date: 16-09-18
+ * Time: 09:52
  */
 
-namespace Roelhem\GraphQL\Types\Connections;
+namespace App\Http\GraphQL\Scalars;
+
+
+use GraphQL\Error\Error;
 use GraphQL\Language\AST\StringValueNode;
 use GraphQL\Type\Definition\ScalarType;
 
-
-/**
- * Class CursorType
- * @package Roelhem\GraphQL\Types\Connections
- */
-class CursorType extends ScalarType
+class LocaleType extends ScalarType
 {
+    public $name = 'Locale';
 
-    public $name = "Cursor";
-
-    public $description = "The `Cursor` scalar type is a string that indicates a certain point in a list of a
-                           `Connection`.";
-
+    public $description = "The `Locale` scalar type represents language and/or localization setting-groups. It's value
+            is a short string.";
 
     /**
      * Serializes an internal value to include in a response.
      *
-     * @param mixed $value
-     * @return mixed
+     * @param string $value
+     * @return string
      */
     public function serialize($value)
     {
-        return base64_encode($value);
+        return $value;
     }
 
     /**
      * Parses an externally provided value (query variable) to use as an input
      *
-     * @param mixed $value
-     * @return mixed
+     * @param string $value
+     * @return string
      */
     public function parseValue($value)
     {
-        return base64_decode($value);
+        return $value;
     }
 
     /**
@@ -52,13 +48,14 @@ class CursorType extends ScalarType
      * @param \GraphQL\Language\AST\Node $valueNode
      * @param array|null $variables
      * @return mixed
+     * @throws Error
      */
     public function parseLiteral($valueNode, array $variables = null)
     {
-        if($valueNode instanceof StringValueNode) {
-            return base64_decode($valueNode->value);
+        if(($valueNode instanceof StringValueNode)) {
+            return $valueNode->value;
         }
 
-        return strval($valueNode);
+        throw new Error("A `Locale` has to be a string", [$valueNode]);
     }
 }

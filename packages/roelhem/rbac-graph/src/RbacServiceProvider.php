@@ -2,10 +2,9 @@
 
 namespace Roelhem\RbacGraph;
 
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Support\ServiceProvider;
 use Roelhem\RbacGraph\Contracts\Services\RuleSerializer;
-use Roelhem\RbacGraph\Http\GraphQL\GraphQLService;
 use Roelhem\RbacGraph\Services\Builders\RbacBuilder;
 use Roelhem\RbacGraph\Commands\NodesCommand;
 use Roelhem\RbacGraph\Commands\TypesCommand;
@@ -15,7 +14,6 @@ use Roelhem\RbacGraph\Contracts\Graphs\Graph;
 use Roelhem\RbacGraph\Contracts\Graphs\MutableGraph;
 use Roelhem\RbacGraph\Contracts\Tools\PathFinder;
 use Roelhem\RbacGraph\Contracts\Services\RbacService;
-use Roelhem\RbacGraph\Database\Tools\DatabaseAuthorizer;
 use Roelhem\RbacGraph\Database\Tools\DatabasePathFinder;
 use Roelhem\RbacGraph\Database\DatabaseGraph;
 use Roelhem\RbacGraph\Database\Edge;
@@ -24,7 +22,6 @@ use Roelhem\RbacGraph\Database\Observers\EdgeObserver;
 use Roelhem\RbacGraph\Database\Observers\NodeObserver;
 use Roelhem\RbacGraph\Database\Observers\PathObserver;
 use Roelhem\RbacGraph\Database\Path;
-use Roelhem\RbacGraph\Enums\NodeType;
 use Roelhem\RbacGraph\Services\CompatibilityService;
 use Roelhem\RbacGraph\Services\DefaultRbacService;
 use Roelhem\RbacGraph\Services\RuleSerializerService;
@@ -74,9 +71,6 @@ class RbacServiceProvider extends ServiceProvider
         // Gates
         resolve(CompatibilityService::class)->registerGate();
 
-        // GraphQL
-        resolve(GraphQLService::class)->register();
-
 
     }
 
@@ -114,9 +108,6 @@ class RbacServiceProvider extends ServiceProvider
         $this->app->singleton(RuleSerializerService::class);
         $this->app->bind(RuleSerializer::class, RuleSerializerService::class);
 
-
-        // GraphQL
-        $this->app->singleton(GraphQLService::class);
 
     }
 

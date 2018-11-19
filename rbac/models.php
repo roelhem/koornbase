@@ -1,7 +1,7 @@
 <?php
 
-/** @var \App\Http\GraphQLNew\Mutation $mutations */
-$mutations = resolve(\App\Http\GraphQLNew\Mutation::class);
+/** @var \App\Http\GraphQL\Mutation $mutations */
+$mutations = resolve(\App\Http\GraphQL\Mutation::class);
 
 foreach($mutations->actions() as $action) {
     Rbac::actionPermission($action);

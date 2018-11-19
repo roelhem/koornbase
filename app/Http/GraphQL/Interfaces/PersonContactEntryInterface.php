@@ -2,58 +2,45 @@
 /**
  * Created by PhpStorm.
  * User: roel
- * Date: 11-07-18
- * Time: 12:03
+ * Date: 16-09-18
+ * Time: 07:54
  */
 
 namespace App\Http\GraphQL\Interfaces;
 
 
-use App\Http\GraphQL\Fields\Relations\PersonField;
-use App\Http\GraphQL\Fields\Relations\PersonIdField;
-use App\Http\GraphQL\Fields\RemarksField;
-use App\PersonAddress;
-use App\PersonEmailAddress;
-use App\PersonPhoneNumber;
-use GraphQL;
-use Rebing\GraphQL\Support\InterfaceType;
-use GraphQL\Type\Definition\Type;
+use Roelhem\GraphQL\Facades\GraphQL;
+use Roelhem\GraphQL\Types\InterfaceType;
 
 class PersonContactEntryInterface extends InterfaceType
 {
 
-    protected $attributes = [
-        'name' => 'PersonContactEntry',
-        'description' => 'Interface for contact entries of a person.'
-    ];
+    public $name = 'PersonContactEntry';
 
-    /** @inheritdoc */
     public function fields()
     {
         return [
-            'person_id' => PersonIdField::class,
-            'person' => PersonField::class,
             'index' => [
-                'type' => Type::nonNull(Type::int()),
-                'description' => 'The index of this contact-entry. This number in combination with the person_id is unique.'
+                'type' => GraphQL::type('Int'),
+                'description' => 'The position of this `PersonContractEntry` in relation to the entries of the same type and the same Person.',
+                'importance' => 253,
             ],
             'label' => [
-                'type' => Type::nonNull(Type::string()),
-                'description' => 'The label of this contact-entry.'
+                'type' => GraphQL::type('String'),
+                'description' => 'A string that (uniquely) identifies the relation between the entry and the `Person` of the entry.',
+                'importance' => 250,
             ],
-            'remarks' => RemarksField::class,
+            'person' => [
+                'type' => GraphQL::type('Person'),
+                'description' => 'The `Person` to which this contract-entry belongs to.',
+                'importance' => 240,
+            ],
+            'remarks' => [
+                'type' => GraphQL::type('String'),
+                'description' => 'Some optional remarks about this contact-entry.',
+                'importance' => -200,
+            ]
         ];
-    }
-
-    /** @inheritdoc */
-    public function resolveType($root) {
-        if ($root instanceof PersonAddress) {
-            return GraphQL::type('PersonAddress');
-        } elseif ($root instanceof PersonEmailAddress) {
-            return GraphQL::type('PersonEmailAddress');
-        } elseif ($root instanceof PersonPhoneNumber) {
-            return GraphQL::type('PersonPhoneNumber');
-        }
     }
 
 }
