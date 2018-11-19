@@ -3,17 +3,19 @@
  * Created by PhpStorm.
  * User: roel
  * Date: 19/11/2018
- * Time: 19:28
+ * Time: 20:29
  */
 
-namespace App\Http\GraphQL\Types\Results;
+namespace App\Http\GraphQL\Types\Pivots;
 
 
+use App\Pivots\PersonGroup;
 use Roelhem\GraphQL\Facades\GraphQL;
-use Roelhem\GraphQL\Types\ObjectType;
+use Roelhem\GraphQL\Types\PivotType;
 
-class AttachPersonToGroupResultType extends ObjectType
+class PersonGroupPivotType extends PivotType
 {
+    protected $pivotClass = PersonGroup::class;
 
     /**
      * Returns the definitions of the fields of this Type.

@@ -20,7 +20,7 @@ class AttachPersonToGroupAction extends AbstractAction
 
     protected $description = 'Attaches a `Person` to a `Group`.';
 
-    protected $type = 'AttachPersonToGroupResult';
+    protected $type = 'PersonGroupPivot';
 
     /** @inheritdoc */
     public function args()

@@ -69,7 +69,8 @@ return [
             // OAuth
             'OAuthTokenIssue' => \App\Http\GraphQL\Types\OAuthTokenIssueType::class,
 
-            'AttachPersonToGroupResult' => \App\Http\GraphQL\Types\Results\AttachPersonToGroupResultType::class,
+            // Pivots
+            'PersonGroupPivot' => \App\Http\GraphQL\Types\Pivots\PersonGroupPivotType::class,
         ],
     ],
 

@@ -24,6 +24,10 @@ abstract class ModelType extends ObjectType implements ModelTypeContract
     use HasConnectionFields;
 
 
+    /**
+     * ModelType constructor.
+     * @param array $config
+     */
     public function __construct(array $config = [])
     {
         parent::__construct(array_merge([
@@ -34,6 +38,11 @@ abstract class ModelType extends ObjectType implements ModelTypeContract
 
     public $modelClass;
 
+    /**
+     * Returns the name of the model that represents this ModelType.
+     *
+     * @return string
+     */
     public function getModelClass()
     {
         return $this->modelClass;

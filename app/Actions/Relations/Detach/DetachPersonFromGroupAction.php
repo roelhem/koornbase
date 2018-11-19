@@ -18,7 +18,7 @@ class DetachPersonFromGroupAction extends AbstractAction
 {
     protected $description = 'Detaches a `Person` from a `Group`';
 
-    protected $type = 'AttachPersonToGroupResult';
+    protected $type = 'PersonGroupPivot';
 
     public function args()
     {
