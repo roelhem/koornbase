@@ -30,6 +30,6 @@ class QueryModelByIdResolver extends AbstractResolver
         /** @var ModelType $returnType */
         $returnType = $store->returnType;
 
-        return call_user_func([$returnType->modelClass, 'find'], $args->get('id'));
+        return call_user_func([$returnType->getModelClass(), 'find'], $args->get('id'));
     }
 }
