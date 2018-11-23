@@ -10,11 +10,14 @@ namespace App\Actions\Models\Create;
 
 
 use App\Enums\OAuthClientType;
+use App\OAuth\Client;
 use Roelhem\Actions\Contracts\ActionContext;
 use Roelhem\GraphQL\Facades\GraphQL;
 
-class CreateOAuthClientAction extends AbstractCreateAction
+class CreateOAuthAuthCodeClientAction extends AbstractCreateAction
 {
+
+    protected $modelClass = Client::class;
 
     /**
      * Handles the action with all the validated arguments.
@@ -25,9 +28,7 @@ class CreateOAuthClientAction extends AbstractCreateAction
      */
     protected function handle($validArgs = [], ?ActionContext $context = null)
     {
-        /** @var OAuthClientType $type */
-        $type = array_get($validArgs, 'type', OAuthClientType::AUTH_CODE());
-        return $type->create($validArgs);
+        return OAuthClientType::AUTH_CODE()->create($validArgs);
     }
 
     /**
@@ -38,19 +39,15 @@ class CreateOAuthClientAction extends AbstractCreateAction
     public function args()
     {
         return [
-            'type' => [
-                'type' => GraphQL::type('OAuthClientType'),
-                'description' => 'The type of the new client. If this value is ommitted or set to `null`, the value will be set to `AUTH_CODE`.'
-            ],
             'name' => [
                 'type' => GraphQL::type('String!'),
                 'description' => 'The name of the new client. This will be displayed when the client requests an User authorize.',
                 'rules' => ['required','string','max:255'],
             ],
             'redirect' => [
-                'type' => GraphQL::type('String'),
+                'type' => GraphQL::type('String!'),
                 'description' => 'The URL to which an User is redirected after it authorized the client.',
-                'rules' => ['nullable','url']
+                'rules' => ['required','url']
             ],
             'userId' => [
                 'type' => GraphQL::type('ID'),

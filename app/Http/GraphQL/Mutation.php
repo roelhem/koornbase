@@ -14,7 +14,10 @@ use App\Actions\Models\Create\CreateCertificateCategoryAction;
 use App\Actions\Models\Create\CreateGroupAction;
 use App\Actions\Models\Create\CreateGroupEmailAddressAction;
 use App\Actions\Models\Create\CreateMembershipAction;
-use App\Actions\Models\Create\CreateOAuthClientAction;
+use App\Actions\Models\Create\CreateOAuthAuthCodeClientAction;
+use App\Actions\Models\Create\CreateOAuthCredentialsClientAction;
+use App\Actions\Models\Create\CreateOAuthPasswordClientAction;
+use App\Actions\Models\Create\CreateOAuthPersonalClientAction;
 use App\Actions\Models\Create\CreatePersonAction;
 use App\Actions\Models\Create\CreatePersonAddressAction;
 use App\Actions\Models\Create\CreatePersonEmailAddressAction;
@@ -54,12 +57,15 @@ class Mutation extends MutationType
             CreateCertificateAction::class,
             CreateCertificateCategoryAction::class,
             CreateGroupEmailAddressAction::class,
-            CreateOAuthClientAction::class,
             CreateMembershipAction::class,
             CreatePersonAddressAction::class,
             CreatePersonEmailAddressAction::class,
             CreatePersonPhoneNumberAction::class,
             //CreateAppAction::class,
+            CreateOAuthAuthCodeClientAction::class,
+            CreateOAuthPasswordClientAction::class,
+            CreateOAuthPersonalClientAction::class,
+            CreateOAuthCredentialsClientAction::class,
 
             // DELETE MODEL ACTIONS
             new DeleteAction('CertificateCategory'),
