@@ -11,14 +11,19 @@
 
         <!-- START: Search Header -->
         <search-header-container v-bind="searchHeaderProps" v-on="searchHeaderListeners">
-            <b-button variant="success" href="#">
+            <b-button variant="success"
+                      @click="$refs.createPersonForm.show()"
+            >
                 <base-icon :icon="{fa:'plus',fe:'plus'}"
                            :from="['fe','fa']"
-                           class="mr-2" />
+                           class="mr-2"
+                />
                 Persoon Toevoegen
             </b-button>
         </search-header-container>
         <!-- END: Search Header -->
+
+        <create-person-form ref="createPersonForm" modal modal-size="lg" />
 
 
         <!-- START: Main Content -->
@@ -101,9 +106,11 @@
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import PersonDataTable from "../../components/displays/PersonDataTable";
     import OrderByInput from "../../components/inputs/OrderByInput";
+    import CreatePersonForm from "../../components/forms/persons/CreatePersonForm";
 
     export default {
         components: {
+            CreatePersonForm,
             OrderByInput,
             PersonDataTable,
             TablerPageHeader,

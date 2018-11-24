@@ -3,6 +3,8 @@
     <tabler-input-icon prepend="calendar" from="fa">
         <b-form-input v-model="value"
                       :placeholder="thePlaceholder"
+                      v-bind="$attrs"
+                      v-on="$listeners"
         ></b-form-input>
     </tabler-input-icon>
 

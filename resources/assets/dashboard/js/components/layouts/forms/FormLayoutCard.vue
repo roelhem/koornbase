@@ -1,6 +1,6 @@
 <template>
 
-    <tabler-card :title="title" :no-header="noHeader">
+    <tabler-card :title="title" :no-header="noHeader" v-bind="$attrs" v-on="$listeners">
 
         <div>
             <tabler-alert v-for="(message, index) in messages"

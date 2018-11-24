@@ -1,5 +1,12 @@
 <template>
-    <tabler-modal ref="modal" :id="id" :title="title" lazy>
+    <tabler-modal ref="modal"
+                  :id="id"
+                  :title="title"
+                  lazy
+                  :size="modalSize"
+                  v-bind="$attrs"
+                  v-on="$listeners"
+    >
 
         <div>
             <tabler-alert v-for="(message, index) in messages"
@@ -65,6 +72,9 @@
                 type:String,
                 default:"secondary"
             },
+            modalSize:{
+                type:String,
+            }
         },
 
         methods: {

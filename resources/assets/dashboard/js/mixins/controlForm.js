@@ -16,7 +16,7 @@ export default {
         modal: {
             type:Boolean,
             default:false
-        }
+        },
 
     },
 
@@ -60,7 +60,8 @@ export default {
                 messages:this.messages,
                 title:this.formTitle,
                 formId:this.formId,
-                actionType:actionType
+                actionType:actionType,
+                ...this.$attrs
             };
         },
 
@@ -69,7 +70,8 @@ export default {
             return {
                 'update:messages': value => this.messages = value,
                 'submit':this.submitHandler,
-                'reset':this.resetHandler
+                'reset':this.resetHandler,
+                ...this.$listeners
             }
         },
 

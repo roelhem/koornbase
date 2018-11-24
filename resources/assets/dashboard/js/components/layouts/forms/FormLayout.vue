@@ -110,6 +110,7 @@
                     resetVariant:this.resetVariant,
                     submitText:this.submitText || this.defaultSubmitText,
                     submitVariant:this.submitVariant || this.defaultSubmitVariant,
+                    ...this.$attrs
                 };
             },
 
@@ -117,7 +118,8 @@
                 return {
                     submit:this.submit,
                     reset:this.reset,
-                    'dismiss-message':this.dismissMessage
+                    'dismiss-message':this.dismissMessage,
+                    ...this.$listeners
                 };
             }
         },
