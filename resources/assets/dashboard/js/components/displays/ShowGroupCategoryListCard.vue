@@ -6,7 +6,7 @@
         </template>
 
         <b-list-group class="card-list-group" @mouseleave="$emit('update:highlighted', null)">
-            <show-group-category-list-card-item v-for="category in groupCategories.data"
+            <show-group-category-list-card-item v-for="category in items"
                                                 :key="category.id"
                                                 :category="category"
                                                 :default-style="category.style"
@@ -37,20 +37,17 @@
             groupCategories: {
                 query: gql`
                     query groupCategoryList {
-                        groupCategories(limit:20) {
-                            data {
-                                id
-                                name
-                                name_short
-                                description
-                                style
-                                is_required
-                                groups {
-                                    total
+                        groupCategories {
+                            edges {
+                                node {
+                                    id
+                                    style
+                                    ...ShowGroupCategoryListCardItem
                                 }
                             }
                         }
                     }
+                    ${ShowGroupCategoryListCardItem.fragment}
                 `,
             }
         },
@@ -73,12 +70,15 @@
         data: function() {
             return {
                 groupCategories:{
-                    from:0,
-                    to:0,
-                    total:0,
-                    data:[]
+                    edges:[]
                 },
 
+            }
+        },
+
+        computed: {
+            items() {
+                return this.groupCategories.edges.map(edge => edge.node);
             }
         },
 

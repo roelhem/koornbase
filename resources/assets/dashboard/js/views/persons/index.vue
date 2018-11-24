@@ -130,11 +130,7 @@
                 query: gql`
                     query personsIndex($pageSize:Int = 10 $page:Int = 1 $orderBy:Person_orderByInput = id_ASC) {
                         persons(first:$pageSize page:$page orderBy:$orderBy) {
-                            totalCount
-                            pageInfo {
-                                startIndex
-                                endIndex
-                            }
+                            ...SearchTableConnection
                             edges {
                                 node {
                                     ...PersonDataTableRow
@@ -143,6 +139,7 @@
                         }
                     }
                     ${PersonDataTable.rowFragment}
+                    ${searchTableMixin.connectionFragment}
                 `,
                 variables() {
                     return {

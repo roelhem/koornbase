@@ -10,12 +10,27 @@ namespace App\Actions\Models\Create;
 
 use App\Enums\OAuthClientType;
 use App\OAuth\Client;
+use Laravel\Passport\ClientRepository;
 use Roelhem\Actions\Contracts\ActionContext;
 use Roelhem\GraphQL\Facades\GraphQL;
 
 class CreateOAuthCredentialsClientAction extends AbstractCreateAction
 {
     protected $modelClass = Client::class;
+
+    /**
+     * @var ClientRepository
+     */
+    protected $repository;
+
+    /**
+     * CreateOAuthCredentialsClientAction constructor.
+     * @param ClientRepository $repository
+     */
+    public function __construct(ClientRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Handles the action with all the validated arguments.
@@ -26,7 +41,11 @@ class CreateOAuthCredentialsClientAction extends AbstractCreateAction
      */
     protected function handle($validArgs = [], ?ActionContext $context = null)
     {
-        return OAuthClientType::CREDENTIALS()->create($validArgs);
+        $userId = array_get($validArgs,'user_id',$context->user()->getId());
+        $name = array_get($validArgs, 'name');
+        $redirect = '';
+
+        return $this->repository->create($userId,$name,$redirect);
     }
 
     /**

@@ -48,22 +48,6 @@ export const routes = [
         component: require('../../views/oauth/clients/index'),
     },
     {
-        path:'/oauth/clients/create',
-        name:'oauth.clients.create',
-        component: require('../../views/oauth/clients/create'),
-    },
-    {
-        path:'/oauth/clients/:id/update',
-        name:'oauth.clients.update',
-        component: require('../../views/oauth/clients/update'),
-    },
-    {
-        path:'/oauth/clients/:id/request-personal-token',
-        name:'oauth.clients.request-personal-token',
-        component: require('../../views/oauth/clients/request-personal-token'),
-        props:true,
-    },
-    {
         path:'/oauth/clients/:id',
         name:'oauth.clients.view',
         component: require('../../views/oauth/clients/view'),

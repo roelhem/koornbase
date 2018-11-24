@@ -6,15 +6,18 @@
             <template slot="category" slot-scope="{item:group}">
                 <base-stamp v-if="group.category"
                             :default-style="group.category.style"
+                            @mouseover="$emit('highlight-category', group.category.id)"
+                            @mouseleave="$emit('highlight-category', null)"
+                            class="muted-stamp"
                 />
             </template>
 
             <template slot="name" slot-scope="{item:group}">
-                <span v-b-tooltip.hover.bottom="item.description || ''">{{ group.name }}</span>
+                <span v-b-tooltip.hover.bottom="group.description || ''">{{ group.name }}</span>
             </template>
 
             <template slot="persons" slot-scope="{item:group}">
-                Boe
+                <group-persons-avatar-list :persons="group.persons" stacked />
             </template>
 
             <template slot="actions" slot-scope="{ item:group }">
@@ -35,9 +38,11 @@
     import BaseStamp from "./BaseStamp";
     import BaseIcon from "./BaseIcon";
     import BaseAvatarList from "./BaseAvatarList";
+    import GroupPersonsAvatarList from "./GroupPersonsAvatarList";
 
     export default {
         components: {
+            GroupPersonsAvatarList,
             BaseAvatarList,
             BaseIcon,
             BaseStamp},
@@ -54,11 +59,13 @@
                     id
                     style
                 }
+                ...GroupPersonsAvatarList
             }
+            ${GroupPersonsAvatarList.fragment}
         `,
 
         columns:{
-            catagory:{
+            category:{
                 label:'',
                 name:'Category',
                 visible:true,

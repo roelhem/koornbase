@@ -61,6 +61,7 @@ class OAuthTokenType extends ModelType
             ],
             'expiresAt' => [
                 'description' => 'The `DateTime` when this token will expire.',
+                'alias' => 'expires_at',
                 'type' => GraphQL::type('DateTime')
             ],
             'expired' => [

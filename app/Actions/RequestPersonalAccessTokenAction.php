@@ -20,7 +20,7 @@ use Roelhem\GraphQL\Facades\GraphQL;
 class RequestPersonalAccessTokenAction extends AbstractAction
 {
 
-    protected $name = 'requestPersonAccessToken';
+    protected $name = 'requestPersonalAccessToken';
 
     protected $description = 'Requests to issue an access token from an `OAuthPersonalClient`. This token is then 
                               available for the current user to authorize requests during the development of client
@@ -47,7 +47,7 @@ class RequestPersonalAccessTokenAction extends AbstractAction
             'name' => [
                 'description' => 'The name that the requested OAuth access-token should have.',
                 'type' => GraphQL::type('String'),
-                'rules' => ['sometimes','required','string','max:255'],
+                'rules' => ['nullable','string','max:255'],
             ],
             'clientId' => [
                 'description' => 'The `ID` of the `OAuthPersonalClient` to whom the access token should belong.',
@@ -72,10 +72,10 @@ class RequestPersonalAccessTokenAction extends AbstractAction
     public function handle($validArgs = [], ?ActionContext $context = null)
     {
         // Getting the User-id
-        $userId = array_get($validArgs,'userId',\Auth::id());
+        $userId = array_get($validArgs,'userId') ?? $context->user()->getId();
 
         // Getting the name for the access token.
-        $name = array_get($validArgs,'name',$this->defaultTokenName());
+        $name = array_get($validArgs,'name');
 
         // Getting the scopes
         $scopeArg = array_get($validArgs,'scopes');
@@ -113,14 +113,4 @@ class RequestPersonalAccessTokenAction extends AbstractAction
             return $this->factory->makeWithClient($client, $userId, $name, $scopes);
         }
     }
-
-    /**
-     * Returns the default name for the access token.
-     *
-     * @return string
-     */
-    protected function defaultTokenName() {
-        return 'Personal Access Token '.str_random(16);
-    }
-
 }

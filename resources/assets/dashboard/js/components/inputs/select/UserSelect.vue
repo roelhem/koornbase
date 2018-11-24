@@ -61,6 +61,21 @@
     import UserAvatar from "../../displays/UserAvatar";
     import SpanPersonName from "../../displays/spans/SpanPersonName";
 
+    let optionFragment = gql`
+        fragment UserSelectOption on User {
+            id
+            name
+            email
+            ...UserAvatar
+            person {
+                id
+                name { ...SpanPersonName }
+            }
+        }
+        ${UserAvatar.fragment}
+        ${SpanPersonName.fragment}
+    `;
+
     export default {
         components: {
             SpanPersonName,
@@ -68,6 +83,8 @@
             BaseTag,
             VueMultiselect},
         name: "user-select",
+
+        optionFragment,
 
         modelSelect: {
             queryKey:'users',
@@ -77,20 +94,12 @@
                         users(first:50) {
                             edges {
                                 node {
-                                    id
-                                    name
-                                    email
-                                    ...UserAvatar
-                                    person {
-                                        id
-                                        name{ ...SpanPersonName }
-                                    }
+                                    ...UserSelectOption
                                 }
                             }
                         }
                     }
-                    ${UserAvatar.fragment}
-                    ${SpanPersonName.fragment}
+                    ${optionFragment}
                 `,
             },
         },

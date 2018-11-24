@@ -1,7 +1,17 @@
 import OrderBy from "../utils/OrderBy";
+import gql from "graphql-tag";
 
 export default {
 
+    connectionFragment:gql`
+        fragment SearchTableConnection on Connection {
+            totalCount
+            pageInfo {
+                startIndex
+                endIndex
+            }
+        }
+    `,
 
     // SEARCH TABLE OPTIONS
     searchTable: {

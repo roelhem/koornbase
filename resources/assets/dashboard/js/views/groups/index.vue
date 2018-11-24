@@ -98,7 +98,10 @@
                         </b-table>
                     </b-card>-->
 
-                    <group-data-table v-bind="dataTableProps" v-on="dataTableListeners"></group-data-table>
+                    <group-data-table v-bind="dataTableProps"
+                                      v-on="dataTableListeners"
+                                      @highlight-category="categoryId => highlightedCategory = categoryId"
+                    />
 
 
 
@@ -118,8 +121,7 @@
 </template>
 
 <script>
-
-    import { GROUPS_INDEX } from "../../apis/graphql/queries";
+    import gql from 'graphql-tag';
 
     import TablerPageHeader from "../../components/layouts/title/TablerPageHeader";
     import TablerInputIcon from "../../components/layouts/forms/TablerInputIcon";
@@ -156,24 +158,30 @@
         searchTable: {
             queryKey:'groups',
             query:{
-                query: GROUPS_INDEX,
+                query: gql`
+                    query groupsIndex($pageSize:Int = 10 $page:Int = 1 $orderBy:Group_orderByInput = id_ASC) {
+                        groups(first:$pageSize page:$page orderBy:$orderBy) {
+                            ...SearchTableConnection
+                            edges {
+                                node {
+                                    ...GroupDataTableRow
+                                }
+                            }
+                        }
+                    }
+                    ${searchTableMixin.connectionFragment}
+                    ${GroupDataTable.rowFragment}
+                `,
                 variables() {
                     return {
                         page:this.page,
-                        limit:this.perPage,
-                        personLimit:this.personLimit,
-                        orderBy:this.sortBy,
-                        orderDir:this.sortDir,
-                        search:this.search,
-                        filter:{
-                            anyCategoryId:this.selectedCategories.length > 0 ? this.selectedCategories : null,
-                        }
+                        pageSize:this.perPage,
+                        orderBy:this.orderBy ? this.orderBy.string : null,
                     }
                 }
             },
             defaults: {
-                perPage:25,
-                sortBy:'category_id',
+                perPage:25
             },
             recordsName:'groepen',
         },

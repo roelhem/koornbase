@@ -35,6 +35,8 @@ use Laravel\Passport\Token as PassportToken;
 class Token extends PassportToken
 {
 
+    protected $dates = ['created_at','updated_at','expires_at'];
+
     /**
      * Attribute that contains the OAuthScope objects of this token.
      *

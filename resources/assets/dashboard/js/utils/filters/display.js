@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import OAUTH_CLIENT_TYPES from "../../constants/oauth-client-types";
 
 export function date(value, format) {
 
@@ -85,49 +86,24 @@ export function membershipStatusColorName(value) {
     }
 }
 
-const PERSONAL = 'PERSONAL';
-const PASSWORD = 'PASSWORD';
-const CREDENTIALS = 'CREDENTIALS';
-const AUTH_CODE = 'AUTH_CODE';
+function getClientFromValue(value) {
+    return OAUTH_CLIENT_TYPES.find(clientType => value === clientType.key) || {};
+}
 
 export function oAuthClientTypeShortLabel(value) {
-    switch(value) {
-        case PERSONAL: return 'Personal';
-        case PASSWORD: return 'Password';
-        case CREDENTIALS: return 'Credentials';
-        case AUTH_CODE: return 'Auth Code';
-        default: return 'Onbekend';
-    }
+    return getClientFromValue(value).shortName || 'Onbekend';
 }
 
 export function oAuthClientTypeLargeLabel(value) {
-    switch(value) {
-        case PERSONAL: return 'Personal Access Client';
-        case PASSWORD: return 'Password Client';
-        case CREDENTIALS: return 'Client Credentials Client';
-        case AUTH_CODE: return 'Authorization Code Client';
-        default: return 'Onbekende Client-type';
-    }
+    return getClientFromValue(value).name || 'Onbekende Client-type';
 }
 
 export function oAuthClientTypeShortDescription(value) {
-    switch(value) {
-        case PERSONAL: return 'Genereert tokens voor individuele gebruikers. Bedoelt voor ontwikkelaars!';
-        case PASSWORD: return 'Kan direct tokens opvragen met het wachtwoord van de gebruiker.';
-        case CREDENTIALS: return 'Voor comunicatie tussen servers, zonder aanmelden met een gebruiker.';
-        case AUTH_CODE: return 'Vraagt eerst om toestemming van de gebruiker (via de KoornBase website).';
-        default: return `Geen type met de naam '${value}' gevonden.`;
-    }
+    return getClientFromValue(value).description || `Geen type met de naam '${value}' gevonden.`;
 }
 
 export function oAuthClientTypeColor(value) {
-    switch(value) {
-        case PERSONAL: return 'cyan';
-        case PASSWORD: return 'orange';
-        case CREDENTIALS: return 'gray';
-        case AUTH_CODE: return 'lime';
-        default: return undefined;
-    }
+    return getClientFromValue(value).color;
 }
 
 export function oAuthClientTypeBgColor(value) {

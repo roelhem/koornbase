@@ -1,17 +1,30 @@
 <template>
-    <span>
+    <span :class="{'d-inline-flex':stacked}">
         <template v-if="user">
+
             <user-avatar v-if="hasAvatar"
                          :user="user"
-                         size="sm"
+                         :size="stacked ? null : 'sm'"
                          class="mr-1"
             />
 
-            <span-person-name v-if="hasPerson" :person-name="user.person.name" />
-            <base-field v-else title="Gebruikersnaam" name="name">{{ user.name }}</base-field>
+            <span :class="{'ml-2 d-block leading-none':stacked}">
+                <span-person-name v-if="hasPerson"
+                                  :person-name="user.person.name"
+                />
+                <base-field v-else
+                            title="Gebruikersnaam"
+                            name="name"
+                >{{ user.name }}</base-field>
 
-            <span v-if="withEmail" class="text-muted">
-                [ <base-field title="E-mail" name="email">{{ user.email }}</base-field> ]
+                <span v-if="withEmail || withUsername"
+                      class="text-muted"
+                      :class="{'d-block small mt-1':stacked}"
+                >
+                    <base-field v-if="withUsername" class="text-muted-dark" title="Gebruikersnaam" name="name">{{ user.name }}</base-field>
+                    <template v-if="withUsername && withEmail">:</template>
+                    <template v-if="withEmail">[ <base-field title="E-mail" name="email">{{ user.email }}</base-field> ]</template>
+                </span>
             </span>
 
         </template>
@@ -56,6 +69,16 @@
             withEmail:{
                 type:Boolean,
                 default:false,
+            },
+
+            withUsername:{
+                type:Boolean,
+                default:false,
+            },
+
+            stacked:{
+                type:Boolean,
+                default:false,
             }
         },
 
@@ -66,6 +89,10 @@
 
             hasPerson() {
                 return !!this.user.person;
+            },
+
+            showUsername() {
+                return this.withUsername && this.hasPerson;
             }
         }
     }

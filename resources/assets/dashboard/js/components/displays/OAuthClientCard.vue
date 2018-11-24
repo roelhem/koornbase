@@ -26,7 +26,7 @@
             </detail-entry>
 
 
-            <subtile-detail-entry-form v-if="client.type !== 'CREDENTIALS'"
+            <subtile-detail-entry-form v-if="canRedirect"
                                        label="Redirect URL"
                                        :value="client.redirect"
                                        @submit="handleSubmitRedirect"
@@ -42,12 +42,6 @@
         <template slot="footer">
             <div class="d-flex text-right">
                 <b-button v-if="!client.revoked" @click="$refs.revokeClientModal.show()" variant="danger" class="ml-1">Intrekken</b-button>
-
-                <b-button v-if="!client.revoked && client.type === 'PERSONAL'"
-                          variant="link"
-                          class="ml-auto"
-                          :to="{ name:'oauth.clients.request-personal-token', params: { id: clientId } }"
-                >Personal Access Token Aanvragen</b-button>
             </div>
 
         </template>
@@ -126,6 +120,12 @@
             }
         },
 
+        computed: {
+            canRedirect() {
+                return this.client.__typename === 'OAuthAuthCodeClient' || this.client.__typename === 'OAuthPasswordClient';
+            }
+        },
+
         methods: {
 
             handleSubmitName(newValue) {
@@ -162,7 +162,13 @@
                     mutation:gql`
                         mutation updateOAuthClientRedirect($id:ID!, $redirect:String) {
                             updateOAuthClient(id:$id, redirect:$redirect) {
-                                id redirect
+                                id
+                                ...on OAuthAuthCodeClient {
+                                    redirect
+                                }
+                                ...on OAuthPasswordClient {
+                                    redirect
+                                }
                             }
                         }
                     `,
